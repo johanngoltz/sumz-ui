@@ -2,19 +2,20 @@
   <h1>Alle Projekte</h1>
   <mat-grid-list cols="4" rowHeight="4:3">
     <mat-grid-tile *ngFor="let project of projectsService.projects">
-      <mat-card (mouseover)="project.isHovered = true" (mouseout)="project.isHovered = undefined" [class.mat-elevation-z8]="project.isHovered">
+      <mat-card (mouseover)="project.isHovered = true" (mouseout)="project.isHovered = undefined" [class.mat-elevation-z8]="project.isHovered"
+        [routerLink]="['/project', project.id]">
         <mat-card-title>
           {{project.name}}
-          <button type="button" mat-icon-button [matMenuTriggerFor]="projectMenu">
+          <button type="button" mat-icon-button [matMenuTriggerFor]="projectMenu" (click)="event.preventDefault()">
             <mat-icon>more_vert</mat-icon>
           </button>
         </mat-card-title>
         <mat-card-content>{{project.description}}</mat-card-content>
-        <mat-menu #projectMenu="matMenu">
-          <button mat-menu-item>Bearbeiten</button>
-          <button mat-menu-item (click)="projectsService.removeProject(project)">Löschen</button>
-        </mat-menu>
       </mat-card>
+      <mat-menu #projectMenu="matMenu">
+        <button mat-menu-item>Bearbeiten</button>
+        <button mat-menu-item (click)="projectsService.removeProject(project)">Löschen</button>
+      </mat-menu>
     </mat-grid-tile>
   </mat-grid-list>
 </div>
