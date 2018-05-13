@@ -1,25 +1,52 @@
 <div class="content-container">
   <h1>Neues Projekt erstellen</h1>
-  <mat-horizontal-stepper linear>
-    <mat-step label="Grundlegendes">
-      ...
-      <div>
-        <button mat-button matStepperNext type="button">Next</button>
-      </div>
-    </mat-step>
-    <mat-step label="Methode wählen">
-      ...
-      <div>
-        <button mat-button matStepperPrevious type="button">Back</button>
-        <button mat-button matStepperNext type="button">Next</button>
-      </div>
-    </mat-step>
-    <mat-step label="Zahlungsreihe angeben">
-      ...
-      <div>
-        <button mat-button matStepperPrevious type="button">Back</button>
-        <button mat-raised-button color="primary" type="submit">Next</button>
-      </div>
-    </mat-step>
-  </mat-horizontal-stepper>
+  <form #createForm="ngForm">
+    <mat-horizontal-stepper linear>
+      <mat-step label="Grundlegendes">
+        <div class="step-container">
+          <div class="form-container">
+            <h2>Worum geht's?</h2>
+            <mat-form-field>
+              <input type="text" id="name" name="name" matInput placeholder="Name" required>
+            </mat-form-field>
+            <mat-form-field>
+              <textarea id="description" name="description" matInput placeholder="Beschreibung"></textarea>
+            </mat-form-field>
+            <mat-label>Berechnungsmethode</mat-label>
+            <mat-radio-group id="method" name="method" required>
+              <mat-radio-button value="deterministic">Deterministisch</mat-radio-button>
+              <mat-radio-button value="stochastically">Stochastisch</mat-radio-button>
+            </mat-radio-group>
+            <div class="stepper-actions">
+              <a mat-button routerLink="">Zurück</a>
+              <button mat-raised-button color="primary" matStepperNext type="button">Weiter</button>
+            </div>
+          </div>
+        </div>
+      </mat-step>
+      <mat-step label="Methode wählen">
+        <div class="step-container">
+          <div class="form-container">
+            <h2>Nach welcher Methode soll das Projekt berechnet werden?</h2>
+            ...
+            <div class="stepper-actions">
+              <button mat-button matStepperPrevious type="button">Zurück</button>
+              <button mat-raised-button color="primary" matStepperNext type="button">Weiter</button>
+            </div>
+          </div>
+        </div>
+      </mat-step>
+      <mat-step label="Zahlungsreihe angeben">
+        <div class="step-container">
+          <div class="form-container">
+            <h2>Wie liefen die letzten Jahre so?</h2>
+            <div class="stepper-actions">
+              <button mat-button matStepperPrevious type="button">Zurück</button>
+              <button mat-raised-button color="accent" type="submit">Projekt anlegen</button>
+            </div>
+          </div>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </form>
 </div>

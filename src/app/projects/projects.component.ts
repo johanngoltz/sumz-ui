@@ -10,11 +10,14 @@ import { ProjectsService } from '../projects.service';
 export class ProjectsComponent implements OnInit {
   projects: Project[];
   projectsService: ProjectsService;
+  hovered: Project;
 
   constructor(projectsService: ProjectsService) {
     this.projectsService = projectsService;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.hovered = undefined;
+  }
 
 }

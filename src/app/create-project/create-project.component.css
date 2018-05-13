@@ -1,0 +1,27 @@
+.step-container {
+    display: flex;
+    justify-content: center;
+}
+
+.form-container {
+    min-width: 400px;
+}
+
+mat-form-field:not(.inline) {
+    display: block;
+}
+
+.stepper-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+mat-radio-group {
+    display: flex;
+    flex-direction: column;
+}
+  
+mat-radio-button {
+    margin: 5px 0 5px;
+}
