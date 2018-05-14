@@ -2,6 +2,12 @@ export class Project {
     id: number;
     name: string;
     description: string;
+    iterations: number;
+    baseYear: number;
+    prognosisLength: number;
+    deterministic: boolean;
+    algorithm: string;
+    timeSeries: FinancialData[];
 }
 
 export class FinancialData {
@@ -14,19 +20,8 @@ export class FinancialData {
 export class Scenario {
     id: number;
     projectId: number;
-    name: string;
-    data: ParameterValue[];
-    result: number
-}
-
-export class Parameter {
-    id: number;
-    name: string;
-    description: string;
-}
-
-export class ParameterValue {
-    parameterId: number;
-    scenarioId: number;
-    value: number;
+    equityInterest: number;
+    outsideCapitalInterest: number;
+    businessTax: number;
+    result: object;
 }
