@@ -5,18 +5,13 @@
       <mat-step label="Grundlegendes">
         <div class="step-container">
           <div class="form-container">
-            <h2>Worum geht's?</h2>
+            <h2>Grundlegendes</h2>
             <mat-form-field>
               <input type="text" id="name" name="name" matInput placeholder="Name" required>
             </mat-form-field>
             <mat-form-field>
               <textarea id="description" name="description" matInput placeholder="Beschreibung"></textarea>
             </mat-form-field>
-            <mat-label>Berechnungsmethode</mat-label>
-            <mat-radio-group id="method" name="method" required>
-              <mat-radio-button value="deterministic">Deterministisch</mat-radio-button>
-              <mat-radio-button value="stochastically">Stochastisch</mat-radio-button>
-            </mat-radio-group>
             <div class="stepper-actions">
               <a mat-button routerLink="">Zurück</a>
               <button mat-raised-button color="primary" matStepperNext type="button">Weiter</button>
@@ -27,8 +22,18 @@
       <mat-step label="Methode wählen">
         <div class="step-container">
           <div class="form-container">
-            <h2>Nach welcher Methode soll das Projekt berechnet werden?</h2>
-            ...
+            <h2>Berechnungsmethode wählen</h2>
+            <label class="grey" for="method">Berechnungsmethode</label>
+            <mat-radio-group id="method" name="method" required>
+              <mat-radio-button value="deterministic">Deterministisch</mat-radio-button>
+              <mat-radio-button value="stochastically">Stochastisch</mat-radio-button>
+            </mat-radio-group>
+            <label class="grey" for="algorithm">Algorithmus</label>
+            <mat-radio-group id="algorithm" name="algorithm" required>
+              <mat-radio-button value="apv">APV</mat-radio-button>
+              <mat-radio-button value="fcf">FCF</mat-radio-button>
+              <mat-radio-button value="fte">FTE</mat-radio-button>
+            </mat-radio-group>
             <div class="stepper-actions">
               <button mat-button matStepperPrevious type="button">Zurück</button>
               <button mat-raised-button color="primary" matStepperNext type="button">Weiter</button>
@@ -39,7 +44,7 @@
       <mat-step label="Zahlungsreihe angeben">
         <div class="step-container">
           <div class="form-container">
-            <h2>Wie liefen die letzten Jahre so?</h2>
+            <h2>Zahlungsreihe angeben</h2>
             <div class="stepper-actions">
               <button mat-button matStepperPrevious type="button">Zurück</button>
               <button mat-raised-button color="accent" type="submit">Projekt anlegen</button>
