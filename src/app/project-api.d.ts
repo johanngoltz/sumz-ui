@@ -25,3 +25,18 @@ export class Scenario {
     businessTax: number;
     result: object;
 }
+
+
+export interface ProjectAPI {
+    '/project': {
+        GET: {
+            response: Project[]
+        },
+        POST: {
+            body: Project,
+            response: {
+                status: 'ok' | 'notok'
+            }
+        }
+    }
+}

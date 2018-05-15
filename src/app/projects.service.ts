@@ -1,28 +1,24 @@
-import { Injectable } from '@angular/core';
-import { Project } from './project';
+import { Injectable, OnInit } from '@angular/core';
+
+import axios, { TypedAxiosStatic, TypedAxiosInstance } from 'restyped-axios'
+import { ProjectAPI, Project } from './project-api'
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectsService {
   protected projects: Project[];
+  private api: TypedAxiosInstance<ProjectAPI>;
 
   constructor() {
-    this.projects = this.loadProjects();
-    let that = this;
-    window.addEventListener('storage', function(e) {  
-      that.projects = that.loadProjects();
-    });
+    this.api = axios.create<ProjectAPI>({ baseURL: 'http://delicate-dew-1362.getsandbox.com/' });
+    this.loadProjects().then(projects => this.projects = projects);
+
+    this.addProject({ id: Math.random(), name: 'randomizedId', description: 'Lorem ipsum dolor sit...' });
   }
 
-  loadProjects(): Project[] {
-    let projectsString = window.localStorage.getItem('projects');
-    if(projectsString) {
-      let projects = JSON.parse(projectsString);
-      return projects;
-    } else {
-      return [];
-    }
+  async loadProjects(): Promise<Project[]> {
+    return (await this.api.get('/project')).data;
   }
 
   saveProjects(projects: Project[]) {
@@ -30,13 +26,15 @@ export class ProjectsService {
   }
 
   addProject(project: Project) {
-    this.projects.push(project);
-    this.saveProjects(this.projects);
+    this.api.post('/project', project).then(
+      () => this.projects.push(project),
+      err => { throw err }
+    );
   }
 
   removeProject(project: Project): Boolean {
     let index = this.projects.indexOf(project);
-    if(index > -1) {
+    if (index > -1) {
       this.projects.splice(index, 1);
       return true;
     } else {
