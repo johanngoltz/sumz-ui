@@ -1,0 +1,16 @@
+{
+  "projects": [
+    {
+      "id": 100,
+      "name": "myName"
+    },
+    {
+      "id": 200,
+      "name": "anotherName"
+    },
+    {
+      "id": 300,
+      "name": "runningOutOfNames"
+    }
+  ]
+}
