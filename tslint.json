@@ -93,7 +93,16 @@
       true,
       "always"
     ],
-    "trailing-comma": true,
+    "trailing-comma": [
+      true,
+      {
+        "multiline": {
+          "arrays": "always",
+          "objects": "always"
+        },
+        "singleline": "never"
+      }
+    ],
     "triple-equals": [
       true,
       "allow-null-check"
@@ -137,9 +146,21 @@
         "arraysInArrays": false
       }
     ],
-    "block-spacing": [true, "always"],
-    "brace-style": [true, "1tbs", { "allowSingleLine": true }],
-    "handle-callback-err": [true, "err"],
+    "block-spacing": [
+      true,
+      "always"
+    ],
+    "brace-style": [
+      true,
+      "1tbs",
+      {
+        "allowSingleLine": true
+      }
+    ],
+    "handle-callback-err": [
+      true,
+      "err"
+    ],
     "no-constant-condition": true,
     "no-control-regex": true,
     "no-duplicate-case": true,
@@ -147,11 +168,13 @@
     "no-ex-assign": true,
     "no-extra-boolean-cast": true,
     "no-extra-semi": true,
-    "no-inner-declarations": [true, "both"],
+    "no-inner-declarations": [
+      true,
+      "both"
+    ],
     "no-invalid-regexp": true,
     "no-irregular-whitespace": true,
     "no-regex-spaces": true,
-    "ter-no-sparse-array": true,
     "no-unexpected-multiline": true,
     "use-isnan": true,
     "valid-jsdoc": true,
