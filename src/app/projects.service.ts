@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 
-import axios, { TypedAxiosStatic, TypedAxiosInstance } from 'restyped-axios'
-import { ProjectAPI, Project } from './project-api'
+import axios, { TypedAxiosStatic, TypedAxiosInstance } from 'restyped-axios';
+import { ProjectAPI, Project } from './project-api';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class ProjectsService {
   constructor() {
     this.api = axios.create<ProjectAPI>({ baseURL: 'http://delicate-dew-1362.getsandbox.com/' });
     this.loadProjects().then(projects => this.projects = projects);
-    this.removeProject({id:100});
+    this.removeProject({ id: 100 });
 
     this.addProject({ id: Math.random(), name: 'randomizedId', description: 'Lorem ipsum dolor sit...' });
   }
@@ -29,7 +29,7 @@ export class ProjectsService {
   addProject(project: Project) {
     this.api.post('/project', project).then(
       () => this.projects.push(project),
-      err => { throw err }
+      err => { throw err; }
     );
   }
 
