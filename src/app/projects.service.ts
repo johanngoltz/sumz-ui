@@ -9,16 +9,16 @@ export class ProjectsService {
 
   constructor() {
     this.projects = this.loadProjects();
-    let that = this;
-    window.addEventListener('storage', function(e) {  
+    const that = this;
+    window.addEventListener('storage', function(e) {
       that.projects = that.loadProjects();
     });
   }
 
   loadProjects(): Project[] {
-    let projectsString = window.localStorage.getItem('projects');
-    if(projectsString) {
-      let projects = JSON.parse(projectsString);
+    const projectsString = window.localStorage.getItem('projects');
+    if (projectsString) {
+      const projects = JSON.parse(projectsString);
       return projects;
     } else {
       return [];
@@ -35,8 +35,8 @@ export class ProjectsService {
   }
 
   removeProject(project: Project): Boolean {
-    let index = this.projects.indexOf(project);
-    if(index > -1) {
+    const index = this.projects.indexOf(project);
+    if (index > -1) {
       this.projects.splice(index, 1);
       return true;
     } else {
