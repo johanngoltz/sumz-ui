@@ -38,5 +38,18 @@ export interface ProjectAPI {
                 status: 'ok' | 'notok'
             }
         }
+    },
+    '/project/:id': {
+        GET: {
+            response: Project
+        },
+        DELETE: {
+            params: {
+                id: number
+            },
+            response: {
+                success: boolean
+            }
+        }
     }
 }

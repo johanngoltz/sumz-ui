@@ -13,6 +13,7 @@ export class ProjectsService {
   constructor() {
     this.api = axios.create<ProjectAPI>({ baseURL: 'http://delicate-dew-1362.getsandbox.com/' });
     this.loadProjects().then(projects => this.projects = projects);
+    this.removeProject({id:100});
 
     this.addProject({ id: Math.random(), name: 'randomizedId', description: 'Lorem ipsum dolor sit...' });
   }
@@ -32,13 +33,15 @@ export class ProjectsService {
     );
   }
 
-  removeProject(project: Project): Boolean {
-    let index = this.projects.indexOf(project);
-    if (index > -1) {
-      this.projects.splice(index, 1);
-      return true;
-    } else {
-      return false;
-    }
+  async removeProject(project: Project): Promise<Boolean> {
+    return this.api.delete<'/project/:id'>
+      (`/project/${project.id}`)
+      .then(
+        async () => {
+          this.projects.splice(this.projects.indexOf(project), 1);
+          return true;
+        },
+        err => false
+      );
   }
 }
