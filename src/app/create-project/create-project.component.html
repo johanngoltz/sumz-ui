@@ -1,11 +1,10 @@
 <div class="content-container">
   <h1>Neues Projekt erstellen</h1>
-    <mat-horizontal-stepper linear>
+  <mat-card>
+    <mat-vertical-stepper linear>
       <mat-step label="Grundlegendes" [stepControl]="stepperFormGroup1">
-          <form [formGroup]="stepperFormGroup1">
-        <div class="step-container">
+        <form [formGroup]="stepperFormGroup1">
           <div class="form-container">
-            <h2>Grundlegendes</h2>
             <mat-form-field>
               <input type="text" id="name" name="name" matInput placeholder="Name" required formControlName="nameCtrl">
             </mat-form-field>
@@ -14,17 +13,14 @@
             </mat-form-field>
             <div class="stepper-actions">
               <a mat-button routerLink="">Abbrechen</a>
-              <button mat-raised-button color="primary" matStepperNext type="button">Weiter</button>
+              <button mat-raised-button color="accent" matStepperNext>Weiter</button>
             </div>
           </div>
-        </div>
         </form>
       </mat-step>
       <mat-step label="Methode wählen" [stepControl]="stepperFormGroup2">
-          <form [formGroup]="stepperFormGroup2">
-        <div class="step-container">
+        <form [formGroup]="stepperFormGroup2">
           <div class="form-container">
-            <h2>Berechnungsmethode wählen</h2>
             <label class="grey" for="method">Berechnungsmethode</label>
             <mat-radio-group id="method" name="method" required>
               <mat-radio-button value="deterministic" checked>Deterministisch</mat-radio-button>
@@ -37,25 +33,50 @@
               <mat-radio-button value="fte">FTE</mat-radio-button>
             </mat-radio-group>
             <div class="stepper-actions">
-              <button mat-button matStepperPrevious type="button">Zurück</button>
-              <button mat-raised-button color="primary" matStepperNext type="button">Weiter</button>
+              <button mat-button matStepperPrevious>Zurück</button>
+              <button mat-raised-button color="accent" matStepperNext>Weiter</button>
             </div>
           </div>
-        </div>
         </form>
       </mat-step>
       <mat-step label="Zahlungsreihe angeben" [stepControl]="stepperFormGroup3">
-          <form [formGroup]="stepperFormGroup3">
-        <div class="step-container">
+        <form [formGroup]="stepperFormGroup3">
           <div class="form-container">
-            <h2>Zahlungsreihe angeben</h2>
+            <mat-form-field>
+              <input type="number" id="baseYear" name="baseYear" matInput placeholder="Basisjahr" formControlName="baseYearCtrl" value="{{prevYear}}"
+                required>
+            </mat-form-field>
+            <table class="mat-table">
+              <thead>
+                <tr class="mat-header-row">
+                  <th class="mat-header-cell">Jahr</th>
+                  <td class="mat-cell">2014</td>
+                  <td class="mat-cell">2013</td>
+                  <td class="mat-cell">2012</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="mat-row">
+                  <th class="mat-header-cell">Fremdkapital</th>
+                  <td class="mat-cell">140</td>
+                  <td class="mat-cell">120</td>
+                  <td class="mat-cell">150</td>
+                </tr>
+                <tr class="mat-row">
+                  <th class="mat-header-cell">FCF</th>
+                  <td class="mat-cell">7</td>
+                  <td class="mat-cell">6</td>
+                  <td class="mat-cell">4</td>
+                </tr>
+              </tbody>
+            </table>
             <div class="stepper-actions">
-              <button mat-button matStepperPrevious type="button">Zurück</button>
-              <button mat-raised-button color="accent" type="submit">Projekt anlegen</button>
+              <button mat-button matStepperPrevious>Zurück</button>
+              <button mat-raised-button color="accent">Projekt anlegen</button>
             </div>
           </div>
-        </div>
         </form>
       </mat-step>
-    </mat-horizontal-stepper>
+    </mat-vertical-stepper>
+  </mat-card>
 </div>

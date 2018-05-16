@@ -10,20 +10,22 @@ export class CreateProjectComponent implements OnInit {
   stepperFormGroup1: FormGroup;
   stepperFormGroup2: FormGroup;
   stepperFormGroup3: FormGroup;
+  prevYear: number;
 
   constructor(private _formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
+    this.prevYear = new Date().getFullYear() - 1;
     this.stepperFormGroup1 = this._formBuilder.group({
       nameCtrl: ['', Validators.required],
       descCtrl: ''
     });
     this.stepperFormGroup2 = this._formBuilder.group({
-      secondCtrl: ''
+      
     });
     this.stepperFormGroup3 = this._formBuilder.group({
-      thirdCtrl: ''
+      baseYearCtrl: [this.prevYear, Validators.required]
     });
   }
 
