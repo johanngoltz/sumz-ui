@@ -1,31 +1,8 @@
-export class Project {
-    id: number;
-    name: string;
-    description: string;
-    iterations: number;
-    baseYear: number;
-    prognosisLength: number;
-    deterministic: boolean;
-    algorithm: string;
-    timeSeries: FinancialData[];
-}
+import { Project } from './project';
 
-export class FinancialData {
-    projectId: number;
-    year: number;
-    externalCapital: number;
-    fcf: number;
+declare class Success {
+    success: boolean;
 }
-
-export class Scenario {
-    id: number;
-    projectId: number;
-    equityInterest: number;
-    outsideCapitalInterest: number;
-    businessTax: number;
-    result: object;
-}
-
 
 export interface ProjectAPI {
     '/project': {
@@ -34,9 +11,7 @@ export interface ProjectAPI {
         },
         POST: {
             body: Project,
-            response: {
-                status: 'ok' | 'notok'
-            }
+            response: Success
         }
     },
     '/project/:id': {
@@ -47,9 +22,11 @@ export interface ProjectAPI {
             params: {
                 id: number
             },
-            response: {
-                success: boolean
-            }
+            response: Success
+        },
+        PATCH: {
+            data: Project,
+            response: Success
         }
     }
 }

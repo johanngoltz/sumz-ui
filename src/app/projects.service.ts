@@ -1,7 +1,8 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
+import axios, { TypedAxiosInstance } from 'restyped-axios';
+import { Project } from './project';
+import { ProjectAPI } from './project-api';
 
-import axios, { TypedAxiosStatic, TypedAxiosInstance } from 'restyped-axios';
-import { ProjectAPI, Project } from './project-api';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class ProjectsService {
   constructor() {
     this.api = axios.create<ProjectAPI>({ baseURL: 'http://delicate-dew-1362.getsandbox.com/' });
     this.loadProjects()
-        .then(loadedProjects => this.projects = loadedProjects);
+      .then(loadedProjects => this.projects = loadedProjects);
   }
 
   async loadProjects(): Promise<Project[]> {
@@ -31,6 +32,16 @@ export class ProjectsService {
     }).then(
       () => this.projects.push(project)
     );
+  }
+
+  async updateProject(project: Project) {
+    this.api.patch(`/project/${project.id}`, project)
+      .then(
+        () => {
+          const oldProjectIndex = this.projects.findIndex(other => other.pkEquals(project));
+          this.projects[oldProjectIndex] = project;
+        }
+      );
   }
 
   async removeProject(project: Project) {
