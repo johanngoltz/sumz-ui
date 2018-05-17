@@ -25,3 +25,31 @@ export class Scenario {
     businessTax: number;
     result: object;
 }
+
+
+export interface ProjectAPI {
+    '/project': {
+        GET: {
+            response: Project[]
+        },
+        POST: {
+            body: Project,
+            response: {
+                status: 'ok' | 'notok'
+            }
+        }
+    },
+    '/project/:id': {
+        GET: {
+            response: Project
+        },
+        DELETE: {
+            params: {
+                id: number
+            },
+            response: {
+                success: boolean
+            }
+        }
+    }
+}

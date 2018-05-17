@@ -1,46 +1,45 @@
-import { Injectable } from '@angular/core';
-import { Project } from './project';
+import { Injectable, OnInit } from '@angular/core';
+
+import axios, { TypedAxiosStatic, TypedAxiosInstance } from 'restyped-axios';
+import { ProjectAPI, Project } from './project-api';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectsService {
   protected projects: Project[];
+  private api: TypedAxiosInstance<ProjectAPI>;
 
   constructor() {
-    this.projects = this.loadProjects();
-    const that = this;
-    window.addEventListener('storage', function(e) {
-      that.projects = that.loadProjects();
-    });
+    this.api = axios.create<ProjectAPI>({ baseURL: 'http://delicate-dew-1362.getsandbox.com/' });
+    this.loadProjects()
+        .then(loadedProjects => this.projects = loadedProjects);
   }
 
-  loadProjects(): Project[] {
-    const projectsString = window.localStorage.getItem('projects');
-    if (projectsString) {
-      const projects = JSON.parse(projectsString);
-      return projects;
-    } else {
-      return [];
-    }
+  async loadProjects(): Promise<Project[]> {
+    return (await this.api.get('/project')).data;
   }
 
   saveProjects(projects: Project[]) {
     window.localStorage.setItem('projects', JSON.stringify(projects));
   }
 
-  addProject(project: Project) {
-    this.projects.push(project);
-    this.saveProjects(this.projects);
+  async addProject(project: Project) {
+    this.api.request({
+      url: '/project',
+      data: project
+    }).then(
+      () => this.projects.push(project)
+    );
   }
 
-  removeProject(project: Project): Boolean {
-    const index = this.projects.indexOf(project);
-    if (index > -1) {
-      this.projects.splice(index, 1);
-      return true;
-    } else {
-      return false;
-    }
+  async removeProject(project: Project) {
+    return this.api.delete(`/project/${project.id}`)
+      .then(
+        async () => {
+          this.projects.splice(this.projects.indexOf(project), 1);
+          return true;
+        }
+      );
   }
 }
