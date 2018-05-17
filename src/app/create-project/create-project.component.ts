@@ -22,7 +22,7 @@ export class CreateProjectComponent implements OnInit {
       descCtrl: ''
     });
     this.stepperFormGroup2 = this._formBuilder.group({
-      
+
     });
     this.stepperFormGroup3 = this._formBuilder.group({
       baseYearCtrl: [this.prevYear, Validators.required]
