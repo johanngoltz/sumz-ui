@@ -4,13 +4,11 @@ language: node_js
 node_js:
   - 'lts/*'
 
-addons:
-apt:
-  sources:
-    - google-chrome
-  packages:
-    - google-chrome-stable
-    - google-chrome-beta
+addons: 
+  chrome: stable
 
 before_install:
   - sh -e /etc/init.d/xvfb start
+
+before_script:
+  - ng lint
