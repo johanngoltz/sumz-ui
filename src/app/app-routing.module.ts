@@ -13,7 +13,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [CreateProjectComponent, ProjectDetailsComponent],
   imports: [RouterModule.forRoot(routes), MaterialModule],
   exports: [RouterModule]
 })

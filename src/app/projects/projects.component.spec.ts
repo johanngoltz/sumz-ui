@@ -1,9 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ProjectsComponent } from './projects.component';
-import { MaterialModule } from '../material.module';
-import { AppRoutingModule } from '../app-routing.module';
+import { APP_BASE_HREF } from '@angular/common';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppRoutingModule } from '../app-routing.module';
+import { CreateProjectComponent } from '../create-project/create-project.component';
+import { MaterialModule } from '../material.module';
+import { ProjectDetailsComponent } from '../project-details/project-details.component';
+import { ProjectsComponent } from './projects.component';
+
 
 describe('ProjectsComponent', () => {
   let component: ProjectsComponent;
@@ -11,10 +14,13 @@ describe('ProjectsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProjectsComponent ],
-      imports: [MaterialModule, AppRoutingModule]
+      declarations: [ProjectsComponent, CreateProjectComponent, ProjectDetailsComponent],
+      imports: [MaterialModule, FormsModule, ReactiveFormsModule, AppRoutingModule],
+      providers: [
+        { provide: APP_BASE_HREF, useValue: '/' }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
