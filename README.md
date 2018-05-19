@@ -1,6 +1,7 @@
 # Sumz
 
 [![Build Status](https://travis-ci.org/johanngoltz/sumz-ui.svg?branch=master)](https://travis-ci.org/johanngoltz/sumz-ui)
+[![CodeFactor](https://www.codefactor.io/repository/github/johanngoltz/sumz-ui/badge)](https://www.codefactor.io/repository/github/johanngoltz/sumz-ui)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.0.
 
