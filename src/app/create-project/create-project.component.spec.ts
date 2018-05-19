@@ -2,6 +2,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreateProjectComponent } from './create-project.component';
 import { MaterialModule } from '../material.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('CreateProjectComponent', () => {
   let component: CreateProjectComponent;
@@ -10,7 +12,7 @@ describe('CreateProjectComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CreateProjectComponent],
-      imports: [MaterialModule]
+      imports: [MaterialModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule]
     })
       .compileComponents();
   }));
