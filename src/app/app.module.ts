@@ -25,12 +25,6 @@ import { ProjectDetailsComponent } from './project-details/project-details.compo
     FormsModule,
     ReactiveFormsModule
   ],
-  exports: [
-    AppComponent,
-    ProjectsComponent,
-    CreateProjectComponent,
-    ProjectDetailsComponent
-  ],
   providers: [],
   bootstrap: [AppComponent]
 })

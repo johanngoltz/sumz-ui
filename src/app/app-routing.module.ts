@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { ProjectsComponent } from './projects/projects.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
-import { MaterialModule } from './material.module';
+import { ProjectsComponent } from './projects/projects.component';
+
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: ProjectsComponent },
@@ -13,7 +12,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes), MaterialModule],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
