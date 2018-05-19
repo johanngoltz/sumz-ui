@@ -4,15 +4,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProjectsComponent } from './projects/projects.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
+import { MaterialModule } from './material.module';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: ProjectsComponent },
-  { path: 'create',  component: CreateProjectComponent },
-  { path: 'project/:id',  component: ProjectDetailsComponent }
+  { path: 'create', component: CreateProjectComponent },
+  { path: 'project/:id', component: ProjectDetailsComponent }
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes) ],
-  exports: [ RouterModule ]
+  declarations: [CreateProjectComponent, ProjectDetailsComponent],
+  imports: [RouterModule.forRoot(routes), MaterialModule],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
