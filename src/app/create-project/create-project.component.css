@@ -1,0 +1,46 @@
+.form-container {
+    min-width: 400px;
+    display: inline-block;
+}
+
+mat-form-field:not(.inline) {
+    display: block;
+}
+
+.stepper-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+mat-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 5px 0 20px;
+}
+  
+mat-radio-button {
+    margin: 5px 0 5px;
+}
+
+label.grey {
+    color: rgba(0,0,0,0.54);
+    font-size: 12px;
+}
+
+.mat-table {
+    text-align: right;
+}
+
+.mat-header-cell, .mat-cell {
+    padding: 5px 20px;
+}
+
+.mat-header-cell {
+    font-size: 14px;
+    border-right: 1px solid #CCC;
+}
+
+.mat-header-row > th, .mat-header-row > td {
+    border-bottom: 1px solid #CCC;
+}

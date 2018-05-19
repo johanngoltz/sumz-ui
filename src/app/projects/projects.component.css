@@ -1,0 +1,17 @@
+
+mat-card {
+    width: calc(100% - 90px);
+    height: calc(100% - 90px);
+    cursor: pointer;
+}
+
+mat-card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+mat-grid-list {
+    margin-left: -20px;
+    margin-right: -20px;
+}
