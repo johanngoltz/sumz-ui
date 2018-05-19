@@ -9,8 +9,8 @@ describe('ProjectDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProjectDetailsComponent ],
-      imports: [MaterialModule]
+      declarations: [ProjectDetailsComponent],
+      imports: [MaterialModule],
     })
     .compileComponents();
   }));

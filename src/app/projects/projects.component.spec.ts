@@ -17,8 +17,8 @@ describe('ProjectsComponent', () => {
       declarations: [ProjectsComponent, CreateProjectComponent, ProjectDetailsComponent],
       imports: [MaterialModule, FormsModule, ReactiveFormsModule, AppRoutingModule],
       providers: [
-        { provide: APP_BASE_HREF, useValue: '/' }
-      ]
+        { provide: APP_BASE_HREF, useValue: '/' },
+      ],
     })
       .compileComponents();
   }));

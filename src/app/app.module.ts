@@ -15,7 +15,7 @@ import { ProjectDetailsComponent } from './project-details/project-details.compo
     AppComponent,
     ProjectsComponent,
     CreateProjectComponent,
-    ProjectDetailsComponent
+    ProjectDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -23,7 +23,7 @@ import { ProjectDetailsComponent } from './project-details/project-details.compo
     MaterialModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

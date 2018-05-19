@@ -12,7 +12,7 @@ describe('CreateProjectComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CreateProjectComponent],
-      imports: [MaterialModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule]
+      imports: [MaterialModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule],
     })
       .compileComponents();
   }));

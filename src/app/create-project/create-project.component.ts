@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators, FormBuilder, FormArray, ReactiveFor
 @Component({
   selector: 'app-create-project',
   templateUrl: './create-project.component.html',
-  styleUrls: ['./create-project.component.css']
+  styleUrls: ['./create-project.component.css'],
 })
 export class CreateProjectComponent implements OnInit {
   stepperFormGroup1: FormGroup;
@@ -19,13 +19,13 @@ export class CreateProjectComponent implements OnInit {
     this.prevYear = new Date().getFullYear() - 1;
     this.stepperFormGroup1 = this._formBuilder.group({
       nameCtrl: ['', Validators.required],
-      descCtrl: ''
+      descCtrl: '',
     });
     this.stepperFormGroup2 = this._formBuilder.group({
 
     });
     this.stepperFormGroup3 = this._formBuilder.group({
-      baseYearCtrl: [this.prevYear, Validators.required]
+      baseYearCtrl: [this.prevYear, Validators.required],
     });
   }
 

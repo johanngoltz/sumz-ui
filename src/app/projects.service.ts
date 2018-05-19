@@ -5,7 +5,7 @@ import { ProjectAPI } from './project-api';
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProjectsService {
   protected projects: Project[];
@@ -28,7 +28,7 @@ export class ProjectsService {
   async addProject(project: Project) {
     this.api.request({
       url: '/project',
-      data: project
+      data: project,
     }).then(
       () => this.projects.push(project)
     );

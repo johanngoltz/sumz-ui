@@ -16,18 +16,18 @@ describe('AppComponent', () => {
         AppComponent,
         ProjectsComponent,
         CreateProjectComponent,
-        ProjectDetailsComponent
+        ProjectDetailsComponent,
       ],
       imports: [
         MaterialModule,
         AppRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
       ],
       providers: [
-        { provide: APP_BASE_HREF, useValue: '/' }
-      ]
+        { provide: APP_BASE_HREF, useValue: '/' },
+      ],
     }).compileComponents();
   }));
   it('should create the app', async(() => {

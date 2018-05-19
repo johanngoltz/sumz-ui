@@ -8,11 +8,11 @@ import { ProjectsComponent } from './projects/projects.component';
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: ProjectsComponent },
   { path: 'create', component: CreateProjectComponent },
-  { path: 'project/:id', component: ProjectDetailsComponent }
+  { path: 'project/:id', component: ProjectDetailsComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule { }
