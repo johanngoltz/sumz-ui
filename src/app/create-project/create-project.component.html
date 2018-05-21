@@ -23,8 +23,8 @@
           <div class="form-container">
             <label class="grey" for="method">Berechnungsmethode</label>
             <mat-radio-group id="method" name="method" required>
-              <mat-radio-button value="deterministic" checked>Deterministisch</mat-radio-button>
-              <mat-radio-button value="stochastically">Stochastisch</mat-radio-button>
+              <mat-radio-button value="true" checked>Deterministisch</mat-radio-button>
+              <mat-radio-button value="false">Stochastisch</mat-radio-button>
             </mat-radio-group>
             <label class="grey" for="algorithm">Algorithmus</label>
             <mat-radio-group id="algorithm" name="algorithm" required>
@@ -46,27 +46,34 @@
               <input type="number" id="baseYear" name="baseYear" matInput placeholder="Basisjahr" formControlName="baseYearCtrl" value="{{prevYear}}"
                 required>
             </mat-form-field>
+            <button mat-icon-button (click)="addYear()">
+              <mat-icon>add</mat-icon>
+            </button>
             <table class="mat-table">
               <thead>
                 <tr class="mat-header-row">
                   <th class="mat-header-cell">Jahr</th>
-                  <td class="mat-cell">2014</td>
-                  <td class="mat-cell">2013</td>
-                  <td class="mat-cell">2012</td>
+                  <td class="mat-cell" *ngFor="let element of newProject.timeSeries">
+                    {{element.year}}
+                  </td>
                 </tr>
               </thead>
               <tbody>
                 <tr class="mat-row">
                   <th class="mat-header-cell">Fremdkapital</th>
-                  <td class="mat-cell">140</td>
-                  <td class="mat-cell">120</td>
-                  <td class="mat-cell">150</td>
+                  <td class="mat-cell" *ngFor="let element of newProject.timeSeries">
+                    <mat-form-field class="table-input-right">
+                      <input type="text" matInput [(ngModel)]="element.externalCapital" formControlName="req" required>
+                    </mat-form-field>
+                  </td>
                 </tr>
                 <tr class="mat-row">
                   <th class="mat-header-cell">FCF</th>
-                  <td class="mat-cell">7</td>
-                  <td class="mat-cell">6</td>
-                  <td class="mat-cell">4</td>
+                  <td class="mat-cell" *ngFor="let element of newProject.timeSeries">
+                    <mat-form-field class="table-input-right">
+                      <input type="text" matInput [(ngModel)]="element.fcf" formControlName="req" required>
+                    </mat-form-field>
+                  </td>
                 </tr>
               </tbody>
             </table>

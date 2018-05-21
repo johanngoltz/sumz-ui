@@ -44,3 +44,8 @@ label.grey {
 .mat-header-row > th, .mat-header-row > td {
     border-bottom: 1px solid #CCC;
 }
+
+.table-input-right {
+    text-align: right;
+    width: 80px;
+}
