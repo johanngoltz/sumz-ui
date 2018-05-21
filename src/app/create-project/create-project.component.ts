@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
-import { Project } from '../project-api';
+import { FormGroup, FormControl, Validators, FormBuilder, FormArray, ReactiveFormsModule } from '@angular/forms';
+import { Project } from '../project';
 
 @Component({
   selector: 'app-create-project',
   templateUrl: './create-project.component.html',
-  styleUrls: ['./create-project.component.css']
+  styleUrls: ['./create-project.component.css'],
 })
 export class CreateProjectComponent implements OnInit {
   stepperFormGroup1: FormGroup;
@@ -27,12 +27,13 @@ export class CreateProjectComponent implements OnInit {
       deterministic: true,
       iterations: 10000,
       prognosisLength: 5,
-      timeSeries: []
+      timeSeries: [],
+      pkEquals: null
     }
     this.prevYear = new Date().getFullYear() - 1;
     this.stepperFormGroup1 = this._formBuilder.group({
       nameCtrl: ['', Validators.required],
-      descCtrl: ''
+      descCtrl: '',
     });
     this.stepperFormGroup2 = this._formBuilder.group({
 
@@ -52,6 +53,7 @@ export class CreateProjectComponent implements OnInit {
     }
     
     this.newProject.timeSeries.push({
+      projectId: null,
       year: nextYear-1,
       externalCapital: 0,
       fcf: 0

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 export class Project {
     id: number;
     name: string;
@@ -15,16 +16,13 @@ export class FinancialData {
     externalCapital: number;
     fcf: number;
 }
+=======
+import { Project } from './project';
+>>>>>>> origin/master
 
-export class Scenario {
-    id: number;
-    projectId: number;
-    equityInterest: number;
-    outsideCapitalInterest: number;
-    businessTax: number;
-    result: object;
+declare class Success {
+    success: boolean;
 }
-
 
 export interface ProjectAPI {
     '/project': {
@@ -33,9 +31,7 @@ export interface ProjectAPI {
         },
         POST: {
             body: Project,
-            response: {
-                status: 'ok' | 'notok'
-            }
+            response: Success
         }
     },
     '/project/:id': {
@@ -46,9 +42,11 @@ export interface ProjectAPI {
             params: {
                 id: number
             },
-            response: {
-                success: boolean
-            }
+            response: Success
+        },
+        PATCH: {
+            data: Project,
+            response: Success
         }
     }
 }

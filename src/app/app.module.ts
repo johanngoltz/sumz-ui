@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { MaterialModule } from './/material.module';
+import { MaterialModule } from './material.module';
 import { ProjectsComponent } from './projects/projects.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { CreateProjectComponent } from './create-project/create-project.component';
@@ -15,7 +15,7 @@ import { ProjectDetailsComponent } from './project-details/project-details.compo
     AppComponent,
     ProjectsComponent,
     CreateProjectComponent,
-    ProjectDetailsComponent
+    ProjectDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -23,9 +23,9 @@ import { ProjectDetailsComponent } from './project-details/project-details.compo
     MaterialModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
