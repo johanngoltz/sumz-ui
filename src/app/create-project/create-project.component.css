@@ -1,6 +1,7 @@
 .form-container {
     min-width: 400px;
     display: inline-block;
+    max-width: 100%;
 }
 
 mat-form-field:not(.inline) {
@@ -48,4 +49,11 @@ label.grey {
 .table-input-right {
     text-align: right;
     width: 80px;
+}
+
+.scrollable {
+    display: flex;
+    max-width: 100%;
+    overflow-x: auto;
+    align-items: center;
 }

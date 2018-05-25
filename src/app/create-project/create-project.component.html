@@ -6,10 +6,10 @@
         <form [formGroup]="stepperFormGroup1">
           <div class="form-container">
             <mat-form-field>
-              <input type="text" id="name" name="name" matInput placeholder="Name" required formControlName="nameCtrl">
+              <input type="text" id="name" name="name" matInput placeholder="Name" required formControlName="name">
             </mat-form-field>
             <mat-form-field>
-              <textarea id="description" name="description" matInput placeholder="Beschreibung" formControlName="descCtrl"></textarea>
+              <textarea id="description" name="description" matInput placeholder="Beschreibung" formControlName="description"></textarea>
             </mat-form-field>
             <div class="stepper-actions">
               <a mat-button routerLink="">Abbrechen</a>
@@ -22,14 +22,14 @@
         <form [formGroup]="stepperFormGroup2">
           <div class="form-container">
             <label class="grey" for="method">Berechnungsmethode</label>
-            <mat-radio-group id="method" name="method" required>
-              <mat-radio-button value="true" checked>Deterministisch</mat-radio-button>
+            <mat-radio-group id="method" name="method" formControlName="deterministic" required>
+              <mat-radio-button value="true">Deterministisch</mat-radio-button>
               <mat-radio-button value="false">Stochastisch</mat-radio-button>
             </mat-radio-group>
             <label class="grey" for="algorithm">Algorithmus</label>
-            <mat-radio-group id="algorithm" name="algorithm" required>
+            <mat-radio-group id="algorithm" name="algorithm" formControlName="algorithm" required>
               <mat-radio-button value="apv">APV</mat-radio-button>
-              <mat-radio-button value="fcf" checked>FCF</mat-radio-button>
+              <mat-radio-button value="fcf">FCF</mat-radio-button>
               <mat-radio-button value="fte">FTE</mat-radio-button>
             </mat-radio-group>
             <div class="stepper-actions">
@@ -42,41 +42,43 @@
       <mat-step label="Zahlungsreihe angeben" [stepControl]="stepperFormGroup3">
         <form [formGroup]="stepperFormGroup3">
           <div class="form-container">
-            <mat-form-field>
-              <input type="number" id="baseYear" name="baseYear" matInput placeholder="Basisjahr" formControlName="baseYearCtrl" value="{{prevYear}}"
+            <mat-form-field class="inline">
+              <input type="number" id="baseYear" name="baseYear" matInput placeholder="Basisjahr" formControlName="baseYear" value="{{prevYear}}"
                 required>
             </mat-form-field>
-            <button mat-icon-button (click)="addYear()">
-              <mat-icon>add</mat-icon>
-            </button>
-            <table class="mat-table">
-              <thead>
-                <tr class="mat-header-row">
-                  <th class="mat-header-cell">Jahr</th>
-                  <td class="mat-cell" *ngFor="let element of newProject.timeSeries">
-                    {{element.year}}
-                  </td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="mat-row">
-                  <th class="mat-header-cell">Fremdkapital</th>
-                  <td class="mat-cell" *ngFor="let element of newProject.timeSeries">
-                    <mat-form-field class="table-input-right">
-                      <input type="text" matInput [(ngModel)]="element.externalCapital" formControlName="req" required>
-                    </mat-form-field>
-                  </td>
-                </tr>
-                <tr class="mat-row">
-                  <th class="mat-header-cell">FCF</th>
-                  <td class="mat-cell" *ngFor="let element of newProject.timeSeries">
-                    <mat-form-field class="table-input-right">
-                      <input type="text" matInput [(ngModel)]="element.fcf" formControlName="req" required>
-                    </mat-form-field>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="scrollable">
+              <table class="mat-table">
+                <thead>
+                  <tr class="mat-header-row">
+                    <th class="mat-header-cell">Jahr</th>
+                    <td class="mat-cell" *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
+                      {{element.value.year}}
+                    </td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="mat-row">
+                    <th class="mat-header-cell">Fremdkapital</th>
+                    <td class="mat-cell" *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
+                      <mat-form-field class="table-input-right" [formGroup]="element">
+                        <input type="text" matInput formControlName="externalCapital" toDouble required> {{element.externalCapital | json}}
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                  <tr class="mat-row">
+                    <th class="mat-header-cell">FCF</th>
+                    <td class="mat-cell" *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
+                      <mat-form-field class="table-input-right" [formGroup]="element">
+                        <input type="text" matInput formControlName="fcf" toDouble required> {{element.fcf | json}}
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <button mat-icon-button (click)="addYear(2017)">
+                <mat-icon #addYearIcon>add</mat-icon>
+              </button>
+            </div>
             <div class="stepper-actions">
               <button mat-button matStepperPrevious>Zurück</button>
               <button mat-raised-button color="accent">Projekt anlegen</button>

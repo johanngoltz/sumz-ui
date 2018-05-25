@@ -1,24 +1,4 @@
-<<<<<<< HEAD
-export class Project {
-    id: number;
-    name: string;
-    description: string;
-    iterations: number;
-    baseYear: number;
-    prognosisLength: number;
-    deterministic: boolean;
-    algorithm: string;
-    timeSeries: FinancialData[];
-}
-
-export class FinancialData {
-    year: number;
-    externalCapital: number;
-    fcf: number;
-}
-=======
 import { Project } from './project';
->>>>>>> origin/master
 
 declare class Success {
     success: boolean;

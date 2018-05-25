@@ -20,7 +20,6 @@ export class Project implements Equatable {
 }
 
 export class FinancialData {
-    projectId: number;
     year: number;
     externalCapital: number;
     fcf: number;
