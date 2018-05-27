@@ -26,10 +26,8 @@ export class ProjectsService {
   }
 
   async addProject(project: Project) {
-    this.api.request({
-      url: '/project',
-      data: project,
-    }).then(
+    this.api.post('/project', project)
+    .then(
       () => this.projects.push(project)
     );
   }

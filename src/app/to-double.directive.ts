@@ -16,12 +16,19 @@ export class ToDoubleDirective implements ControlValueAccessor {
   @HostListener('input', ['$event.target.value']) input(value: any) {
     const caretPosition = this.getCaretPosition(this._elementRef.nativeElement);
     const currentNumChars = this.countNumericChars(value.substr(0, caretPosition));
-    const seperatorAtEnd = value.slice(-1) === ',' && caretPosition === value.length - 1;
+    const decimalNumberRegEx = value.match(/([0-9.]*)(,0*)$/);
+    const keepEnd = decimalNumberRegEx && caretPosition > decimalNumberRegEx[1].length;
     value = parseFloat(value.replace(/\./g, '').replace(/,/g, '.'));
-    this.writeValue(value);
-    value = value.toLocaleString('de-de') + (seperatorAtEnd ? ',' : '');
-    this.onChangeCallback(value);
-    this.setCaretPosition(this._elementRef.nativeElement, this.retrieveNewPosition(value, currentNumChars));
+    if (isNaN(value)) {
+      this.onChangeCallback(null);
+    } else {
+      this.onChangeCallback(value);
+      value = value.toLocaleString('de-de') + (keepEnd ? decimalNumberRegEx[2] : '');
+      this.writeValue(value, true);
+      if (!keepEnd) {
+        this.setCaretPosition(this._elementRef.nativeElement, this.retrieveNewPosition(value, currentNumChars));
+      }
+    }
   }
 
   @HostListener('blur', []) touched() {
@@ -30,8 +37,8 @@ export class ToDoubleDirective implements ControlValueAccessor {
 
   constructor(private _renderer: Renderer2, private _elementRef: ElementRef) { }
 
-  writeValue(value: any): void {
-    this._renderer.setProperty(this._elementRef.nativeElement, 'value', value.toLocaleString('de-de'));
+  writeValue(value: any, skipLocale?: Boolean): void {
+    this._renderer.setProperty(this._elementRef.nativeElement, 'value', skipLocale ? value : value.toLocaleString('de-de'));
   }
 
   registerOnChange(fn: any) {

@@ -1,5 +1,9 @@
+mat-vertical-stepper {
+    background: none;
+}
+
 .form-container {
-    min-width: 400px;
+    min-width: 600px;
     display: inline-block;
     max-width: 100%;
 }
@@ -11,7 +15,6 @@ mat-form-field:not(.inline) {
 .stepper-actions {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
 }
 
 mat-radio-group {
@@ -56,4 +59,26 @@ label.grey {
     max-width: 100%;
     overflow-x: auto;
     align-items: center;
+}
+
+.info {
+    max-width: 600px;
+    background: whitesmoke;
+    margin: 16px -24px 0;
+    padding: 1px 24px 8px;
+    border-top: 1px solid rgba(0,0,0,.12);
+    border-bottom: 1px solid rgba(0,0,0,.12);
+}
+
+.info-action {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 -12px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 0 0 0 5px;
 }
