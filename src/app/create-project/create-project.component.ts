@@ -15,7 +15,7 @@ export class CreateProjectComponent implements OnInit {
   stepperFormGroup3: FormGroup;
   prevYear: number;
   newProject: Project;
-  @ViewChild('addYearIcon') addYearIcon : MatIcon;
+  @ViewChild('addYearIcon') addYearIcon: MatIcon;
 
   constructor(private _formBuilder: FormBuilder) {
   }
@@ -31,8 +31,8 @@ export class CreateProjectComponent implements OnInit {
       iterations: 10000,
       prognosisLength: 5,
       timeSeries: [],
-      pkEquals: null
-    }
+      pkEquals: null,
+    };
     this.prevYear = new Date().getFullYear() - 1;
     this.timeSeries = this._formBuilder.array([]);
     this.stepperFormGroup1 = this._formBuilder.group({
@@ -41,18 +41,18 @@ export class CreateProjectComponent implements OnInit {
     });
     this.stepperFormGroup2 = this._formBuilder.group({
       deterministic: 'true',
-      algorithm: 'fcf'
+      algorithm: 'fcf',
     });
     this.stepperFormGroup3 = this._formBuilder.group({
       baseYear: [this.prevYear, Validators.required],
-      timeSeries: this.timeSeries
+      timeSeries: this.timeSeries,
     });
   }
 
   addYear(baseYear: number) {
     let currYear: number;
     if (this.timeSeries.controls.length > 0) {
-      currYear = Math.min(...this.timeSeries.controls.map(function (obj) { return obj.value.year }));
+      currYear = Math.min(...this.timeSeries.controls.map(obj => obj.value.year));
     } else {
       currYear = baseYear;
     }
@@ -61,11 +61,11 @@ export class CreateProjectComponent implements OnInit {
       this._formBuilder.group({
         year: [currYear - 1, Validators.required],
         externalCapital: [0, Validators.required],
-        fcf: [0, Validators.required]
+        fcf: [0, Validators.required],
       })
     );
-    //this.addYearIcon._elementRef.nativeElement.scrollIntoView();
-    window.setTimeout(() => this.addYearIcon._elementRef.nativeElement.scrollIntoView(), 10)
+    // this.addYearIcon._elementRef.nativeElement.scrollIntoView();
+    window.setTimeout(() => this.addYearIcon._elementRef.nativeElement.scrollIntoView(), 10);
   }
 
   trackByYear(i: number, o: FinancialData) {

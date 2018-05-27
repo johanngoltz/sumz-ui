@@ -61,7 +61,7 @@
                     <th class="mat-header-cell">Fremdkapital</th>
                     <td class="mat-cell" *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
                       <mat-form-field class="table-input-right" [formGroup]="element">
-                        <input type="text" matInput formControlName="externalCapital" toDouble required> {{element.externalCapital | json}}
+                        <input type="text" matInput formControlName="externalCapital" appToDouble required> {{element.externalCapital | json}}
                       </mat-form-field>
                     </td>
                   </tr>
@@ -69,7 +69,7 @@
                     <th class="mat-header-cell">FCF</th>
                     <td class="mat-cell" *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
                       <mat-form-field class="table-input-right" [formGroup]="element">
-                        <input type="text" matInput formControlName="fcf" toDouble required> {{element.fcf | json}}
+                        <input type="text" matInput formControlName="fcf" appToDouble required> {{element.fcf | json}}
                       </mat-form-field>
                     </td>
                   </tr>
