@@ -1,8 +1,8 @@
 <div class="content-container">
   <h1>Neues Projekt erstellen</h1>
-  <mat-vertical-stepper linear>
-    <mat-step label="Grundlegendes" [stepControl]="stepperFormGroup1">
-      <form [formGroup]="stepperFormGroup1">
+  <mat-vertical-stepper linear [class.navigation-disabled]="busy">
+    <mat-step label="Grundlegendes" [stepControl]="formGroup1">
+      <form [formGroup]="formGroup1">
         <mat-card class="form-container">
           <mat-card-title>Grundlegendes</mat-card-title>
           <mat-card-content>
@@ -30,15 +30,15 @@
         </mat-card>
       </form>
     </mat-step>
-    <mat-step label="Methode wählen" [stepControl]="stepperFormGroup2">
-      <form [formGroup]="stepperFormGroup2">
+    <mat-step label="Methode wählen" [stepControl]="formGroup2">
+      <form [formGroup]="formGroup2">
         <mat-card class="form-container">
           <mat-card-title>Methode & Algorithmus</mat-card-title>
           <mat-card-content>
             <label class="grey" for="method">Berechnungsmethode</label>
             <mat-radio-group id="method" name="method" formControlName="deterministic" required>
-              <mat-radio-button value="true">Deterministisch</mat-radio-button>
-              <mat-radio-button value="false">Stochastisch</mat-radio-button>
+              <mat-radio-button [value]="true">Deterministisch</mat-radio-button>
+              <mat-radio-button [value]="false">Stochastisch</mat-radio-button>
             </mat-radio-group>
             <label class="grey" for="algorithm">Algorithmus</label>
             <mat-radio-group id="algorithm" name="algorithm" formControlName="algorithm" required>
@@ -46,6 +46,9 @@
               <mat-radio-button value="fcf">FCF</mat-radio-button>
               <mat-radio-button value="fte">FTE</mat-radio-button>
             </mat-radio-group>
+            <mat-form-field class="inline">
+              <input type="number" id="iterations" name="iterations" matInput placeholder="Anzahl Iterationen" formControlName="iterations" required>
+            </mat-form-field>
           </mat-card-content>
           <mat-card-actions class="stepper-actions">
             <button mat-button matStepperPrevious>Zurück</button>
@@ -54,13 +57,14 @@
         </mat-card>
       </form>
     </mat-step>
-    <mat-step label="Zahlungsreihe angeben" [stepControl]="stepperFormGroup3">
-      <form [formGroup]="stepperFormGroup3" (ngSubmit)="createProject()">
-        <mat-card class="form-container">
+    <mat-step label="Zahlungsreihe angeben" [stepControl]="formGroup3">
+      <form [formGroup]="formGroup3" (ngSubmit)="createProject()">
+        <mat-card class="form-container" [class.busy]="busy">
+          <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
           <mat-card-title>Zahlungsreihe</mat-card-title>
           <mat-card-content>
             <mat-form-field class="inline">
-              <input type="number" id="baseYear" name="baseYear" matInput placeholder="Basisjahr" formControlName="baseYear" value="{{prevYear}}"
+              <input type="number" id="baseYear" name="baseYear" matInput placeholder="Basisjahr" formControlName="baseYear"
                 (change)="updateTable()" required>
             </mat-form-field>
             <div class="scrollable">
@@ -69,7 +73,7 @@
                   <tr class="mat-header-row">
                     <th class="mat-header-cell">Jahr</th>
                     <ng-container *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
-                      <th class="mat-cell" *ngIf="element.value.year < stepperFormGroup3.value.baseYear">
+                      <th class="mat-cell" *ngIf="element.value.year < formGroup3.value.baseYear">
                         {{element.value.year}}
                       </th>
                     </ng-container>
@@ -79,7 +83,7 @@
                   <tr class="mat-row">
                     <th class="mat-header-cell">Fremdkapital</th>
                     <ng-container *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
-                      <td class="mat-cell" *ngIf="element.value.year < stepperFormGroup3.value.baseYear">
+                      <td class="mat-cell" *ngIf="element.value.year < formGroup3.value.baseYear">
                         <mat-form-field class="table-input-right" [formGroup]="element">
                           <input type="text" matInput formControlName="externalCapital" appToDouble required>
                         </mat-form-field>
@@ -89,7 +93,7 @@
                   <tr class="mat-row">
                     <th class="mat-header-cell">FCF</th>
                     <ng-container *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
-                      <td class="mat-cell" *ngIf="element.value.year < stepperFormGroup3.value.baseYear">
+                      <td class="mat-cell" *ngIf="element.value.year < formGroup3.value.baseYear">
                         <mat-form-field class="table-input-right" [formGroup]="element">
                           <input type="text" matInput formControlName="fcf" appToDouble required>
                         </mat-form-field>
@@ -109,8 +113,8 @@
             </div>
           </mat-card-content>
           <mat-card-actions class="stepper-actions">
-            <button mat-button matStepperPrevious>Zurück</button>
-            <button mat-raised-button matStepperNext color="accent">Projekt anlegen</button>
+            <button mat-button matStepperPrevious [disabled]="busy">Zurück</button>
+            <button mat-raised-button matStepperNext color="accent" [disabled]="busy">Projekt anlegen</button>
           </mat-card-actions>
         </mat-card>
       </form>

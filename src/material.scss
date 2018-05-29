@@ -9,8 +9,8 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://www.google.com/design/spec/style/color.html
-$app-accent: mat-palette($mat-green, 800, 400, 900);
-$app-primary:  mat-palette($mat-blue-grey, 900, 700, 900);
+$app-accent: mat-palette($mat-green, 800, 100, 900);
+$app-primary:  mat-palette($mat-blue-grey, 900, 200, 900);
 $app-warn:    mat-palette($mat-red, 800);
 
 // Create the theme object (a Sass map containing all of the palettes).

@@ -15,7 +15,7 @@ export class SelectProjectComponent implements OnInit {
   }
 
   selectProject(project: Project) {
-    this.bottomSheetRef.dismiss();
+    this.bottomSheetRef.dismiss(project);
   }
 
 }

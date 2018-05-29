@@ -11,6 +11,7 @@ import { CreateProjectComponent } from './create-project/create-project.componen
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 import { ToDoubleDirective } from './to-double.directive';
 import { SelectProjectComponent } from './select-project/select-project.component';
+import { ProjectCardComponent } from './project-card/project-card.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { SelectProjectComponent } from './select-project/select-project.componen
     ProjectDetailsComponent,
     ToDoubleDirective,
     SelectProjectComponent,
+    ProjectCardComponent,
   ],
   imports: [
     BrowserModule,

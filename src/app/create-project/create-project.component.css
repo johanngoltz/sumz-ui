@@ -82,3 +82,32 @@ label.grey {
     border-left: 1px solid rgba(0, 0, 0, 0.12);
     padding: 0 0 0 5px;
 }
+
+mat-card {
+    overflow: hidden;
+}
+
+mat-card-title, mat-card-content,  mat-card-actions {
+    transition: opacity .25s;
+}
+
+.busy mat-card-title, .busy mat-card-content, .busy mat-card-actions {
+    opacity: 0.5;
+}
+
+mat-progress-bar {
+    transition: opacity .25s;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.busy mat-progress-bar {
+    opacity: 1;
+}
+
+.navigation-disabled ::ng-deep .mat-step-header {
+    pointer-events: none !important;
+}
