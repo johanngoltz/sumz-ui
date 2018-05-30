@@ -59,6 +59,7 @@ label.grey {
     max-width: 100%;
     overflow-x: auto;
     align-items: center;
+    scroll-behavior: smooth;
 }
 
 .info {
