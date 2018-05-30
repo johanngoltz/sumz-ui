@@ -2,11 +2,22 @@
   "projects": [
     {
       "id": 200,
-      "name": "anotherName"
+      "name": "anotherName",
+      "scenarios": [
+        {
+          "id": 0.24470925173976066,
+          "projectId": 200
+        },
+        {
+          "id": 0.1205979219630624,
+          "projectId": 200
+        }
+      ]
     },
     {
       "id": 300,
-      "name": "runningOutOfNames"
+      "name": "runningOutOfNames",
+      "scenarios": []
     }
   ]
 }
