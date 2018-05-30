@@ -86,13 +86,12 @@ export class CreateProjectComponent implements OnInit {
 
   createProject() {
     if (this.formGroup3.valid) {
-      this.busy = false;
+      this.busy = true;
       this._projectsService.addProject({
         id: null,
         ...this.formGroup1.value,
         ...this.formGroup2.value,
         ...this.formGroup3.value,
-        iterations: 10000,
         prognosisLength: 5,
         pkEquals: null,
       }).then(() => {
@@ -103,39 +102,36 @@ export class CreateProjectComponent implements OnInit {
       ).catch(e => {
         this.busy = false;
         this._snackBar.open(`Das Projekt konnte nicht erstellt werden. (${e.message})`, undefined,
-        { panelClass: 'mat-warn', duration: 5000 });
+          { panelClass: 'mat-warn', duration: 5000 });
       });
     }
   }
 
   openSelectionSheet() {
-    this._bottomSheet.open(SelectProjectComponent).afterDismissed().subscribe(result => {
-      if (result instanceof Project) {
-        if (this.formGroup1.value.name.length === 0) {
-          this.formGroup1.value.name = result.name;
-        }
-        if (this.formGroup1.value.description.length === 0) {
-          this.formGroup1.value.description = result.description;
-        }
-        this.formGroup2.value.deterministic = result.deterministic;
-        this.formGroup2.value.algorithm = result.algorithm;
-        this.formGroup2.value.iterations = result.iterations;
-        this.formGroup3.value.baseYear = result.baseYear;
-        this.timeSeries.reset();
-        result.timeSeries.forEach((financialData: FinancialData) => {
-          this.timeSeries.push(
-            this._formBuilder.group({
-              year: [financialData.year, Validators.required],
-              externalCapital: [financialData.externalCapital, Validators.required],
-              fcf: [financialData.fcf, Validators.required],
-            })
-          );
-        });
-        this._snackBar.open(`Die Daten des Projekts "${result.name}" wurden erfolgreich übernommen`, undefined, { duration: 5000 });
-      } else {
-        this._snackBar.open(`Die Daten des Projekts "${result.name}" konnten aufgrund eines Fehlers nicht übernommen werden`,
-          undefined, { panelClass: 'mat-warn', duration: 5000 });
+    this._bottomSheet.open(SelectProjectComponent).afterDismissed().subscribe((result: Project) => {
+      if (this.formGroup1.value.name.length === 0) {
+        this.formGroup1.controls.name.patchValue(result.name);
       }
+      if (this.formGroup1.value.description.length === 0) {
+        this.formGroup1.controls.description.patchValue(result.description);
+      }
+      this.formGroup2.controls.deterministic.patchValue(result.deterministic);
+      this.formGroup2.controls.algorithm.patchValue(result.algorithm);
+      this.formGroup2.controls.iterations.patchValue(result.iterations);
+      this.formGroup3.controls.baseYear.patchValue(result.baseYear);
+      while (this.timeSeries.length > 0) {
+        this.timeSeries.removeAt(0);
+      }
+      result.timeSeries.forEach((financialData: FinancialData) => {
+        this.timeSeries.push(
+          this._formBuilder.group({
+            year: [financialData.year, Validators.required],
+            externalCapital: [financialData.externalCapital, Validators.required],
+            fcf: [financialData.fcf, Validators.required],
+          })
+        );
+      });
+      this._snackBar.open(`Die Daten des Projekts "${result.name}" wurden erfolgreich übernommen`, undefined, { duration: 5000 });
     });
   }
 
