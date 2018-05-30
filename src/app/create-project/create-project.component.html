@@ -46,12 +46,12 @@
               <input type="number" id="baseYear" name="baseYear" matInput placeholder="Basisjahr" formControlName="baseYear" value="{{prevYear}}"
                 required>
             </mat-form-field>
-            <div class="scrollable">
+            <div class="scrollable" #scrollable>
               <table class="mat-table">
                 <thead>
                   <tr class="mat-header-row">
                     <th class="mat-header-cell">Jahr</th>
-                    <td class="mat-cell" *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
+                    <td class="mat-cell" *ngFor="let element of timeSeries.controls; trackBy: trackByYear" #yearCell>
                       {{element.value.year}}
                     </td>
                   </tr>
@@ -65,7 +65,7 @@
                       </mat-form-field>
                     </td>
                   </tr>
-                  <tr class="mat-row">
+                  <tr class="mat-row" #fcfrow>
                     <th class="mat-header-cell">FCF</th>
                     <td class="mat-cell" *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
                       <mat-form-field class="table-input-right" [formGroup]="element">

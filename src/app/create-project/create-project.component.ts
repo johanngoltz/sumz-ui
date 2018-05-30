@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FinancialData, Project } from '../project';
-import { MatIcon } from '@angular/material';
 
 @Component({
   selector: 'app-create-project',
@@ -15,7 +14,8 @@ export class CreateProjectComponent implements OnInit {
   stepperFormGroup3: FormGroup;
   prevYear: number;
   newProject: Project;
-  @ViewChild('addYearIcon') addYearIcon : MatIcon;
+  @ViewChild('scrollable') dataScrollContainer: ElementRef;
+  @ViewChild('fcfrow') fcfRow: ElementRef;
 
   constructor(private _formBuilder: FormBuilder) {
   }
@@ -47,6 +47,13 @@ export class CreateProjectComponent implements OnInit {
       baseYear: [this.prevYear, Validators.required],
       timeSeries: this.timeSeries
     });
+
+    new MutationObserver(
+      // besser und logischer wäre scrollLeftMax, aber das scheint es nur in Firefox zu geben.
+      () => this.dataScrollContainer.nativeElement.scrollLeft = this.dataScrollContainer.nativeElement.scrollWidth)
+      .observe(
+        this.fcfRow.nativeElement,
+        { childList: true });
   }
 
   addYear(baseYear: number) {
@@ -64,8 +71,6 @@ export class CreateProjectComponent implements OnInit {
         fcf: [0, Validators.required]
       })
     );
-    //this.addYearIcon._elementRef.nativeElement.scrollIntoView();
-    window.setTimeout(() => this.addYearIcon._elementRef.nativeElement.scrollIntoView(), 10)
   }
 
   trackByYear(i: number, o: FinancialData) {
