@@ -16,8 +16,5 @@ export class ProjectsComponent implements OnInit {
     this.projectsService = projectsService;
   }
 
-  ngOnInit() {
-    this.hovered = undefined;
-  }
-
+  ngOnInit() { }
 }

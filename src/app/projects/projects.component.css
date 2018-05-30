@@ -1,14 +1,9 @@
-
-mat-card {
-    width: calc(100% - 90px);
-    height: calc(100% - 90px);
-    cursor: pointer;
-}
-
-mat-card-title {
+app-project-card {
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: center;
 }
 
 mat-grid-list {

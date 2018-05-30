@@ -6,3 +6,13 @@
     height: 50px;
     width: auto;
 }
+
+::ng-deep snack-bar-container.mat-accent {
+    background: #2e7d32;
+    color: #FFF;
+}
+
+::ng-deep snack-bar-container.mat-warn {
+    background: #c62828;
+    color: #FFF;
+}

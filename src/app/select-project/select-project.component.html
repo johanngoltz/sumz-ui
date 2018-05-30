@@ -1,0 +1,7 @@
+<mat-nav-list>
+  <h3 matSubheader>Vorhandene Projekte</h3>
+  <a (click)="selectProject(project)" mat-list-item *ngFor="let project of _projectsService.projects">
+      <div class="title" matLine>{{project.name}}</div>
+      <div class="description" matLine>{{project.description}}</div>
+  </a>
+</mat-nav-list>
