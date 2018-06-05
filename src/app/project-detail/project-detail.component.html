@@ -1,9 +1,13 @@
-<p>
+<div class="content-container">
   project-detail works!
-  <mat-list>
-    
-  </mat-list>
-  <mat-table>
+  <div>
+    <mat-list>
+      <mat-list-item *ngFor="let scenario of scenariosService.scenarios[forProject.id]">
 
-  </mat-table>
-</p>
+      </mat-list-item>
+    </mat-list>
+    <mat-table>
+
+    </mat-table>
+  </div>
+</div>

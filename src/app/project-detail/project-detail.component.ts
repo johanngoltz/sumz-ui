@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MaterialModule } from '../material.module';
+import { ProjectsService } from '../projects.service';
+import { ScenariosService } from '../scenarios.service';
+import { Project } from '../project';
 
 @Component({
   selector: 'app-project-detail',
@@ -8,9 +11,15 @@ import { MaterialModule } from '../material.module';
 })
 export class ProjectDetailComponent implements OnInit {
 
-  constructor() { }
+  projectsService: ProjectsService;
+  scenariosService: ScenariosService;
+  forProject: Project;
+
+  constructor() { 
+  }
 
   ngOnInit() {
+    this.projectsService.getScenarios(this.forProject.id);
   }
 
 }
