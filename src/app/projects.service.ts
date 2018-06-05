@@ -21,10 +21,6 @@ export class ProjectsService {
     return (await this.api.get('/project')).data;
   }
 
-  saveProjects(projects: Project[]) {
-    window.localStorage.setItem('projects', JSON.stringify(projects));
-  }
-
   async addProject(project: Project) {
     this.api.request({
       url: '/project',

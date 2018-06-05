@@ -7,7 +7,7 @@ import axios, { TypedAxiosInstance } from 'restyped-axios';
   providedIn: 'root',
 })
 export class ScenariosService {
-  protected scenarios: Map<number, Scenario[]>;
+  protected scenarios: Map<number, Scenario[]> = new Map<number, Scenario[]>();
   private api: TypedAxiosInstance<ScenarioAPI>;
 
   constructor() {
@@ -15,35 +15,34 @@ export class ScenariosService {
   }
 
   async getScenarios(ofProjectId: number): Promise<Scenario[]> {
-    return (await this.api.get(`/project/${ofProjectId}`)).data as Scenario[];
+    const scenarios = (await this.api.get(`/project/${ofProjectId}/scenario`)).data as Scenario[];
+    this.scenarios.set(ofProjectId, scenarios);
+    return scenarios;
   }
 
   async addScenario(toProjectId: number, scenario: Scenario): Promise<Scenario> {
-    const mergedScenario = (await this.api.request({
-      url: '/project/:pId/scenario',
-      method: 'POST',
-      data: scenario,
-    })).data;
+    const mergedScenario = (await this.api.post(
+      `/project/${toProjectId}/scenario`,
+      scenario
+    )).data;
     // TODO: handle empty array / adding a scenario to newly-created project
     this.scenarios.get(toProjectId).push(mergedScenario);
     return mergedScenario;
   }
 
   async updateScenario(ofProjectId: number, scenario: Scenario) {
-    await this.api.request({
-      url: '/project/:pId/scenario/:sId',
-      method: 'PATCH',
-      data: scenario,
-    });
+    await this.api.patch(
+      `/project/${ofProjectId}/scenario/${scenario.id}`,
+      scenario
+    );
     const scenarioCache = this.scenarios.get(ofProjectId);
     scenarioCache[scenarioCache.findIndex(value => value.id === scenario.id)] = scenario;
   }
 
   async removeScenario(ofProjectId: number, scenario: Scenario) {
-    await this.api.request({
-      url: '/project/:pId/scenario/:sId',
-      method: 'DELETE',
-    });
+    await this.api.delete(
+      `/project/${ofProjectId}/scenario/${scenario.id}`
+    );
     const scenarioCache = this.scenarios.get(ofProjectId);
     scenarioCache.splice(scenarioCache.indexOf(scenario), 1);
   }
