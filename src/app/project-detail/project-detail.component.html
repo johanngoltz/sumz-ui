@@ -1,13 +1,37 @@
 <div class="content-container">
-  project-detail works!
   <div>
-    <mat-list>
-      <mat-list-item *ngFor="let scenario of scenariosService.scenarios[forProject.id]">
+    <div>
+      <mat-list>
+        <mat-list-item *ngFor="let scenario of scenariosService.scenarios[forProject.id]">
 
-      </mat-list-item>
-    </mat-list>
-    <mat-table>
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <div>
+      <table class="mat-table">
+        <thead>
+          <tr class="mat-header-row">
+            <th class="mat-header-cell">Name</th>
+            <th class="mat-header-cell">Beschreibung</th>
+            <th class="mat-header-cell">Basisjahr</th>
+            <th class="mat-header-cell">Perioden</th>
+          </tr> 
+        </thead>
+        <tbody>
+          <tr class="mat-row">
+            <td class="mat-cell">{{forProject.name}}</td>
+            <td class="mat-cell">{{forProject.description}}</td>
+            <td class="mat-cell">{{forProject.baseYear}}</td>
+            <td class="mat-cell">{{forProject.prognosisLength}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <!--<table mat-table [dataSource]="">aktivierte Szenarien
 
-    </mat-table>
+      </table>
+      <table mat-table [dataSource]="forProject.timeSeries">
+
+      </table>-->
+    </div>
   </div>
 </div>

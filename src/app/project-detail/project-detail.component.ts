@@ -10,16 +10,18 @@ import { Project } from '../project';
   styleUrls: ['./project-detail.component.css'],
 })
 export class ProjectDetailComponent implements OnInit {
+  public columnsFromProject: ['name', 'iterations'];
+  private forProject: Project;
 
-  projectsService: ProjectsService;
-  scenariosService: ScenariosService;
-  forProject: Project;
-
-  constructor() { 
+  constructor(private scenariosService: ScenariosService,
+    private projectsService: ProjectsService) {
+    this.forProject = new Project();
+    this.forProject.iterations = 5;
+    this.forProject.name = 'Blabla';
+    this.forProject.id = 200;
   }
 
   ngOnInit() {
-    this.projectsService.getScenarios(this.forProject.id);
+    this.scenariosService.getScenarios(this.forProject.id);
   }
-
 }
