@@ -12,13 +12,19 @@ export class ProjectsService {
   private api: TypedAxiosInstance<ProjectAPI>;
 
   constructor() {
-    this.api = axios.create<ProjectAPI>({ baseURL: 'http://delicate-dew-1362.getsandbox.com/' });
+    this.api = axios.create<ProjectAPI>({ baseURL: 'http://localhost:8080' });
     this.loadProjects()
       .then(loadedProjects => this.projects = loadedProjects);
   }
 
   async loadProjects(): Promise<Project[]> {
     return (await this.api.get('/project')).data;
+  }
+
+  async getProject(id: number): Promise<Project> {
+    // führt dazu, dass loadProjects() zwei mal aufgerufen wird. doof.
+    if (!this.projects) { this.projects = await this.loadProjects(); }
+    return this.projects.find(project => project.id === id);
   }
 
   async addProject(project: Project) {

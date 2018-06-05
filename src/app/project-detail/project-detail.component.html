@@ -1,13 +1,16 @@
 <div class="content-container">
-  <div>
+  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
     <div>
+      Szenarien
       <mat-list>
-        <mat-list-item *ngFor="let scenario of scenariosService.scenarios[forProject.id]">
-
+        <mat-list-item *ngFor="let scenario of allScenarios$ | async">
+          {{ scenario.id }}
         </mat-list-item>
       </mat-list>
     </div>
+    <mat-divider [vertical]="true"></mat-divider>
     <div>
+      Projekt
       <table class="mat-table">
         <thead>
           <tr class="mat-header-row">
@@ -15,23 +18,55 @@
             <th class="mat-header-cell">Beschreibung</th>
             <th class="mat-header-cell">Basisjahr</th>
             <th class="mat-header-cell">Perioden</th>
-          </tr> 
+          </tr>
         </thead>
         <tbody>
           <tr class="mat-row">
-            <td class="mat-cell">{{forProject.name}}</td>
-            <td class="mat-cell">{{forProject.description}}</td>
-            <td class="mat-cell">{{forProject.baseYear}}</td>
-            <td class="mat-cell">{{forProject.prognosisLength}}</td>
+            <td class="mat-cell">{{(forProject$ | async)?.name}}</td>
+            <td class="mat-cell">{{(forProject$ | async)?.description}}</td>
+            <td class="mat-cell">{{(forProject$ | async)?.baseYear}}</td>
+            <td class="mat-cell">{{(forProject$ | async)?.prognosisLength}}</td>
           </tr>
         </tbody>
       </table>
-      <!--<table mat-table [dataSource]="">aktivierte Szenarien
 
+      Aktive Szenarien
+      <table mat-table [dataSource]="activeScenarios$ | async">
+        <ng-container matColumnDef="equityInterest">
+          <th mat-header-cell *matHeaderCellDef> EK-Rendite </th>
+          <td mat-cell *matCellDef="let row"> {{row.equityInterest}} </td>
+        </ng-container>
+        <ng-container matColumnDef="outsideCapitalInterest">
+          <th mat-header-cell *matHeaderCellDef> FK-Rendite </th>
+          <td mat-cell *matCellDef="let row"> {{row.outsideCapitalInterest}} </td>
+        </ng-container>
+        <ng-container matColumnDef="businessTax">
+          <th mat-header-cell *matHeaderCellDef> Steuersatz </th>
+          <td mat-cell *matCellDef="let row"> {{row.businessTax}} </td>
+        </ng-container>
+        
+        <tr mat-header-row *matHeaderRowDef="scenarioColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: scenarioColumns"></tr>
       </table>
-      <table mat-table [dataSource]="forProject.timeSeries">
 
-      </table>-->
+      Angegebene Unternehmensdaten
+      <table mat-table [dataSource]="timeSeries">
+        <ng-container matColumnDef="year">
+          <th mat-header-cell *matHeaderCellDef> Jahr </th>
+          <td mat-cell *matCellDef="let row"> {{row.year}} </td>
+        </ng-container>
+        <ng-container matColumnDef="externalCapital">
+          <th mat-header-cell *matHeaderCellDef> Fremdkapital </th>
+          <td mat-cell *matCellDef="let row"> {{row.externalCapital}} </td>
+        </ng-container>
+        <ng-container matColumnDef="fcf">
+          <th mat-header-cell *matHeaderCellDef> Free Cashflow </th>
+          <td mat-cell *matCellDef="let row"> {{row.fcf}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="timeSeriesColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: timeSeriesColumns"></tr>
+      </table>
     </div>
   </div>
 </div>
