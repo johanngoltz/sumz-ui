@@ -14,13 +14,13 @@ export class ScenariosService {
     this.api = axios.create<ScenarioAPI>({ baseURL: 'http://localhost:8080' });
   }
 
-  async getScenarios(ofProjectId: number): Promise<Scenario[]> {
+  public async getScenarios(ofProjectId: number): Promise<Scenario[]> {
     const scenarios = (await this.api.get(`/project/${ofProjectId}/scenario`)).data as Scenario[];
     this.scenarios.set(ofProjectId, scenarios);
     return scenarios;
   }
 
-  async addScenario(toProjectId: number, scenario: Scenario): Promise<Scenario> {
+  public async addScenario(toProjectId: number, scenario: Scenario): Promise<Scenario> {
     const mergedScenario = (await this.api.post(
       `/project/${toProjectId}/scenario`,
       scenario
@@ -30,7 +30,7 @@ export class ScenariosService {
     return mergedScenario;
   }
 
-  async updateScenario(ofProjectId: number, scenario: Scenario) {
+  public async updateScenario(ofProjectId: number, scenario: Scenario) {
     await this.api.patch(
       `/project/${ofProjectId}/scenario/${scenario.id}`,
       scenario
@@ -39,7 +39,7 @@ export class ScenariosService {
     scenarioCache[scenarioCache.findIndex(value => value.id === scenario.id)] = scenario;
   }
 
-  async removeScenario(ofProjectId: number, scenario: Scenario) {
+  public async removeScenario(ofProjectId: number, scenario: Scenario) {
     await this.api.delete(
       `/project/${ofProjectId}/scenario/${scenario.id}`
     );
