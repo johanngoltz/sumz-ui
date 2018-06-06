@@ -10,10 +10,11 @@ import { ProjectAPI } from './project-api';
 export class ProjectsService {
   protected projects: Project[];
   private api: TypedAxiosInstance<ProjectAPI>;
+  private initialLoader: Promise<Project[]>;
 
   constructor() {
     this.api = axios.create<ProjectAPI>({ baseURL: 'http://localhost:8080' });
-    this.loadProjects()
+    (this.initialLoader = this.loadProjects())
       .then(loadedProjects => this.projects = loadedProjects);
   }
 
@@ -22,12 +23,12 @@ export class ProjectsService {
   }
 
   async getProject(id: number): Promise<Project> {
-    // führt dazu, dass loadProjects() zwei mal aufgerufen wird. doof.
-    if (!this.projects) { this.projects = await this.loadProjects(); }
+    await this.initialLoader;
     return this.projects.find(project => project.id === id);
   }
 
   async addProject(project: Project) {
+    await this.initialLoader;
     this.api.request({
       url: '/project',
       data: project,
@@ -37,6 +38,7 @@ export class ProjectsService {
   }
 
   async updateProject(project: Project) {
+    await this.initialLoader;
     this.api.patch(`/project/${project.id}`, project)
       .then(
         () => {
@@ -47,6 +49,7 @@ export class ProjectsService {
   }
 
   async removeProject(project: Project) {
+    await this.initialLoader;
     return this.api.delete(`/project/${project.id}`)
       .then(
         async () => {
