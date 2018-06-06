@@ -5,7 +5,7 @@ mat-vertical-stepper {
 .form-container {
     min-width: 600px;
     display: inline-block;
-    max-width: 100%;
+    max-width: calc(100% - 40px);
 }
 
 mat-form-field:not(.inline) {
@@ -55,10 +55,7 @@ label.grey {
 }
 
 .scrollable {
-    display: flex;
-    max-width: calc(100% - 40px);
     overflow-x: auto;
-    align-items: center;
     scroll-behavior: smooth;
 }
 
@@ -78,6 +75,8 @@ label.grey {
 }
 
 .actions {
+    position: sticky;
+    right: 0;
     display: flex;
     flex-direction: column;
     border-left: 1px solid rgba(0, 0, 0, 0.12);
@@ -111,4 +110,9 @@ mat-progress-bar {
 
 .navigation-disabled ::ng-deep .mat-step-header {
     pointer-events: none !important;
+}
+
+:ng-deep .md-button-wrapper > * {
+    vertical-align: middle;
+    margin-top: -3px;
 }

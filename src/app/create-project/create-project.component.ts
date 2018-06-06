@@ -29,7 +29,7 @@ export class CreateProjectComponent implements OnInit {
     this.busy = false;
     this.prevYear = new Date().getFullYear() - 1;
     this.timeSeries = this._formBuilder.array([this._formBuilder.group({
-      year: [this.prevYear - 1, Validators.required],
+      year: [this.prevYear, Validators.required],
       externalCapital: [0, Validators.required],
       fcf: [0, Validators.required],
     })]);
@@ -55,25 +55,39 @@ export class CreateProjectComponent implements OnInit {
   }
 
   addYear() {
-    let currYear: number;
+    const years = this.timeSeries.controls.map(obj => obj.value.year);
     if (this.timeSeries.controls.length > 0) {
-      currYear = Math.min(...this.timeSeries.controls.map(obj => obj.value.year));
+      if (this.formGroup2.value.deterministic) {
+        this.timeSeries.push(
+          this._formBuilder.group({
+            year: [Math.max(...years) + 1, Validators.required],
+            externalCapital: [0, Validators.required],
+            fcf: [0, Validators.required],
+          })
+        );
+      } else {
+        this.timeSeries.insert(0,
+          this._formBuilder.group({
+            year: [Math.min(...years) - 1, Validators.required],
+            externalCapital: [0, Validators.required],
+            fcf: [0, Validators.required],
+          })
+        );
+      }
     } else {
-      currYear = this.formGroup3.value.baseYear;
+      this.timeSeries.push(
+        this._formBuilder.group({
+          year: [this.formGroup3.value.baseYear, Validators.required],
+          externalCapital: [0, Validators.required],
+          fcf: [0, Validators.required],
+        })
+      );
     }
-
-    this.timeSeries.push(
-      this._formBuilder.group({
-        year: [currYear - 1, Validators.required],
-        externalCapital: [0, Validators.required],
-        fcf: [0, Validators.required],
-      })
-    );
   }
 
   removeLastYear() {
     if (this.timeSeries.value.length > 0) {
-      this.timeSeries.removeAt(-1);
+      this.timeSeries.removeAt(this.formGroup2.value.deterministic ? -1 : 0);
     }
     if (this.timeSeries.value.filter(o => o.year < this.formGroup3.value.baseYear).length === 0) {
       this.addYear();
@@ -108,31 +122,33 @@ export class CreateProjectComponent implements OnInit {
   }
 
   openSelectionSheet() {
-    this._bottomSheet.open(SelectProjectComponent).afterDismissed().subscribe((result: Project) => {
-      if (this.formGroup1.value.name.length === 0) {
-        this.formGroup1.controls.name.patchValue(result.name);
-      }
-      if (this.formGroup1.value.description.length === 0) {
-        this.formGroup1.controls.description.patchValue(result.description);
-      }
-      this.formGroup2.controls.deterministic.patchValue(result.deterministic);
-      this.formGroup2.controls.algorithm.patchValue(result.algorithm);
-      this.formGroup2.controls.iterations.patchValue(result.iterations);
-      this.formGroup3.controls.baseYear.patchValue(result.baseYear);
-      while (this.timeSeries.length > 0) {
-        this.timeSeries.removeAt(0);
-      }
-      result.timeSeries.forEach((financialData: FinancialData) => {
-        this.timeSeries.push(
-          this._formBuilder.group({
-            year: [financialData.year, Validators.required],
-            externalCapital: [financialData.externalCapital, Validators.required],
-            fcf: [financialData.fcf, Validators.required],
-          })
-        );
-      });
-      this._snackBar.open(`Die Daten des Projekts "${result.name}" wurden erfolgreich übernommen`, undefined, { duration: 5000 });
+    this._bottomSheet.open(SelectProjectComponent).afterDismissed().subscribe(this.insertProjectData);
+  }
+
+  insertProjectData(project: Project) {
+    if (this.formGroup1.value.name.length === 0) {
+      this.formGroup1.controls.name.patchValue(project.name);
+    }
+    if (this.formGroup1.value.description.length === 0) {
+      this.formGroup1.controls.description.patchValue(project.description);
+    }
+    this.formGroup2.controls.deterministic.patchValue(project.deterministic);
+    this.formGroup2.controls.algorithm.patchValue(project.algorithm);
+    this.formGroup2.controls.iterations.patchValue(project.iterations);
+    this.formGroup3.controls.baseYear.patchValue(project.baseYear);
+    while (this.timeSeries.length > 0) {
+      this.timeSeries.removeAt(0);
+    }
+    project.timeSeries.forEach((financialData: FinancialData) => {
+      this.timeSeries.push(
+        this._formBuilder.group({
+          year: [financialData.year, Validators.required],
+          externalCapital: [financialData.externalCapital, Validators.required],
+          fcf: [financialData.fcf, Validators.required],
+        })
+      );
     });
+    this._snackBar.open(`Die Daten des Projekts "${project.name}" wurden erfolgreich übernommen`, undefined, { duration: 5000 });
   }
 
   updateTable() {
@@ -141,26 +157,53 @@ export class CreateProjectComponent implements OnInit {
       const years = this.timeSeries.value.map(o => o.year);
       const min = Math.min(...years);
       const max = Math.max(...years);
-      if (max < baseYear - 1) {
-        for (let i = max + 1; i < baseYear; i++) {
-          this.timeSeries.insert(0,
-            this._formBuilder.group({
-              year: [i, Validators.required],
-              externalCapital: [0, Validators.required],
-              fcf: [0, Validators.required],
-            })
-          );
+      if (baseYear > max) {
+        for (let i = 0; i < Math.min(min - baseYear, years.length); i++) {
+          if (this.timeSeries.controls[0].dirty) {
+            break;
+          } else {
+            this.timeSeries.removeAt(0);
+          }
         }
-      } else if (min >= baseYear) {
-        for (let i = min - 1; i >= baseYear - 1; i--) {
-          this.timeSeries.push(
-            this._formBuilder.group({
-              year: [i, Validators.required],
-              externalCapital: [0, Validators.required],
-              fcf: [0, Validators.required],
-            })
-          );
+        if (this.timeSeries.length > 0) {
+          for (let i = max + 1; i <= baseYear; i++) {
+            this.timeSeries.push(
+              this._formBuilder.group({
+                year: [i, Validators.required],
+                externalCapital: [0, Validators.required],
+                fcf: [0, Validators.required],
+              })
+            );
+          }
         }
+      } else if (max < baseYear && !this.formGroup2.value.deterministic) {
+        if (this.timeSeries.length > 0) {
+          for (let i = years.length - 1; i >= Math.max(0, years.length - (baseYear - max)); i--) {
+            if (this.timeSeries.controls[i].dirty) {
+              break;
+            } else {
+              this.timeSeries.removeAt(i);
+            }
+          }
+          for (let i = min - 1; i >= baseYear; i--) {
+            this.timeSeries.insert(0,
+              this._formBuilder.group({
+                year: [i, Validators.required],
+                externalCapital: [0, Validators.required],
+                fcf: [0, Validators.required],
+              })
+            );
+          }
+        }
+      }
+      if (this.timeSeries.length === 0) {
+        this.timeSeries.push(
+          this._formBuilder.group({
+            year: [baseYear, Validators.required],
+            externalCapital: [0, Validators.required],
+            fcf: [0, Validators.required],
+          })
+        );
       }
     }
   }

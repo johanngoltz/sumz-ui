@@ -35,7 +35,8 @@ export class ToDoubleDirective implements ControlValueAccessor {
     this.onTouchedCallback();
   }
 
-  constructor(private _renderer: Renderer2, private _elementRef: ElementRef) { }
+  constructor(private _renderer: Renderer2, private _elementRef: ElementRef) {
+  }
 
   writeValue(value: any, skipLocale?: Boolean): void {
     this._renderer.setProperty(this._elementRef.nativeElement, 'value', skipLocale ? value : value.toLocaleString('de-de'));
