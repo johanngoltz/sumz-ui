@@ -10,11 +10,12 @@ body {
 }
 
 .content-container {
-    padding: 30px;
+    padding: 16px;
+    overflow: hidden;
 }
 
 .mat-fab.fab-bottom-right {
     position: fixed;
-    bottom: 40px;
-    right: 40px;
+    bottom: 24px;
+    right: 24px;
 }

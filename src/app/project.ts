@@ -2,7 +2,7 @@ interface Equatable {
     pkEquals(other: Equatable): boolean;
 }
 
-export class Project implements Equatable {
+export class Project {
     id: number;
     name: string;
     description: string;
@@ -12,11 +12,6 @@ export class Project implements Equatable {
     deterministic: boolean;
     algorithm: string;
     timeSeries: FinancialData[];
-
-    pkEquals(other: Equatable): boolean {
-        const otherProject = other as Project;
-        return otherProject !== null && otherProject.id === this.id;
-    }
 }
 
 export class FinancialData {

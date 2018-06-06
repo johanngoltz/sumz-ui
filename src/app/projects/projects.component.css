@@ -11,4 +11,5 @@ app-project-card {
 mat-grid-list {
     margin-left: -20px;
     margin-right: -20px;
+    overflow: hidden;
 }

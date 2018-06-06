@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SelectProjectComponent } from './select-project.component';
+import { MaterialModule } from '../material.module';
+import { MatBottomSheetRef } from '@angular/material';
 
 describe('SelectProjectComponent', () => {
   let component: SelectProjectComponent;
@@ -9,6 +11,8 @@ describe('SelectProjectComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SelectProjectComponent],
+      imports: [MaterialModule],
+      providers: [MatBottomSheetRef],
     })
     .compileComponents();
   }));

@@ -8,6 +8,8 @@ import { CreateProjectComponent } from './create-project/create-project.componen
 import { MaterialModule } from './material.module';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 import { ProjectsComponent } from './projects/projects.component';
+import { SelectProjectComponent } from './select-project/select-project.component';
+import { ProjectCardComponent } from './project-card/project-card.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -17,6 +19,8 @@ describe('AppComponent', () => {
         ProjectsComponent,
         CreateProjectComponent,
         ProjectDetailsComponent,
+        SelectProjectComponent,
+        ProjectCardComponent,
       ],
       imports: [
         MaterialModule,

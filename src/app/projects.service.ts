@@ -27,16 +27,16 @@ export class ProjectsService {
 
   async addProject(project: Project) {
     this.api.post('/project', project)
-    .then(
-      () => this.projects.push(project)
-    );
+      .then(
+        () => this.projects.push(project)
+      );
   }
 
   async updateProject(project: Project) {
     this.api.patch(`/project/${project.id}`, project)
       .then(
         () => {
-          const oldProjectIndex = this.projects.findIndex(other => other.pkEquals(project));
+          const oldProjectIndex = this.projects.findIndex(other => other.id === project.id);
           this.projects[oldProjectIndex] = project;
         }
       );
