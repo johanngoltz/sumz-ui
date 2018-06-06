@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SelectProjectComponent } from './select-project.component';
 import { MaterialModule } from '../material.module';
 import { MatBottomSheetRef } from '@angular/material';
+import { ProjectsService } from '../projects.service';
 
 describe('SelectProjectComponent', () => {
   let component: SelectProjectComponent;
@@ -12,7 +13,12 @@ describe('SelectProjectComponent', () => {
     TestBed.configureTestingModule({
       declarations: [SelectProjectComponent],
       imports: [MaterialModule],
-      providers: [MatBottomSheetRef],
+      providers: [
+        { provide: MatBottomSheetRef, useValue: {dismiss() {}} },
+        { provide: ProjectsService, useValue: {
+          projects: [],
+        }},
+      ],
     })
     .compileComponents();
   }));

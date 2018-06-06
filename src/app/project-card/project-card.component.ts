@@ -9,7 +9,7 @@ import { ProjectsService } from '../projects.service';
   styleUrls: ['./project-card.component.css'],
 })
 export class ProjectCardComponent implements OnInit {
-  @Input('project') project: Project;
+  @Input() project: Project;
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   hovered: Boolean;
 
