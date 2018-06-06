@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Scenario, Project } from './project';
-import { ScenarioAPI } from './scenario-api';
 import axios, { TypedAxiosInstance } from 'restyped-axios';
+import { Scenario } from './project';
+import { ScenarioAPI } from './scenario-api';
 
 @Injectable({
   providedIn: 'root',

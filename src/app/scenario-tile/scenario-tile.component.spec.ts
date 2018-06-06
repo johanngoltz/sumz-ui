@@ -8,7 +8,7 @@ describe('ScenarioTileComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ScenarioTileComponent ]
+      declarations: [ScenarioTileComponent],
     })
     .compileComponents();
   }));
