@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MaterialModule } from '../material.module';
-import { ProjectsService } from '../projects.service';
-import { ScenariosService } from '../scenarios.service';
-import { Project, Scenario, FinancialData } from '../project';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { FinancialData, Project, Scenario } from '../project';
+import { ProjectsService } from '../projects.service';
+import { ScenariosService } from '../scenarios.service';
 
 @Component({
   selector: 'app-project-detail',
@@ -24,6 +23,7 @@ export class ProjectDetailComponent implements OnInit {
     externalCapital: 5645646,
     fcf: 4531.1,
   }];
+  alert = window.alert;
 
   constructor(private scenariosService: ScenariosService,
     private projectsService: ProjectsService,
@@ -35,8 +35,11 @@ export class ProjectDetailComponent implements OnInit {
       switchMap(params =>
         this.projectsService.getProject(Number.parseInt(params.get('id'))))
     );
-    this.activeScenarios$ = this.allScenarios$ = this.forProject$.pipe(
+    this.allScenarios$ = this.forProject$.pipe(
       switchMap(project => this.scenariosService.getScenarios(project.id))
+    );
+    this.activeScenarios$ = this.allScenarios$.pipe(
+      switchMap(scenarios => Promise.resolve(scenarios.filter(s => s.isActive)))
     );
   }
 }

@@ -4,7 +4,7 @@
       Szenarien
       <mat-list>
         <mat-list-item *ngFor="let scenario of allScenarios$ | async">
-          <app-scenario-tile [scenario]="scenario"></app-scenario-tile>
+          <app-scenario-tile [scenario]="scenario" (isActive)="alert(true)"></app-scenario-tile>
         </mat-list-item>
       </mat-list>
     </div>
@@ -32,7 +32,7 @@
 
       Aktive Szenarien
       <table mat-table [dataSource]="activeScenarios$ | async">
-        <ng-container matColumnDef="equityInterest" *ngFor="let item of items">
+        <ng-container matColumnDef="equityInterest">
           <th mat-header-cell *matHeaderCellDef> EK-Rendite </th>
           <td mat-cell *matCellDef="let row"> {{row.equityInterest}} </td>
         </ng-container>

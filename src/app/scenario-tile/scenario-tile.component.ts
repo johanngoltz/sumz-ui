@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Scenario } from '../project';
 
 @Component({
@@ -7,9 +7,11 @@ import { Scenario } from '../project';
   styleUrls: ['./scenario-tile.component.css'],
 })
 export class ScenarioTileComponent implements OnInit {
-  @Input('scenario') scenario: Scenario;
+  @Input() scenario: Scenario;
+  @Output('isActive') isActive = new EventEmitter<boolean>(true);
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

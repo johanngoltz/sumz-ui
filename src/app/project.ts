@@ -33,4 +33,5 @@ export class Scenario {
     outsideCapitalInterest: number;
     businessTax: number;
     result: object;
+    isActive: boolean;
 }
