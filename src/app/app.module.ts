@@ -10,6 +10,7 @@ import { ProjectsComponent } from './projects/projects.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { ProjectDetailComponent } from './project-detail/project-detail.component';
+import { ScenarioTileComponent } from './scenario-tile/scenario-tile.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { ProjectDetailComponent } from './project-detail/project-detail.componen
     ProjectsComponent,
     CreateProjectComponent,
     ProjectDetailComponent,
+    ScenarioTileComponent,
   ],
   imports: [
     BrowserModule,
