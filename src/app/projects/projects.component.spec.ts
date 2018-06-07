@@ -20,7 +20,56 @@ describe('ProjectsComponent', () => {
       imports: [MaterialModule, FormsModule, ReactiveFormsModule, AppRoutingModule],
       providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
-        { provide: ProjectsService, useValue: { projects: [] } },
+        {
+          provide: ProjectsService, useValue: {
+            projects: [
+              {
+                id: 3,
+                name: 'Testproject',
+                description: 'Testdesc',
+                algorithm: 'fcf',
+                deterministic: true,
+                baseYear: 2014,
+                iterations: 5000,
+                prognosisLength: 0,
+                timeSeries: [
+                  {
+                    year: 2014,
+                    fcf: 300,
+                    externalCapital: 500,
+                  },
+                  {
+                    year: 2015,
+                    fcf: 350,
+                    externalCapital: 400,
+                  },
+                ],
+              },
+              {
+                id: 4,
+                name: 'Testproject2',
+                description: 'Testdesc2',
+                algorithm: 'apv',
+                deterministic: false,
+                baseYear: 2015,
+                iterations: 5000,
+                prognosisLength: 3,
+                timeSeries: [
+                  {
+                    year: 2014,
+                    fcf: 0,
+                    externalCapital: 500,
+                  },
+                  {
+                    year: 2015,
+                    fcf: 0,
+                    externalCapital: 550,
+                  },
+                ],
+              },
+            ],
+          },
+        },
       ],
     })
       .compileComponents();

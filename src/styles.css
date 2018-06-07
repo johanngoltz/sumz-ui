@@ -12,6 +12,7 @@ body {
 .content-container {
     padding: 16px;
     overflow: hidden;
+    display: block;
 }
 
 .mat-fab.fab-bottom-right {

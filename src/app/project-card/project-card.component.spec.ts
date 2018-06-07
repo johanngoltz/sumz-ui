@@ -20,11 +20,11 @@ describe('ProjectCardComponent', () => {
     component = fixture.componentInstance;
     component.project = {
       id: 3,
-      name: 'Testpeoject',
+      name: 'Testproject',
       description: 'Testdesc',
       algorithm: 'fcf',
       deterministic: true,
-      baseYear: 2015,
+      baseYear: 2014,
       iterations: 5000,
       prognosisLength: 3,
       timeSeries: [
