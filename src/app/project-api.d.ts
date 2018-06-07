@@ -26,7 +26,7 @@ export interface ProjectAPI {
         },
         PATCH: {
             data: Project,
-            response: Success
+            response: Project
         }
     }
 }

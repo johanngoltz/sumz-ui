@@ -2,11 +2,43 @@
   "projects": [
     {
       "id": 200,
-      "name": "anotherName"
+      "name": "anotherName",
+      "scenarios": [
+        {
+          "id": 0.24470925173976066,
+          "projectId": 200
+        },
+        {
+          "id": 0.1205979219630624,
+          "projectId": 200
+        }
+      ],
+      "financialData": [
+        {
+          "id": 4711,
+          "year": 2017,
+          "externalCapital": 453165,
+          "fcf": 22.3
+        }
+      ]
     },
     {
       "id": 300,
-      "name": "runningOutOfNames"
+      "name": "runningOutOfNames",
+      "scenarios": [
+        {
+          "id": 0.18489153828391758
+        },
+        {
+          "id": 0.571014116428883
+        },
+        {
+          "id": 0.2942143434081076
+        },
+        {
+          "id": 0.20621556630215454
+        }
+      ]
     }
   ]
 }
