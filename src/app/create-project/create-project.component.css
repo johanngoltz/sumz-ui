@@ -22,9 +22,24 @@ mat-radio-group {
     flex-direction: column;
     margin: 5px 0 20px;
 }
+
+mat-radio-group mat-form-field {
+    align-self: flex-start;
+    margin: 6px 0 0 24px;
+    transition: opacity .25s;
+}
+
+mat-radio-group mat-form-field.disabled {
+    opacity: 0.37;
+    pointer-events: none;
+}
   
 mat-radio-button {
     margin: 5px 0 5px;
+}
+
+mat-radio-button mat-icon {
+    vertical-align: middle;
 }
 
 label.grey {
@@ -85,6 +100,7 @@ label.grey {
 
 mat-card {
     overflow: hidden;
+    margin-top: 5px;
 }
 
 mat-card-title, mat-card-content,  mat-card-actions {
@@ -115,4 +131,8 @@ mat-progress-bar {
 :ng-deep .md-button-wrapper > * {
     vertical-align: middle;
     margin-top: -3px;
+}
+
+#remove_year {
+    position: absolute;
 }

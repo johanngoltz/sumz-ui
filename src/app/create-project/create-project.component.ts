@@ -41,6 +41,7 @@ export class CreateProjectComponent implements OnInit {
       deterministic: true,
       algorithm: 'fcf',
       iterations: [10000, Validators.required],
+      prognosisLength: [5, Validators.required],
     });
     this.formGroup3 = this._formBuilder.group({
       baseYear: [this.prevYear, Validators.required],
@@ -54,42 +55,39 @@ export class CreateProjectComponent implements OnInit {
         { childList: true });
   }
 
+  createFinancialData(year: number, index?: number) {
+    const formGroup = this._formBuilder.group({
+      year: [year, Validators.required],
+      externalCapital: [0, Validators.required],
+      fcf: [0, Validators.required],
+    });
+
+    if (index !== undefined) {
+      this.timeSeries.insert(index, formGroup);
+    } else {
+      this.timeSeries.push(formGroup);
+    }
+  }
+
   addYear() {
     const years = this.timeSeries.controls.map(obj => obj.value.year);
     if (this.timeSeries.controls.length > 0) {
       if (this.formGroup2.value.deterministic) {
-        this.timeSeries.push(
-          this._formBuilder.group({
-            year: [Math.max(...years) + 1, Validators.required],
-            externalCapital: [0, Validators.required],
-            fcf: [0, Validators.required],
-          })
-        );
+        this.createFinancialData(Math.max(...years) + 1);
       } else {
-        this.timeSeries.insert(0,
-          this._formBuilder.group({
-            year: [Math.min(...years) - 1, Validators.required],
-            externalCapital: [0, Validators.required],
-            fcf: [0, Validators.required],
-          })
-        );
+        this.createFinancialData(Math.min(...years) - 1, 0);
       }
     } else {
-      this.timeSeries.push(
-        this._formBuilder.group({
-          year: [this.formGroup3.value.baseYear, Validators.required],
-          externalCapital: [0, Validators.required],
-          fcf: [0, Validators.required],
-        })
-      );
+      this.createFinancialData(this.formGroup3.value.baseYear);
     }
   }
 
-  removeLastYear() {
+  removeYear() {
     if (this.timeSeries.value.length > 0) {
       this.timeSeries.removeAt(this.formGroup2.value.deterministic ? -1 : 0);
     }
-    if (this.timeSeries.value.filter(o => o.year < this.formGroup3.value.baseYear).length === 0) {
+    if (this.timeSeries.value.filter(o => (o.year > this.formGroup3.value.baseYear) === this.formGroup2.value.deterministic ||
+       o.year === this.formGroup3.value.baseYear).length === 0) {
       this.addYear();
     }
   }
@@ -101,14 +99,16 @@ export class CreateProjectComponent implements OnInit {
   createProject() {
     if (this.formGroup3.valid) {
       this.busy = true;
-      this._projectsService.addProject({
+      const project = {
         id: null,
         ...this.formGroup1.value,
         ...this.formGroup2.value,
         ...this.formGroup3.value,
         prognosisLength: 5,
-        pkEquals: null,
-      }).then(() => {
+      };
+      project.timeSeries = project.timeSeries.map((o) =>
+        o.year === project.baseYear || (o.year > project.baseYear) === project.deterministic);
+      this._projectsService.addProject(project).then(() => {
         this.busy = false;
         this._snackBar.open('Das Projekt wurde erfolgreich erstellt', undefined, { duration: 5000 });
         this._router.navigate(['/project', 1]);
@@ -122,33 +122,33 @@ export class CreateProjectComponent implements OnInit {
   }
 
   openSelectionSheet() {
-    this._bottomSheet.open(SelectProjectComponent).afterDismissed().subscribe(this.insertProjectData);
+    this._bottomSheet.open(SelectProjectComponent).afterDismissed().subscribe((project) => this.insertProjectData(project, this));
   }
 
-  insertProjectData(project: Project) {
-    if (this.formGroup1.value.name.length === 0) {
-      this.formGroup1.controls.name.patchValue(project.name);
+  insertProjectData(project: Project, that: CreateProjectComponent) {
+    if (that.formGroup1.value.name.length === 0) {
+      that.formGroup1.controls.name.patchValue(project.name);
     }
-    if (this.formGroup1.value.description.length === 0) {
-      this.formGroup1.controls.description.patchValue(project.description);
+    if (that.formGroup1.value.description.length === 0) {
+      that.formGroup1.controls.description.patchValue(project.description);
     }
-    this.formGroup2.controls.deterministic.patchValue(project.deterministic);
-    this.formGroup2.controls.algorithm.patchValue(project.algorithm);
-    this.formGroup2.controls.iterations.patchValue(project.iterations);
-    this.formGroup3.controls.baseYear.patchValue(project.baseYear);
-    while (this.timeSeries.length > 0) {
-      this.timeSeries.removeAt(0);
+    that.formGroup2.controls.deterministic.patchValue(project.deterministic);
+    that.formGroup2.controls.algorithm.patchValue(project.algorithm);
+    that.formGroup2.controls.iterations.patchValue(project.iterations);
+    that.formGroup3.controls.baseYear.patchValue(project.baseYear);
+    while (that.timeSeries.length > 0) {
+      that.timeSeries.removeAt(0);
     }
     project.timeSeries.forEach((financialData: FinancialData) => {
-      this.timeSeries.push(
-        this._formBuilder.group({
+      that.timeSeries.push(
+        that._formBuilder.group({
           year: [financialData.year, Validators.required],
           externalCapital: [financialData.externalCapital, Validators.required],
           fcf: [financialData.fcf, Validators.required],
         })
       );
     });
-    this._snackBar.open(`Die Daten des Projekts "${project.name}" wurden erfolgreich übernommen`, undefined, { duration: 5000 });
+    that._snackBar.open(`Die Daten des Projekts "${project.name}" wurden erfolgreich übernommen`, undefined, { duration: 5000 });
   }
 
   updateTable() {
@@ -158,7 +158,7 @@ export class CreateProjectComponent implements OnInit {
       const min = Math.min(...years);
       const max = Math.max(...years);
       if (baseYear > max) {
-        for (let i = 0; i < Math.min(min - baseYear, years.length); i++) {
+        for (let i = 0; i < Math.min(baseYear - max, years.length); i++) {
           if (this.timeSeries.controls[0].dirty) {
             break;
           } else {
@@ -167,43 +167,25 @@ export class CreateProjectComponent implements OnInit {
         }
         if (this.timeSeries.length > 0) {
           for (let i = max + 1; i <= baseYear; i++) {
-            this.timeSeries.push(
-              this._formBuilder.group({
-                year: [i, Validators.required],
-                externalCapital: [0, Validators.required],
-                fcf: [0, Validators.required],
-              })
-            );
+            this.createFinancialData(i);
           }
         }
-      } else if (max < baseYear && !this.formGroup2.value.deterministic) {
-        if (this.timeSeries.length > 0) {
-          for (let i = years.length - 1; i >= Math.max(0, years.length - (baseYear - max)); i--) {
-            if (this.timeSeries.controls[i].dirty) {
-              break;
-            } else {
-              this.timeSeries.removeAt(i);
-            }
+      } else if (baseYear < min) {
+        for (let i = years.length - 1; i >= Math.max(0, years.length - (min - baseYear)); i--) {
+          if (this.timeSeries.controls[i].dirty) {
+            break;
+          } else {
+            this.timeSeries.removeAt(i);
           }
+        }
+        if (this.timeSeries.length > 0) {
           for (let i = min - 1; i >= baseYear; i--) {
-            this.timeSeries.insert(0,
-              this._formBuilder.group({
-                year: [i, Validators.required],
-                externalCapital: [0, Validators.required],
-                fcf: [0, Validators.required],
-              })
-            );
+            this.createFinancialData(i, 0);
           }
         }
       }
       if (this.timeSeries.length === 0) {
-        this.timeSeries.push(
-          this._formBuilder.group({
-            year: [baseYear, Validators.required],
-            externalCapital: [0, Validators.required],
-            fcf: [0, Validators.required],
-          })
-        );
+        this.createFinancialData(baseYear);
       }
     }
   }

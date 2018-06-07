@@ -39,12 +39,25 @@
             <mat-radio-group id="method" name="method" formControlName="deterministic" required>
               <mat-radio-button [value]="true">Deterministisch</mat-radio-button>
               <mat-radio-button [value]="false">Stochastisch</mat-radio-button>
+              <mat-form-field class="inline" [ngClass]="{disabled: this.formGroup2.value.deterministic}">
+                <input type="number" id="prognosisLength" name="prognosisLength" matInput placeholder="Anzahl Prognosejahre" formControlName="prognosisLength"
+                [readonly]="this.formGroup2.value.deterministic" required>
+              </mat-form-field>
             </mat-radio-group>
             <label class="grey" for="algorithm">Algorithmus</label>
             <mat-radio-group id="algorithm" name="algorithm" formControlName="algorithm" required>
-              <mat-radio-button value="apv">APV</mat-radio-button>
-              <mat-radio-button value="fcf">FCF</mat-radio-button>
-              <mat-radio-button value="fte">FTE</mat-radio-button>
+              <mat-radio-button value="apv">
+                APV
+                <mat-icon matTooltip="Das APV-Verfahren, auch Konzept des angepassten Barwerts, zählt - wie der WACC-Ansatz oder der TCF-Ansatz - zu den Entity-Methoden der DCF-Bewertung. Im Rahmen dieser Verfahren wird der Wert des Eigenkapitals eines Unternehmens durch Abzug der Nettofinanzverbindlichkeiten von dem Unternehmensgesamtwert (Entity Value) ermittelt. ">help</mat-icon>
+              </mat-radio-button>
+              <mat-radio-button value="fcf">
+                FCF
+                <mat-icon matTooltip="">help</mat-icon>
+              </mat-radio-button>
+              <mat-radio-button value="fte">
+                FTE
+                <mat-icon matTooltip="">help</mat-icon>
+              </mat-radio-button>
             </mat-radio-group>
             <mat-form-field class="inline">
               <input type="number" id="iterations" name="iterations" matInput placeholder="Anzahl Iterationen" formControlName="iterations"
@@ -76,6 +89,9 @@
                     <th class="mat-cell" *ngIf="!formGroup2.value.deterministic">{{(timeSeries.at(0) && timeSeries.at(0).value.year - 1) || formGroup3.value.baseYear}}</th>
                     <ng-container *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
                       <th class="mat-cell" *ngIf="(element.value.year > formGroup3.value.baseYear) === formGroup2.value.deterministic || element.value.year === formGroup3.value.baseYear">
+                        <button type="button" id="remove-year" (click)="removeYear()" mat-icon-button *ngIf="timeSeries.controls.indexOf(element) === (formGroup2.value.deterministic ? timeSeries.length - 1 : 0)">
+                          <mat-icon>delete</mat-icon>
+                        </button>
                         {{element.value.year}}
                       </th>
                     </ng-container>
@@ -115,14 +131,6 @@
                   </tr>
                 </tbody>
               </table>
-              <!--<div class="actions">
-                <button mat-icon-button type="button" (click)="addYear(2017)" matTooltip="Weiteres Jahr hinzufügen" matTooltipShowDelay="500">
-                  <mat-icon #addYearIcon>add</mat-icon>
-                </button>
-                <button mat-icon-button type="button" (click)="removeLastYear()" matTooltip="Letztes Jahr entfernen" matTooltipShowDelay="500">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </div>-->
             </div>
           </mat-card-content>
           <mat-card-actions class="stepper-actions">
