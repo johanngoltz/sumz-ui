@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ScenarioTileComponent } from './scenario-tile.component';
+import { MaterialModule } from '../material.module';
 
 describe('ScenarioTileComponent', () => {
   let component: ScenarioTileComponent;
@@ -8,7 +9,8 @@ describe('ScenarioTileComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ScenarioTileComponent ]
+      declarations: [ScenarioTileComponent],
+      imports: [MaterialModule],
     })
     .compileComponents();
   }));

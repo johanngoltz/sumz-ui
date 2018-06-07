@@ -18,7 +18,6 @@ export class ProjectDetailComponent implements OnInit {
   timeSeriesColumns = ['year', 'externalCapital', 'fcf'];
   scenarioColumns = ['equityInterest', 'outsideCapitalInterest', 'businessTax'];
   timeSeries: FinancialData[] = [{
-    projectId: 200,
     year: 2017,
     externalCapital: 5645646,
     fcf: 4531.1,

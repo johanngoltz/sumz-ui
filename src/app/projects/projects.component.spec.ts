@@ -7,7 +7,8 @@ import { ProjectsComponent } from './projects.component';
 import { ProjectCardComponent } from '../project-card/project-card.component';
 import { ProjectsService } from '../projects.service';
 import { CreateProjectComponent } from '../create-project/create-project.component';
-import { ProjectDetailsComponent } from '../project-details/project-details.component';
+import { ProjectDetailComponent } from '../project-detail/project-detail.component';
+import { ScenarioTileComponent } from '../scenario-tile/scenario-tile.component';
 
 
 describe('ProjectsComponent', () => {
@@ -16,7 +17,7 @@ describe('ProjectsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProjectsComponent, ProjectCardComponent, CreateProjectComponent, ProjectDetailsComponent],
+      declarations: [ProjectsComponent, ProjectCardComponent, CreateProjectComponent, ProjectDetailComponent, ScenarioTileComponent],
       imports: [MaterialModule, FormsModule, ReactiveFormsModule, AppRoutingModule],
       providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
