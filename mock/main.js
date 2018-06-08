@@ -79,7 +79,5 @@ Sandbox.define('/project', 'POST', function (req, res) {
   res.status(200);
 
   // Send the response body.
-  res.json({
-    "status": "ok"
-  });
+  res.json(req.body);
 })

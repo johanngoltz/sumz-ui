@@ -1,6 +1,6 @@
 <div class="content-container">
   <h1>Alle Projekte</h1>
-  <mat-grid-list cols="4" rowHeight="4:3">
+  <mat-grid-list cols="4" rowHeight="4:3" [@gridAnimation]="projectsService.projects?.length">
     <mat-grid-tile *ngFor="let project of projectsService.projects">
       <app-project-card [project]="project" [routerLink]="['/project', project.id]"></app-project-card>
     </mat-grid-tile>

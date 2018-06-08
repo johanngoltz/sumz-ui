@@ -11,7 +11,7 @@ export interface ProjectAPI {
         },
         POST: {
             body: Project,
-            response: Success
+            response: Project,
         }
     },
     '/project/:id': {

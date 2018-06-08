@@ -32,8 +32,9 @@ export class ProjectsService {
     this.api.request({
       url: '/project',
       data: project,
+      method: 'POST',
     }).then(
-      () => this.projects.push(project)
+      (response) => this.projects.push(response.data)
     );
   }
 
