@@ -1,44 +1,74 @@
 {
   "projects": [
     {
-      "id": 200,
-      "name": "anotherName",
-      "scenarios": [
-        {
-          "id": 0.24470925173976066,
-          "projectId": 200
-        },
-        {
-          "id": 0.1205979219630624,
-          "projectId": 200
-        }
+      "timeSeries": [
+        true
       ],
-      "financialData": [
-        {
-          "id": 4711,
-          "year": 2017,
-          "externalCapital": 453165,
-          "fcf": 22.3
-        }
-      ]
+      "name": "Michael Sch√§fer",
+      "deterministic": true,
+      "baseYear": 2017,
+      "description": "",
+      "prognosisLength": 5,
+      "id": 0.8982118627231611,
+      "iterations": 10000,
+      "algorithm": "fcf",
+      "scenarios": []
     },
     {
-      "id": 300,
-      "name": "runningOutOfNames",
-      "scenarios": [
-        {
-          "id": 0.18489153828391758
-        },
-        {
-          "id": 0.571014116428883
-        },
-        {
-          "id": 0.2942143434081076
-        },
-        {
-          "id": 0.20621556630215454
-        }
-      ]
+      "timeSeries": [
+        true
+      ],
+      "name": "Michael Sch‰fer",
+      "deterministic": true,
+      "baseYear": 2017,
+      "description": "",
+      "prognosisLength": 5,
+      "id": 0.5898818876049766,
+      "iterations": 10000,
+      "algorithm": "fcf",
+      "scenarios": []
+    },
+    {
+      "timeSeries": [
+        true
+      ],
+      "name": "Michael Sch‰fer",
+      "deterministic": true,
+      "baseYear": 2017,
+      "description": "",
+      "prognosisLength": 5,
+      "id": 0.27353600438521064,
+      "iterations": 10000,
+      "algorithm": "fcf",
+      "scenarios": []
+    },
+    {
+      "timeSeries": [
+        true
+      ],
+      "name": "Michael Sch‰fer",
+      "deterministic": true,
+      "baseYear": 2017,
+      "description": "",
+      "prognosisLength": 5,
+      "id": 0.476661529033393,
+      "iterations": 10000,
+      "algorithm": "fcf",
+      "scenarios": []
+    },
+    {
+      "timeSeries": [
+        true
+      ],
+      "name": "Michael Sch‰fer",
+      "deterministic": true,
+      "baseYear": 2017,
+      "description": "",
+      "prognosisLength": 5,
+      "id": 0.2461871577180922,
+      "iterations": 10000,
+      "algorithm": "fcf",
+      "scenarios": []
     }
   ]
 }

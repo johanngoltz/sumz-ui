@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Project } from '../project';
-import { MatMenuTrigger, MatSnackBar } from '@angular/material';
+import { MatMenuTrigger, MatSnackBar, MatDialog } from '@angular/material';
 import { ProjectsService } from '../projects.service';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-project-card',
@@ -13,7 +14,8 @@ export class ProjectCardComponent implements OnInit {
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   hovered: Boolean;
 
-  constructor(private _projectsService: ProjectsService, private _snackBar: MatSnackBar) { }
+  constructor(private _projectsService: ProjectsService, private _snackBar: MatSnackBar,
+    private _dialog: MatDialog) { }
 
   ngOnInit() {
     this.hovered = false;
@@ -25,10 +27,15 @@ export class ProjectCardComponent implements OnInit {
   }
 
   removeProject() {
-    this._projectsService.removeProject(this.project)
-    .then(() => this._snackBar.open(`Das Projekt "${this.project.name}" wurde erfolgreich gelöscht`, undefined,
-      { duration: 5000 }))
-    .catch(e => this._snackBar.open(`Das Projekt "${this.project.name}" konnte nicht gelöscht werden (${e.message})`,
-      undefined, { panelClass: 'mat-warn', duration: 5000 }));
+    this._dialog.open(DeleteDialogComponent, { data: { project: this.project } })
+      .afterClosed().subscribe((result) => {
+        if (result === true) {
+          this._projectsService.removeProject(this.project)
+            .then(() => this._snackBar.open(`Das Projekt "${this.project.name}" wurde erfolgreich gelöscht`, undefined,
+              { duration: 5000 }))
+            .catch(e => this._snackBar.open(`Das Projekt "${this.project.name}" konnte nicht gelöscht werden (${e.message})`,
+              undefined, { panelClass: 'mat-warn', duration: 5000 }));
+        }
+      });
   }
 }

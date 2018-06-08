@@ -25,7 +25,8 @@ import { trigger, transition, query, style, animate, keyframes, group } from '@a
                 backgroundColor: 'whitesmoke', boxShadow: 'none',
               })),
           ], { optional: true }),
-          query(':leave h1, :leave mat-grid-list', animate('.2s cubic-bezier(0.4, 0.0, 1, 1)', style({ opacity: 0 })), { optional: true }),
+          query(':leave h1, :leave h1+div, :leave mat-grid-list',
+            animate('.2s cubic-bezier(0.4, 0.0, 1, 1)', style({ opacity: 0 })), { optional: true }),
         ]),
         query(':enter', [
           animate('.3s cubic-bezier(0.0, 0.0, 0.2, 1)', style({ opacity: 1, transform: 'translateY(0px)' })),

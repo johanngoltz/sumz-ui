@@ -14,6 +14,7 @@ import { ToDoubleDirective } from './to-double.directive';
 import { SelectProjectComponent } from './select-project/select-project.component';
 import { ProjectCardComponent } from './project-card/project-card.component';
 import { ScenarioTileComponent } from './scenario-tile/scenario-tile.component';
+import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { ScenarioTileComponent } from './scenario-tile/scenario-tile.component';
     SelectProjectComponent,
     ProjectCardComponent,
     ScenarioTileComponent,
+    DeleteDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,6 +39,6 @@ import { ScenarioTileComponent } from './scenario-tile/scenario-tile.component';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [SelectProjectComponent],
+  entryComponents: [SelectProjectComponent, DeleteDialogComponent],
 })
 export class AppModule { }
