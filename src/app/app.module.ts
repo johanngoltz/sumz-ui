@@ -15,6 +15,8 @@ import { SelectProjectComponent } from './select-project/select-project.componen
 import { ProjectCardComponent } from './project-card/project-card.component';
 import { ScenarioTileComponent } from './scenario-tile/scenario-tile.component';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
+import { LoginComponent } from './login/login.component';
+import { RegistrationComponent } from './registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
     ProjectCardComponent,
     ScenarioTileComponent,
     DeleteDialogComponent,
+    LoginComponent,
+    RegistrationComponent,
   ],
   imports: [
     BrowserModule,

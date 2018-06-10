@@ -1,0 +1,26 @@
+<div class="content-container">
+  <mat-card class="login-card">
+    <mat-card-title>Login</mat-card-title>
+    <mat-divider></mat-divider>
+
+    <form [formGroup]="stepperFormGroup1">
+      <p>
+        <mat-icon class="login-icon">person</mat-icon>
+        <mat-form-field>
+          <input type="text" id="username" name="username" matInput placeholder="Benutzername" required formControlName="nameCtrl">
+        </mat-form-field>
+      </p>
+      <br>
+      <p>
+        <mat-icon class="login-icon">lock</mat-icon>
+        <mat-form-field>
+          <input [type]="hide ? 'password' : 'text'" id="password" name="password" matInput placeholder="Passwort" required formControlName="pwdCtrl">
+          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+        </mat-form-field>
+      </p>
+      <br>
+      <button mat-stroked-button class="login-btn">LOGIN</button>
+    </form>
+
+  </mat-card>
+</div>

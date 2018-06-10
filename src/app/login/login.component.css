@@ -1,0 +1,17 @@
+.login-card {
+    max-width: 400px;
+}
+
+.login-icon {
+    vertical-align: middle;
+    margin-right: 7px;
+}
+
+.login-btn {
+    width: 90%;
+}
+
+mat-form-field {
+    width: 90%;
+}
+
