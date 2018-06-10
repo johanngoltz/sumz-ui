@@ -9,7 +9,6 @@ import { ProjectsComponent } from './projects/projects.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
-import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +16,6 @@ import { LoginComponent } from './login/login.component';
     ProjectsComponent,
     CreateProjectComponent,
     ProjectDetailsComponent,
-    LoginComponent,
   ],
   imports: [
     BrowserModule,
