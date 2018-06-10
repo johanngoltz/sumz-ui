@@ -1,7 +1,7 @@
-<mat-card (mouseover)="hovered = true" (mouseout)="hovered = false" [class.mat-elevation-z8]="hovered">
+<mat-card (mouseover)="hovered = true" (mouseout)="hovered = false" [class.mat-elevation-z8]="hovered" mat-ripple matRippleColor="rgba(0,0,0,0.05)">
   <mat-card-title>
     {{project.name}}
-    <button type="button" mat-icon-button [matMenuTriggerFor]="projectMenu" (click)="toggleProjectMenu($event)">
+    <button type="button" mat-icon-button [matMenuTriggerFor]="projectMenu" (click)="toggleProjectMenu($event)" (mousedown)="$event.stopPropagation()">
       <mat-icon>more_vert</mat-icon>
     </button>
   </mat-card-title>

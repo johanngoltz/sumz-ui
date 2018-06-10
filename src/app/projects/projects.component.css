@@ -9,12 +9,11 @@ app-project-card {
 }
 
 mat-grid-list {
-    margin-left: -16px;
-    margin-right: -16px;
+    margin: 0 -16px 16px;
 }
 
 mat-grid-tile {
-    transition: top .2s .2s cubic-bezier(0.0, 0.0, 0.2, 1), left .2s .2s cubic-bezier(0.0, 0.0, 0.2, 1);
+    transition: margin-top .2s .2s cubic-bezier(0.0, 0.0, 0.2, 1), left .2s .2s cubic-bezier(0.0, 0.0, 0.2, 1);
 }
 
 #spinner {

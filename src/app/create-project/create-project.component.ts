@@ -49,10 +49,12 @@ export class CreateProjectComponent implements OnInit {
     });
     new MutationObserver(
       // besser und logischer wäre scrollLeftMax, aber das scheint es nur in Firefox zu geben.
-      () => this.dataScrollContainer.nativeElement.scrollLeft = this.dataScrollContainer.nativeElement.scrollWidth)
-      .observe(
-        this.fcfRow.nativeElement,
-        { childList: true });
+      () => this.dataScrollContainer.nativeElement.scrollLeft =
+        this.formGroup2.value.deterministic ? this.dataScrollContainer.nativeElement.scrollWidth :
+          this.dataScrollContainer.nativeElement.scrollLeft
+      ).observe(
+      this.fcfRow.nativeElement,
+      { childList: true });
   }
 
   createFinancialData(year: number, index?: number) {
@@ -87,7 +89,7 @@ export class CreateProjectComponent implements OnInit {
       this.timeSeries.removeAt(this.formGroup2.value.deterministic ? -1 : 0);
     }
     if (this.timeSeries.value.filter(o => (o.year > this.formGroup3.value.baseYear) === this.formGroup2.value.deterministic ||
-       o.year === this.formGroup3.value.baseYear).length === 0) {
+      o.year === this.formGroup3.value.baseYear).length === 0) {
       this.addYear();
     }
   }
@@ -107,7 +109,7 @@ export class CreateProjectComponent implements OnInit {
         prognosisLength: 5,
       };
       project.timeSeries = project.timeSeries.map((o) =>
-        o.year === project.baseYear || (o.year > project.baseYear) === project.deterministic);
+        (o.year === project.baseYear || (o.year > project.baseYear) === project.deterministic) ? o : false).filter(Boolean);
       this._projectsService.addProject(project).then(() => {
         this.busy = false;
         this._snackBar.open('Das Projekt wurde erfolgreich erstellt', undefined, { duration: 5000 });

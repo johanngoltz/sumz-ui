@@ -17,7 +17,7 @@ import { trigger, transition, query, style, animate, keyframes, group } from '@a
             animate('.1s cubic-bezier(0.4, 0.0, 1, 1)',
               style({ opacity: 0 })),
           ], { optional: true }),
-          query(':leave .fab-bottom-right', [
+          query(':leave .fab-bottom-right, :enter #spinner', [
             style({ zIndex: 5 }),
             animate('.3s cubic-bezier(0.4, 0.0, 1, 1)',
               style({
@@ -39,11 +39,10 @@ import { trigger, transition, query, style, animate, keyframes, group } from '@a
           , { optional: true }),
         query(':enter .content-container', style({ transform: 'translateY(25px)' })
           , { optional: true }),
-        query(':enter .fab-bottom-right', style({ transform: 'scale(0)' })
+        query(':enter .fab-bottom-right, :enter #spinner', style({ transform: 'scale(0)' })
           , { optional: true }),
         query(':leave ', [
           animate('.2s cubic-bezier(0.4, 0.0, 1, 1)', style({ opacity: 0 })),
-          style({ position: 'fixed', opacity: 0 }),
         ], { optional: true }),
         group([
           query(':enter', animate('.3s cubic-bezier(0.0, 0.0, 0.2, 1)', style({ opacity: 1 })), { optional: true }),

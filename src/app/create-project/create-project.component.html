@@ -15,7 +15,7 @@
             <div class="info">
               <h4>Aus bestehendem Projekt erstellen</h4>
               <p>
-                Die können bereits bestehende Projekte als Vorlage für dieses Projekt nutzen. Wählen Sie hierzu über den folgenden Button
+                Sie können bereits bestehende Projekte als Vorlage für dieses Projekt nutzen. Wählen Sie hierzu über den folgenden Button
                 einfach ein Projekt aus, um dessen Daten in die Eingabefelder zu übertragen.
               </p>
               <div class="info-action">
@@ -39,11 +39,13 @@
             <mat-radio-group id="method" name="method" formControlName="deterministic" required>
               <mat-radio-button [value]="true">Deterministisch</mat-radio-button>
               <mat-radio-button [value]="false">Stochastisch</mat-radio-button>
-              <mat-form-field class="inline" [ngClass]="{disabled: this.formGroup2.value.deterministic}">
-                <input type="number" id="prognosisLength" name="prognosisLength" matInput placeholder="Anzahl Prognosejahre" formControlName="prognosisLength"
-                [readonly]="this.formGroup2.value.deterministic" required>
-              </mat-form-field>
             </mat-radio-group>
+            <div>
+              <mat-form-field id="prognosis" class="inline" [ngClass]="{disabled: this.formGroup2.value.deterministic}">
+                <input type="number" id="prognosisLength" name="prognosisLength" matInput placeholder="Anzahl Prognosejahre" formControlName="prognosisLength"
+                  [readonly]="this.formGroup2.value.deterministic" required>
+              </mat-form-field>
+            </div>
             <label class="grey" for="algorithm">Algorithmus</label>
             <mat-radio-group id="algorithm" name="algorithm" formControlName="algorithm" required>
               <mat-radio-button value="apv">

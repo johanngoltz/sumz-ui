@@ -23,13 +23,12 @@ mat-radio-group {
     margin: 5px 0 20px;
 }
 
-mat-radio-group mat-form-field {
-    align-self: flex-start;
-    margin: 6px 0 0 24px;
+#prognosis {
+    margin: -10px 0 0 28px;
     transition: opacity .25s;
 }
 
-mat-radio-group mat-form-field.disabled {
+#prognosis.disabled {
     opacity: 0.37;
     pointer-events: none;
 }
