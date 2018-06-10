@@ -1,0 +1,33 @@
+<h2>Neuen Benutzer registrieren</h2>
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <label for="firstName">Vorname</label>
+        <input type="text" formControlName="firstName" class="form-control"  />
+        
+    </div>
+    <div class="form-group">
+        <label for="lastName">Nachname</label>
+        <input type="text" formControlName="lastName" class="form-control" />
+        
+    </div>
+    <div class="form-group">
+        <label for="username">Benutzername</label>
+        <input type="text" formControlName="username" class="form-control"  />
+        
+    </div>
+    <div class="form-group">
+        <label for="username">Email-Adresse</label>
+        <input type="text" formControlName="email" class="form-control"  />
+        
+    </div>
+    <div class="form-group">
+        <label for="password">Passwort</label>
+        <input type="password" formControlName="password" class="form-control"  />
+        
+    </div>
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">Registrieren</button>
+        
+        <a [routerLink]="['/login']" class="btn btn-link">Cancel</a>
+    </div>
+</form>
