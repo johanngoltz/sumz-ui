@@ -5,11 +5,17 @@
       <mat-card-title>Login</mat-card-title>
       <mat-divider></mat-divider>
 
-      <form [formGroup]="stepperFormGroup1" id="login-form">
+      <form [formGroup]="loginFormGroup" id="login-form">
         <p>
-          <mat-icon class="login-icon">person</mat-icon>
+          <mat-icon class="login-icon">mail</mat-icon>
           <mat-form-field>
-            <input type="text" id="username" name="username" matInput placeholder="Benutzername" required formControlName="nameCtrl">
+            <input type="text" id="email" name="email" matInput placeholder="E-Mail" required formControlName="mailCtrl">
+            <mat-error *ngIf="mailCtrl.errors?.required">
+              Dieses Feld ist ein <strong>Pflichtfeld</strong>
+            </mat-error>
+            <mat-error *ngIf="mailCtrl.errors?.email">
+              Bitte geben Sie eine gültige E-Mail-Adresse ein
+            </mat-error>
           </mat-form-field>
         </p>
         <p>
@@ -17,18 +23,18 @@
           <mat-form-field>
             <input [type]="hide ? 'password' : 'text'" id="password" name="password" matInput placeholder="Passwort" required formControlName="pwdCtrl">
             <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+            <mat-error *ngIf="pwdCtrl.errors?.required">
+              Dieses Feld ist ein <strong>Pflichtfeld</strong>
+            </mat-error>
           </mat-form-field>
         </p>
         <br>
-        <button mat-raised-button class="login-btn">LOGIN</button>
+        <button mat-raised-button color="accent" class="login-btn">LOGIN</button>
       </form>
-
-      <button mat-button class="forgot-btn">Passwort vergessen?</button>
+      <div class="login-footer">
+        <button mat-button class="signup-btn" routerLink="../signup">Jetzt anmelden!</button>
+        <button mat-button class="forgot-btn">Passwort vergessen?</button>
+      </div>
     </mat-card-content>
-
-    <button mat-fab color="accent" class="fab-bottom-right" matTooltip="Neues Benutzerkonto anlegen" routerLink="">
-        <mat-icon aria-label="Neues Benutzerkonto anlegen">add</mat-icon>
-    </button>
-
   </mat-card>
 </div>
