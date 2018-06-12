@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { PasswordValidation } from 'src/app/registration/registration.passwordvalidation';
+
+
+
 
  
 @Component({
     selector: 'app-registration',
     templateUrl: './registration.component.html',
-    //styleUrls: ['./registration.component.css'],
+    styleUrls: ['./registration.component.css'],
   })
   export class RegistrationComponent implements OnInit {
     
@@ -14,20 +18,25 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   
     constructor(private _formBuilder: FormBuilder) { // <--- inject FormBuilder
     }
+
   
     ngOnInit() {
       this.registerFormGroup = this._formBuilder.group({
         mailCtrl: ['', Validators.email],
-        pwdCtrl: '',
+
+        pwdCtrl: ['', Validators.compose([Validators.required, Validators.minLength(8)])],
+        pwdrptCtrl: ['', Validators.required],
+
+      },
+      {        
+        validator: PasswordValidation.Match('pwdCtrl', 'pwdrptCtrl') // validates the two passwords 
       });
     }
   
-    get firstNameCtrl() { return this.registerFormGroup.get('firstNameCtrl'); }
+    get mailCtrl() { return this.registerFormGroup.get('mailCtrl'); }
 
-    get lastNameCtrl() { return this.registerFormGroup.get('lastNameCtrl'); }
-
-    get userNameCtrl() { return this.registerFormGroup.get('userNameCtrl'); }
-  
     get pwdCtrl() { return this.registerFormGroup.get('pwdCtrl'); }
+
+    get pwdrptCtrl() { return this.registerFormGroup.get('pwdrptCtrl'); }
   
   }

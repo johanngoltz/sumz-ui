@@ -9,54 +9,47 @@
 
             <form [formGroup]="registerFormGroup" id="register-form">
                 <p>
-                  <mat-icon class="register-icon">first name</mat-icon>
-                  <mat-form-field>
-                    <input type="text" id="firstName" name="firstName" matInput placeholder="Vorname" required formControlName="firstNameCtrl">
-                    <mat-error *ngIf="firstNameCtrl.errors?.required">
-                      Dieses Feld ist ein <strong>Pflichtfeld</strong>
-                    </mat-error>
-                    <mat-error *ngIf="firstNameCtrl.errors?.firstName">
-                      Bitte geben Sie einen gültigen Vornamen ein
-                    </mat-error>
-                  </mat-form-field>
-                </p>
-
-                <p>
-                    <mat-icon class="register-icon">last name</mat-icon>
+                    <mat-icon class="register-icon">mail</mat-icon>
                     <mat-form-field>
-                      <input type="text" id="lastName" name="lastName" matInput placeholder="Nachname" required formControlName="lastNameCtrl">
-                      <mat-error *ngIf="lastNameCtrl.errors?.required">
+                      <input type="text" id="email" name="email" matInput placeholder="E-Mail" required formControlName="mailCtrl">
+                      <mat-error *ngIf="mailCtrl.errors?.required">
                         Dieses Feld ist ein <strong>Pflichtfeld</strong>
                       </mat-error>
-                      <mat-error *ngIf="lastNameCtrl.errors?.lastName">
-                        Bitte geben Sie einen gültigen Nachnamen ein
+                      <mat-error *ngIf="mailCtrl.errors?.email">
+                        Bitte geben Sie eine gültige E-Mail-Adresse ein
                       </mat-error>
                     </mat-form-field>
                 </p>
 
                 <p>
-                    <mat-icon class="register-icon">Benutzername</mat-icon>
-                    <mat-form-field>
-                      <input type="text" id="userName" name="userName" matInput placeholder="Benutzername" required formControlName="userNameCtrl">
-                      <mat-error *ngIf="userNameCtrl.errors?.required">
-                        Dieses Feld ist ein <strong>Pflichtfeld</strong>
-                      </mat-error>
-                      <mat-error *ngIf="userNameCtrl.errors?.userName">
-                        Bitte geben Sie einen gültigen Benutzernamen ein
-                      </mat-error>
-                    </mat-form-field>
-                </p>
-
-                <p>
-                  <mat-icon class="register-icon">lock</mat-icon>  <!-- Gibt es register icon?? -->
+                  <mat-icon class="register-icon">lock</mat-icon>  
                   <mat-form-field>
                     <input [type]="hide ? 'password' : 'text'" id="password" name="password" matInput placeholder="Passwort" required formControlName="pwdCtrl">
                     <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
                     <mat-error *ngIf="pwdCtrl.errors?.required">
                       Dieses Feld ist ein <strong>Pflichtfeld</strong>
                     </mat-error>
+                    <mat-error *ngIf="pwdCtrl.errors?.password">
+                        Bitte geben Sie eine gültige E-Mail-Adresse ein
+                    </mat-error>
                   </mat-form-field>
                 </p>
+
+                <p>
+                    <mat-icon class="register-icon">lock</mat-icon>  
+                    <mat-form-field>
+                      <input [type]="hide ? 'passwordrepeat' : 'text'" id="passwordrepeat" name="passwordrepeat" matInput placeholder="Passwort" required formControlName="pwdrptCtrl">
+                      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+                      <mat-error *ngIf="pwdrptCtrl.errors?.required">
+                        Dieses Feld ist ein <strong>Pflichtfeld</strong>
+                      </mat-error>
+                      <mat-error *ngIf="pwdrptCtrl.errors?.passwordrepeat">
+                        Bitte geben Sie eine gültige E-Mail-Adresse ein
+                      </mat-error>
+                      
+                    </mat-form-field>
+                  </p>
+
                 <br>
                 <button mat-raised-button color="accent" class="register-btn">Register</button>
               </form>
