@@ -17,6 +17,6 @@ body {
 
 .mat-fab.fab-bottom-right {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    bottom: 32px;
+    right: 32px;
 }
