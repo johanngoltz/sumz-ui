@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from '../app-routing.module';
 import { CreateProjectComponent } from '../create-project/create-project.component';
 import { MaterialModule } from '../material.module';
-import { ProjectDetailsComponent } from '../project-details/project-details.component';
+import { ProjectDetailComponent } from '../project-detail/project-detail.component';
 import { ProjectsComponent } from './projects.component';
 
 
@@ -14,7 +14,7 @@ describe('ProjectsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProjectsComponent, CreateProjectComponent, ProjectDetailsComponent],
+      declarations: [ProjectsComponent, CreateProjectComponent, ProjectDetailComponent],
       imports: [MaterialModule, FormsModule, ReactiveFormsModule, AppRoutingModule],
       providers: [
         { provide: APP_BASE_HREF, useValue: '/' },

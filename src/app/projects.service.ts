@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import axios, { TypedAxiosInstance } from 'restyped-axios';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Project } from './project';
 import { ProjectAPI } from './project-api';
 
@@ -12,14 +13,28 @@ export class ProjectsService {
   private api: TypedAxiosInstance<ProjectAPI>;
   private initialLoader: Promise<Project[]>;
 
+
+  public projects$: Observable<Project[]>;
+  private projectsStorage: Project[];
+  private _projects$: BehaviorSubject<Project[]>;
+
   constructor() {
     this.api = axios.create<ProjectAPI>({ baseURL: 'http://localhost:8080' });
     (this.initialLoader = this.loadProjects())
       .then(loadedProjects => this.projects = loadedProjects);
+
+  this.projects$ = this._projects$.asObservable();
   }
 
-  async loadProjects(): Promise<Project[]> {
+  /*async loadProjects(): Promise<Project[]> {
     return (await this.api.get('/project')).data;
+  }*/
+
+  async loadProjects() {
+    const projects = (await this.api.get('/project')).data;
+    this.projectsStorage = projects;
+    this._projects$.next(Object.assign({}, projects));
+    return this.projects$;
   }
 
   async getProject(id: number): Promise<Project> {

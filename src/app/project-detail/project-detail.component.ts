@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, merge } from 'rxjs';
+import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { FinancialData, Project, Scenario } from '../project';
 import { ProjectsService } from '../projects.service';
@@ -35,11 +35,13 @@ export class ProjectDetailComponent implements OnInit {
       switchMap(params =>
         this.projectsService.getProject(Number.parseInt(params.get('id'))))
     );
-    this.allScenarios$ = merge(this.forProject$).pipe(
-      switchMap(project => this.scenariosService.getScenarios(project.id))
+    this.forProject$.subscribe(newProject => this.scenariosService.getScenarios(newProject.id));
+    this.allScenarios$ = this.scenariosService.scenarios$.pipe(
+      switchMap(scenarios => scenarios.get ? Promise.resolve(scenarios.get(200)) : undefined)
     );
+    /*
     this.activeScenarios$ = this.allScenarios$.pipe(
       switchMap(scenarios => Promise.resolve(scenarios.filter(s => s.isActive)))
-    );
+    );*/
   }
 }
