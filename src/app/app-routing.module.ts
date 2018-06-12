@@ -10,7 +10,7 @@ import { RegistrationComponent } from './registration/registration.component';
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: ProjectsComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'signup', component: RegistrationComponent },
+  { path: 'registration', component: RegistrationComponent },
   { path: 'create', component: CreateProjectComponent },
   { path: 'project/:id', component: ProjectDetailsComponent },
 ];

@@ -1,33 +1,69 @@
-<h2>Neuen Benutzer registrieren</h2>
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-        <label for="firstName">Vorname</label>
-        <input type="text" formControlName="firstName" class="form-control"  />
-        
-    </div>
-    <div class="form-group">
-        <label for="lastName">Nachname</label>
-        <input type="text" formControlName="lastName" class="form-control" />
-        
-    </div>
-    <div class="form-group">
-        <label for="username">Benutzername</label>
-        <input type="text" formControlName="username" class="form-control"  />
-        
-    </div>
-    <div class="form-group">
-        <label for="username">Email-Adresse</label>
-        <input type="text" formControlName="email" class="form-control"  />
-        
-    </div>
-    <div class="form-group">
-        <label for="password">Passwort</label>
-        <input type="password" formControlName="password" class="form-control"  />
-        
-    </div>
-    <div class="form-group">
-        <button [disabled]="loading" class="btn btn-primary">Registrieren</button>
-        
-        <a [routerLink]="['/login']" class="btn btn-link">Cancel</a>
-    </div>
-</form>
+<div class="content-container">
+    <mat-card class="register-card">
+      <mat-card-content>
+  
+        <mat-card-title>Registrierung</mat-card-title>
+        <mat-divider></mat-divider>
+
+
+
+            <form [formGroup]="registerFormGroup" id="register-form">
+                <p>
+                  <mat-icon class="register-icon">first name</mat-icon>
+                  <mat-form-field>
+                    <input type="text" id="firstName" name="firstName" matInput placeholder="Vorname" required formControlName="firstNameCtrl">
+                    <mat-error *ngIf="firstNameCtrl.errors?.required">
+                      Dieses Feld ist ein <strong>Pflichtfeld</strong>
+                    </mat-error>
+                    <mat-error *ngIf="firstNameCtrl.errors?.firstName">
+                      Bitte geben Sie einen gültigen Vornamen ein
+                    </mat-error>
+                  </mat-form-field>
+                </p>
+
+                <p>
+                    <mat-icon class="register-icon">last name</mat-icon>
+                    <mat-form-field>
+                      <input type="text" id="lastName" name="lastName" matInput placeholder="Nachname" required formControlName="lastNameCtrl">
+                      <mat-error *ngIf="lastNameCtrl.errors?.required">
+                        Dieses Feld ist ein <strong>Pflichtfeld</strong>
+                      </mat-error>
+                      <mat-error *ngIf="lastNameCtrl.errors?.lastName">
+                        Bitte geben Sie einen gültigen Nachnamen ein
+                      </mat-error>
+                    </mat-form-field>
+                </p>
+
+                <p>
+                    <mat-icon class="register-icon">Benutzername</mat-icon>
+                    <mat-form-field>
+                      <input type="text" id="userName" name="userName" matInput placeholder="Benutzername" required formControlName="userNameCtrl">
+                      <mat-error *ngIf="userNameCtrl.errors?.required">
+                        Dieses Feld ist ein <strong>Pflichtfeld</strong>
+                      </mat-error>
+                      <mat-error *ngIf="userNameCtrl.errors?.userName">
+                        Bitte geben Sie einen gültigen Benutzernamen ein
+                      </mat-error>
+                    </mat-form-field>
+                </p>
+
+                <p>
+                  <mat-icon class="register-icon">lock</mat-icon>  <!-- Gibt es register icon?? -->
+                  <mat-form-field>
+                    <input [type]="hide ? 'password' : 'text'" id="password" name="password" matInput placeholder="Passwort" required formControlName="pwdCtrl">
+                    <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+                    <mat-error *ngIf="pwdCtrl.errors?.required">
+                      Dieses Feld ist ein <strong>Pflichtfeld</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </p>
+                <br>
+                <button mat-raised-button color="accent" class="register-btn">Register</button>
+              </form>
+              <div class="register-footer">
+                <button mat-button class="login-btn" routerLink="../login">Jetzt einloggen!</button>
+                <button mat-button class="forgot-btn">Passwort vergessen?</button>
+              </div>
+</mat-card-content>
+</mat-card>
+</div>
