@@ -13,6 +13,8 @@ const routes: Routes = [
   { path: 'registration', component: RegistrationComponent },
   { path: 'create', component: CreateProjectComponent },
   { path: 'project/:id', component: ProjectDetailsComponent },
+
+  { path: '**', redirectTo: '' }, // otherwise redirect to home
 ];
 
 @NgModule({
