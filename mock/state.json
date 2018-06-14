@@ -1,12 +1,60 @@
 {
   "projects": [
     {
-      "id": 200,
-      "name": "anotherName"
+      "timeSeries": [
+        {
+          "year": 2017,
+          "externalCapital": 100,
+          "fcf": 50
+        },
+        {
+          "year": 2018,
+          "externalCapital": 110,
+          "fcf": 60
+        },
+        {
+          "year": 2019,
+          "externalCapital": 110,
+          "fcf": 66
+        }
+      ],
+      "name": "Testprojekt 1",
+      "deterministic": true,
+      "baseYear": 2017,
+      "description": "Beschreibung",
+      "prognosisLength": 5,
+      "id": 0.23842078591344507,
+      "iterations": 6000,
+      "algorithm": "apv",
+      "scenarios": []
     },
     {
-      "id": 300,
-      "name": "runningOutOfNames"
+      "timeSeries": [
+        {
+          "year": 2014,
+          "externalCapital": 100,
+          "fcf": 50
+        },
+        {
+          "year": 2015,
+          "externalCapital": 110,
+          "fcf": 60
+        },
+        {
+          "year": 2016,
+          "externalCapital": 110,
+          "fcf": 66
+        }
+      ],
+      "name": "Testprojekt 2",
+      "deterministic": false,
+      "baseYear": 2016,
+      "description": "",
+      "prognosisLength": 4,
+      "id": 0.23842078591344507,
+      "iterations": 6000,
+      "algorithm": "apv",
+      "scenarios": []
     }
   ]
 }

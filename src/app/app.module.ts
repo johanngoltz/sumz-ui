@@ -2,14 +2,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
 import { ProjectsComponent } from './projects/projects.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { CreateProjectComponent } from './create-project/create-project.component';
-import { ProjectDetailsComponent } from './project-details/project-details.component';
+import { ProjectDetailComponent } from './project-detail/project-detail.component';
+import { ToDoubleDirective } from './to-double.directive';
+import { SelectProjectComponent } from './select-project/select-project.component';
+import { ProjectCardComponent } from './project-card/project-card.component';
+import { ScenarioTileComponent } from './scenario-tile/scenario-tile.component';
+import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
 
@@ -18,20 +23,26 @@ import { RegistrationComponent } from './registration/registration.component';
     AppComponent,
     ProjectsComponent,
     CreateProjectComponent,
-    ProjectDetailsComponent,
+    ProjectDetailComponent,
+    ToDoubleDirective,
+    SelectProjectComponent,
+    ProjectCardComponent,
+    ScenarioTileComponent,
+    DeleteDialogComponent,
     LoginComponent,
     RegistrationComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    HttpClientModule, // for communication with backend
     MaterialModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    FlexLayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
+  entryComponents: [SelectProjectComponent, DeleteDialogComponent],
 })
 export class AppModule { }

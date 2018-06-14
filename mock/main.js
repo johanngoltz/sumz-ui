@@ -1,3 +1,21 @@
+scenario = require('./scenario');
+console.log(scenario.routes);
+
+function setDefaultHeaders(forHandler, req, res) {
+  res.type('application/json');
+  res.status(200);
+  return forHandler(req, res);
+}
+
+scenario.routes.forEach(function (routeDefinition) {
+  Sandbox.define(
+    routeDefinition.route,
+    routeDefinition.verb,
+    function (req, res) {
+      setDefaultHeaders(routeDefinition.handler, req, res);
+    });
+});
+
 Sandbox.define('/project', 'GET', function (req, res) {
   // Set the type of response, sets the content type.
   res.type('application/json');
@@ -53,13 +71,13 @@ Sandbox.define('/project', 'POST', function (req, res) {
   // Set the type of response, sets the content type.
   res.type('application/json');
 
+  req.body.id = Math.random();
+  req.body.scenarios = [];
   state.projects.push(req.body);
 
   // Set the status code of the response.
   res.status(200);
 
   // Send the response body.
-  res.json({
-    "status": "ok"
-  });
+  res.json(req.body);
 })

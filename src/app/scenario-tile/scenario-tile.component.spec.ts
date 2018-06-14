@@ -1,22 +1,22 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProjectDetailsComponent } from './project-details.component';
+import { ScenarioTileComponent } from './scenario-tile.component';
 import { MaterialModule } from '../material.module';
 
-describe('ProjectDetailsComponent', () => {
-  let component: ProjectDetailsComponent;
-  let fixture: ComponentFixture<ProjectDetailsComponent>;
+describe('ScenarioTileComponent', () => {
+  let component: ScenarioTileComponent;
+  let fixture: ComponentFixture<ScenarioTileComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProjectDetailsComponent],
+      declarations: [ScenarioTileComponent],
       imports: [MaterialModule],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProjectDetailsComponent);
+    fixture = TestBed.createComponent(ScenarioTileComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

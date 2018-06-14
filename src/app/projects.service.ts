@@ -10,10 +10,11 @@ import { ProjectAPI } from './project-api';
 export class ProjectsService {
   protected projects: Project[];
   private api: TypedAxiosInstance<ProjectAPI>;
+  private initialLoader: Promise<Project[]>;
 
   constructor() {
-    this.api = axios.create<ProjectAPI>({ baseURL: 'http://delicate-dew-1362.getsandbox.com/' });
-    this.loadProjects()
+    this.api = axios.create<ProjectAPI>({ baseURL: 'http://localhost:8080' });
+    (this.initialLoader = this.loadProjects())
       .then(loadedProjects => this.projects = loadedProjects);
   }
 
@@ -21,30 +22,35 @@ export class ProjectsService {
     return (await this.api.get('/project')).data;
   }
 
-  saveProjects(projects: Project[]) {
-    window.localStorage.setItem('projects', JSON.stringify(projects));
+  async getProject(id: number): Promise<Project> {
+    await this.initialLoader;
+    return this.projects.find(project => project.id === id);
   }
 
   async addProject(project: Project) {
+    await this.initialLoader;
     this.api.request({
       url: '/project',
       data: project,
+      method: 'POST',
     }).then(
-      () => this.projects.push(project)
+      (response) => this.projects.push(response.data)
     );
   }
 
   async updateProject(project: Project) {
+    await this.initialLoader;
     this.api.patch(`/project/${project.id}`, project)
       .then(
         () => {
-          const oldProjectIndex = this.projects.findIndex(other => other.pkEquals(project));
+          const oldProjectIndex = this.projects.findIndex(other => other.id === project.id);
           this.projects[oldProjectIndex] = project;
         }
       );
   }
 
   async removeProject(project: Project) {
+    await this.initialLoader;
     return this.api.delete(`/project/${project.id}`)
       .then(
         async () => {

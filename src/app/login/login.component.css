@@ -1,12 +1,16 @@
+.content-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 #login-form {
     padding-top: 10px;
 }
 
 .login-card {
     max-width: 400px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto
+    width: 400px;
 }
 
 .login-icon {

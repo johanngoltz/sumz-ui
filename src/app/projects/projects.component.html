@@ -1,23 +1,17 @@
 <div class="content-container">
   <h1>Alle Projekte</h1>
-  <mat-grid-list cols="4" rowHeight="4:3">
+  <div id="no-data-info" *ngIf="projectsService.projects && projectsService.projects.length === 0" [@noDataAnimation]>
+    Es existieren aktuell keine Projekte.
+  </div>
+  <mat-grid-list cols="4" rowHeight="4:3" [@gridAnimation]="projectsService.projects?.length">
     <mat-grid-tile *ngFor="let project of projectsService.projects">
-      <mat-card (mouseover)="hovered = project" (mouseout)="hovered = undefined" [class.mat-elevation-z8]="hovered === project">
-        <mat-card-title>
-          {{project.name}}
-          <button type="button" mat-icon-button [matMenuTriggerFor]="projectMenu" (click)="event.preventDefault()">
-            <mat-icon>more_vert</mat-icon>
-          </button>
-        </mat-card-title>
-        <mat-card-content [routerLink]="['/project', project.id]">{{project.description}}</mat-card-content>
-      </mat-card>
-      <mat-menu #projectMenu="matMenu">
-        <button mat-menu-item>Bearbeiten</button>
-        <button mat-menu-item (click)="projectsService.removeProject(project)">Löschen</button>
-      </mat-menu>
+      <app-project-card [project]="project" [routerLink]="['/project', project.id]"></app-project-card>
     </mat-grid-tile>
   </mat-grid-list>
 </div>
-<a mat-fab color="accent" class="fab-bottom-right" matTooltip="Neues Projekt erstellen" routerLink="create">
+<div id="spinner" *ngIf="!projectsService.projects" class="mat-elevation-z6" [@spinnerAnimation]>
+<mat-spinner diameter="36"></mat-spinner>
+</div>
+<a mat-fab color="accent" class="fab-bottom-right" matTooltip="Neues Projekt erstellen" matTooltipShowDelay="500" routerLink="create">
   <mat-icon aria-label="Neues Projekt erstellen">add</mat-icon>
 </a>
