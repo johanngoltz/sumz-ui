@@ -16,16 +16,15 @@ import { PasswordValidation } from 'src/app/registration/registration.passwordva
     registerFormGroup: FormGroup;
     hide = true;
   
-    constructor(private _formBuilder: FormBuilder) { // <--- inject FormBuilder
+    constructor(private _formBuilder: FormBuilder) { this.ngOnInit();// <--- inject FormBuilder
     }
 
   
     ngOnInit() {
       this.registerFormGroup = this._formBuilder.group({
         mailCtrl: ['', Validators.email],
-
-        pwdCtrl: ['', Validators.compose([Validators.required, Validators.minLength(8)])],
-        pwdrptCtrl: ['', Validators.required],
+        pwdCtrl: ['', Validators.minLength(8)],
+        pwdrptCtrl: ['', Validators.minLength(8)],
 
       },
       {        

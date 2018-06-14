@@ -24,31 +24,29 @@
                 <p>
                   <mat-icon class="register-icon">lock</mat-icon>  
                   <mat-form-field>
-                    <input [type]="hide ? 'password' : 'text'" id="password" name="password" matInput placeholder="Passwort" required formControlName="pwdCtrl">
+                    <input [type]="hide ? 'password' : 'text'" id="password" name="password" matInput placeholder="Passwort" formControlName="pwdCtrl">
                     <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
-                    <mat-error *ngIf="pwdCtrl.errors?.required">
-                      Dieses Feld ist ein <strong>Pflichtfeld</strong>
+                    <mat-error>
+                      Dieses Feld ist ein <strong>Pflichtfeld du Lauch</strong>
                     </mat-error>
-                    <mat-error *ngIf="pwdCtrl.errors?.password">
-                        Bitte geben Sie eine gültige E-Mail-Adresse ein
-                    </mat-error>
+                    
                   </mat-form-field>
                 </p>
 
                 <p>
                     <mat-icon class="register-icon">lock</mat-icon>  
                     <mat-form-field>
-                      <input [type]="hide ? 'passwordrepeat' : 'text'" id="passwordrepeat" name="passwordrepeat" matInput placeholder="Passwort" required formControlName="pwdrptCtrl">
+                      <input [type]="hide ? 'passwordrepeat' : 'text'" id="passwordrepeat" name="passwordrepeat" matInput placeholder="Passwort" formControlName="pwdrptCtrl">
                       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
                       <mat-error *ngIf="pwdrptCtrl.errors?.required">
                         Dieses Feld ist ein <strong>Pflichtfeld</strong>
                       </mat-error>
                       <mat-error *ngIf="pwdrptCtrl.errors?.passwordrepeat">
-                        Bitte geben Sie eine gültige E-Mail-Adresse ein
+                        Hey das geht ab
                       </mat-error>
                       
                     </mat-form-field>
-                  </p>
+                </p>
 
                 <br>
                 <button mat-raised-button color="accent" class="register-btn">Register</button>
