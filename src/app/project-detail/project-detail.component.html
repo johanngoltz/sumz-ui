@@ -1,72 +1,118 @@
 <div class="content-container">
-  <div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="20px">
-    <div>
-      Szenarien
-      <mat-list>
-        <mat-list-item *ngFor="let scenario of allScenarios$ | async">
-          <app-scenario-tile [scenario]="scenario" (isActive)="alert(true)"></app-scenario-tile>
-        </mat-list-item>
-      </mat-list>
-    </div>
-    <mat-divider [vertical]="true"></mat-divider>
-    <div fxLayout="column" fxLayoutGap="20px">
-      Projekt
-      <table class="mat-table">
-        <thead>
-          <tr class="mat-header-row">
-            <th class="mat-header-cell">Name</th>
-            <th class="mat-header-cell">Beschreibung</th>
-            <th class="mat-header-cell">Basisjahr</th>
-            <th class="mat-header-cell">Perioden</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="mat-row">
-            <td class="mat-cell">{{(forProject$ | async)?.name}}</td>
-            <td class="mat-cell">{{(forProject$ | async)?.description}}</td>
-            <td class="mat-cell">{{(forProject$ | async)?.baseYear}}</td>
-            <td class="mat-cell">{{(forProject$ | async)?.prognosisLength}}</td>
-          </tr>
-        </tbody>
-      </table>
+  <!-- <div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="20px"> -->
+  <div>
+    <mat-tab-group>
+      <!-- Tab for Project Detail Information-->
+      <!-- FIXME: Es werden nur Daten vom 1. Projekt angezeigt-->
+      <mat-tab label="Projekt">
+        <table class="mat-table">
+          <thead>
+            <tr class="mat-header-row">
+              <th class="mat-header-cell">Name</th>
+              <th class="mat-header-cell">Beschreibung</th>
+              <th class="mat-header-cell">Basisjahr</th>
+              <th class="mat-header-cell">Perioden</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="mat-row">
+              <td class="mat-cell">{{(forProject$ | async)?.name}}</td>
+              <td class="mat-cell">{{(forProject$ | async)?.description}}</td>
+              <td class="mat-cell">{{(forProject$ | async)?.baseYear}}</td>
+              <td class="mat-cell">{{(forProject$ | async)?.prognosisLength}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table mat-table [dataSource]="timeSeries">
+          <ng-container matColumnDef="year">
+            <th mat-header-cell *matHeaderCellDef> Jahr </th>
+            <td mat-cell *matCellDef="let row"> {{row.year}} </td>
+          </ng-container>
+          <ng-container matColumnDef="externalCapital">
+            <th mat-header-cell *matHeaderCellDef> Fremdkapital </th>
+            <td mat-cell *matCellDef="let row"> {{row.externalCapital}} </td>
+          </ng-container>
+          <ng-container matColumnDef="fcf">
+            <th mat-header-cell *matHeaderCellDef> Free Cashflow </th>
+            <td mat-cell *matCellDef="let row"> {{row.fcf}} </td>
+          </ng-container>
 
-      Aktive Szenarien
-      <table mat-table [dataSource]="activeScenarios$ | async">
-        <ng-container matColumnDef="equityInterest">
-          <th mat-header-cell *matHeaderCellDef> EK-Rendite </th>
-          <td mat-cell *matCellDef="let row"> {{row.equityInterest}} </td>
-        </ng-container>
-        <ng-container matColumnDef="outsideCapitalInterest">
-          <th mat-header-cell *matHeaderCellDef> FK-Rendite </th>
-          <td mat-cell *matCellDef="let row"> {{row.outsideCapitalInterest}} </td>
-        </ng-container>
-        <ng-container matColumnDef="businessTax">
-          <th mat-header-cell *matHeaderCellDef> Steuersatz </th>
-          <td mat-cell *matCellDef="let row"> {{row.businessTax}} </td>
-        </ng-container>
-        
-        <tr mat-header-row *matHeaderRowDef="scenarioColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: scenarioColumns"></tr>
-      </table>
+          <tr mat-header-row *matHeaderRowDef="timeSeriesColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: timeSeriesColumns"></tr>
+        </table>
+      </mat-tab>
 
-      Angegebene Unternehmensdaten
-      <table mat-table [dataSource]="timeSeries">
-        <ng-container matColumnDef="year">
-          <th mat-header-cell *matHeaderCellDef> Jahr </th>
-          <td mat-cell *matCellDef="let row"> {{row.year}} </td>
-        </ng-container>
-        <ng-container matColumnDef="externalCapital">
-          <th mat-header-cell *matHeaderCellDef> Fremdkapital </th>
-          <td mat-cell *matCellDef="let row"> {{row.externalCapital}} </td>
-        </ng-container>
-        <ng-container matColumnDef="fcf">
-          <th mat-header-cell *matHeaderCellDef> Free Cashflow </th>
-          <td mat-cell *matCellDef="let row"> {{row.fcf}} </td>
-        </ng-container>
+      <!-- Tab for Scenarios of specific Project -->
+      <mat-tab label="Szenarien">
+        <mat-accordion multi="true">
+          <!-- Panel for Szenario Details -->
+          <!-- FIXME: Panel werden nicht richtig gerendert, erst nach anklicken-->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Szenario
+              </mat-panel-title>
+              <mat-panel-description>
+                Details zu Szenarien des Projektes
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            
+            <!--TODO: allScenarios$ wenn Service steht
+              Dann die einzelnen CellDef anpassen
+            -->
+            <table mat-table [dataSource]="allScenarios" class="mat-elevation-z8">
+              <!-- Id Column -->
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef> Id </th>
+                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+              </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="timeSeriesColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: timeSeriesColumns"></tr>
-      </table>
-    </div>
+              <!-- Equity Interest Column -->
+              <ng-container matColumnDef="Equity Interest">
+                <th mat-header-cell *matHeaderCellDef> Id </th>
+                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+              </ng-container>
+
+              <!-- Outside Capital Interest Column -->
+              <ng-container matColumnDef="Outside Capital Interest">
+                <th mat-header-cell *matHeaderCellDef> Id </th>
+                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+              </ng-container>
+
+              <!-- Corporate Tax Column -->
+              <ng-container matColumnDef="Corporate Tax">
+                <th mat-header-cell *matHeaderCellDef> Id </th>
+                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+
+            <mat-action-row>
+              <button mat-mini-fab color="accent" matTooltip="Neues Szenario hinzufügen" matTooltipShowDelay="500" (click)="addScenario()">
+                <mat-icon aria-label="Neues Szenario hinzufügen">add</mat-icon>
+              </button>
+            </mat-action-row>
+          </mat-expansion-panel>
+
+          <!-- Panel for Comparison-->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Vergleich
+              </mat-panel-title>
+              <mat-panel-description>
+                Vergleich der Szenarien
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>Vergleich hier einfügen</p>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+      </mat-tab>
+    </mat-tab-group>
   </div>
+  <!-- </div> -->
 </div>
