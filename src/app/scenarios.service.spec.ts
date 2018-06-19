@@ -3,11 +3,16 @@ import { Scenario } from './project';
 import { ScenariosService } from './scenarios.service';
 
 
+let spyMethods;
 describe('ScenariosService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [ScenariosService],
     });
+    spyMethods = {
+      nextHandler: next => undefined,
+    };
+    spyOn(spyMethods, 'nextHandler');
   });
 
   it('should be created', inject([ScenariosService], (service: ScenariosService) => {
@@ -15,22 +20,15 @@ describe('ScenariosService', () => {
   }));
 
   it('should load a projects\' scenarios', inject([ScenariosService], async (service: ScenariosService) => {
-    await service.getScenarios(200);
-    service.scenarios$.subscribe(newValue => {
-      expect(newValue.get(200).length)
-        .toBeGreaterThan(0);
-    });
+    (await service.getScenarios(300)).subscribe(spyMethods.nextHandler);
+    expect(spyMethods.nextHandler).toHaveBeenCalled();
   }));
 
   it('should throw an exception on 404', inject([ScenariosService], async (service: ScenariosService) => {
-    service.getScenarios(55555555555).then(
-      () => fail('expectected call to be rejected'),
-      () => expect());
-  }));
-
-  it('should add a scenario to a project and return it', inject([ScenariosService], async (service: ScenariosService) => {
-    await service.addScenario(300, new Scenario());
-    //expect(addedScenario.id).toBeDefined();
+    expect(async () =>
+      (await service.getScenarios(55555555555)).subscribe(spyMethods.nextHandler)
+    ).toThrow();
+    expect(spyMethods.nextHandler).toHaveBeenCalledTimes(0);
   }));
 
   // TODO: more tests

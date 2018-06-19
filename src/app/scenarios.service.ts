@@ -36,7 +36,8 @@ export class ScenariosService {
     if (!this._scenariosStorage.has(ofProjectId)) {
       await this.getScenarios(ofProjectId);
     }
-    return this.scenarios$;
+    return this.scenarios$.pipe(
+      switchMap(scenarios => of(scenarios.get(ofProjectId).find(s => s.id === scenarioId))));
   }
 
   async addScenario(toProjectId: number, scenario: Scenario) {
@@ -59,17 +60,25 @@ export class ScenariosService {
     } else {
       throw response;
     }
-    // TODO: handle empty array / adding a scenario to newly-created project
   }
 
   async updateScenario(ofProjectId: number, scenario: Scenario) {
-    throw new Error('Not implemented');
-    await this.api.patch(
+    const response = await this.api.patch(
       `/project/${ofProjectId}/scenario/${scenario.id}`,
       scenario
     );
-    const scenarioCache = this._scenariosStorage.get(ofProjectId);
-    scenarioCache[scenarioCache.findIndex(value => value.id === scenario.id)] = scenario;
+    if (response.status === 200) {
+      const scenarioCache = this._scenariosStorage.get(ofProjectId);
+      scenarioCache[scenarioCache.findIndex(value => value.id === scenario.id)] = response.data;
+      this._scenarios$.next(new Map(this._scenariosStorage));
+      return this.scenarios$.pipe(
+        switchMap(scenarios => of(
+          scenarios.get(ofProjectId).find(s => s.id === response.data.id)
+        ))
+      );
+    } else {
+      throw response;
+    }
   }
 
   async removeScenario(ofProjectId: number, scenario: Scenario) {
