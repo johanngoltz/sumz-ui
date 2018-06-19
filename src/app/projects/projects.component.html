@@ -1,7 +1,7 @@
 <div class="content-container">
   <h1>Alle Projekte</h1>
   <mat-grid-list cols="4" rowHeight="4:3">
-    <mat-grid-tile *ngFor="let project of projectsService.projects">
+    <mat-grid-tile *ngFor="let project of projectsService.projects$ | async">
       <mat-card (mouseover)="hovered = project" (mouseout)="hovered = undefined" [class.mat-elevation-z8]="hovered === project">
         <mat-card-title>
           {{project.name}}

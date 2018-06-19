@@ -20,10 +20,11 @@ export class ProjectsService {
 
   constructor() {
     this.api = axios.create<ProjectAPI>({ baseURL: 'http://localhost:8080' });
-    (this.initialLoader = this.loadProjects())
-      .then(loadedProjects => this.projects = loadedProjects);
+    this._projects$ = new BehaviorSubject([new Project()]);
 
-  this.projects$ = this._projects$.asObservable();
+    this.projects$ = this._projects$.asObservable();
+
+    this.loadProjects();
   }
 
   /*async loadProjects(): Promise<Project[]> {
@@ -33,7 +34,7 @@ export class ProjectsService {
   async loadProjects() {
     const projects = (await this.api.get('/project')).data;
     this.projectsStorage = projects;
-    this._projects$.next(Object.assign({}, projects));
+    this._projects$.next([...projects]);
     return this.projects$;
   }
 
