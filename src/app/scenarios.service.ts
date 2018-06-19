@@ -1,33 +1,60 @@
 import { Injectable } from '@angular/core';
-import { Scenario, Project } from './project';
-import { ScenarioAPI } from './scenario-api';
 import axios, { TypedAxiosInstance } from 'restyped-axios';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Scenario } from './project';
+import { ScenarioAPI } from './scenario-api';
 
 @Injectable({
   providedIn: 'root',
 })
+
 export class ScenariosService {
+  public scenarios$: Observable<Map<number, Scenario[]>>;
+
   protected scenarios: Map<number, Scenario[]> = new Map<number, Scenario[]>();
+
+  private _scenariosStorage: Map<number, Scenario[]> = new Map<number, Scenario[]>();
+  private _scenarios$: BehaviorSubject<Map<number, Scenario[]>> = new BehaviorSubject(this._scenariosStorage);
   private api: TypedAxiosInstance<ScenarioAPI>;
 
   constructor() {
     this.api = axios.create<ScenarioAPI>({ baseURL: 'http://localhost:8080' });
+    this.scenarios$ = this._scenarios$.asObservable();
+    this.scenarios$.subscribe(next =>
+      console.log(next));
   }
 
-  async getScenarios(ofProjectId: number): Promise<Scenario[]> {
-    const scenarios = (await this.api.get(`/project/${ofProjectId}/scenario`)).data as Scenario[];
-    this.scenarios.set(ofProjectId, scenarios);
-    return scenarios;
+  async getScenarios(ofProjectId: number) {
+    const scenarios = (await this.api.get(`project/${ofProjectId}/scenario`)).data as Scenario[];
+    this._scenariosStorage.set(ofProjectId, scenarios);
+    this._scenarios$.next(new Map(this._scenariosStorage));
+    return new Map(this._scenariosStorage);
   }
 
-  async addScenario(toProjectId: number, scenario: Scenario): Promise<Scenario> {
-    const mergedScenario = (await this.api.post(
+  async getScenario(ofProjectId: number, scenarioId: number) {
+    if (!this._scenariosStorage.has(ofProjectId)) {
+      await this.getScenarios(ofProjectId);
+    }
+    return this.scenarios$;
+  }
+
+  async addScenario(toProjectId: number, scenario: Scenario) {
+    const response = (await this.api.post(
       `/project/${toProjectId}/scenario`,
       scenario
-    )).data;
+    ));
+    if (response.status === 200) {
+      if (!this._scenariosStorage.has(toProjectId)) {
+        this._scenariosStorage.set(toProjectId, [response.data]);
+      } else {
+        this._scenariosStorage.get(toProjectId).push(response.data);
+      }
+      this._scenarios$.next(new Map(this._scenariosStorage));
+      return response.data;
+    } else {
+      throw response;
+    }
     // TODO: handle empty array / adding a scenario to newly-created project
-    this.scenarios.get(toProjectId).push(mergedScenario);
-    return mergedScenario;
   }
 
   async updateScenario(ofProjectId: number, scenario: Scenario) {

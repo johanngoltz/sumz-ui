@@ -110,14 +110,14 @@ export class CreateProjectComponent implements OnInit {
       };
       project.timeSeries = project.timeSeries.map((o) =>
         (o.year === project.baseYear || (o.year > project.baseYear) === project.deterministic) ? o : false).filter(Boolean);
-      this._projectsService.addProject(project).then(() => {
+      this._projectsService.addProject(project).then(createdProject => {
         this.busy = false;
         this._snackBar.open('Das Projekt wurde erfolgreich erstellt', undefined, { duration: 5000 });
-        this._router.navigate(['/project', 1]);
+        this._router.navigate(['/project', createdProject.id]);
       }
       ).catch(e => {
         this.busy = false;
-        this._snackBar.open(`Das Projekt konnte nicht erstellt werden. (${e.message})`, undefined,
+        this._snackBar.open(`Das Projekt konnte nicht erstellt werden. (${e.statusText})`, undefined,
           { panelClass: 'mat-warn', duration: 5000 });
       });
     }

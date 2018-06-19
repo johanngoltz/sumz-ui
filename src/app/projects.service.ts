@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import axios, { TypedAxiosInstance } from 'restyped-axios';
+import { BehaviorSubject, Observable, of, throwError, empty } from 'rxjs';
 import { Project } from './project';
 import { ProjectAPI } from './project-api';
+import { switchMap, filter, catchError, retry } from 'rxjs/operators';
 
 
 @Injectable({
@@ -12,33 +14,60 @@ export class ProjectsService {
   private api: TypedAxiosInstance<ProjectAPI>;
   private initialLoader: Promise<Project[]>;
 
+
+  public projects$: Observable<Project[]>;
+  private _projectsStorage: Project[];
+  private _projects$: BehaviorSubject<Project[]>;
+
   constructor() {
     this.api = axios.create<ProjectAPI>({ baseURL: 'http://localhost:8080' });
-    (this.initialLoader = this.loadProjects())
-      .then(loadedProjects => this.projects = loadedProjects);
+    this._projects$ = new BehaviorSubject(undefined);
+
+    this.projects$ = this._projects$.asObservable();
+    this.projects$.subscribe(next => console.log(next));
+
+    this.getProjects();
   }
 
-  async loadProjects(): Promise<Project[]> {
-    return (await this.api.get('/project')).data;
+  async getProjects() {
+    const projects = (await this.api.get('/project')).data;
+    this._projectsStorage = projects;
+    this._projects$.next([...projects]);
+    return this.projects$;
   }
 
-  async getProject(id: number): Promise<Project> {
-    await this.initialLoader;
-    return this.projects.find(project => project.id === id);
-  }
-
-  async addProject(project: Project) {
-    await this.initialLoader;
-    this.api.request({
-      url: '/project',
-      data: project,
-      method: 'POST',
-    }).then(
-      (response) => this.projects.push(response.data)
+  getProject(id: number) {
+    // TODO: Error handling
+    return this.projects$.pipe(
+      switchMap(projects => {
+        if (projects) {
+          const foundProject = projects.find(p => p.id === id);
+          if (foundProject) {
+            return of(foundProject);
+          }
+        }
+        return empty();
+      })
     );
   }
 
+  async addProject(project: Project) {
+    const response = await this.api.request({
+      url: '/project',
+      data: project,
+      method: 'POST',
+    });
+    if (response.status === 200) {
+      this._projectsStorage.push(response.data);
+      this._projects$.next([...this._projectsStorage]);
+      return response.data;
+    } else {
+      throw response;
+    }
+  }
+
   async updateProject(project: Project) {
+    throw new Error('Not implemented');
     await this.initialLoader;
     this.api.patch(`/project/${project.id}`, project)
       .then(
@@ -50,6 +79,7 @@ export class ProjectsService {
   }
 
   async removeProject(project: Project) {
+    throw new Error('Not implemented');
     await this.initialLoader;
     return this.api.delete(`/project/${project.id}`)
       .then(

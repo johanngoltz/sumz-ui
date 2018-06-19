@@ -73,6 +73,42 @@
       "iterations": 10000,
       "algorithm": "fcf",
       "scenarios": []
+    },
+    {
+      "timeSeries": [
+        {
+          "year": 2017,
+          "externalCapital": 0,
+          "fcf": 0
+        }
+      ],
+      "name": "mnjjkoijo",
+      "deterministic": true,
+      "baseYear": 2017,
+      "description": "",
+      "prognosisLength": 5,
+      "id": 0.07375743414571156,
+      "iterations": 10000,
+      "algorithm": "fcf",
+      "scenarios": []
+    },
+    {
+      "timeSeries": [
+        {
+          "year": 2017,
+          "externalCapital": 0,
+          "fcf": 0
+        }
+      ],
+      "name": "uicgaszucg zuasgcuzia",
+      "deterministic": true,
+      "baseYear": 2017,
+      "description": "",
+      "prognosisLength": 5,
+      "id": 0.2030862172398723,
+      "iterations": 10000,
+      "algorithm": "fcf",
+      "scenarios": []
     }
   ]
 }
