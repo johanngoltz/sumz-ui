@@ -40,12 +40,13 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   private addScenario() {
-    of({} as Scenario).pipe(
+    of({businessTax: 25} as Scenario).pipe(
       withLatestFrom(this.projectId),
-      map(x => {
+      tap(x => {
         const [scenario, pId] = x;
-        this._scenariosService.addScenario(pId, scenario);
+        return this._scenariosService.addScenario(pId, scenario);
       })
-    ).subscribe();
+    ).pipe(flatMap(a => a))
+      .subscribe(next => console.log('Scenario added: ', next));
   }
 }

@@ -53,7 +53,11 @@ export class ScenariosService {
         this._scenariosStorage.get(toProjectId).push(response.data);
       }
       this._scenarios$.next(new Map(this._scenariosStorage));
-      return response.data;
+      return this.scenarios$.pipe(
+        switchMap(scenarios => of(
+          scenarios.get(toProjectId).find(s => s.id === response.data.id)
+        ))
+      );
     } else {
       throw response;
     }
