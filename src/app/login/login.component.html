@@ -1,0 +1,30 @@
+<div class="content-container">
+  <mat-card class="login-card">
+    <mat-card-content>
+
+      <mat-card-title>Login</mat-card-title>
+      <mat-divider></mat-divider>
+
+      <form [formGroup]="loginForm" id="login-form">
+        <p>
+          <mat-icon class="login-icon">person</mat-icon>
+          <mat-form-field>
+            <input type="text" id="username" name="username" matInput placeholder="Benutzername" required formControlName="username">
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-icon class="login-icon">lock</mat-icon>
+          <mat-form-field>
+            <input [type]="hide ? 'password' : 'text'" id="password" name="password" matInput placeholder="Passwort" required formControlName="password">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+          </mat-form-field>
+        </p>
+        <br>
+        <button mat-raised-button class="login-btn">LOGIN</button>
+      </form>
+
+      <button mat-button class="forgot-btn">Passwort vergessen?</button>
+    </mat-card-content>
+
+  </mat-card>
+</div>

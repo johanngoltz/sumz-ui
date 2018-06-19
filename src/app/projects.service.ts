@@ -48,8 +48,9 @@ export class ProjectsService {
     this.api.request({
       url: '/project',
       data: project,
+      method: 'POST',
     }).then(
-      () => this.projects.push(project)
+      (response) => this.projects.push(response.data)
     );
   }
 
@@ -58,7 +59,7 @@ export class ProjectsService {
     this.api.patch(`/project/${project.id}`, project)
       .then(
         () => {
-          const oldProjectIndex = this.projects.findIndex(other => other.pkEquals(project));
+          const oldProjectIndex = this.projects.findIndex(other => other.id === project.id);
           this.projects[oldProjectIndex] = project;
         }
       );
