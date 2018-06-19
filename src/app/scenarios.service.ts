@@ -12,8 +12,6 @@ import { switchMap } from 'rxjs/operators';
 export class ScenariosService {
   public scenarios$: Observable<Map<number, Scenario[]>>;
 
-  protected scenarios: Map<number, Scenario[]> = new Map<number, Scenario[]>();
-
   private _scenariosStorage: Map<number, Scenario[]> = new Map<number, Scenario[]>();
   private _scenarios$: BehaviorSubject<Map<number, Scenario[]>> = new BehaviorSubject(this._scenariosStorage);
   private api: TypedAxiosInstance<ScenarioAPI>;
@@ -42,10 +40,10 @@ export class ScenariosService {
   }
 
   async addScenario(toProjectId: number, scenario: Scenario) {
-    const response = (await this.api.post(
+    const response = await this.api.post(
       `/project/${toProjectId}/scenario`,
       scenario
-    ));
+    );
     if (response.status === 200) {
       if (!this._scenariosStorage.has(toProjectId)) {
         this._scenariosStorage.set(toProjectId, [response.data]);
@@ -65,19 +63,25 @@ export class ScenariosService {
   }
 
   async updateScenario(ofProjectId: number, scenario: Scenario) {
+    throw new Error('Not implemented');
     await this.api.patch(
       `/project/${ofProjectId}/scenario/${scenario.id}`,
       scenario
     );
-    const scenarioCache = this.scenarios.get(ofProjectId);
+    const scenarioCache = this._scenariosStorage.get(ofProjectId);
     scenarioCache[scenarioCache.findIndex(value => value.id === scenario.id)] = scenario;
   }
 
   async removeScenario(ofProjectId: number, scenario: Scenario) {
-    await this.api.delete(
+    const response = await this.api.delete(
       `/project/${ofProjectId}/scenario/${scenario.id}`
     );
-    const scenarioCache = this.scenarios.get(ofProjectId);
-    scenarioCache.splice(scenarioCache.indexOf(scenario), 1);
+    if (response.status === 200) {
+      const scenarioCache = this._scenariosStorage.get(ofProjectId);
+      scenarioCache.splice(scenarioCache.indexOf(scenario), 1);
+      this._scenarios$.next(new Map(this._scenariosStorage));
+    } else {
+      throw response;
+    }
   }
 }
