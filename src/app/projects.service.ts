@@ -39,22 +39,28 @@ export class ProjectsService {
   }
 
   async getProject(id: number): Promise<Project> {
+    throw new Error('Not implemented');
     await this.initialLoader;
     return this.projects.find(project => project.id === id);
   }
 
   async addProject(project: Project) {
-    await this.initialLoader;
-    this.api.request({
+    const response = await this.api.request({
       url: '/project',
       data: project,
       method: 'POST',
-    }).then(
-      (response) => this.projects.push(response.data)
-    );
+    });
+    if (response.status === 200) {
+      this.projectsStorage.push(response.data);
+      this._projects$.next([...this.projectsStorage]);
+      return response.data;
+    } else {
+      throw response;
+    }
   }
 
   async updateProject(project: Project) {
+    throw new Error('Not implemented');
     await this.initialLoader;
     this.api.patch(`/project/${project.id}`, project)
       .then(
@@ -66,6 +72,7 @@ export class ProjectsService {
   }
 
   async removeProject(project: Project) {
+    throw new Error('Not implemented');
     await this.initialLoader;
     return this.api.delete(`/project/${project.id}`)
       .then(
