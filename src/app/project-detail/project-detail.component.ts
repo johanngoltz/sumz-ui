@@ -32,11 +32,9 @@ export class ProjectDetailComponent implements OnInit {
 
   ngOnInit() {
     const projectId$ = this.route.paramMap.pipe(switchMap(params => of(Number.parseFloat(params.get('id')))));
-    projectId$.subscribe(next => console.log('Project ID:' + next));
     this.forProject$ = projectId$.pipe(
       switchMap(projectId => this.projectsService.getProject(projectId))
     );
-    this.forProject$.subscribe(next => console.log(next));
     /*
     this.forProject$.subscribe(newProject => this.scenariosService.getScenarios(newProject.id));
     this.allScenarios$ = this.scenariosService.scenarios$.pipe(

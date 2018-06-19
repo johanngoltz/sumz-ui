@@ -16,7 +16,7 @@ export class ProjectsService {
 
 
   public projects$: Observable<Project[]>;
-  private projectsStorage: Project[];
+  private _projectsStorage: Project[];
   private _projects$: BehaviorSubject<Project[]>;
 
   constructor() {
@@ -26,16 +26,12 @@ export class ProjectsService {
     this.projects$ = this._projects$.asObservable();
     this.projects$.subscribe(next => console.log(next));
 
-    this.loadProjects();
+    this.getProjects();
   }
 
-  /*async loadProjects(): Promise<Project[]> {
-    return (await this.api.get('/project')).data;
-  }*/
-
-  async loadProjects() {
+  async getProjects() {
     const projects = (await this.api.get('/project')).data;
-    this.projectsStorage = projects;
+    this._projectsStorage = projects;
     this._projects$.next([...projects]);
     return this.projects$;
   }
@@ -62,8 +58,8 @@ export class ProjectsService {
       method: 'POST',
     });
     if (response.status === 200) {
-      this.projectsStorage.push(response.data);
-      this._projects$.next([...this.projectsStorage]);
+      this._projectsStorage.push(response.data);
+      this._projects$.next([...this._projectsStorage]);
       return response.data;
     } else {
       throw response;
