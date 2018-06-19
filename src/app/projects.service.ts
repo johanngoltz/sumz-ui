@@ -68,6 +68,7 @@ export class ProjectsService {
 
   async updateProject(project: Project) {
     throw new Error('Not implemented');
+    /*
     await this.initialLoader;
     this.api.patch(`/project/${project.id}`, project)
       .then(
@@ -76,10 +77,12 @@ export class ProjectsService {
           this.projects[oldProjectIndex] = project;
         }
       );
+      */
   }
 
   async removeProject(project: Project) {
     throw new Error('Not implemented');
+    /*
     await this.initialLoader;
     return this.api.delete(`/project/${project.id}`)
       .then(
@@ -87,6 +90,6 @@ export class ProjectsService {
           this.projects.splice(this.projects.indexOf(project), 1);
           return true;
         }
-      );
+      );*/
   }
 }
