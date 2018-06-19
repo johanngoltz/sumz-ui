@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { switchMap, merge, map, withLatestFrom } from 'rxjs/operators';
+import { Observable, of, from } from 'rxjs';
+import { switchMap, merge, map, withLatestFrom, flatMap, filter } from 'rxjs/operators';
 import { FinancialData, Project, Scenario } from '../project';
 import { ProjectsService } from '../projects.service';
 import { ScenariosService } from '../scenarios.service';
@@ -17,13 +17,7 @@ export class ProjectDetailComponent implements OnInit {
   private allScenarios$: Observable<Scenario[]>;
   private activeScenarios$: Observable<Scenario[]>;
   timeSeriesColumns = ['year', 'externalCapital', 'fcf'];
-  scenarioColumns = ['equityInterest', 'outsideCapitalInterest', 'businessTax'];
-  timeSeries: FinancialData[] = [{
-    year: 2017,
-    externalCapital: 5645646,
-    fcf: 4531.1,
-  }];
-  alert = window.alert;
+  scenarioColumns = ['position', 'equityInterest', 'outsideCapitalInterest', 'corporateTax'];
 
   constructor(private scenariosService: ScenariosService,
     private projectsService: ProjectsService,
@@ -35,13 +29,11 @@ export class ProjectDetailComponent implements OnInit {
     this.forProject$ = projectId$.pipe(
       switchMap(projectId => this.projectsService.getProject(projectId))
     );
-    /*
-    this.forProject$.subscribe(newProject => this.scenariosService.getScenarios(newProject.id));
-    this.allScenarios$ = this.scenariosService.scenarios$.pipe(
-      switchMap(scenarios => scenarios.get ? Promise.resolve(scenarios.get(200)) : undefined)
-    );
+    this.allScenarios$ = projectId$.pipe(
+      switchMap(projectId => this.scenariosService.getScenarios(projectId))
+    ).pipe(flatMap(a => a));
     this.activeScenarios$ = this.allScenarios$.pipe(
-      switchMap(scenarios => Promise.resolve(scenarios.filter(s => s.isActive)))
-    );*/
+      switchMap(scenarios => of(scenarios.filter(s => s.isActive)))
+    );
   }
 }

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import axios, { TypedAxiosInstance } from 'restyped-axios';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of, from } from 'rxjs';
 import { Scenario } from './project';
 import { ScenarioAPI } from './scenario-api';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -24,11 +25,13 @@ export class ScenariosService {
       console.log(next));
   }
 
-  async getScenarios(ofProjectId: number) {
+  async getScenarios(ofProjectId: number): Promise<Observable<Scenario[]>> {
     const scenarios = (await this.api.get(`project/${ofProjectId}/scenario`)).data as Scenario[];
     this._scenariosStorage.set(ofProjectId, scenarios);
     this._scenarios$.next(new Map(this._scenariosStorage));
-    return new Map(this._scenariosStorage);
+    return this.scenarios$.pipe(
+      switchMap(s => of(s.get(ofProjectId)))
+    );
   }
 
   async getScenario(ofProjectId: number, scenarioId: number) {
