@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import axios, { TypedAxiosInstance } from 'restyped-axios';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError, empty } from 'rxjs';
 import { Project } from './project';
 import { ProjectAPI } from './project-api';
+import { switchMap, filter, catchError, retry } from 'rxjs/operators';
 
 
 @Injectable({
@@ -23,6 +24,7 @@ export class ProjectsService {
     this._projects$ = new BehaviorSubject(undefined);
 
     this.projects$ = this._projects$.asObservable();
+    this.projects$.subscribe(next => console.log(next));
 
     this.loadProjects();
   }
@@ -38,10 +40,19 @@ export class ProjectsService {
     return this.projects$;
   }
 
-  async getProject(id: number): Promise<Project> {
-    throw new Error('Not implemented');
-    await this.initialLoader;
-    return this.projects.find(project => project.id === id);
+  getProject(id: number) {
+    // TODO: Error handling
+    return this.projects$.pipe(
+      switchMap(projects => {
+        if (projects) {
+          const foundProject = projects.find(p => p.id === id);
+          if (foundProject) {
+            return of(foundProject);
+          }
+        }
+        return empty();
+      })
+    );
   }
 
   async addProject(project: Project) {
