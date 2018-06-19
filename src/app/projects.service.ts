@@ -20,7 +20,7 @@ export class ProjectsService {
 
   constructor() {
     this.api = axios.create<ProjectAPI>({ baseURL: 'http://localhost:8080' });
-    this._projects$ = new BehaviorSubject([new Project()]);
+    this._projects$ = new BehaviorSubject(undefined);
 
     this.projects$ = this._projects$.asObservable();
 
