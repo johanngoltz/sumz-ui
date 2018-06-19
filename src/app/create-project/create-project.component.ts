@@ -117,7 +117,7 @@ export class CreateProjectComponent implements OnInit {
       }
       ).catch(e => {
         this.busy = false;
-        this._snackBar.open(`Das Projekt konnte nicht erstellt werden. (${e.statusText})`, undefined,
+        this._snackBar.open(`Das Projekt konnte nicht erstellt werden. (${e.message})`, undefined,
           { panelClass: 'mat-warn', duration: 5000 });
       });
     }
