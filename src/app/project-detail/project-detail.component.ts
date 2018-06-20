@@ -17,6 +17,8 @@ export class ProjectDetailComponent implements OnInit {
   private allScenarios$: Observable<Scenario[]>;
   private activeScenarios$: Observable<Scenario[]>;
   private projectId: Observable<number>;
+  private step = 0;
+
   timeSeriesColumns = ['year', 'externalCapital', 'fcf'];
   scenarioColumns = ['position', 'equityInterest', 'outsideCapitalInterest', 'corporateTax'];
 
@@ -48,5 +50,17 @@ export class ProjectDetailComponent implements OnInit {
       })
     ).pipe(flatMap(a => a))
       .subscribe(next => console.log('Scenario added: ', next));
+  }
+
+  setStep(index: number) {
+    this.step = index;
+  }
+
+  nextStep() {
+    this.step++;
+  }
+
+  prevStep() {
+    this.step--;
   }
 }

@@ -1,8 +1,16 @@
 <div class="content-container">
-  <div>
-    <mat-tab-group>
-      <!-- Tab for Project Detail Information-->
-      <mat-tab label="Projekt">
+    <!-- panels for different parts of project-->
+    <mat-accordion multi="false" class="example-headers-align">
+      <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Daten
+          </mat-panel-title>
+          <mat-panel-description>
+            Kopfdaten des Projektes
+            <mat-icon>work</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
         <table class="mat-table">
           <thead>
             <tr class="mat-header-row">
@@ -21,6 +29,22 @@
             </tr>
           </tbody>
         </table>
+
+        <mat-action-row>
+            <button mat-button color="primary" (click)="nextStep()">Next</button>
+          </mat-action-row>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Cashflows
+          </mat-panel-title>
+          <mat-panel-description>
+            Details für Cashflowberechnung
+            <mat-icon>euro_symbol</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
         <table mat-table [dataSource]="(forProject$ | async)?.timeSeries">
           <ng-container matColumnDef="year">
             <th mat-header-cell *matHeaderCellDef> Jahr </th>
@@ -38,79 +62,31 @@
           <tr mat-header-row *matHeaderRowDef="timeSeriesColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: timeSeriesColumns"></tr>
         </table>
-      </mat-tab>
 
-      <!-- Tab for Scenarios of specific Project -->
-      <mat-tab label="Szenarien">
-        <mat-accordion multi="true">
-          <!-- Panel for Szenario Details -->
-          <!-- FIXME: Panel werden nicht richtig gerendert, erst nach anklicken-->
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Szenario
-              </mat-panel-title>
-              <mat-panel-description>
-                Details zu Szenarien des Projektes
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            
-            <!--TODO: allScenarios$ wenn Service steht
-              Dann die einzelnen CellDef anpassen
-            -->
-            <table mat-table [dataSource]="allScenarios$" class="mat-elevation-z8">
-              <!-- Id Column -->
-              <ng-container matColumnDef="position">
-                <th mat-header-cell *matHeaderCellDef> Nr. </th>
-                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-              </ng-container>
+        <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">Next</button>
+          </mat-action-row>
+      </mat-expansion-panel>
 
-              <!-- Equity Interest Column -->
-              <ng-container matColumnDef="equityInterest">
-                <th mat-header-cell *matHeaderCellDef> EK-Renditeforderung </th>
-                <td mat-cell *matCellDef="let element"> {{element.equityInterest}} </td>
-              </ng-container>
+      <!-- Panel for Comparison-->
+      <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Vergleich
+          </mat-panel-title>
+          <mat-panel-description>
+            Vergleich der Szenarien
 
-              <!-- Outside Capital Interest Column -->
-              <ng-container matColumnDef="outsideCapitalInterest">
-                <th mat-header-cell *matHeaderCellDef> FK-Zinssatz </th>
-                <td mat-cell *matCellDef="let element"> {{element.outsideCapitalInterest}} </td>
-              </ng-container>
+            <mat-icon>bar_chart</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p>Vergleich hier einfügen</p>
 
-              <!-- Corporate Tax Column -->
-              <ng-container matColumnDef="corporateTax">
-                <th mat-header-cell *matHeaderCellDef> Körperschaftssteuer </th>
-                <td mat-cell *matCellDef="let element"> {{element.businessTax}} </td>
-              </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="scenarioColumns"></tr>
-              <tr mat-row *matRowDef="let element; columns: scenarioColumns;"></tr>
-            </table>
-
-
-            <mat-action-row>
-              <button mat-mini-fab color="accent" matTooltip="Neues Szenario hinzufügen" matTooltipShowDelay="500" (click)="addScenario()">
-                <mat-icon aria-label="Neues Szenario hinzufügen">add</mat-icon>
-              </button>
-            </mat-action-row>
-          </mat-expansion-panel>
-
-          <!-- Panel for Comparison-->
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Vergleich
-              </mat-panel-title>
-              <mat-panel-description>
-                Vergleich der Szenarien
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <p>Vergleich hier einfügen</p>
-          </mat-expansion-panel>
-        </mat-accordion>
-
-      </mat-tab>
-    </mat-tab-group>
-  </div>
-  <!-- </div> -->
+        <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">End</button>
+          </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
 </div>
