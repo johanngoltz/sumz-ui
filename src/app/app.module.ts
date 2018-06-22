@@ -16,7 +16,7 @@ import { ScenarioTileComponent } from './scenario-tile/scenario-tile.component';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
-
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -40,6 +40,7 @@ import { RegistrationComponent } from './registration/registration.component';
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
+    ChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

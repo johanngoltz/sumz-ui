@@ -1,5 +1,5 @@
 <div class="content-container">
-  <script src="node_modules/chart.js/src/chart.js"></script>
+  <script src="./node_modules/chart.js/src/chart.js"></script>
   <!-- panels for different parts of project-->
   <mat-accordion multi="false" class="example-headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
@@ -81,7 +81,13 @@
           <mat-icon>bar_chart</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <p>Vergleich hier einfügen</p>
+
+      <canvas baseChart width="200" height="100"
+        [datasets]="chartData"
+        [labels]="chartLabels"
+        [options]="chartOptions"
+        [legend]="chartLegend"
+        [chartType]="chartType"></canvas>
 
       <mat-action-row>
         <button mat-button color="warn" (click)="prevStep()">Previous</button>
