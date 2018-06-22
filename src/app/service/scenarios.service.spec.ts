@@ -1,11 +1,11 @@
 import { TestBed, inject } from '@angular/core/testing';
-
 import { ScenariosService } from './scenarios.service';
+
 
 describe('ScenariosService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ScenariosService]
+      providers: [ScenariosService],
     });
   });
 
