@@ -18,7 +18,7 @@ export class PasswordValidation {
         console.log(false);
       } else {
         console.log(true);
-        return null
+        return null   //if the passwords match
       }
     };
   }
