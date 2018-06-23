@@ -6,13 +6,14 @@ import { CreateProjectComponent } from './create-project/create-project.componen
 import { ProjectDetailComponent } from './project-detail/project-detail.component';
 import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', component: ProjectsComponent, data: {state: 'projects'} },
+  { path: '', pathMatch: 'full', component: ProjectsComponent, data: {state: 'projects'}, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent, data: {state: 'login'} },
   { path: 'registration', component: RegistrationComponent, data: {state: 'registration'} },
-  { path: 'create', component: CreateProjectComponent, data: {state: 'create'} },
-  { path: 'project/:id', component: ProjectDetailComponent, data: {state: 'details'} },
+  { path: 'create', component: CreateProjectComponent, data: {state: 'create'}, canActivate: [AuthGuard] },
+  { path: 'project/:id', component: ProjectDetailComponent, data: {state: 'details'}, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

@@ -10,12 +10,11 @@ import { AuthenticationService } from '../_services/authentication.service';
 })
 export class LoginComponent implements OnInit {
   loginFormGroup: FormGroup;
-  hide = true;
 
   constructor(
     private _formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
-  ) { } // <--- inject FormBuilder
+  ) { }
 
   ngOnInit() {
     this.loginFormGroup = this._formBuilder.group({
@@ -25,7 +24,15 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.authenticationService.login(this.mailCtrl.value.toString, this.pwdCtrl.value.toString).subscribe();
+    // abort if form is invalid
+    if (this.loginFormGroup.invalid) {
+      return;
+    }
+
+    // reset login status
+    this.authenticationService.logout();
+
+    this.authenticationService.login(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString(), 'password');
   }
 
   get mailCtrl() { return this.loginFormGroup.get('mailCtrl'); }

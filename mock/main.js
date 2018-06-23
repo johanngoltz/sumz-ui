@@ -81,3 +81,36 @@ Sandbox.define('/project', 'POST', function (req, res) {
   // Send the response body.
   res.json(req.body);
 })
+
+// Login
+Sandbox.define('/oauth/token', 'POST', function (req, res) {
+  // Check the request, make sure it is a compatible type
+  if (!req.is('application/json')) {
+    return res.send(400, 'Invalid content type, expected application/json');
+  }
+
+  // Check login credentials
+  if (!(req.body.email === 'tomastepa@web.de' && req.body.password === '123' && req.body.grant_type === 'password')) {
+    return res.send(401, 'Invalid username or password')
+  }
+
+  // Set the type of response, sets the content type.
+  res.type('application/json');
+
+  // Set the status code of the response.
+  res.status(200);
+
+  // Send the response body.
+  res.json(
+    {
+      access_token: "214vg3hg2v123f123f4ghv",
+      refresh_token: "dfshbfhb367gfvagfasf",
+      token_type: "bearer",
+      expires_in: 1234,			
+	    scope: "read write",			 
+	    jti: "",	
+	    id: 1,
+    }
+  );
+
+})
