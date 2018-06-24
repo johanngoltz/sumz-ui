@@ -17,6 +17,7 @@ import { ScenarioTileComponent } from './scenario-tile/scenario-tile.component';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { FinancialDataComponent } from './accounting-data/accounting-data.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { RegistrationComponent } from './registration/registration.component';
     DeleteDialogComponent,
     LoginComponent,
     RegistrationComponent,
+    FinancialDataComponent,
   ],
   imports: [
     BrowserModule,

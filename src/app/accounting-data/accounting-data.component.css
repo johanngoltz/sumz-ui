@@ -1,0 +1,33 @@
+.scrollable {
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+}
+
+.mat-table {
+    text-align: right;
+}
+
+.mat-header-cell, .mat-cell {
+    padding: 5px 20px;
+}
+
+.mat-header-cell {
+    font-size: 14px;
+    border-right: 1px solid #CCC;
+}
+
+.mat-header-row > th, .mat-header-row > td {
+    border-bottom: 1px solid #CCC;
+}
+
+.table-input-right {
+    text-align: right;
+    width: 80px;
+}
+
+#remove_year {
+    position: absolute;
+}

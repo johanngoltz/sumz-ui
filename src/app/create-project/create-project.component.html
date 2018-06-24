@@ -83,57 +83,7 @@
               <input (input)="updateTable()" type="number" id="baseYear" name="baseYear" matInput placeholder="Basisjahr" formControlName="baseYear"
                 required>
             </mat-form-field>
-            <div class="scrollable" #scrollable>
-              <table class="mat-table">
-                <thead>
-                  <tr class="mat-header-row">
-                    <th class="mat-header-cell">Jahr</th>
-                    <th class="mat-cell" *ngIf="!formGroup2.value.deterministic">{{(timeSeries.at(0) && timeSeries.at(0).value.year - 1) || formGroup3.value.baseYear}}</th>
-                    <ng-container *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
-                      <th class="mat-cell" *ngIf="(element.value.year > formGroup3.value.baseYear) === formGroup2.value.deterministic || element.value.year === formGroup3.value.baseYear">
-                        <button type="button" id="remove-year" (click)="removeYear()" mat-icon-button *ngIf="timeSeries.controls.indexOf(element) === (formGroup2.value.deterministic ? timeSeries.length - 1 : 0)">
-                          <mat-icon>delete</mat-icon>
-                        </button>
-                        {{element.value.year}}
-                      </th>
-                    </ng-container>
-                    <th class="mat-cell" *ngIf="formGroup2.value.deterministic">{{(timeSeries.at(timeSeries.length - 1) && timeSeries.at(timeSeries.length - 1).value.year + 1) || formGroup3.value.baseYear}}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="mat-row">
-                    <th class="mat-header-cell">Fremdkapital</th>
-                    <td *ngIf="!formGroup2.value.deterministic" rowspan="2" class="mat-cell">
-                      <button type="button" (click)="addYear()" color="accent" mat-icon-button>
-                        <mat-icon>add</mat-icon>
-                      </button>
-                    </td>
-                    <ng-container *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
-                      <td class="mat-cell" *ngIf="(element.value.year > formGroup3.value.baseYear) === formGroup2.value.deterministic || element.value.year === formGroup3.value.baseYear">
-                        <mat-form-field class="table-input-right" [formGroup]="element">
-                          <input type="text" matInput formControlName="externalCapital" appToDouble required>
-                        </mat-form-field>
-                      </td>
-                    </ng-container>
-                    <td *ngIf="formGroup2.value.deterministic" rowspan="2" class="mat-cell">
-                      <button type="button" (click)="addYear()" color="accent" mat-icon-button>
-                        <mat-icon>add</mat-icon>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr class="mat-row" #fcfrow>
-                    <th class="mat-header-cell">FCF</th>
-                    <ng-container *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
-                      <td class="mat-cell" *ngIf="(element.value.year > formGroup3.value.baseYear) === formGroup2.value.deterministic || element.value.year === formGroup3.value.baseYear">
-                        <mat-form-field class="table-input-right" [formGroup]="element">
-                          <input type="text" matInput formControlName="fcf" appToDouble required>
-                        </mat-form-field>
-                      </td>
-                    </ng-container>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <app-accounting-data [editable]="true" [formGroup]="formGroup3"></app-accounting-data>
           </mat-card-content>
           <mat-card-actions class="stepper-actions">
             <button mat-button matStepperPrevious [disabled]="busy">Zurück</button>

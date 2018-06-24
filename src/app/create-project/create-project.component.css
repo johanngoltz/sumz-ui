@@ -46,33 +46,6 @@ label.grey {
     font-size: 12px;
 }
 
-.mat-table {
-    text-align: right;
-}
-
-.mat-header-cell, .mat-cell {
-    padding: 5px 20px;
-}
-
-.mat-header-cell {
-    font-size: 14px;
-    border-right: 1px solid #CCC;
-}
-
-.mat-header-row > th, .mat-header-row > td {
-    border-bottom: 1px solid #CCC;
-}
-
-.table-input-right {
-    text-align: right;
-    width: 80px;
-}
-
-.scrollable {
-    overflow-x: auto;
-    scroll-behavior: smooth;
-}
-
 .info {
     max-width: 600px;
     background: whitesmoke;
@@ -130,8 +103,4 @@ mat-progress-bar {
 :ng-deep .md-button-wrapper > * {
     vertical-align: middle;
     margin-top: -3px;
-}
-
-#remove_year {
-    position: absolute;
 }

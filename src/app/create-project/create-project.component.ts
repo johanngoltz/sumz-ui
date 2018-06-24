@@ -17,8 +17,6 @@ export class CreateProjectComponent implements OnInit {
   formGroup2: FormGroup;
   formGroup3: FormGroup;
   prevYear: number;
-  @ViewChild('scrollable') dataScrollContainer: ElementRef;
-  @ViewChild('fcfrow') fcfRow: ElementRef;
   busy: Boolean;
 
   constructor(private _formBuilder: FormBuilder, private _projectsService: ProjectsService, private _router: Router,
@@ -45,16 +43,9 @@ export class CreateProjectComponent implements OnInit {
     });
     this.formGroup3 = this._formBuilder.group({
       baseYear: [this.prevYear, Validators.required],
+      calculateFcf: [false, Validators.required],
       timeSeries: this.timeSeries,
     });
-    new MutationObserver(
-      // besser und logischer wäre scrollLeftMax, aber das scheint es nur in Firefox zu geben.
-      () => this.dataScrollContainer.nativeElement.scrollLeft =
-        this.formGroup2.value.deterministic ? this.dataScrollContainer.nativeElement.scrollWidth :
-          this.dataScrollContainer.nativeElement.scrollLeft
-      ).observe(
-      this.fcfRow.nativeElement,
-      { childList: true });
   }
 
   createFinancialData(year: number, index?: number) {
