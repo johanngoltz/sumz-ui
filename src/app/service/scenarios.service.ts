@@ -67,11 +67,7 @@ export class ScenariosService {
   }
 
   removeScenario(scenario: Scenario) {
-    return from(this._apiClient.request({
-      url: `/scenario/:sId`,
-      params: { sId: scenario.id },
-      method: 'DELETE',
-    })).pipe(
+    return from(this._apiClient.delete(`/scenario/${scenario.id}`)).pipe(
       switchMap(response => {
         this._scenariosStorage.splice(this._scenariosStorage.indexOf(scenario), 1);
         this._scenarios$.next([...this._scenariosStorage]);

@@ -24,4 +24,5 @@ module.exports = {
       list.push(newValue);
     }
   },
+  findIndex: findIndex,
 }

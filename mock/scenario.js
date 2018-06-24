@@ -37,10 +37,11 @@ exports.routes = [{
   verb: 'DELETE',
   handler: function (req, res) {
     state.scenarios.splice(
-      state.scenarios.findIndex(function (scenario) {
+      utils.findIndex(state.scenarios, function (scenario) {
         return scenario.id === req.params.sId;
       }),
-      1);
+      0);
+    res.send(true);
   }
 }
 ];
