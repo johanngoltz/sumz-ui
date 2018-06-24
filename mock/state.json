@@ -1,114 +1,16 @@
 {
-  "projects": [
+  "scenarios": [
     {
-      "id": 300,
-      "name": "runningOutOfNames",
-      "scenarios": [
-        {
-          "id": 0.18489153828391758
-        },
-        {
-          "id": 0.571014116428883
-        },
-        {
-          "id": 0.2942143434081076
-        },
-        {
-          "id": 0.20621556630215454
-        }
-      ]
+      "id": 1,
+      "name": "Eins",
+      "description": "Das erste Szenario",
+      "periods": 2
     },
     {
-      "timeSeries": [
-        {
-          "year": 2017,
-          "externalCapital": 0,
-          "fcf": 0
-        }
-      ],
-      "name": "Neu",
-      "deterministic": true,
-      "baseYear": 2017,
-      "description": "Test",
-      "prognosisLength": 5,
-      "id": 0.008398681348886106,
-      "iterations": 10000,
-      "algorithm": "fcf",
-      "scenarios": []
-    },
-    {
-      "timeSeries": [
-        {
-          "year": 2017,
-          "externalCapital": 5,
-          "fcf": 1
-        },
-        {
-          "year": 2018,
-          "externalCapital": 4,
-          "fcf": 2
-        },
-        {
-          "year": 2019,
-          "externalCapital": 3,
-          "fcf": 3
-        },
-        {
-          "year": 2020,
-          "externalCapital": 2,
-          "fcf": 4
-        },
-        {
-          "year": 2021,
-          "externalCapital": 1,
-          "fcf": 5
-        }
-      ],
-      "name": "Jonas",
-      "deterministic": true,
-      "baseYear": 2017,
-      "description": "Test",
-      "prognosisLength": 5,
-      "id": 0.11362778583023869,
-      "iterations": 10000,
-      "algorithm": "fcf",
-      "scenarios": []
-    },
-    {
-      "timeSeries": [
-        {
-          "year": 2017,
-          "externalCapital": 0,
-          "fcf": 0
-        }
-      ],
-      "name": "mnjjkoijo",
-      "deterministic": true,
-      "baseYear": 2017,
-      "description": "",
-      "prognosisLength": 5,
-      "id": 0.07375743414571156,
-      "iterations": 10000,
-      "algorithm": "fcf",
-      "scenarios": []
-    },
-    {
-      "timeSeries": [
-        {
-          "year": 2017,
-          "externalCapital": 0,
-          "fcf": 0
-        }
-      ],
-      "name": "uicgaszucg zuasgcuzia",
-      "deterministic": true,
-      "baseYear": 2017,
-      "description": "",
-      "prognosisLength": 5,
-      "id": 0.2030862172398723,
-      "iterations": 10000,
-      "algorithm": "fcf",
-      "scenarios": []
+      "name": "Zwei",
+      "description": "Das zweite Szenario",
+      "periods": 5,
+      "id": 2
     }
   ]
 }
