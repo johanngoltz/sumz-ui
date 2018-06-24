@@ -13,9 +13,9 @@ import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { LoginComponent } from './login/login.component';
 import { MaterialModule } from './material.module';
 import { ProjectCardComponent } from './project-card/project-card.component';
-import { ProjectDetailComponent } from './project-detail/project-detail.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.component';
 import { SelectProjectComponent } from './select-project/select-project.component';
 import { ToDoubleDirective } from './to-double.directive';
 
@@ -30,7 +30,7 @@ export const AxiosInstance = new InjectionToken(
     AppComponent,
     ProjectsComponent,
     CreateProjectComponent,
-    ProjectDetailComponent,
+    ScenarioDetailComponent,
     ToDoubleDirective,
     SelectProjectComponent,
     ProjectCardComponent,
