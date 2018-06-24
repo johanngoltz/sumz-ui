@@ -13,6 +13,7 @@ exports.routes = [{
     handler: function (req, res) {
       state.scenarios.push(req.body)
       res.json(req.body);
+      res.status(201);
     },
   },
   {
