@@ -1,0 +1,137 @@
+mat-vertical-stepper {
+    background: none;
+}
+
+.form-container {
+    min-width: 600px;
+    display: inline-block;
+    max-width: calc(100% - 40px);
+}
+
+mat-form-field:not(.inline) {
+    display: block;
+}
+
+.stepper-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+mat-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 5px 0 20px;
+}
+
+#prognosis {
+    margin: -10px 0 0 28px;
+    transition: opacity .25s;
+}
+
+#prognosis.disabled {
+    opacity: 0.37;
+    pointer-events: none;
+}
+  
+mat-radio-button {
+    margin: 5px 0 5px;
+}
+
+mat-radio-button mat-icon {
+    vertical-align: middle;
+}
+
+label.grey {
+    color: rgba(0,0,0,0.54);
+    font-size: 12px;
+}
+
+.mat-table {
+    text-align: right;
+}
+
+.mat-header-cell, .mat-cell {
+    padding: 5px 20px;
+}
+
+.mat-header-cell {
+    font-size: 14px;
+    border-right: 1px solid #CCC;
+}
+
+.mat-header-row > th, .mat-header-row > td {
+    border-bottom: 1px solid #CCC;
+}
+
+.table-input-right {
+    text-align: right;
+    width: 80px;
+}
+
+.scrollable {
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+
+.info {
+    max-width: 600px;
+    background: whitesmoke;
+    margin: 16px -24px 0;
+    padding: 1px 24px 8px;
+    border-top: 1px solid rgba(0,0,0,.12);
+    border-bottom: 1px solid rgba(0,0,0,.12);
+}
+
+.info-action {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 -12px;
+}
+
+.actions {
+    position: sticky;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 0 5px 0;
+}
+
+mat-card {
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+mat-card-title, mat-card-content,  mat-card-actions {
+    transition: opacity .25s;
+}
+
+.busy mat-card-title, .busy mat-card-content, .busy mat-card-actions {
+    opacity: 0.5;
+}
+
+mat-progress-bar {
+    transition: opacity .25s;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.busy mat-progress-bar {
+    opacity: 1;
+}
+
+.navigation-disabled ::ng-deep .mat-step-header {
+    pointer-events: none !important;
+}
+
+:ng-deep .md-button-wrapper > * {
+    vertical-align: middle;
+    margin-top: -3px;
+}
+
+#remove_year {
+    position: absolute;
+}
