@@ -1,13 +1,12 @@
+import { animate, keyframes, query, stagger, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { Project } from '../project';
-import { ProjectsService } from '../projects.service';
-import { Router } from '@angular/router';
-import { trigger, transition, query, stagger, keyframes, animate, style } from '@angular/animations';
+import { Scenario } from '../api/scenario';
+import { ScenariosService } from '../service/scenarios.service';
 
 @Component({
-  selector: 'app-projects',
-  templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.css'],
+  selector: 'app-scenarios',
+  templateUrl: './scenarios.component.html',
+  styleUrls: ['./scenarios.component.css'],
   animations: [
     trigger('gridAnimation', [
       transition('* => *', [
@@ -49,10 +48,10 @@ import { trigger, transition, query, stagger, keyframes, animate, style } from '
     ]),
   ],
 })
-export class ProjectsComponent implements OnInit {
-  projects: Project[];
+export class ScenariosComponent implements OnInit {
+  scenarios: Scenario[];
 
-  constructor(private projectsService: ProjectsService) { }
+  constructor(private scenariosService: ScenariosService) { }
 
   ngOnInit() { }
 

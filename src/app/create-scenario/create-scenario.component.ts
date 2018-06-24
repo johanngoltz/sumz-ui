@@ -2,16 +2,16 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import { FinancialData, Project } from '../project';
-import { ProjectsService } from '../projects.service';
-import { SelectProjectComponent } from '../select-project/select-project.component';
+import { AccountingFigure, Scenario } from '../api/scenario';
+import { SelectScenarioComponent } from '../select-scenario/select-scenario.component';
+import { ScenariosService } from '../service/scenarios.service';
 
 @Component({
-  selector: 'app-create-project',
-  templateUrl: './create-project.component.html',
-  styleUrls: ['./create-project.component.css'],
+  selector: 'app-create-scenario',
+  templateUrl: './create-scenario.component.html',
+  styleUrls: ['./create-scenario.component.css'],
 })
-export class CreateProjectComponent implements OnInit {
+export class CreateScenarioComponent implements OnInit {
   timeSeries: FormArray;
   formGroup1: FormGroup;
   formGroup2: FormGroup;
@@ -21,7 +21,7 @@ export class CreateProjectComponent implements OnInit {
   @ViewChild('fcfrow') fcfRow: ElementRef;
   busy: Boolean;
 
-  constructor(private _formBuilder: FormBuilder, private _projectsService: ProjectsService, private _router: Router,
+  constructor(private _formBuilder: FormBuilder, private _scenariosService: ScenariosService, private _router: Router,
     private _snackBar: MatSnackBar, private _bottomSheet: MatBottomSheet) {
   }
 
@@ -94,54 +94,63 @@ export class CreateProjectComponent implements OnInit {
     }
   }
 
-  trackByYear(i: number, o: FinancialData) {
-    return o.year;
+  // FIXME
+  trackByYear(i: number, o: AccountingFigure) {
+    // return o.year;
+    return -1;
   }
 
-  createProject() {
+  createScenario() {
     if (this.formGroup3.valid) {
       this.busy = true;
-      const project = {
+      const scenario = {
         id: null,
         ...this.formGroup1.value,
         ...this.formGroup2.value,
         ...this.formGroup3.value,
         prognosisLength: 5,
       };
-      project.timeSeries = project.timeSeries.map((o) =>
-        (o.year === project.baseYear || (o.year > project.baseYear) === project.deterministic) ? o : false).filter(Boolean);
-      this._projectsService.addProject(project).then(createdProject => {
+      scenario.timeSeries = scenario.timeSeries.map((o) =>
+        (o.year === scenario.baseYear || (o.year > scenario.baseYear) === scenario.deterministic) ? o : false).filter(Boolean);
+      this._scenariosService.addScenario(scenario);
+      // FIXME
+      /* .then(createdScenario => {
         this.busy = false;
         this._snackBar.open('Das Projekt wurde erfolgreich erstellt', undefined, { duration: 5000 });
-        this._router.navigate(['/project', createdProject.id]);
+        this._router.navigate(['/scenario', createdScenario.id]);
       }
       ).catch(e => {
         this.busy = false;
         this._snackBar.open(`Das Projekt konnte nicht erstellt werden. (${e.statusText})`, undefined,
           { panelClass: 'mat-warn', duration: 5000 });
-      });
+      });*/
     }
   }
 
   openSelectionSheet() {
-    this._bottomSheet.open(SelectProjectComponent).afterDismissed().subscribe((project) => this.insertProjectData(project, this));
+    this._bottomSheet.open(SelectScenarioComponent).afterDismissed().subscribe((scenario) => this.insertScenarioData(scenario, this));
   }
 
-  insertProjectData(project: Project, that: CreateProjectComponent) {
+  insertScenarioData(scenario: Scenario, that: CreateScenarioComponent) {
     if (that.formGroup1.value.name.length === 0) {
-      that.formGroup1.controls.name.patchValue(project.name);
+      that.formGroup1.controls.name.patchValue(scenario.name);
     }
     if (that.formGroup1.value.description.length === 0) {
-      that.formGroup1.controls.description.patchValue(project.description);
+      that.formGroup1.controls.description.patchValue(scenario.description);
     }
-    that.formGroup2.controls.deterministic.patchValue(project.deterministic);
-    that.formGroup2.controls.algorithm.patchValue(project.algorithm);
-    that.formGroup2.controls.iterations.patchValue(project.iterations);
-    that.formGroup3.controls.baseYear.patchValue(project.baseYear);
+    // FIXME
+    /*
+    that.formGroup2.controls.deterministic.patchValue(scenario.deterministic);
+    that.formGroup2.controls.algorithm.patchValue(scenario.algorithm);
+    that.formGroup2.controls.iterations.patchValue(scenario.iterations);
+    that.formGroup3.controls.baseYear.patchValue(scenario.baseYear);
+    */
     while (that.timeSeries.length > 0) {
       that.timeSeries.removeAt(0);
     }
-    project.timeSeries.forEach((financialData: FinancialData) => {
+    // FIXME
+    /*
+    scenario.timeSeries.forEach((financialData: AccountingFigure) => {
       that.timeSeries.push(
         that._formBuilder.group({
           year: [financialData.year, Validators.required],
@@ -150,7 +159,8 @@ export class CreateProjectComponent implements OnInit {
         })
       );
     });
-    that._snackBar.open(`Die Daten des Projekts "${project.name}" wurden erfolgreich übernommen`, undefined, { duration: 5000 });
+    */
+    that._snackBar.open(`Die Daten des Projekts "${scenario.name}" wurden erfolgreich übernommen`, undefined, { duration: 5000 });
   }
 
   updateTable() {

@@ -7,9 +7,9 @@ import { ScenariosService } from '../service/scenarios.service';
 
 
 @Component({
-  selector: 'app-project-detail',
-  templateUrl: './project-detail.component.html',
-  styleUrls: ['./project-detail.component.css'],
+  selector: 'app-scenario-detail',
+  templateUrl: './scenario-detail.component.html',
+  styleUrls: ['./scenario-detail.component.css'],
 })
 
 export class ScenarioDetailComponent implements OnInit {
@@ -42,7 +42,7 @@ export class ScenarioDetailComponent implements OnInit {
     const scenarioId$ = this.route.paramMap.pipe(switchMap(params => of(Number.parseFloat(params.get('id')))));
     this.scenarioId$ = scenarioId$;
     this.forScenario$ = scenarioId$.pipe(
-      switchMap(projectId => this._scenariosService.getScenario(projectId))
+      switchMap(scenarioId => this._scenariosService.getScenario(scenarioId))
     );
 
     this.chartData = [{ data: [1, 2, 3, 4, 3, 2, 1], label: 'Häufigkeit' }];

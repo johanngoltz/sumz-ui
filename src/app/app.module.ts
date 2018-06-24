@@ -6,26 +6,26 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChartsModule } from 'ng2-charts';
 import { AppRoutingModule } from './/app-routing.module';
 import { AppComponent } from './app.component';
-import { CreateProjectComponent } from './create-project/create-project.component';
+import { CreateScenarioComponent } from './create-scenario/create-scenario.component';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { LoginComponent } from './login/login.component';
 import { MaterialModule } from './material.module';
-import { ProjectCardComponent } from './project-card/project-card.component';
-import { ProjectsComponent } from './projects/projects.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { ScenarioCardComponent } from './scenario-card/scenario-card.component';
 import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.component';
-import { SelectProjectComponent } from './select-project/select-project.component';
+import { ScenariosComponent } from './scenarios/scenarios.component';
+import { SelectScenarioComponent } from './select-scenario/select-scenario.component';
 import { ToDoubleDirective } from './to-double.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ProjectsComponent,
-    CreateProjectComponent,
+    ScenariosComponent,
+    CreateScenarioComponent,
     ScenarioDetailComponent,
     ToDoubleDirective,
-    SelectProjectComponent,
-    ProjectCardComponent,
+    SelectScenarioComponent,
+    ScenarioCardComponent,
     DeleteDialogComponent,
     LoginComponent,
     RegistrationComponent,
@@ -42,6 +42,6 @@ import { ToDoubleDirective } from './to-double.directive';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [SelectProjectComponent, DeleteDialogComponent],
+  entryComponents: [SelectScenarioComponent, DeleteDialogComponent],
 })
 export class AppModule { }
