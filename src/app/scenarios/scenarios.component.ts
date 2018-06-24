@@ -1,6 +1,5 @@
 import { animate, keyframes, query, stagger, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { Scenario } from '../api/scenario';
 import { ScenariosService } from '../service/scenarios.service';
 
 @Component({
@@ -49,8 +48,6 @@ import { ScenariosService } from '../service/scenarios.service';
   ],
 })
 export class ScenariosComponent implements OnInit {
-  scenarios: Scenario[];
-
   constructor(private scenariosService: ScenariosService) { }
 
   ngOnInit() { }
