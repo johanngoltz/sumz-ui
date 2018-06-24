@@ -1,6 +1,6 @@
 <div class="content-container">
   <script src="./node_modules/chart.js/src/chart.js"></script>
-  <!-- panels for different parts of project-->
+  <!-- panels for different parts of Scenario-->
   <mat-accordion multi="false" class="example-headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
       <mat-expansion-panel-header>
@@ -8,7 +8,7 @@
           Daten
         </mat-panel-title>
         <mat-panel-description>
-          Kopfdaten des Projektes
+          Kopfdaten des Szenarios
           <mat-icon>work</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
@@ -23,16 +23,15 @@
         </thead>
         <tbody>
           <tr class="mat-row">
-            <td class="mat-cell">{{(forProject$ | async)?.name}}</td>
-            <td class="mat-cell">{{(forProject$ | async)?.description}}</td>
-            <td class="mat-cell">{{(forProject$ | async)?.baseYear}}</td>
-            <td class="mat-cell">{{(forProject$ | async)?.prognosisLength}}</td>
+            <td class="mat-cell">{{(forScenario$ | async)?.name}}</td>
+            <td class="mat-cell">{{(forScenario$ | async)?.description}}</td>
+            <td class="mat-cell">{{(forScenario$ | async)?.periods}}</td>
           </tr>
         </tbody>
       </table>
 
       <mat-action-row>
-        <button mat-button color="primary" (click)="nextStep()">Next</button>
+        <button mat-button color="primary" (click)="nextStep()">Weiter</button>
       </mat-action-row>
     </mat-expansion-panel>
 
@@ -46,24 +45,7 @@
           <mat-icon>euro_symbol</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <table mat-table [dataSource]="(forProject$ | async)?.timeSeries">
-        <ng-container matColumnDef="year">
-          <th mat-header-cell *matHeaderCellDef> Jahr </th>
-          <td mat-cell *matCellDef="let row"> {{row.year}} </td>
-        </ng-container>
-        <ng-container matColumnDef="externalCapital">
-          <th mat-header-cell *matHeaderCellDef> Fremdkapital </th>
-          <td mat-cell *matCellDef="let row"> {{row.externalCapital}} </td>
-        </ng-container>
-        <ng-container matColumnDef="fcf">
-          <th mat-header-cell *matHeaderCellDef> Free Cashflow </th>
-          <td mat-cell *matCellDef="let row"> {{row.fcf}} </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="timeSeriesColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: timeSeriesColumns"></tr>
-      </table>
-
+      TODO: Cashflowberechnungstabelle implementieren
       <mat-action-row>
         <button mat-button color="warn" (click)="prevStep()">Previous</button>
         <button mat-button color="primary" (click)="nextStep()">Next</button>
