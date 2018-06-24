@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { TypedAxiosInstance } from 'restyped-axios';
-import { BehaviorSubject, Observable, from, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, empty, from, of, throwError } from 'rxjs';
 import { filter, retry, switchMap } from 'rxjs/operators';
 import { ScenarioAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
@@ -67,6 +67,23 @@ export class ScenariosService {
   }
 
   removeScenario(scenario: Scenario) {
-    return throwError('Not implemented');
+    return from(this._apiClient.request({
+      url: `/scenario/:sId`,
+      params: { sId: scenario.id },
+      method: 'DELETE',
+    })).pipe(
+      switchMap(response => {
+        this._scenariosStorage.splice(this._scenariosStorage.indexOf(scenario), 1);
+        this._scenarios$.next([...this._scenariosStorage]);
+        return empty();
+      })
+    );
+  }
+
+  private ensureStatus(allowStatus: number) {
+    return (response: { status: number }) =>
+      response.status === allowStatus ?
+        of(response) :
+        throwError(response);
   }
 }

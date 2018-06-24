@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatMenuTrigger, MatSnackBar } from '@angular/material';
-import { Scenario } from '../api/scenario';
+// import { Scenario } from '../api/scenario';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { ScenariosService } from '../service/scenarios.service';
 
@@ -31,11 +31,11 @@ export class ScenarioCardComponent implements OnInit {
       .afterClosed().subscribe((result) => {
         if (result === true) {
           this._scenariosService.removeScenario(this.scenario)
-          /* FIXME
-            .then(() => this._snackBar.open(`Das Projekt "${this.scenario.name}" wurde erfolgreich gelöscht`, undefined,
-              { duration: 5000 }))
-            .catch(e => this._snackBar.open(`Das Projekt "${this.scenario.name}" konnte nicht gelöscht werden (${e.message})`,
-              undefined, { panelClass: 'mat-warn', duration: 5000 }))*/;
+            .subscribe(
+              removed => this._snackBar.open(`Das Szenario "${this.scenario.name}" wurde erfolgreich gelöscht`, undefined,
+                { duration: 5000 }),
+              error => this._snackBar.open(`Das Projekt "${this.scenario.name}" konnte nicht gelöscht werden (${error.message})`,
+                undefined, { panelClass: 'mat-warn', duration: 5000 }));
         }
       });
   }
