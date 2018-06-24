@@ -7,9 +7,9 @@ import { ScenariosService } from '../service/scenarios.service';
 
 
 @Component({
-  selector: 'app-project-detail',
-  templateUrl: './project-detail.component.html',
-  styleUrls: ['./project-detail.component.css'],
+  selector: 'app-scenario-detail',
+  templateUrl: './scenario-detail.component.html',
+  styleUrls: ['./scenario-detail.component.css'],
 })
 
 export class ScenarioDetailComponent implements OnInit {
