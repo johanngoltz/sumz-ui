@@ -1,5 +1,7 @@
 import { animate, keyframes, query, stagger, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Scenario } from '../api/scenario';
 import { ScenariosService } from '../service/scenarios.service';
 
 @Component({
@@ -48,8 +50,11 @@ import { ScenariosService } from '../service/scenarios.service';
   ],
 })
 export class ScenariosComponent implements OnInit {
+  private scenarios$: Observable<Scenario[]>;
   constructor(private scenariosService: ScenariosService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.scenarios$ = this.scenariosService.getScenarios();
+  }
 
 }

@@ -1,15 +1,15 @@
 <div class="content-container">
   <h1>Alle Projekte</h1>
-  <div id="no-data-info" *ngIf="(scenariosService.scenarios$ | async) && (scenariosService.scenarios$ | async).length === 0" [@noDataAnimation]>
+  <div id="no-data-info" *ngIf="(scenarios$ | async) && (scenarios$ | async).length === 0" [@noDataAnimation]>
     Es existieren aktuell keine Projekte.
   </div>
-  <mat-grid-list cols="4" rowHeight="4:3" [@gridAnimation]="(scenariosService.scenarios$ | async)?.length">
-    <mat-grid-tile *ngFor="let scenario of scenariosService.scenarios$ | async">
+  <mat-grid-list cols="4" rowHeight="4:3" [@gridAnimation]="(scenarios$ | async)?.length">
+    <mat-grid-tile *ngFor="let scenario of scenarios$ | async">
       <app-scenario-card [scenario]="scenario" [routerLink]="['/scenario', scenario.id]"></app-scenario-card>
     </mat-grid-tile>
   </mat-grid-list>
 </div>
-<div id="spinner" *ngIf="!(scenariosService.scenarios$ | async)" class="mat-elevation-z6" [@spinnerAnimation]>
+<div id="spinner" *ngIf="!(scenarios$ | async)" class="mat-elevation-z6" [@spinnerAnimation]>
 <mat-spinner diameter="36"></mat-spinner>
 </div>
 <a mat-fab color="accent" class="fab-bottom-right" matTooltip="Neues Projekt erstellen" matTooltipShowDelay="500" routerLink="create">

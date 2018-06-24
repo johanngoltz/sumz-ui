@@ -17,12 +17,17 @@ export class ScenariosService {
   constructor(@Inject(AxiosInstance) private _apiClient: TypedAxiosInstance<ScenarioAPI>) {
     this._scenarios$ = new BehaviorSubject(undefined);
     this.scenarios$ = this._scenarios$.asObservable();
+
+    this.getScenarios();
   }
 
   getScenarios() {
     return from(this._apiClient.request({ url: '/scenario' })).pipe(
       // TODO: wird vllt nicht wie gedacht funktionieren
-      switchMap(response => response.status === 200 ? of(response) : throwError(response)),
+      switchMap(response => response.status === 200 ?
+        of(response) :
+        throwError(response)
+      ),
       retry(2),
       switchMap(response => {
         this._scenariosStorage = response.data;
