@@ -30,6 +30,10 @@ export class CreateProjectComponent implements OnInit {
       year: [this.prevYear, Validators.required],
       externalCapital: [0, Validators.required],
       fcf: [0, Validators.required],
+      revenue: [0, Validators.required],
+      personnelCosts: [0, Validators.required],
+      materialCosts: [0, Validators.required],
+      otherCosts: [0, Validators.required],
     })]);
     this.formGroup1 = this._formBuilder.group({
       name: ['', Validators.required],
@@ -42,6 +46,8 @@ export class CreateProjectComponent implements OnInit {
       prognosisLength: [5, Validators.required],
     });
     this.formGroup3 = this._formBuilder.group({
+      startYear: [this.prevYear - 1, Validators.required],
+      endYear: [this.prevYear + 1, Validators.required],
       baseYear: [this.prevYear, Validators.required],
       calculateFcf: [false, Validators.required],
       timeSeries: this.timeSeries,

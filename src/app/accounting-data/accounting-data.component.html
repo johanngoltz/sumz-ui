@@ -1,71 +1,39 @@
-<div class="scrollable" [formGroup]="formGroup" #scrollable>
+<div [formGroup]="formGroup">
   <mat-slide-toggle formControlName="calculateFcf">Free Cashflow-Werte aus GuV-Werten berechnen</mat-slide-toggle>
+</div>
+<div class="scrollable" [formGroup]="formGroup" #scrollable>
   <table class="mat-table">
     <thead>
       <tr class="mat-header-row">
         <th class="mat-header-cell">Jahr</th>
-        <th class="mat-cell">{{formGroup.controls.timeSeries.at(0)?.value.year - 1 || formGroup.value.baseYear}}</th>
         <ng-container *ngFor="let element of formGroup.controls.timeSeries.controls; trackBy: trackByYear">
-          <th class="mat-cell">
-            <button type="button" id="remove-year" (click)="removeYear()" mat-icon-button *ngIf="[0, formGroup.controls.timeSeries.length - 1].includes(formGroup.controls.timeSeries.controls.indexOf(element))">
-              <mat-icon>delete</mat-icon>
-            </button>
+          <th class="mat-cell" *ngIf="element.value.year > formGroup.value.startYear && element.value.year <= formGroup.value.endYear">
+            <div id="startyear-container" class="leveraged-field" *ngIf="element.value.year === formGroup.value.startYear + 1">
+              <span *ngIf="!editable">
+                {{formGroup.value.startYear}}
+              </span>
+              <mat-form-field class="table-input-right" *ngIf="editable">
+                <input type="number" matInput formControlName="startYear" required>
+              </mat-form-field>
+              <div class="indicator"></div>
+            </div>
             {{element.value.year}}
           </th>
         </ng-container>
-        <th class="mat-cell">{{formGroup.controls.timeSeries.at(formGroup.controls.timeSeries.length - 1)?.value.year + 1 || formGroup.value.baseYear}}</th>
       </tr>
     </thead>
     <tbody>
       <ng-container *ngFor="let ctrl of groupParams">
-        <tr>
-          {{paramData[ctrl]}} {{[undefined, formGroup.value.calculateFcf].indexOf(paramData[ctrl]?.showOnCalculation) > -1}}
-        </tr>
         <tr class="mat-row" *ngIf="paramData[ctrl] && [undefined, formGroup.value.calculateFcf].indexOf(paramData[ctrl]?.showOnCalculation) > -1">
-          <td class="mat-cell">
-            {{paramData[ctrl].displayName}}
-          </td>
-        </tr>
-      </ng-container>
-      <ng-container *ngIf="formGroup.value.calculateFcf">
-        <tr class="mat-row">
-          <th class="mat-header-cell"></th>
+          <th class="mat-header-cell">{{paramData[ctrl].displayName}}</th>
           <td class="mat-cell" *ngFor="let element of formGroup.controls.timeSeries.controls; trackBy: trackByYear">
-            <span class="table-data" *ngIf="!editable">element.value</span>
+            <span class="table-data" *ngIf="!editable">element.value[ctrl]</span>
             <mat-form-field class="table-input-right" [formGroup]="element" *ngIf="editable">
-              <input type="text" matInput formControlName="fcf" appToDouble required>
+              <input type="text" matInput [formControlName]="ctrl" appToDouble required>
             </mat-form-field>
           </td>
         </tr>
       </ng-container>
-      <tr class="mat-row" *ngIf="!formGroup.value.calculateFcf">
-        <th class="mat-header-cell">FCF</th>
-        <td class="mat-cell" *ngFor="let element of formGroup.controls.timeSeries.controls; trackBy: trackByYear">
-          <span class="table-data" *ngIf="!editable">element.value.fcf</span>
-          <mat-form-field class="table-input-right" [formGroup]="element" *ngIf="editable">
-            <input type="text" matInput formControlName="fcf" appToDouble required>
-          </mat-form-field>
-        </td>
-      </tr>
-      <tr class="mat-row" #fkrow>
-        <th class="mat-header-cell">Fremdkapital</th>
-        <td rowspan="2" class="mat-cell">
-          <button type="button" (click)="addYear()" color="accent" mat-icon-button>
-            <mat-icon>add</mat-icon>
-          </button>
-        </td>
-        <td class="mat-cell" *ngFor="let element of formGroup.controls.timeSeries.controls; trackBy: trackByYear">
-          <span class="table-data" *ngIf="!editable">element.value.fcf</span>
-          <mat-form-field class="table-input-right" [formGroup]="element" *ngIf="editable">
-            <input type="text" matInput formControlName="externalCapital" appToDouble required>
-          </mat-form-field>
-        </td>
-        <td rowspan="2" class="mat-cell">
-          <button type="button" (click)="addYear()" color="accent" mat-icon-button>
-            <mat-icon>add</mat-icon>
-          </button>
-        </td>
-      </tr>
     </tbody>
   </table>
 </div>

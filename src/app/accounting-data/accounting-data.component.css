@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
     justify-content: stretch;
+    padding-top: 150px;
 }
 
 .mat-table {
@@ -21,6 +22,7 @@
 
 .mat-header-row > th, .mat-header-row > td {
     border-bottom: 1px solid #CCC;
+    position: relative;
 }
 
 .table-input-right {
@@ -30,4 +32,30 @@
 
 #remove_year {
     position: absolute;
+}
+
+.leveraged-field {
+    display: inline-block;
+    position: absolute;
+    top: -10px;
+    padding: 10px;
+    bottom: 0;
+    background: #ccc;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+}
+
+.indicator {
+    border-left: 2px solid green;
+}
+
+.leveraged-field > mat-form-field {
+    flex-grow: 0;
+}
+
+#startyear-container {
+    left: 0;
+    transform: translateY(-100%);
+    align-items: flex-start;
 }

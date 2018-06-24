@@ -12,27 +12,29 @@ export class FinancialDataComponent implements OnInit {
   @ViewChild('scrollable') dataScrollContainer: ElementRef;
   @ViewChild('fkrow') fkRow: ElementRef;
   groupParams: String[];
-  paramData: {
-    'fk': {displayName: 'Fremdkapital'},
-    'fcf': {displayName: 'Free Cash Flow', showOnCalculation: false},
-    'revenue': {displayName: 'Umsatzerlöse', showOnCalculation: true},
-    'personnelCosts': {displayName: 'Personalkosten', showOnCalculation: true},
-    'materialCosts': {displayName: 'Materialkosten', showOnCalculation: true},
-    'otherCosts': {displayName: 'Sonstige Kosten', showOnCalculation: true},
-  };
+  paramData: Object;
 
-  constructor() { }
+  constructor() {
+    this.paramData = {
+      'revenue': {displayName: 'Umsatzerlöse', showOnCalculation: true},
+      'personnelCosts': {displayName: 'Personalkosten', showOnCalculation: true},
+      'materialCosts': {displayName: 'Materialkosten', showOnCalculation: true},
+      'otherCosts': {displayName: 'Sonstige Kosten', showOnCalculation: true},
+      'fcf': {displayName: 'Free Cash Flow', showOnCalculation: false},
+      'externalCapital': {displayName: 'Fremdkapital'},
+    };
+  }
 
   ngOnInit() {
-    this.groupParams = Object.keys((<FormArray> this.formGroup.controls.timeSeries).at(0).value);
-    this.paramData = this.paramData;
-    new MutationObserver(
+    this.groupParams = Object.keys((<FormArray> this.formGroup.controls.timeSeries).at(0).value)
+      .sort((a, b) => Object.keys(this.paramData).indexOf(a) - Object.keys(this.paramData).indexOf(b));
+    /*new MutationObserver(
       // besser und logischer wäre scrollLeftMax, aber das scheint es nur in Firefox zu geben.
       () => this.dataScrollContainer.nativeElement.scrollLeft =
         this.dataScrollContainer.nativeElement.scrollLeft
       ).observe(
       this.fkRow.nativeElement,
-      { childList: true });
+      { childList: true });*/
   }
 
 }
