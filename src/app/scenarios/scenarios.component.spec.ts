@@ -1,6 +1,9 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { of } from 'rxjs';
+import { Scenario } from '../api/scenario';
 import { AppRoutingModule } from '../app-routing.module';
 import { CreateScenarioComponent } from '../create-scenario/create-scenario.component';
 import { LoginComponent } from '../login/login.component';
@@ -20,58 +23,14 @@ describe('ScenariosComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ScenariosComponent, ScenarioCardComponent, CreateScenarioComponent, ScenarioDetailComponent, LoginComponent,
         RegistrationComponent],
-      imports: [MaterialModule, FormsModule, ReactiveFormsModule, AppRoutingModule],
+      imports: [MaterialModule, FormsModule, ReactiveFormsModule, AppRoutingModule, BrowserAnimationsModule],
       providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
         {
           provide: ScenariosService, useValue: {
-            scenarios: [
-              {
-                id: 3,
-                name: 'Testscenario',
-                description: 'Testdesc',
-                algorithm: 'fcf',
-                deterministic: true,
-                baseYear: 2014,
-                iterations: 5000,
-                prognosisLength: 0,
-                timeSeries: [
-                  {
-                    year: 2014,
-                    fcf: 300,
-                    externalCapital: 500,
-                  },
-                  {
-                    year: 2015,
-                    fcf: 350,
-                    externalCapital: 400,
-                  },
-                ],
-              },
-              {
-                id: 4,
-                name: 'Testscenario2',
-                description: 'Testdesc2',
-                algorithm: 'apv',
-                deterministic: false,
-                baseYear: 2015,
-                iterations: 5000,
-                prognosisLength: 3,
-                timeSeries: [
-                  {
-                    year: 2014,
-                    fcf: 0,
-                    externalCapital: 500,
-                  },
-                  {
-                    year: 2015,
-                    fcf: 0,
-                    externalCapital: 550,
-                  },
-                ],
-              },
-            ],
-          },
+            scenarios$: of([{ id: 1, name: 'Eins', description: 'Das erste Szenario' } as Scenario]),
+            getScenarios: () => this.scenarios$,
+          } as ScenariosService,
         },
       ],
     })
