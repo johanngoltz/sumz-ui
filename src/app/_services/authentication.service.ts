@@ -32,6 +32,21 @@ export class AuthenticationService {
     }
   }
 
+  // registration (is called in registration.component)
+  async registration(email: string, password: string) {
+    const response = await this.api.request({
+      url: '/users',
+      data: {email, password},
+      method: 'POST',
+    });
+    // if credentials correct, redirect to main page
+    if (response.status === 200) {  // should be 302
+      console.log('Registrierung klappt');
+      // redirect to "successful registration"
+      // this.router.navigate(["/users"]);
+    }
+  }
+
   logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');

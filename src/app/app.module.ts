@@ -18,7 +18,8 @@ import { ScenarioTileComponent } from './scenario-tile/scenario-tile.component';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
-import { AlertComponent } from './alert/alert.component';
+import { RegistrationSuccessComponent } from './registration-success/registration-success.component';
+ 
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import { AlertComponent } from './alert/alert.component';
     DeleteDialogComponent,
     LoginComponent,
     RegistrationComponent,
-    AlertComponent,
+    RegistrationSuccessComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,6 +48,6 @@ import { AlertComponent } from './alert/alert.component';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [SelectProjectComponent, DeleteDialogComponent, AlertComponent],
+  entryComponents: [SelectProjectComponent, DeleteDialogComponent],
 })
 export class AppModule { }
