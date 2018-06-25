@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { AppRoutingModule } from '../app-routing.module';
 import { CreateScenarioComponent } from '../create-scenario/create-scenario.component';
 import { LoginComponent } from '../login/login.component';
@@ -21,7 +20,7 @@ describe('RegistrationComponent', () => {
       // Komponenten deklariert werden.
       declarations: [ScenariosComponent, ScenarioCardComponent, CreateScenarioComponent, ScenarioDetailComponent, LoginComponent,
         RegistrationComponent],
-      imports: [ReactiveFormsModule, AppRoutingModule, MaterialModule, ChartsModule],
+      imports: [ReactiveFormsModule, AppRoutingModule, MaterialModule],
     })
       .compileComponents();
   }));

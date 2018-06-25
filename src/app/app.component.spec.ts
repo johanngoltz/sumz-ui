@@ -2,7 +2,6 @@ import { APP_BASE_HREF } from '@angular/common';
 import { TestBed, async } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreateScenarioComponent } from './create-scenario/create-scenario.component';
@@ -35,7 +34,6 @@ describe('AppComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
-        ChartsModule,
       ],
       providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
