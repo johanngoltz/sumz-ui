@@ -6,7 +6,16 @@ export class Scenario {
     equityInterest: number;
     outsideCapitalInterest: number;
     corporateTax: number;
-    accountingFigures: AccountingFigure[];
+    stochastic: Boolean;
+    additionalIncome: AccountingFigure;
+    additionalCosts: AccountingFigure;
+    investments: AccountingFigure;
+    divestments: AccountingFigure;
+    revenue: AccountingFigure;
+    costOfMaterial: AccountingFigure;
+    costOfStaff: AccountingFigure;
+    liabilities: AccountingFigure;
+    freeCashFlows: AccountingFigure;
     companyValueDistribution: DistributedCompanyValue[];
     fteValuationResult: { companyValue: number; };
     fcfValuationResult: FcfValuationResult;
@@ -14,11 +23,7 @@ export class Scenario {
 }
 
 export class AccountingFigure {
-    // TODO: Deutsch lassen oder englisch übersetzen?
-    // TODO: Alle Möglichkeiten hinzufügen
-    name: "Umlaufvermögen"
-        | "";
-    historic: Boolean;
+    isHistoric: Boolean;
     timeSeries: [{
         year: Date;
         quarter: 1 | 2 | 3 | 4;
@@ -27,13 +32,18 @@ export class AccountingFigure {
 }
 
 export class DistributedCompanyValue {
-
+    num: number;
+    rangeMin: number;
+    rangeMax: number;
+    height: number;
 }
 
 export class FcfValuationResult {
-
+    companyValue: number;
+    marketValueTotalAssets: number;
+    totalLiabilities: number;
 }
 
-export class ApvValuationResult {
-
+export class ApvValuationResult extends FcfValuationResult {
+    taxShield: number;
 }
