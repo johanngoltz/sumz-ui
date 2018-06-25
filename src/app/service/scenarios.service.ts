@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { TypedAxiosInstance } from 'restyped-axios';
-import { Observable, ReplaySubject, empty, from, of, throwError } from 'rxjs';
+import { EMPTY, Observable, ReplaySubject, from, of, throwError } from 'rxjs';
 import { filter, retry, switchMap } from 'rxjs/operators';
 import { ScenarioAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
@@ -70,7 +70,7 @@ export class ScenariosService {
       switchMap(response => {
         this._scenariosStorage.splice(this._scenariosStorage.indexOf(scenario), 1);
         this._scenarios$.next([...this._scenariosStorage]);
-        return empty();
+        return EMPTY;
       })
     );
   }

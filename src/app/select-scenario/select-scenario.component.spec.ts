@@ -28,7 +28,7 @@ describe('SelectScenarioComponent', () => {
                 name: 'Zwei',
                 description: 'Zweite Beschreibung',
               }] as Scenario[]),
-          }
+          },
         },
       ],
     })
