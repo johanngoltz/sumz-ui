@@ -47,8 +47,12 @@ export class ScenarioCardComponent implements OnInit {
       });
   }
 }
-class Wrapper<T> extends Object {
+export class Wrapper<T> extends Object {
   valueOf(): T {
-    return null;
+    return this.value;
+  }
+
+  constructor(private value: T) {
+    super();
   }
 }

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Scenario } from '../api/scenario';
 import { MaterialModule } from '../material.module';
-import { ScenarioCardComponent } from './scenario-card.component';
+import { ScenarioCardComponent, Wrapper } from './scenario-card.component';
 
 describe('ScenarioCardComponent', () => {
   let component: ScenarioCardComponent;
@@ -18,7 +18,7 @@ describe('ScenarioCardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ScenarioCardComponent);
     component = fixture.componentInstance;
-    component.scenario = {
+    component.scenario = new Wrapper<Scenario>({
       id: 3,
       name: 'Testscenario',
       description: 'Testdesc',
@@ -41,7 +41,7 @@ describe('ScenarioCardComponent', () => {
           externalCapital: 400,
         },
       ],*/
-    } as Scenario;
+    } as Scenario);
     fixture.detectChanges();
   });
 
