@@ -1,24 +1,28 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
 import { MaterialModule } from '../material.module';
-import { CreateProjectComponent } from './create-project.component';
+import { CreateScenarioComponent } from './create-scenario.component';
 
 
-describe('CreateProjectComponent', () => {
-  let component: CreateProjectComponent;
-  let fixture: ComponentFixture<CreateProjectComponent>;
+describe('CreateScenarioComponent', () => {
+  let component: CreateScenarioComponent;
+  let fixture: ComponentFixture<CreateScenarioComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CreateProjectComponent],
+      declarations: [CreateScenarioComponent],
       imports: [MaterialModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule],
+      providers: [
+        { provide: Router, useValue: { navigate() { return true; } } },
+      ],
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateProjectComponent);
+    fixture = TestBed.createComponent(CreateScenarioComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

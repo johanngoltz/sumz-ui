@@ -6,7 +6,8 @@ import {
   MatTabsModule, MatTreeModule, MatBadgeModule, MatChipsModule, MatInputModule, MatRadioModule, MatAutocompleteModule, MatTableModule,
   MatDialogModule, MatOptionModule, MatRippleModule, MatSelectModule, MatSliderModule, MatDividerModule, MatSidenavModule, MatStepperModule,
   MatToolbarModule, MatTooltipModule, MatGridListModule, MatSnackBarModule, MatFormFieldModule, MatPaginatorModule, MatDatepickerModule,
-  MatProgressBarModule, MatSlideToggleModule, MatButtonToggleModule, MatProgressSpinnerModule, MatCommonModule
+  MatProgressBarModule, MatSlideToggleModule, MatButtonToggleModule, MatProgressSpinnerModule, MatCommonModule, MatBottomSheetModule,
+  MatExpansionModule,
 } from '@angular/material';
 
 
@@ -18,6 +19,7 @@ import {
     MatDialogModule, MatOptionModule, MatRippleModule, MatSelectModule, MatSliderModule, MatDividerModule, MatSidenavModule,
     MatStepperModule, MatToolbarModule, MatTooltipModule, MatGridListModule, MatSnackBarModule, MatFormFieldModule, MatPaginatorModule,
     MatDatepickerModule, MatProgressBarModule, MatSlideToggleModule, MatButtonToggleModule, MatProgressSpinnerModule, MatCommonModule,
+    MatBottomSheetModule, MatExpansionModule,
   ],
   exports: [
     MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatIconModule, MatLineModule, MatListModule, MatSortModule,
@@ -25,6 +27,7 @@ import {
     MatDialogModule, MatOptionModule, MatRippleModule, MatSelectModule, MatSliderModule, MatDividerModule, MatSidenavModule,
     MatStepperModule, MatToolbarModule, MatTooltipModule, MatGridListModule, MatSnackBarModule, MatFormFieldModule, MatPaginatorModule,
     MatDatepickerModule, MatProgressBarModule, MatSlideToggleModule, MatButtonToggleModule, MatProgressSpinnerModule, MatCommonModule,
+    MatBottomSheetModule, MatExpansionModule,
   ],
 })
 export class MaterialModule { }

@@ -4,19 +4,29 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CreateProjectComponent } from './create-project/create-project.component';
+import { CreateScenarioComponent } from './create-scenario/create-scenario.component';
+import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
+import { LoginComponent } from './login/login.component';
 import { MaterialModule } from './material.module';
-import { ProjectDetailsComponent } from './project-details/project-details.component';
-import { ProjectsComponent } from './projects/projects.component';
+import { RegistrationComponent } from './registration/registration.component';
+import { ScenarioCardComponent } from './scenario-card/scenario-card.component';
+import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.component';
+import { ScenariosComponent } from './scenarios/scenarios.component';
+import { SelectScenarioComponent } from './select-scenario/select-scenario.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent,
-        ProjectsComponent,
-        CreateProjectComponent,
-        ProjectDetailsComponent,
+        ScenariosComponent,
+        CreateScenarioComponent,
+        ScenarioDetailComponent,
+        SelectScenarioComponent,
+        ScenarioCardComponent,
+        LoginComponent,
+        RegistrationComponent,
+        DeleteDialogComponent,
       ],
       imports: [
         MaterialModule,
@@ -35,9 +45,9 @@ describe('AppComponent', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   }));
-  it(`should have as title 'app'`, async(() => {
+  it(`should have as title 'SUMZ'`, async(() => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('app');
+    expect(app.title).toEqual('SUMZ');
   }));
 });
