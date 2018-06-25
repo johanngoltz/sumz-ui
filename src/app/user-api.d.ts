@@ -18,4 +18,12 @@ export interface UserAPI {
             },
         }
     },
+    '/users': {
+        POST: {
+            body: {
+                email: string,
+                password: string
+            },
+        }
+    },
 }

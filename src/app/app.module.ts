@@ -18,6 +18,8 @@ import { ScenarioTileComponent } from './scenario-tile/scenario-tile.component';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { RegistrationSuccessComponent } from './registration-success/registration-success.component';
+ 
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { RegistrationComponent } from './registration/registration.component';
     DeleteDialogComponent,
     LoginComponent,
     RegistrationComponent,
+    RegistrationSuccessComponent,
   ],
   imports: [
     BrowserModule,

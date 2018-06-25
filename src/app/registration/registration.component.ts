@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { PasswordValidation } from 'src/app/registration/registration.passwordvalidation';
-
-
+import { first } from 'rxjs/operators';
+import { AuthenticationService } from '../_services/authentication.service';
 
 
  
@@ -13,10 +13,12 @@ import { PasswordValidation } from 'src/app/registration/registration.passwordva
   })
   export class RegistrationComponent implements OnInit {
     
+  [x: string]: any;
     registerFormGroup: FormGroup;
     hide = true;
   
-    constructor(private _formBuilder: FormBuilder) { this.ngOnInit();// <--- inject FormBuilder
+    constructor(private _formBuilder: FormBuilder, private authenticationService: AuthenticationService) { 
+      
     }
 
   
@@ -30,6 +32,18 @@ import { PasswordValidation } from 'src/app/registration/registration.passwordva
       {        
         validator: PasswordValidation.Match('pwdCtrl', 'pwdrptCtrl') // validates the two passwords 
       });
+    }
+
+    onSubmit() {
+     // this.submitted = true;
+
+      // stop here if form is invalid
+      if (this.registerFormGroup.invalid) {
+          return;
+      }
+
+      this.authenticationService.registration(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString());
+      console.log("fdsadgds");
     }
   
     get mailCtrl() { return this.registerFormGroup.get('mailCtrl'); }

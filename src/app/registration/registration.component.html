@@ -7,7 +7,7 @@
 
 
 
-            <form [formGroup]="registerFormGroup" id="register-form">
+            <form [formGroup]="registerFormGroup" id="register-form" (ngSubmit) = "onSubmit()">
                 <p>
                     <mat-icon class="register-icon">mail</mat-icon>
                     <mat-form-field>
@@ -50,7 +50,6 @@
               </form>
               <div class="register-footer">
                 <button mat-button class="login-btn" routerLink="../login">Jetzt einloggen!</button>
-                <button mat-button class="forgot-btn">Passwort vergessen?</button>
               </div>
 </mat-card-content>
 </mat-card>
