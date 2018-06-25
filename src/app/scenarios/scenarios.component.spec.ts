@@ -2,31 +2,30 @@ import { APP_BASE_HREF } from '@angular/common';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from '../app-routing.module';
+import { CreateScenarioComponent } from '../create-scenario/create-scenario.component';
 import { MaterialModule } from '../material.module';
-import { ProjectsComponent } from './projects.component';
-import { ProjectCardComponent } from '../project-card/project-card.component';
-import { ProjectsService } from '../projects.service';
-import { CreateProjectComponent } from '../create-project/create-project.component';
-import { ProjectDetailComponent } from '../project-detail/project-detail.component';
-import { ScenarioTileComponent } from '../scenario-tile/scenario-tile.component';
+import { ScenarioCardComponent } from '../scenario-card/scenario-card.component';
+import { ScenarioDetailComponent } from '../scenario-detail/scenario-detail.component';
+import { ScenariosService } from '../service/scenarios.service';
+import { ScenariosComponent } from './scenarios.component';
 
 
-describe('ProjectsComponent', () => {
-  let component: ProjectsComponent;
-  let fixture: ComponentFixture<ProjectsComponent>;
+describe('ScenariosComponent', () => {
+  let component: ScenariosComponent;
+  let fixture: ComponentFixture<ScenariosComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProjectsComponent, ProjectCardComponent, CreateProjectComponent, ProjectDetailComponent, ScenarioTileComponent],
+      declarations: [ScenariosComponent, ScenarioCardComponent, CreateScenarioComponent, ScenarioDetailComponent],
       imports: [MaterialModule, FormsModule, ReactiveFormsModule, AppRoutingModule],
       providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
         {
-          provide: ProjectsService, useValue: {
-            projects: [
+          provide: ScenariosService, useValue: {
+            scenarios: [
               {
                 id: 3,
-                name: 'Testproject',
+                name: 'Testscenario',
                 description: 'Testdesc',
                 algorithm: 'fcf',
                 deterministic: true,
@@ -48,7 +47,7 @@ describe('ProjectsComponent', () => {
               },
               {
                 id: 4,
-                name: 'Testproject2',
+                name: 'Testscenario2',
                 description: 'Testdesc2',
                 algorithm: 'apv',
                 deterministic: false,
@@ -77,7 +76,7 @@ describe('ProjectsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProjectsComponent);
+    fixture = TestBed.createComponent(ScenariosComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

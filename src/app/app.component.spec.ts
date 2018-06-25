@@ -4,23 +4,23 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CreateProjectComponent } from './create-project/create-project.component';
+import { CreateScenarioComponent } from './create-scenario/create-scenario.component';
 import { MaterialModule } from './material.module';
-import { ProjectDetailComponent } from './project-detail/project-detail.component';
-import { ProjectsComponent } from './projects/projects.component';
-import { SelectProjectComponent } from './select-project/select-project.component';
-import { ProjectCardComponent } from './project-card/project-card.component';
+import { ScenarioCardComponent } from './scenario-card/scenario-card.component';
+import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.component';
+import { ScenariosComponent } from './scenarios/scenarios.component';
+import { SelectScenarioComponent } from './select-scenario/select-scenario.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent,
-        ProjectsComponent,
-        CreateProjectComponent,
-        ProjectDetailComponent,
-        SelectProjectComponent,
-        ProjectCardComponent,
+        ScenariosComponent,
+        CreateScenarioComponent,
+        ScenarioDetailComponent,
+        SelectScenarioComponent,
+        ScenarioCardComponent,
       ],
       imports: [
         MaterialModule,

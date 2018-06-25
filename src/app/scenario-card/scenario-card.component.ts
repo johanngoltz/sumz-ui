@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatMenuTrigger, MatSnackBar } from '@angular/material';
-// import { Scenario } from '../api/scenario';
+import { Scenario } from '../api/scenario';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { ScenariosService } from '../service/scenarios.service';
 
