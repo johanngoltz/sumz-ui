@@ -2,10 +2,14 @@ import { APP_BASE_HREF } from '@angular/common';
 import { TestBed, async } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreateScenarioComponent } from './create-scenario/create-scenario.component';
+import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
+import { LoginComponent } from './login/login.component';
 import { MaterialModule } from './material.module';
+import { RegistrationComponent } from './registration/registration.component';
 import { ScenarioCardComponent } from './scenario-card/scenario-card.component';
 import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.component';
 import { ScenariosComponent } from './scenarios/scenarios.component';
@@ -21,6 +25,9 @@ describe('AppComponent', () => {
         ScenarioDetailComponent,
         SelectScenarioComponent,
         ScenarioCardComponent,
+        LoginComponent,
+        RegistrationComponent,
+        DeleteDialogComponent,
       ],
       imports: [
         MaterialModule,
@@ -28,6 +35,7 @@ describe('AppComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
+        ChartsModule,
       ],
       providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
@@ -39,9 +47,9 @@ describe('AppComponent', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   }));
-  it(`should have as title 'app'`, async(() => {
+  it(`should have as title 'SUMZ'`, async(() => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('app');
+    expect(app.title).toEqual('SUMZ');
   }));
 });

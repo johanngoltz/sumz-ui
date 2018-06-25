@@ -3,7 +3,9 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from '../app-routing.module';
 import { CreateScenarioComponent } from '../create-scenario/create-scenario.component';
+import { LoginComponent } from '../login/login.component';
 import { MaterialModule } from '../material.module';
+import { RegistrationComponent } from '../registration/registration.component';
 import { ScenarioCardComponent } from '../scenario-card/scenario-card.component';
 import { ScenarioDetailComponent } from '../scenario-detail/scenario-detail.component';
 import { ScenariosService } from '../service/scenarios.service';
@@ -16,7 +18,8 @@ describe('ScenariosComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ScenariosComponent, ScenarioCardComponent, CreateScenarioComponent, ScenarioDetailComponent],
+      declarations: [ScenariosComponent, ScenarioCardComponent, CreateScenarioComponent, ScenarioDetailComponent, LoginComponent,
+        RegistrationComponent],
       imports: [MaterialModule, FormsModule, ReactiveFormsModule, AppRoutingModule],
       providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
