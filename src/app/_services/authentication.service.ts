@@ -43,7 +43,7 @@ export class AuthenticationService {
     if (response.status === 200) {  // should be 302
       console.log("Registrierung klappt");
       //now redirect to "successful registration"
-      this.router.navigate(["/users"]);
+      //this.router.navigate(["/users"]);
     }
   }
 

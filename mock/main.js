@@ -126,7 +126,7 @@ Sandbox.define('/users', 'POST', function (req, res) {
   res.type('application/json');
 
   // Set the status code of the response.
-  res.status(302); //redirect to page like "successful registration"
+  res.status(200); //should be 302
 
   res.json(
     {
