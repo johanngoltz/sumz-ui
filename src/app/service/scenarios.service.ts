@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
-import { TypedAxiosInstance } from 'restyped-axios';
-import { EMPTY, Observable, ReplaySubject, from, of, throwError } from 'rxjs';
-import { filter, retry, switchMap } from 'rxjs/operators';
+import { TypedAxiosInstance, TypedAxiosResponse } from 'restyped-axios';
+import { Observable, ReplaySubject, from, of, throwError, concat } from 'rxjs';
+import { filter, flatMap, retry, switchMap, tap, debounceTime, concatMap, map } from 'rxjs/operators';
 import { ScenarioAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
 import { ScenarioClient } from './http-client';
@@ -38,10 +38,10 @@ export class ScenariosService {
   }
 
   getScenario(id: number) {
-    // TODO: Maybe Error Handling
     return this.scenarios$.pipe(
       filter(scenarios => !!scenarios),
-      switchMap(scenarios => of(scenarios.find(s => s.id === id)))
+      switchMap(scenarios => of(scenarios.find(s => s.id === id))),
+      switchMap(scenario => undefined === scenario ? throwError('Szenario existiert nicht') : of(scenario))
     );
   }
 
@@ -62,16 +62,26 @@ export class ScenariosService {
   }
 
   updateScenario(scenario: Scenario) {
-    return throwError('Not implemented');
+    return from(this._apiClient.put(`/scenario/${scenario.id}`, scenario)).pipe(
+      switchMap(response => response.status === 200 ? of(response) : throwError(response)),
+      retry(2),
+      switchMap(response => {
+        const updatedScenario = response.data as Scenario;
+        this._scenariosStorage[this._scenariosStorage.indexOf(scenario)] = updatedScenario;
+        return of(updatedScenario);
+      })
+    );
   }
 
   removeScenario(scenario: Scenario) {
     return from(this._apiClient.delete(`/scenario/${scenario.id}`)).pipe(
+      switchMap(response => response.status === 200 ? of(response) : throwError(response)),
+      retry(2),
       switchMap(response => {
         this._scenariosStorage.splice(this._scenariosStorage.indexOf(scenario), 1);
         this._scenarios$.next([...this._scenariosStorage]);
-        return EMPTY;
-      })
+        return of(scenario);
+      }),
     );
   }
 
