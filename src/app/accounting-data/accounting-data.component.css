@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     justify-content: stretch;
-    padding-top: 150px;
+    padding-top: 80px;
 }
 
 .mat-table {
@@ -23,6 +23,12 @@
 .mat-header-row > th, .mat-header-row > td {
     border-bottom: 1px solid #CCC;
     position: relative;
+    font-weight: normal;
+    vertical-align: bottom;
+}
+
+.bold {
+    font-weight: bold;
 }
 
 .table-input-right {
@@ -35,19 +41,18 @@
 }
 
 .leveraged-field {
-    display: inline-block;
     position: absolute;
-    top: -10px;
-    padding: 10px;
+    top: -60px;
     bottom: 0;
-    background: #ccc;
     display: flex;
     flex-direction: column;
     justify-content: stretch;
 }
 
 .indicator {
-    border-left: 2px solid green;
+    border-left: 1px solid #ccc;
+    flex-grow: 1;
+    margin-top: -16px;
 }
 
 .leveraged-field > mat-form-field {
@@ -55,7 +60,12 @@
 }
 
 #startyear-container {
-    left: 0;
-    transform: translateY(-100%);
-    align-items: flex-start;
+    left: -3px;
+    transform: translateX(-50%);
+    align-items: center;
+}
+
+mat-checkbox {
+    display: block;
+    font-weight: normal;
 }

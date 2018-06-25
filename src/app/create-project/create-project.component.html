@@ -79,11 +79,7 @@
           <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
           <mat-card-title>Zahlungsreihe</mat-card-title>
           <mat-card-content>
-            <mat-form-field class="inline">
-              <input (input)="updateTable()" type="number" id="baseYear" name="baseYear" matInput placeholder="Basisjahr" formControlName="baseYear"
-                required>
-            </mat-form-field>
-            <app-accounting-data [editable]="true" [formGroup]="formGroup3"></app-accounting-data>
+            <app-accounting-data [editable]="true" (formGroupOutput)="formGroup3 = $event"></app-accounting-data>
           </mat-card-content>
           <mat-card-actions class="stepper-actions">
             <button mat-button matStepperPrevious [disabled]="busy">Zurück</button>

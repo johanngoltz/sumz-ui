@@ -1,36 +1,60 @@
 <div [formGroup]="formGroup">
   <mat-slide-toggle formControlName="calculateFcf">Free Cashflow-Werte aus GuV-Werten berechnen</mat-slide-toggle>
 </div>
-<div class="scrollable" [formGroup]="formGroup" #scrollable>
+<div class="scrollable" #scrollable>
   <table class="mat-table">
     <thead>
       <tr class="mat-header-row">
-        <th class="mat-header-cell">Jahr</th>
-        <ng-container *ngFor="let element of formGroup.controls.timeSeries.controls; trackBy: trackByYear">
+        <th class="mat-header-cell"><div class="bold">Jahr</div>Quartal</th>
+        <ng-container *ngFor="let element of timeSeries.controls; let i = index; trackBy: trackByYear">
           <th class="mat-cell" *ngIf="element.value.year > formGroup.value.startYear && element.value.year <= formGroup.value.endYear">
-            <div id="startyear-container" class="leveraged-field" *ngIf="element.value.year === formGroup.value.startYear + 1">
+            <div id="startyear-container" class="leveraged-field" *ngIf="element.value.year === formGroup.value.startYear && element.value.quarter === 1">
               <span *ngIf="!editable">
                 {{formGroup.value.startYear}}
               </span>
-              <mat-form-field class="table-input-right" *ngIf="editable">
-                <input type="number" matInput formControlName="startYear" required>
+              <mat-form-field class="table-input-right" *ngIf="editable" [formGroup]="formGroup">
+                <input type="number" matInput formControlName="startYear" required placeholder="Startjahr">
               </mat-form-field>
               <div class="indicator"></div>
             </div>
-            {{element.value.year}}
+            <div id="baseyear-container" class="leveraged-field" *ngIf="element.value.year === formGroup.value.baseYear && element.value.quarter === 1">
+              <span *ngIf="!editable">
+                {{formGroup.value.baseYear}}
+              </span>
+              <mat-form-field class="table-input-right" *ngIf="editable" [formGroup]="formGroup">
+                <input type="number" matInput formControlName="baseYear" required placeholder="Basisjahr">
+              </mat-form-field>
+              <div class="indicator"></div>
+            </div>
+            <div id="endyear-container" class="leveraged-field" *ngIf="element.value.year === formGroup.value.endYear && element.value.quarter === 4">
+              <span *ngIf="!editable">
+                {{formGroup.value.endYear}}
+              </span>
+              <mat-form-field class="table-input-right" *ngIf="editable" [formGroup]="formGroup">
+                <input type="number" matInput formControlName="endYear" required placeholder="Endjahr">
+              </mat-form-field>
+              <div class="indicator"></div>
+            </div>
+            <div *ngIf="i === 0 || timeSeries.at(i-1).value.year !== element.value.year" class="bold">{{element.value.year}}</div>
+            Q {{element.value.quarter}}
           </th>
         </ng-container>
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let ctrl of groupParams">
+      <ng-container *ngFor="let ctrl of keys(formGroup?.value.parameterConfig)">
         <tr class="mat-row" *ngIf="paramData[ctrl] && [undefined, formGroup.value.calculateFcf].indexOf(paramData[ctrl]?.showOnCalculation) > -1">
-          <th class="mat-header-cell">{{paramData[ctrl].displayName}}</th>
+          <th class="mat-header-cell" [formGroup]="formGroup?.controls.parameterConfig">
+            {{paramData[ctrl].displayName}}
+            <mat-checkbox [formControlName]="ctrl">Prognostizieren</mat-checkbox>
+          </th>
           <td class="mat-cell" *ngFor="let element of formGroup.controls.timeSeries.controls; trackBy: trackByYear">
-            <span class="table-data" *ngIf="!editable">element.value[ctrl]</span>
-            <mat-form-field class="table-input-right" [formGroup]="element" *ngIf="editable">
-              <input type="text" matInput [formControlName]="ctrl" appToDouble required>
-            </mat-form-field>
+            <ng-container *ngIf="(element.value.year <= formGroup.value.baseYear) === formGroup.value.parameterConfig[ctrl]">
+              <span class="table-data" *ngIf="!editable">element.value[ctrl]</span>
+              <mat-form-field class="table-input-right" [formGroup]="element" *ngIf="editable">
+                <input type="text" matInput [formControlName]="ctrl" appToDouble required>
+              </mat-form-field>
+            </ng-container>
           </td>
         </tr>
       </ng-container>
