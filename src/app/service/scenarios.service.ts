@@ -4,7 +4,7 @@ import { Observable, ReplaySubject, empty, from, of, throwError } from 'rxjs';
 import { filter, retry, switchMap } from 'rxjs/operators';
 import { ScenarioAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
-import { AxiosInstance } from './http-client';
+import { ScenarioClient } from './http-client';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +14,7 @@ export class ScenariosService {
   private _scenarios$: ReplaySubject<Scenario[]>;
   private _scenariosStorage: Scenario[];
 
-  constructor(@Inject(AxiosInstance) private _apiClient: TypedAxiosInstance<ScenarioAPI>) {
+  constructor(@Inject(ScenarioClient) private _apiClient: TypedAxiosInstance<ScenarioAPI>) {
     this._scenarios$ = new ReplaySubject();
     this.scenarios$ = this._scenarios$.asObservable();
 
