@@ -4,7 +4,7 @@ describe('RegistrationComponent', () => {
   /*
   let component: RegistrationComponent;
   let fixture: ComponentFixture<RegistrationComponent>;
-  
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       // Wenn das AppRoutingModule importiert wird, müssen alle von dort aus importierten
