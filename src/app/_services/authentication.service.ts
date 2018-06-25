@@ -40,7 +40,7 @@ export class AuthenticationService {
       method: 'POST',
     });
     // if credentials correct, redirect to main page
-    if (response.status === 302) {
+    if (response.status === 200) {  // should be 302
       console.log("Registrierung klappt");
       //now redirect to "successful registration"
       this.router.navigate(["/users"]);
