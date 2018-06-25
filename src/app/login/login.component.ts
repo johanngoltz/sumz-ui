@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { AuthenticationService } from '../_services/authentication.service';
+import { AlertService } from '../_services/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -10,14 +11,16 @@ import { AuthenticationService } from '../_services/authentication.service';
 })
 export class LoginComponent implements OnInit {
   loginFormGroup: FormGroup;
+  loading = false;
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
+    private alertService: AlertService,
   ) { }
 
   ngOnInit() {
-    this.loginFormGroup = this._formBuilder.group({
+    this.loginFormGroup = this.formBuilder.group({
       mailCtrl: ['', Validators.email],
       pwdCtrl: '',
     });
@@ -28,6 +31,9 @@ export class LoginComponent implements OnInit {
     if (this.loginFormGroup.invalid) {
       return;
     }
+
+    // disable login button
+    this.loading = true;
 
     // reset login status
     this.authenticationService.logout();

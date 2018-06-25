@@ -29,7 +29,7 @@
           </mat-form-field>
         </p>
         <br>
-        <button mat-raised-button color="accent" class="login-btn">LOGIN</button>
+        <button mat-raised-button [disabled]="loading" color="accent" class="login-btn">LOGIN</button>
       </form>
       <div class="login-footer">
         <button mat-button class="signup-btn" routerLink="../registration">Jetzt anmelden!</button>
