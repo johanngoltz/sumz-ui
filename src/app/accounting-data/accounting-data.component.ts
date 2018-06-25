@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { FinancialData } from '../project';
 
 @Component({
   selector: 'app-accounting-data',
@@ -93,7 +92,7 @@ export class AccountingDataComponent implements OnInit {
     return i + 1;
   }
 
-  trackByYear(i: number, o: FinancialData) {
+  trackByYear(i: number, o) {
     return o.year;
   }
 
