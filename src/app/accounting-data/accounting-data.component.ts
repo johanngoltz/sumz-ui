@@ -13,7 +13,6 @@ export class AccountingDataComponent implements OnInit {
   @ViewChild('scrollable') dataScrollContainer: ElementRef;
   @ViewChild('fkrow') fkRow: ElementRef;
   paramData: Object;
-  timeSeries: FormArray;
   prevYear: number;
   keys = Object.keys;
 
@@ -35,13 +34,11 @@ export class AccountingDataComponent implements OnInit {
 
   ngOnInit() {
     this.prevYear = new Date().getFullYear() - 1;
-    this.timeSeries = this.formBuilder.array([]);
     this.formGroup = this.formBuilder.group({
       startYear: [this.prevYear - 1, Validators.required],
       endYear: [this.prevYear + 1, Validators.required],
       baseYear: [this.prevYear, Validators.required],
       calculateFcf: [false, Validators.required],
-      timeSeries: this.timeSeries,
     });
     Object.keys(this.paramData).forEach((param) => {
       this.formGroup.addControl(param, this.formBuilder.group({
@@ -61,22 +58,22 @@ export class AccountingDataComponent implements OnInit {
   }
 
   createFinancialData(year: number, quarter: number, index?: number) {
-    const formGroup = this.formBuilder.group({
-      year: [year, Validators.required],
-      quarter: [quarter, Validators.required],
-    });
     Object.keys(this.paramData).forEach((param) => {
-      formGroup.addControl(param, new FormControl([0, Validators.required]));
+      const array = <FormArray> (<FormGroup> this.formGroup.controls[param]).controls.timeSeries;
+      const group = this.formBuilder.group({
+        year: year,
+        quarter: quarter,
+        amount: [0, Validators.required],
+      });
+      if (index !== undefined) {
+        array.insert(index, group);
+      } else {
+        array.push(group);
+      }
     });
-
-    if (index !== undefined) {
-      this.timeSeries.insert(index, formGroup);
-    } else {
-      this.timeSeries.push(formGroup);
-    }
   }
 
-  getInsertIndex(year: number, quarter: number) {
+  /*getInsertIndex(year: number, quarter: number) {
     const years = this.timeSeries.value.map(o => {
       return { year: o.year, quarter: o.quarter };
     });
@@ -90,16 +87,16 @@ export class AccountingDataComponent implements OnInit {
       }
     }
     return i + 1;
-  }
+  }*/
 
-  trackByYear(i: number, o) {
-    return o.year;
+  trackByYearQuarter(i: number, o) {
+    return o.year + ';' + o.quarter;
   }
 
   updateTable() {
     const startYear = this.formGroup.value.startYear;
     const endYear = this.formGroup.value.endYear;
-    const years = this.timeSeries.value.map(o => {
+    const years = (<FormGroup> this.formGroup.controls.externalCapital).controls.timeSeries.value.map(o => {
       return { year: o.year, quarter: o.quarter };
     });
     let q = 1;

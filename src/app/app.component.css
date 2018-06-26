@@ -13,7 +13,7 @@ mat-toolbar {
     width: auto;
 }
 
-::ng-deep app-projects, ::ng-deep app-create-project, ::ng-deep app-project-detail, ::ng-deep app-login {
+::ng-deep app-scenarios, ::ng-deep app-create-scenario, ::ng-deep app-scenario-detail, ::ng-deep app-login {
     width: 100%;
     min-height: calc(100% - 64px);
     display: block;
