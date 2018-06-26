@@ -19,7 +19,8 @@ import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { RegistrationSuccessComponent } from './registration-success/registration-success.component';
- 
+import { AlertComponent } from './alert/alert.component';
+
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { RegistrationSuccessComponent } from './registration-success/registratio
     LoginComponent,
     RegistrationComponent,
     RegistrationSuccessComponent,
+    AlertComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,6 +50,6 @@ import { RegistrationSuccessComponent } from './registration-success/registratio
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [SelectProjectComponent, DeleteDialogComponent],
+  entryComponents: [SelectProjectComponent, DeleteDialogComponent, AlertComponent],
 })
 export class AppModule { }
