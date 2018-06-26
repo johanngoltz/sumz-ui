@@ -47,6 +47,21 @@ export class AuthenticationService {
     }
   }
 
+    // reset the password (is called in resetpassword.component)
+    async resetpassword(passwordold: string, passwordnew: string) {
+      const response = await this.api.request({
+        url: '/users/id',
+        data: {passwordold, passwordnew},
+        method: 'PUT',
+      });
+      // if credentials correct, redirect to main page
+      if (response.status === 200) {  // should be 302
+        console.log('Registrierung klappt');
+        // redirect to "successful registration"
+        // this.router.navigate(["/users"]);
+      }
+    }
+
   logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');

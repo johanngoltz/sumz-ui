@@ -21,9 +21,6 @@ import { AuthenticationService } from '../_services/authentication.service';
       
     }
 
-    
-
-
     ngOnInit() {
       this.registerFormGroup = this._formBuilder.group({
         mailCtrl: ['', Validators.email],
@@ -37,7 +34,7 @@ import { AuthenticationService } from '../_services/authentication.service';
     }
 
     onSubmit() {
-     // this.submitted = true;
+     this.submitted = true;
 
       // stop here if form is invalid
       if (this.registerFormGroup.invalid) {

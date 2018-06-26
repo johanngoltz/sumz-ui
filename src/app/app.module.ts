@@ -19,7 +19,9 @@ import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { RegistrationSuccessComponent } from './registration-success/registration-success.component';
- 
+import { ResetPasswordComponent } from './resetpassword/resetpassword.component';
+
+
 
 @NgModule({
   declarations: [
@@ -35,6 +37,7 @@ import { RegistrationSuccessComponent } from './registration-success/registratio
     LoginComponent,
     RegistrationComponent,
     RegistrationSuccessComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     BrowserModule,
