@@ -31,18 +31,4 @@ describe('CreateScenarioComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initially create a financial data object for the baseyear', () => {
-    expect(component.timeSeries.length).toBe(1);
-    expect(component.timeSeries.value[0].year).toBe(component.formGroup3.value.baseYear);
-  });
-
-  it('should add a year when triggered', () => {
-    component.addYear();
-    expect(component.timeSeries.length).toBe(2);
-    if (component.formGroup2.value.deterministic) {
-      expect(component.timeSeries.value[1].year).toBe(component.formGroup3.value.baseYear + 1);
-    } else {
-      expect(component.timeSeries.value[0].year).toBe(component.formGroup3.value.baseYear - 1);
-    }
-  });
 });

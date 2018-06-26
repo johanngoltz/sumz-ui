@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-accounting-data',
@@ -20,10 +20,15 @@ export class AccountingDataComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) {
     this.paramData = {
       revenue: { displayName: 'Umsatzerlöse', showOnCalculation: true },
-      personnelCosts: { displayName: 'Personalkosten', showOnCalculation: true },
-      materialCosts: { displayName: 'Materialkosten', showOnCalculation: true },
-      otherCosts: { displayName: 'Sonstige Kosten', showOnCalculation: true },
-      fcf: { displayName: 'Free Cash Flow', showOnCalculation: false },
+      additionalIncome: { displayName: 'Sonstige Erlöse', showOnCalculation: true },
+      costOfMaterial: { displayName: 'Materialkosten', showOnCalculation: true },
+      costOfStaff: { displayName: 'Personalkosten', showOnCalculation: true },
+      additionalCosts: { displayName: 'Sonstige Kosten', showOnCalculation: true },
+      investments: { displayName: 'Investitionen', showOnCalculation: true },
+      divestments: { displayName: 'Desinvestitionen', showOnCalculation: true },
+      liabilities: { displayName: 'Verbindlichkeiten', showOnCalculation: true },
+      interestOnLiabilities: { displayName: 'Zinsen auf Verbindlichkeiten', showOnCalculation: true },
+      freeCashFlows: { displayName: 'Free Cash Flow', showOnCalculation: false },
       externalCapital: { displayName: 'Fremdkapital' },
     };
   }
@@ -36,15 +41,13 @@ export class AccountingDataComponent implements OnInit {
       endYear: [this.prevYear + 1, Validators.required],
       baseYear: [this.prevYear, Validators.required],
       calculateFcf: [false, Validators.required],
-      parameterConfig: this.formBuilder.group({
-        revenue: false,
-        personnelCosts: false,
-        materialCosts: false,
-        otherCosts: false,
-        fcf: false,
-        externalCapital: false,
-      }),
       timeSeries: this.timeSeries,
+    });
+    Object.keys(this.paramData).forEach((param) => {
+      this.formGroup.addControl(param, this.formBuilder.group({
+        isHistoric: false,
+        timeSeries: this.formBuilder.array([]),
+      }));
     });
     this.formGroupOutput.emit(this.formGroup);
     this.updateTable();
@@ -61,12 +64,9 @@ export class AccountingDataComponent implements OnInit {
     const formGroup = this.formBuilder.group({
       year: [year, Validators.required],
       quarter: [quarter, Validators.required],
-      externalCapital: [0, Validators.required],
-      fcf: [0, Validators.required],
-      revenue: [0, Validators.required],
-      personnelCosts: [0, Validators.required],
-      materialCosts: [0, Validators.required],
-      otherCosts: [0, Validators.required],
+    });
+    Object.keys(this.paramData).forEach((param) => {
+      formGroup.addControl(param, new FormControl([0, Validators.required]));
     });
 
     if (index !== undefined) {
