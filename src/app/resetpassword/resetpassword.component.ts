@@ -14,7 +14,8 @@ import { AuthenticationService } from '../_services/authentication.service';
     
   [x: string]: any;
     resetFormGroup: FormGroup;
-    hide = true;
+    hide_pw1 = true;
+    hide_pw2 = true;
   
     constructor(private _formBuilder: FormBuilder, private authenticationService: AuthenticationService) { 
       
