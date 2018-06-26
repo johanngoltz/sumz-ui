@@ -24,8 +24,12 @@ import { AuthenticationService } from '../_services/authentication.service';
       this.resetFormGroup = this._formBuilder.group({
         pwdOld: ['', Validators.minLength(8)],
         pwdNew: ['', Validators.minLength(8)],
+        pwdNew2: ['', Validators.minLength(8)],
 
-      })
+      },
+      {
+        validator: PasswordValidation.Match('pwdNew', 'pwdNew2'), // validates the two passwords
+      });
     }
 
     onSubmit() {
@@ -36,12 +40,14 @@ import { AuthenticationService } from '../_services/authentication.service';
           return;
       }
 
-      this.authenticationService.registration(this.pwdOld.value.toString(), this.pwdNew.value.toString());
+      this.authenticationService.resetpassword(this.pwdOld.value.toString(), this.pwdNew.value.toString(), this.pwdNew2.value.toString());
     }
   
 
     get pwdOld() { return this.resetFormGroup.get('pwdOld'); }
 
     get pwdNew() { return this.resetFormGroup.get('pwdNew'); }
+
+    get pwdNew2() { return this.resetFormGroup.get('pwdNew2'); }
 
 }

@@ -42,23 +42,24 @@ export class AuthenticationService {
     // if credentials correct, redirect to main page
     if (response.status === 200) {  // should be 302
       console.log('Registrierung klappt');
-      // redirect to "successful registration"
-      // this.router.navigate(["/users"]);
+      // navigate to return url from route parameters or default to '/'
+      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+      this.router.navigate([this.returnUrl]);
     }
   }
 
     // reset the password (is called in resetpassword.component)
-    async resetpassword(passwordold: string, passwordnew: string) {
+    async resetpassword(passwordold: string, passwordnew: string, passwordnew2: string) {
       const response = await this.api.request({
         url: '/users/id',
-        data: {passwordold, passwordnew},
+        data: {passwordold, passwordnew, passwordnew2},
         method: 'PUT',
       });
       // if credentials correct, redirect to main page
       if (response.status === 200) {  // should be 302
-        console.log('Registrierung klappt');
+        console.log('Reset klappt');
         // redirect to "successful registration"
-        // this.router.navigate(["/users"]);
+        this.router.navigate(["/users"]);
       }
     }
 

@@ -30,7 +30,8 @@ export interface UserAPI {
         PUT: {
             body: {
                 passwordold: string,
-                passwordnew: string
+                passwordnew: string,
+                passwordnew2: string
             },
         }
     },
