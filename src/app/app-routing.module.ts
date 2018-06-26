@@ -1,18 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CreateProjectComponent } from './create-project/create-project.component';
-import { ProjectDetailsComponent } from './project-details/project-details.component';
-import { ProjectsComponent } from './projects/projects.component';
-
+import { CreateScenarioComponent } from './create-scenario/create-scenario.component';
+import { LoginComponent } from './login/login.component';
+import { RegistrationComponent } from './registration/registration.component';
+import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.component';
+import { ScenariosComponent } from './scenarios/scenarios.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', component: ProjectsComponent },
-  { path: 'create', component: CreateProjectComponent },
-  { path: 'project/:id', component: ProjectDetailsComponent },
+  { path: '', pathMatch: 'full', component: ScenariosComponent, data: {state: 'scenarios'} },
+  { path: 'login', component: LoginComponent, data: {state: 'login'} },
+  { path: 'registration', component: RegistrationComponent, data: {state: 'registration'} },
+  { path: 'create', component: CreateScenarioComponent, data: {state: 'create'} },
+  { path: 'scenario/:id', component: ScenarioDetailComponent, data: {state: 'details'} },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

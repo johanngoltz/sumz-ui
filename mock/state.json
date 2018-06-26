@@ -1,12 +1,16 @@
 {
-  "projects": [
+  "scenarios": [
     {
-      "id": 200,
-      "name": "anotherName"
+      "id": 1,
+      "name": "Eins",
+      "description": "Das erste Szenario",
+      "periods": 2
     },
     {
-      "id": 300,
-      "name": "runningOutOfNames"
+      "name": "Zwei",
+      "description": "Das zweite Szenario",
+      "periods": 5,
+      "id": 2
     }
   ]
 }

@@ -1,0 +1,44 @@
+.content-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#login-form {
+    padding-top: 10px;
+}
+
+.login-card {
+    max-width: 400px;
+    width: 400px;
+}
+
+.login-icon {
+    vertical-align: middle;
+    margin-right: 7px;
+}
+
+.login-btn {
+    width: 90%;
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    color: #fff;
+    background-color: #0d9a39;
+    border-color: #0d9a39;
+}
+
+.forgot-btn {
+    width: 90%;
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    color: darkgray;
+}
+
+mat-form-field {
+    width: 90%;
+}
