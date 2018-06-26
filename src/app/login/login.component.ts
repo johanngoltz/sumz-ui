@@ -38,7 +38,12 @@ export class LoginComponent implements OnInit {
     // reset login status
     this.authenticationService.logout();
 
-    this.authenticationService.login(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString(), 'password');
+    this.authenticationService.login(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString(), 'password')
+      .catch(
+        error => {
+          this.alertService.error(error);
+          this.loading = false;
+        });
   }
 
   get mailCtrl() { return this.loginFormGroup.get('mailCtrl'); }
