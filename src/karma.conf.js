@@ -34,6 +34,6 @@ module.exports = function (config) {
     logLevel: config.LOG_DEBUG,
     autoWatch: true,
     browsers: ['ChromeHeadless'],
-    singleRun: false
+    singleRun: true
   });
 };
