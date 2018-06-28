@@ -38,7 +38,7 @@
 
             <td class="mat-cell">
                 <mat-form-field floatLabel="never">
-                    <input matInput placeholder="Periode" [formControl]="nameFormControl" [value]="(forScenario$ | async)?.periods" (ngModel)="forScenario$.periods" [errorStateMatcher]="periodsMatcher"/> 
+                    <input matInput placeholder="Periode" [formControl]="periodsFormControl" [value]="(forScenario$ | async)?.periods" (ngModel)="forScenario$.periods" [errorStateMatcher]="periodsMatcher"/> 
                     <mat-error *ngIf="periodsFormControl.hasError('required')">
                         Periode wird <strong>benötigt</strong>
                     </mat-error>
@@ -49,7 +49,7 @@
       </table>
 
       <mat-action-row>
-        <button mat-button color="" (click)="save()">Speichern</button>
+        <button mat-button color="secondary" color="" (click)="saveScenario()">Speichern</button>
         <button mat-button color="primary" (click)="nextStep()">Weiter</button>
       </mat-action-row>
     </mat-expansion-panel>
@@ -65,7 +65,9 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       TODO: Cashflowberechnungstabelle implementieren
+      
       <mat-action-row>
+        <button mat-button color="secondary" color="" (click)="saveScenario()">Speichern</button>
         <button mat-button color="warn" (click)="prevStep()">Zurück</button>
         <button mat-button color="primary" (click)="nextStep()">Weiter</button>
       </mat-action-row>
@@ -113,11 +115,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr class="mat-row">
-                <!--<td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult.companyValue}}</td>
+                <tr class="mat-row">
+                <!-- <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult.companyValue}}</td>
                 <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult.marketValueTotalAssets}}</td>
                 <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult.totalLiabilities}}</td>
-                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult.taxShield}}</td>-->
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult.taxShield}}</td> -->
               </tr>
             </tbody>
           </table>
