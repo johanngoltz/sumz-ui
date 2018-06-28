@@ -3,9 +3,5 @@ dist: trusty
 language: node_js
 node_js:
   - 'lts/*'
-
-addons: 
-  firefox: latest-dev
-
 before_script:
   - ng lint
