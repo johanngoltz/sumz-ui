@@ -20,6 +20,7 @@ import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { RegistrationSuccessComponent } from './registration-success/registration-success.component';
 import { ResetPasswordComponent } from './resetpassword/resetpassword.component';
+import { AlertComponent } from './alert/alert.component';
 
 
 
@@ -38,6 +39,7 @@ import { ResetPasswordComponent } from './resetpassword/resetpassword.component'
     RegistrationComponent,
     RegistrationSuccessComponent,
     ResetPasswordComponent,
+    AlertComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,6 +53,6 @@ import { ResetPasswordComponent } from './resetpassword/resetpassword.component'
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [SelectProjectComponent, DeleteDialogComponent],
+  entryComponents: [SelectProjectComponent, DeleteDialogComponent, AlertComponent],
 })
 export class AppModule { }
