@@ -39,21 +39,21 @@ export class ScenarioDetailComponent implements OnInit {
 
   /* graph */
   private data;
-  private view: any[] = [1000, 500];
   private barPadding = 0;
   private showXAxis = true;
   private showYAxis = true;
   private gradient = false;
   private showLegend = false;
   private showXAxisLabel = true;
-  private xAxisLabel = 'Country';
+  private xAxisLabel = 'Jahr';
   private showYAxisLabel = true;
-  private yAxisLabel = 'Population';
+  private yAxisLabel = 'Unternehmenswert';
   private colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
+    domain: ['#0D9A39'],
   };
 
   /* forms */
+  /* TODO: Fehlermeldung wird angezeigt, obwohl Text da ist*/
   nameFormControl = new FormControl('', [Validators.required]);
   nameMatcher = new MyErrorStateMatcher();
 
@@ -77,16 +77,24 @@ export class ScenarioDetailComponent implements OnInit {
 
     this.data = [
       {
-        'name': 'Germany',
-        'value': 8940000,
+        'name': '2018',
+        'value': 100,
       },
       {
-        'name': 'USA',
-        'value': 5000000,
+        'name': '2019',
+        'value': 120,
       },
       {
-        'name': 'France',
-        'value': 7200000,
+        'name': '2020',
+        'value': 125,
+      },
+      {
+        'name': '2021',
+        'value': 140,
+      },
+      {
+        'name': '2022',
+        'value': 100,
       },
     ];
   }

@@ -7,15 +7,15 @@
       "periods": 2
     },
     {
+      "id": 2,
       "name": "Zwei",
       "description": "Das zweite Szenario",
-      "periods": 5,
-      "id": 2
+      "periods": 5
     },
     {
-      "id": 1,
-      "scenarioName": "Drei",
-      "scenarioDescription": "Das Dritte Scenario",
+      "id": 3,
+      "name": "Drei",
+      "description": "Das Dritte Scenario",
       "periods": 2,
       "equityInterest": 23,
       "outsideCapitalInterest": 22,
