@@ -41,7 +41,7 @@ mat-radio-button mat-icon {
     vertical-align: middle;
 }
 
-label.grey {
+.grey {
     color: rgba(0,0,0,0.54);
     font-size: 12px;
 }
@@ -97,10 +97,5 @@ mat-progress-bar {
 }
 
 .navigation-disabled ::ng-deep .mat-step-header {
-    pointer-events: none !important;
-}
-
-:ng-deep .md-button-wrapper > * {
-    vertical-align: middle;
-    margin-top: -3px;
+    pointer-events: none;
 }

@@ -30,56 +30,13 @@
         </mat-card>
       </form>
     </mat-step>
-    <mat-step label="Methode wählen" [stepControl]="formGroup2">
-      <form [formGroup]="formGroup2">
-        <mat-card class="form-container">
-          <mat-card-title>Methode & Algorithmus</mat-card-title>
-          <mat-card-content>
-            <label class="grey" for="method">Berechnungsmethode</label>
-            <mat-radio-group id="method" name="method" formControlName="deterministic" required>
-              <mat-radio-button [value]="true">Deterministisch</mat-radio-button>
-              <mat-radio-button [value]="false">Stochastisch</mat-radio-button>
-            </mat-radio-group>
-            <div>
-              <mat-form-field id="prognosis" class="inline" [ngClass]="{disabled: this.formGroup2.value.deterministic}">
-                <input type="number" id="prognosisLength" name="prognosisLength" matInput placeholder="Anzahl Prognosejahre" formControlName="prognosisLength"
-                  [readonly]="this.formGroup2.value.deterministic" required>
-              </mat-form-field>
-            </div>
-            <label class="grey" for="algorithm">Algorithmus</label>
-            <mat-radio-group id="algorithm" name="algorithm" formControlName="algorithm" required>
-              <mat-radio-button value="apv">
-                APV
-                <mat-icon matTooltip="Das APV-Verfahren, auch Konzept des angepassten Barwerts, zählt - wie der WACC-Ansatz oder der TCF-Ansatz - zu den Entity-Methoden der DCF-Bewertung. Im Rahmen dieser Verfahren wird der Wert des Eigenkapitals eines Unternehmens durch Abzug der Nettofinanzverbindlichkeiten von dem Unternehmensgesamtwert (Entity Value) ermittelt. ">help</mat-icon>
-              </mat-radio-button>
-              <mat-radio-button value="fcf">
-                FCF
-                <mat-icon matTooltip="">help</mat-icon>
-              </mat-radio-button>
-              <mat-radio-button value="fte">
-                FTE
-                <mat-icon matTooltip="">help</mat-icon>
-              </mat-radio-button>
-            </mat-radio-group>
-            <mat-form-field class="inline">
-              <input type="number" id="iterations" name="iterations" matInput placeholder="Anzahl Iterationen" formControlName="iterations"
-                required>
-            </mat-form-field>
-          </mat-card-content>
-          <mat-card-actions class="stepper-actions">
-            <button mat-button matStepperPrevious>Zurück</button>
-            <button mat-raised-button color="accent" matStepperNext>Weiter</button>
-          </mat-card-actions>
-        </mat-card>
-      </form>
-    </mat-step>
-    <mat-step label="Zahlungsreihe angeben" [stepControl]="formGroup3">
-      <form [formGroup]="formGroup3" (ngSubmit)="createProject()">
+    <mat-step label="Zahlungsreihe angeben" [stepControl]="formGroup2">
+      <form [formGroup]="formGroup2" (ngSubmit)="createScenario()">
         <mat-card class="form-container" [class.busy]="busy">
           <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
           <mat-card-title>Zahlungsreihe</mat-card-title>
           <mat-card-content>
-            <app-accounting-data [editable]="true" (formGroupOutput)="formGroup3 = $event"></app-accounting-data>
+            <app-accounting-data [editable]="true" (formGroupOutput)="formGroup2 = $event"></app-accounting-data>
           </mat-card-content>
           <mat-card-actions class="stepper-actions">
             <button mat-button matStepperPrevious [disabled]="busy">Zurück</button>

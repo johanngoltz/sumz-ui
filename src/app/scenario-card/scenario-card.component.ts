@@ -3,6 +3,7 @@ import { MatDialog, MatMenuTrigger, MatSnackBar } from '@angular/material';
 import { Scenario } from '../api/scenario';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { ScenariosService } from '../service/scenarios.service';
+import { Wrapper } from '../api/wrapper';
 
 @Component({
   selector: 'app-scenario-card',
@@ -12,11 +13,6 @@ import { ScenariosService } from '../service/scenarios.service';
 
 
 export class ScenarioCardComponent implements OnInit {
-  // Schlimme Sache.
-  // Wird scenario direkt auf Scenario typsiert, kommt es beim Compilieren zu einem Fehler, weil die
-  // Dependency nicht aufgelöst werden kann. Mit der Wrapper-Klasse gibt es das Problem nicht, dafür muss der Wert
-  // immer mit valueOf() adressiert werden, um nicht statische Typfehler zu bekommen.
-  // Zur Laufzeit hat scenario den Typ Scenario.
   @Input() scenario: Wrapper<Scenario>;
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   hovered: Boolean;
@@ -47,12 +43,4 @@ export class ScenarioCardComponent implements OnInit {
       });
   }
 }
-export class Wrapper<T> extends Object {
-  valueOf(): T {
-    return this.value;
-  }
 
-  constructor(private value: T) {
-    super();
-  }
-}

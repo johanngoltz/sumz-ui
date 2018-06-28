@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { debounceTime, map } from 'rxjs/operators';
+import { Scenario } from '../api/scenario';
+import { Wrapper } from '../api/wrapper';
 
 @Component({
   selector: 'app-accounting-data',
@@ -9,14 +11,15 @@ import { debounceTime, map } from 'rxjs/operators';
 })
 export class AccountingDataComponent implements OnInit {
   @Input() editable: Boolean;
+  @Input() initialData: Wrapper<Scenario>;
   @Output() formGroupOutput = new EventEmitter<FormGroup>();
   formGroup: FormGroup;
   @ViewChild('scrollable') dataScrollContainer: ElementRef;
   @ViewChild('fkrow') fkRow: ElementRef;
   paramData: Object;
   prevYear: number;
-  keys = Object.keys;
-  startYear: number;
+  keys = Object.keys; // needed due to context issues in ngFor
+  startYear: number; // debounced values
   endYear: number;
 
   constructor(private formBuilder: FormBuilder) {
@@ -103,22 +106,22 @@ export class AccountingDataComponent implements OnInit {
     const years = (<FormGroup>this.formGroup.controls.externalCapital).controls.timeSeries.value.map(o => {
       return { year: o.year, quarter: o.quarter };
     });
-    let q = 1;
+    let quarter = 1;
     let j = 0;
-    for (let i = startYear; i <= endYear;) {
+    for (let year = startYear; year <= endYear;) {
       if (years.length === 0) {
-        this.createFinancialData(i, q, j);
+        this.createFinancialData(year, quarter, j);
         j++;
       } else {
         let found = false;
         for (; j < years.length; j++) {
-          if (years[j].year === i && years[j].quarter === q) {
+          if (years[j].year === year && years[j].quarter === quarter) {
             j++;
             found = true;
             break;
-          } else if ((years[j].year === i && years[j].quarter > q) || years[j].year > i) {
-            this.createFinancialData(i, q, j);
-            years.splice(j, 0, {year: i, quarter: q});
+          } else if ((years[j].year === year && years[j].quarter > quarter) || years[j].year > year) {
+            this.createFinancialData(year, quarter, j);
+            years.splice(j, 0, {year: year, quarter: quarter});
             j++;
             found = true;
             break;
@@ -129,15 +132,15 @@ export class AccountingDataComponent implements OnInit {
           }
         }
         if (!found) {
-          this.createFinancialData(i, q, j);
+          this.createFinancialData(year, quarter, j);
           j++;
         }
       }
-      if (q === 4) {
-        i++;
-        q = 1;
+      if (quarter === 4) {
+        year++;
+        quarter = 1;
       } else {
-        q++;
+        quarter++;
       }
     }
   }
