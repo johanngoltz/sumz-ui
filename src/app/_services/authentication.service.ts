@@ -16,15 +16,38 @@ export class AuthenticationService {
   }
 
   // signin (is called in login.component)
-  async login(email: string, password: string, grant_type: string) {
+  async login(email: string, password: string ) {
     const response = await this.api.request({
       url: '/oauth/token',
-      data: {email, password, grant_type},
+      params: {email, password, 'grant_type' : 'password'},
       method: 'POST',
     });
-    // if credentials correct, redirect to main page
+    // if credentials correct, redirect to main page or return url
     if (response.status === 200) {
       // store user details in local storage to keep user logged in
+      localStorage.setItem('currentUser', JSON.stringify(response.data));
+      // navigate to return url from route parameters or default to '/'
+      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+      this.router.navigate([this.returnUrl]);
+    }
+  }
+
+  // get refresh token
+  async refresh() {
+    const response = await this.api.request({
+      url: '/oauth/token',
+      params: {
+        'refresh_token' : JSON.parse(localStorage.getItem('currentUser')).refresh_token,
+        'grant_type' : 'refresh'},
+      method: 'POST',
+    });
+
+    // delete old tokens
+    this.logout();
+
+    // if refresh token correct, redirect page
+    if (response.status === 200) {
+      // store new user details in local storage to keep user logged in
       localStorage.setItem('currentUser', JSON.stringify(response.data));
       // navigate to return url from route parameters or default to '/'
       this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';

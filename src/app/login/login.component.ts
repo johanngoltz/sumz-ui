@@ -12,6 +12,7 @@ import { AlertService } from '../_services/alert.service';
 export class LoginComponent implements OnInit {
   loginFormGroup: FormGroup;
   loading = false;
+  hide = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -38,7 +39,7 @@ export class LoginComponent implements OnInit {
     // reset login status
     this.authenticationService.logout();
 
-    this.authenticationService.login(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString(), 'password')
+    this.authenticationService.login(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString())
       .catch(
         error => {
           this.alertService.error(error);

@@ -2,11 +2,7 @@
 export interface UserAPI {
     '/oauth/token': {
         POST: {
-            body: {
-                email: string, 
-                password: string, 
-                grant_type: string
-            },
+            body: { },
             respose: {
                 access_token: string,
                 refresh_token: string;
