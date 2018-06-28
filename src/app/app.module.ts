@@ -19,7 +19,8 @@ import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { RegistrationSuccessComponent } from './registration-success/registration-success.component';
-import { AlertComponent } from './alert/alert.component';
+import { ResetPasswordComponent } from './resetpassword/resetpassword.component';
+
 
 
 @NgModule({
@@ -36,7 +37,7 @@ import { AlertComponent } from './alert/alert.component';
     LoginComponent,
     RegistrationComponent,
     RegistrationSuccessComponent,
-    AlertComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +51,6 @@ import { AlertComponent } from './alert/alert.component';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [SelectProjectComponent, DeleteDialogComponent, AlertComponent],
+  entryComponents: [SelectProjectComponent, DeleteDialogComponent],
 })
 export class AppModule { }

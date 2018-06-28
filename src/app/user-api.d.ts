@@ -22,4 +22,13 @@ export interface UserAPI {
             },
         }
     },
+    '/users/id': {
+        PUT: {
+            body: {
+                passwordold: string,
+                passwordnew: string,
+                passwordnew2: string
+            },
+        }
+    },
 }

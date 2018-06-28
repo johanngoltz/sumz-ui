@@ -166,3 +166,24 @@ Sandbox.define('/users', 'POST', function (req, res) {
   );
 
 })
+
+// Resetpassword
+Sandbox.define('/users/{id}', 'PUT', function (req, res) {
+  // Check the request, make sure it is a compatible type
+  if (!req.is('application/json')) {
+    return res.send(400, 'Invalid content type, expected application/json');
+  }
+
+  // Set the type of response, sets the content type.
+  res.type('application/json');
+
+  // Set the status code of the response.
+  res.status(200); 
+
+  res.json(
+    {
+      
+    }
+  );
+
+})
