@@ -1,23 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import axios, { TypedAxiosInstance } from 'restyped-axios';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { UserAPI } from '../user-api';
+import { SumzAPI } from '../api/api';
+import { HttpClient } from './http-client';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
-  private api: TypedAxiosInstance<UserAPI>; // uses the definition from user-api
   private returnUrl: string;
 
-  constructor(private router: Router, private route: ActivatedRoute) {
-    this.api = axios.create({ baseURL: 'http://localhost:8080' });
-  }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    @Inject(HttpClient) private _apiClient: TypedAxiosInstance<SumzAPI>,
+  ) { }
 
   // signin (is called in login.component)
   async login(email: string, password: string ) {
-    const response = await this.api.request({
+    const response = await this._apiClient.request({
       url: '/oauth/token',
       params: {email, password, 'grant_type' : 'password'},
       method: 'POST',
@@ -34,7 +37,7 @@ export class AuthenticationService {
 
   // get refresh token
   async refresh() {
-    const response = await this.api.request({
+    const response = await this._apiClient.request({
       url: '/oauth/token',
       params: {
         'refresh_token' : JSON.parse(localStorage.getItem('currentUser')).refresh_token,
@@ -57,7 +60,7 @@ export class AuthenticationService {
 
   // registration (is called in registration.component)
   async registration(email: string, password: string) {
-    const response = await this.api.request({
+    const response = await this._apiClient.request({
       url: '/users',
       data: {email, password},
       method: 'POST',
@@ -73,7 +76,7 @@ export class AuthenticationService {
 
     // reset the password (is called in resetpassword.component)
     async resetpassword(passwordold: string, passwordnew: string, passwordnew2: string) {
-      const response = await this.api.request({
+      const response = await this._apiClient.request({
         url: '/users/id',
         data: {passwordold, passwordnew, passwordnew2},
         method: 'PUT',
