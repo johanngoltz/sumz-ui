@@ -1,5 +1,4 @@
 scenario = require('./scenario');
-console.log(scenario.routes);
 
 function setDefaultHeaders(forHandler, req, res) {
   res.type('application/json');

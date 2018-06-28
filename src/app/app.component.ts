@@ -1,7 +1,7 @@
+import { animate, group, query, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { trigger, transition, query, style, animate, keyframes, group } from '@angular/animations';
 
 @Component({
   selector: 'app-root',
@@ -60,7 +60,7 @@ import { trigger, transition, query, style, animate, keyframes, group } from '@a
 })
 export class AppComponent {
   log: NavigationEnd[];
-  title = 'app';
+  title = 'SUMZ';
 
   constructor(router: Router) {
     this.log = [];

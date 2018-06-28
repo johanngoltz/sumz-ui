@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 
-import { PasswordValidation } from 'src/app/registration/registration.passwordvalidation';
-import { first } from 'rxjs/operators';
+import { PasswordValidation } from '../registration/registration.passwordvalidation';
 import { AuthenticationService } from '../_services/authentication.service';
 
 @Component({
@@ -11,14 +10,14 @@ import { AuthenticationService } from '../_services/authentication.service';
     styleUrls: ['./resetpassword.component.css'],
   })
   export class ResetPasswordComponent implements OnInit {
-    
+
   [x: string]: any;
     resetFormGroup: FormGroup;
     hide_pw1 = true;
     hide_pw2 = true;
-  
-    constructor(private _formBuilder: FormBuilder, private authenticationService: AuthenticationService) { 
-      
+
+    constructor(private _formBuilder: FormBuilder, private authenticationService: AuthenticationService) {
+
     }
 
     ngOnInit() {
@@ -43,12 +42,10 @@ import { AuthenticationService } from '../_services/authentication.service';
 
       this.authenticationService.resetpassword(this.pwdOld.value.toString(), this.pwdNew.value.toString(), this.pwdNew2.value.toString());
     }
-  
 
     get pwdOld() { return this.resetFormGroup.get('pwdOld'); }
 
     get pwdNew() { return this.resetFormGroup.get('pwdNew'); }
 
     get pwdNew2() { return this.resetFormGroup.get('pwdNew2'); }
-
 }

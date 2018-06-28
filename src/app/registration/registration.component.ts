@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 
-import { PasswordValidation } from 'src/app/registration/registration.passwordvalidation';
+import { PasswordValidation } from '../registration/registration.passwordvalidation';
 import { first } from 'rxjs/operators';
 import { AuthenticationService } from '../_services/authentication.service';
 
@@ -12,14 +12,14 @@ import { AuthenticationService } from '../_services/authentication.service';
     styleUrls: ['./registration.component.css'],
   })
   export class RegistrationComponent implements OnInit {
-    
+
   [x: string]: any;
     registerFormGroup: FormGroup;
     hide_pw1 = true;
     hide_pw2 = true;
-  
-    constructor(private _formBuilder: FormBuilder, private authenticationService: AuthenticationService) { 
-      
+
+    constructor(private _formBuilder: FormBuilder, private authenticationService: AuthenticationService) {
+
     }
 
     ngOnInit() {
@@ -43,9 +43,9 @@ import { AuthenticationService } from '../_services/authentication.service';
       }
 
       this.authenticationService.registration(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString());
-      console.log("fdsadgds");
+      console.log('fdsadgds');
     }
-  
+
     get mailCtrl() { return this.registerFormGroup.get('mailCtrl'); }
 
     get pwdCtrl() { return this.registerFormGroup.get('pwdCtrl'); }

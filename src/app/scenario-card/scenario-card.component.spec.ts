@@ -1,27 +1,29 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ProjectCardComponent } from './project-card.component';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { Scenario } from '../api/scenario';
 import { MaterialModule } from '../material.module';
-import { Project } from '../project';
+import { ScenarioCardComponent, Wrapper } from './scenario-card.component';
 
-describe('ProjectCardComponent', () => {
-  let component: ProjectCardComponent;
-  let fixture: ComponentFixture<ProjectCardComponent>;
+describe('ScenarioCardComponent', () => {
+  let component: ScenarioCardComponent;
+  let fixture: ComponentFixture<ScenarioCardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProjectCardComponent],
+      declarations: [ScenarioCardComponent],
       imports: [MaterialModule],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProjectCardComponent);
+    fixture = TestBed.createComponent(ScenarioCardComponent);
     component = fixture.componentInstance;
-    component.project = {
+    component.scenario = new Wrapper<Scenario>({
       id: 3,
-      name: 'Testproject',
+      name: 'Testscenario',
       description: 'Testdesc',
+      // FIXME
+      /*
       algorithm: 'fcf',
       deterministic: true,
       baseYear: 2014,
@@ -38,8 +40,8 @@ describe('ProjectCardComponent', () => {
           fcf: 350,
           externalCapital: 400,
         },
-      ],
-    };
+      ],*/
+    } as Scenario);
     fixture.detectChanges();
   });
 
