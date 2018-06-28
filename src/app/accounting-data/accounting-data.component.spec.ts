@@ -1,20 +1,23 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FinancialDataComponent } from './accounting-data.component';
+import { AccountingDataComponent } from './accounting-data.component';
+import { MaterialModule } from '../material.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
-describe('FinancialDataComponent', () => {
-  let component: FinancialDataComponent;
-  let fixture: ComponentFixture<FinancialDataComponent>;
+describe('AccountingDataComponent', () => {
+  let component: AccountingDataComponent;
+  let fixture: ComponentFixture<AccountingDataComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [FinancialDataComponent],
+      declarations: [AccountingDataComponent],
+      imports: [MaterialModule, ReactiveFormsModule],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FinancialDataComponent);
+    fixture = TestBed.createComponent(AccountingDataComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

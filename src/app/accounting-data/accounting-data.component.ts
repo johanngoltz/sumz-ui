@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
+import { debounceTime, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-accounting-data',
@@ -15,6 +16,8 @@ export class AccountingDataComponent implements OnInit {
   paramData: Object;
   prevYear: number;
   keys = Object.keys;
+  startYear: number;
+  endYear: number;
 
   constructor(private formBuilder: FormBuilder) {
     this.paramData = {
@@ -34,6 +37,8 @@ export class AccountingDataComponent implements OnInit {
 
   ngOnInit() {
     this.prevYear = new Date().getFullYear() - 1;
+    this.startYear = this.prevYear - 1;
+    this.endYear = this.prevYear + 1;
     this.formGroup = this.formBuilder.group({
       startYear: [this.prevYear - 1, Validators.required],
       endYear: [this.prevYear + 1, Validators.required],
@@ -47,6 +52,14 @@ export class AccountingDataComponent implements OnInit {
       }));
     });
     this.formGroupOutput.emit(this.formGroup);
+    this.formGroup.controls.startYear.valueChanges.pipe(debounceTime(500)).subscribe(val => {
+      this.startYear = val;
+      this.updateTable();
+    });
+    this.formGroup.controls.endYear.valueChanges.pipe(debounceTime(500)).subscribe(val => {
+      this.endYear = val;
+      this.updateTable();
+    });
     this.updateTable();
     /*new MutationObserver(
       // besser und logischer wäre scrollLeftMax, aber das scheint es nur in Firefox zu geben.
@@ -59,7 +72,7 @@ export class AccountingDataComponent implements OnInit {
 
   createFinancialData(year: number, quarter: number, index?: number) {
     Object.keys(this.paramData).forEach((param) => {
-      const array = <FormArray> (<FormGroup> this.formGroup.controls[param]).controls.timeSeries;
+      const array = <FormArray>(<FormGroup>this.formGroup.controls[param]).controls.timeSeries;
       const group = this.formBuilder.group({
         year: year,
         quarter: quarter,
@@ -73,45 +86,52 @@ export class AccountingDataComponent implements OnInit {
     });
   }
 
-  /*getInsertIndex(year: number, quarter: number) {
-    const years = this.timeSeries.value.map(o => {
-      return { year: o.year, quarter: o.quarter };
+  removeFinancialData(index: number) {
+    Object.keys(this.paramData).forEach((param) => {
+      const array = <FormArray>(<FormGroup>this.formGroup.controls[param]).controls.timeSeries;
+      array.removeAt(index);
     });
-    if (years.length === 0) {
-      return 0;
-    }
-    let i = 0;
-    for (; i < years.length; i++) {
-      if ((years[i].year === year && years[i].quarter > quarter) || years[i].year > year) {
-        return i;
-      }
-    }
-    return i + 1;
-  }*/
+  }
 
   trackByYearQuarter(i: number, o) {
     return o.year + ';' + o.quarter;
   }
 
   updateTable() {
-    const startYear = this.formGroup.value.startYear;
-    const endYear = this.formGroup.value.endYear;
-    const years = (<FormGroup> this.formGroup.controls.externalCapital).controls.timeSeries.value.map(o => {
+    const startYear = this.startYear;
+    const endYear = this.endYear;
+    const years = (<FormGroup>this.formGroup.controls.externalCapital).controls.timeSeries.value.map(o => {
       return { year: o.year, quarter: o.quarter };
     });
     let q = 1;
     let j = 0;
     for (let i = startYear; i <= endYear;) {
-      let found = false;
-      for (; j < years.length; j++) {
-        if ((years[j].year === i && years[j].quarter > q) || years[j].year > i) {
-          this.createFinancialData(i, q, j);
-          found = true;
-          break;
+      if (years.length === 0) {
+        this.createFinancialData(i, q, j);
+        j++;
+      } else {
+        let found = false;
+        for (; j < years.length; j++) {
+          if (years[j].year === i && years[j].quarter === q) {
+            j++;
+            found = true;
+            break;
+          } else if ((years[j].year === i && years[j].quarter > q) || years[j].year > i) {
+            this.createFinancialData(i, q, j);
+            years.splice(j, 0, {year: i, quarter: q});
+            j++;
+            found = true;
+            break;
+          } else {
+            this.removeFinancialData(j);
+            years.splice(j, 1);
+            j--;
+          }
         }
-      }
-      if (!found) {
-        this.createFinancialData(i, q);
+        if (!found) {
+          this.createFinancialData(i, q, j);
+          j++;
+        }
       }
       if (q === 4) {
         i++;
