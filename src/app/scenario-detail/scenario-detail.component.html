@@ -1,6 +1,6 @@
 <div class="content-container">
   <!-- panels for different parts of Scenario-->
-  <mat-accordion multi="false" class="example-headers-align">
+  <mat-accordion multi="false" class="headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -16,20 +16,40 @@
           <tr class="mat-header-row">
             <th class="mat-header-cell">Name</th>
             <th class="mat-header-cell">Beschreibung</th>
-            <th class="mat-header-cell">Basisjahr</th>
             <th class="mat-header-cell">Perioden</th>
           </tr>
         </thead>
         <tbody>
           <tr class="mat-row">
-            <td class="mat-cell">{{(forScenario$ | async)?.name}}</td>
-            <td class="mat-cell">{{(forScenario$ | async)?.description}}</td>
-            <td class="mat-cell">{{(forScenario$ | async)?.periods}}</td>
+            <td class="mat-cell">
+              <mat-form-field floatLabel="never">
+                <input matInput placeholder="Name" [formControl]="nameFormControl" [value]="(forScenario$ | async)?.name" (ngModel)="forScenario$.name" [errorStateMatcher]="nameMatcher"/> 
+                <mat-error *ngIf="nameFormControl.hasError('required')">
+                    Name wird <strong>benötigt</strong>
+                </mat-error>
+              </mat-form-field>
+              </td>
+
+            <td class="mat-cell">              
+              <mat-form-field>
+                <input matInput placeholder="Beschreibung" [value]="(forScenario$ | async)?.description" (ngModel)="forScenario$.description"/> 
+              </mat-form-field>
+            </td>
+
+            <td class="mat-cell">
+                <mat-form-field floatLabel="never">
+                    <input matInput placeholder="Periode" [formControl]="nameFormControl" [value]="(forScenario$ | async)?.periods" (ngModel)="forScenario$.periods" [errorStateMatcher]="periodsMatcher"/> 
+                    <mat-error *ngIf="periodsFormControl.hasError('required')">
+                        Periode wird <strong>benötigt</strong>
+                    </mat-error>
+                  </mat-form-field>
+            </td>
           </tr>
         </tbody>
       </table>
 
       <mat-action-row>
+        <button mat-button color="" (click)="save()">Speichern</button>
         <button mat-button color="primary" (click)="nextStep()">Weiter</button>
       </mat-action-row>
     </mat-expansion-panel>
@@ -46,8 +66,8 @@
       </mat-expansion-panel-header>
       TODO: Cashflowberechnungstabelle implementieren
       <mat-action-row>
-        <button mat-button color="warn" (click)="prevStep()">Previous</button>
-        <button mat-button color="primary" (click)="nextStep()">Next</button>
+        <button mat-button color="warn" (click)="prevStep()">Zurück</button>
+        <button mat-button color="primary" (click)="nextStep()">Weiter</button>
       </mat-action-row>
     </mat-expansion-panel>
 
@@ -58,16 +78,96 @@
           Auswertung
         </mat-panel-title>
         <mat-panel-description>
-          Vergleich der Szenarien
+          Alle Ergebnisse
           <mat-icon>bar_chart</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <canvas baseChart width="200" height="100"></canvas>
+      <div class="selection">
+        <mat-checkbox class="margin" [(ngModel)]="showCvd">CVD</mat-checkbox>
+        <mat-checkbox class="margin" [(ngModel)]="showApv">APV</mat-checkbox>
+        <mat-checkbox class="margin" [(ngModel)]="showFcf">FCF</mat-checkbox>
+        <mat-checkbox class="margin" [(ngModel)]="showFte">FTE</mat-checkbox>
+      </div>
+
+      <div class="flex-container">
+        <div [hidden]="!showCvd"  class="flex-item">
+          <mat-divider></mat-divider>
+          <h1>Unternehmenswertverteilung</h1>
+          <ngx-charts-bar-vertical  [scheme]="colorScheme" [results]="data" [gradient]="gradient" [xAxis]="showXAxis"
+            [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+            [yAxisLabel]="yAxisLabel" [barPadding]="barPadding" (select)="onSelect($event)">
+          </ngx-charts-bar-vertical>
+        </div>
+
+        <div [hidden]="!showApv"  class="flex-item">
+          <mat-divider></mat-divider>
+          <h1>Ergebnis APV</h1>
+          <table class="mat-table">
+            <thead>
+              <tr class="mat-header-row">
+                <th class="mat-header-cell">Unternehmenswert</th>
+                <th class="mat-header-cell">Bilanzsumme</th>
+                <th class="mat-header-cell">Verbindlichkeiten</th>
+                <th class="mat-header-cell">TaxShield</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="mat-row">
+                <!--<td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult.companyValue}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult.marketValueTotalAssets}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult.totalLiabilities}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult.taxShield}}</td>-->
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+        <div [hidden]="!showFcf"  class="flex-item">
+          <mat-divider></mat-divider>
+          <h1>Ergebnis FCF</h1>
+          <table class="mat-table">
+            <thead>
+              <tr class="mat-header-row">
+                <th class="mat-header-cell">Unternehmenswert</th>
+                <th class="mat-header-cell">Bilanzsumme</th>
+                <th class="mat-header-cell">Verbindlichkeiten</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="mat-row">
+               <!-- <td class="mat-cell">{{(forScenario$ | async)?.FcfValuationResult.companyValue}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.FcfValuationResult.marketValueTotalAssets}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.FcfValuationResult.totalLiabilities}}</td> -->
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+        <div [hidden]="!showFte" class="flex-item">
+          <mat-divider></mat-divider>
+          <h1>Ergebnis FTE</h1>
+          <table class="mat-table">
+            <thead>
+              <tr class="mat-header-row">
+                <th class="mat-header-cell">Unternehmenswert</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="mat-row">
+                <!-- <td class="mat-cell">{{(forScenario$ | async)?.fteValuationResult.companyValue}}</td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
 
       <mat-action-row>
-        <button mat-button color="warn" (click)="prevStep()">Previous</button>
-        <button mat-button color="primary" (click)="nextStep()">End</button>
+        <button mat-button color="warn" (click)="prevStep()">Zurück</button>
+        <button mat-button color="primary" (click)="nextStep()">Ende</button>
       </mat-action-row>
     </mat-expansion-panel>
   </mat-accordion>

@@ -15,6 +15,7 @@ import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.compo
 import { ScenariosComponent } from './scenarios/scenarios.component';
 import { SelectScenarioComponent } from './select-scenario/select-scenario.component';
 import { ToDoubleDirective } from './to-double.directive';
+import { NgxChartsModule } from "@swimlane/ngx-charts";
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { ToDoubleDirective } from './to-double.directive';
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
+    NgxChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
