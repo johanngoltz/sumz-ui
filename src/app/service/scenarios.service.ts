@@ -18,7 +18,7 @@ export class ScenariosService {
     this._scenarios$ = new ReplaySubject();
     this.scenarios$ = this._scenarios$.asObservable();
 
-    this.getScenarios().subscribe(console.log);
+    this.getScenarios().subscribe();
   }
 
   getScenarios() {

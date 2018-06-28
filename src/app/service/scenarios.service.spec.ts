@@ -70,7 +70,6 @@ describe('ScenariosService', () => {
           expect(scenarios.length).toBe(3, 'should not have deleted other entries');
         },
         fail);
-    service.scenarios$.subscribe(console.log);
   }));
 
   it('should be able to modify a scenario', inject([ScenariosService], (service: ScenariosService) => {
