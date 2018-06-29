@@ -23,7 +23,7 @@
           <tr class="mat-row">
             <td class="mat-cell">
               <mat-form-field floatLabel="never">
-                <input matInput placeholder="Name" [formControl]="nameFormControl" [value]="(forScenario$ | async)?.name" (blur)="saveScenario"
+                <input matInput placeholder="Name" [formControl]="nameFormControl" [value]="(forScenario$ | async)?.name" (blur)="saveScenario()"
                   [errorStateMatcher]="nameMatcher" />
                 <mat-error *ngIf="nameFormControl.hasError('required')">
                   Name wird

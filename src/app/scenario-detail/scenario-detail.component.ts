@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, fromEvent, from, EMPTY } from 'rxjs';
-import { switchMap, withLatestFrom, tap } from 'rxjs/operators';
+import { switchMap, withLatestFrom, tap, first } from 'rxjs/operators';
 import { Scenario } from '../api/scenario';
 import { ScenariosService } from '../service/scenarios.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -111,7 +111,7 @@ export class ScenarioDetailComponent implements OnInit {
 
   saveScenario() {
     if (!this.nameFormControl.hasError('required') && !this.periodsFormControl.hasError('required')) {
-      this.forScenario$.subscribe(currentScenario => {
+      this.forScenario$.pipe(first()).subscribe(currentScenario => {
         console.log('Updating Scenario');
         // TODO: Modify Scenario
         this._scenariosService.updateScenario(currentScenario);
