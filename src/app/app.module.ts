@@ -15,6 +15,10 @@ import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.compo
 import { ScenariosComponent } from './scenarios/scenarios.component';
 import { SelectScenarioComponent } from './select-scenario/select-scenario.component';
 import { ToDoubleDirective } from './to-double.directive';
+import { environment } from '../environments/environment';
+import { ScenariosService } from './service/scenarios.service';
+import { ScenariosServiceMock } from './service/scenarios.service.mock';
+import { DEFAULT_MOCK_DATA } from './service/mockdata';
 
 @NgModule({
   declarations: [
@@ -38,7 +42,9 @@ import { ToDoubleDirective } from './to-double.directive';
     ReactiveFormsModule,
     FlexLayoutModule,
   ],
-  providers: [],
+  providers: [environment.emergencyDemo ? {
+    provide: ScenariosService, useFactory: () => new ScenariosServiceMock(DEFAULT_MOCK_DATA),
+  } : { provide: ScenariosService, useClass: ScenariosService }],
   bootstrap: [AppComponent],
   entryComponents: [SelectScenarioComponent, DeleteDialogComponent],
 })
