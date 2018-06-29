@@ -1,5 +1,9 @@
 import {AbstractControl} from '@angular/forms';
 
+/**
+ * The validation of two passwords (if they match each other) is implemented in this class.
+ * @author Burkart
+ */
 export class PasswordValidation {
 
   /**
@@ -15,9 +19,7 @@ export class PasswordValidation {
       const secondControlValue = AC.get(password2).value; // get the value of the password2 field
       if (firstControlValue !== secondControlValue) {
         AC.get(password2).setErrors({MatchFields: true});
-        console.log(false);
       } else {
-        console.log(true);
         return null;   // if the passwords match
       }
     };

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
-
 import { PasswordValidation } from '../registration/registration.passwordvalidation';
 import { AuthenticationService } from '../service/authentication.service';
 import { AlertService } from '../service/alert.service';
@@ -11,6 +10,11 @@ import { AlertService } from '../service/alert.service';
     templateUrl: './registration.component.html',
     styleUrls: ['./registration.component.css'],
   })
+
+  /**
+   * The registration of new users is implemented in this component
+   * @author Burkart
+   */
   export class RegistrationComponent implements OnInit {
 
   [x: string]: any;
@@ -26,17 +30,21 @@ import { AlertService } from '../service/alert.service';
 
     ngOnInit() {
       this.registerFormGroup = this._formBuilder.group({
+        //Validators to check the syntax of the email-adress and the length of the password
         mailCtrl: ['', Validators.email],
         pwdCtrl: ['', Validators.minLength(8)],
         pwdrptCtrl: ['', Validators.minLength(8)],
 
       },
       {
-        validator: PasswordValidation.Match('pwdCtrl', 'pwdrptCtrl'), // validates the two passwords
+        // validates the two passwords
+        validator: PasswordValidation.Match('pwdCtrl', 'pwdrptCtrl'), 
       });
     }
 
     onSubmit() {
+
+      //deactivate the registration button
      this.submitted = true;
 
       // stop here if form is invalid
@@ -45,15 +53,17 @@ import { AlertService } from '../service/alert.service';
       }
 
       this.authenticationService.registration(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString())
-      .catch(
+      .catch( // catch the error warnings if the registration fails
         error => {
           this.alertService.error(error);
           this.loading = false;
         });
 
+      //if the registration was successful inform them to check their mails and activate their account
       this.alertService.success("Die Registrierung war erfolgreich! Ein Link zur Aktivierung Ihres Profils wurde an die von Ihnen angegebene Email-Adresse versandt.");
     }
 
+    //getter for the email-adress and the two passwords to check if they match
     get mailCtrl() { return this.registerFormGroup.get('mailCtrl'); }
 
     get pwdCtrl() { return this.registerFormGroup.get('pwdCtrl'); }

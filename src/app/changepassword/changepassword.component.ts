@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
-
 import { PasswordValidation } from 'src/app/registration/registration.passwordvalidation';
-import { first } from 'rxjs/operators';
 import { AuthenticationService } from '../service/authentication.service';
 import { AlertService } from '../service/alert.service';
 
@@ -11,6 +9,11 @@ import { AlertService } from '../service/alert.service';
     templateUrl: './changepassword.component.html',
     styleUrls: ['./changepassword.component.css'],
   })
+
+  /**
+   * Changing the password of an existing user account is implemented in this class.
+   * @author Burkart
+   */
   export class ChangePasswordComponent implements OnInit {
     
   [x: string]: any;
@@ -26,17 +29,22 @@ import { AlertService } from '../service/alert.service';
 
     ngOnInit() {
       this.changeFormGroup = this._formBuilder.group({
+        
+        //Validators to check the length of the password
         pwdOld: ['', Validators.minLength(8)],
         pwdNew: ['', Validators.minLength(8)],
         pwdNew2: ['', Validators.minLength(8)],
 
       },
       {
-        validator: PasswordValidation.Match('pwdNew', 'pwdNew2'), // validates the two passwords
+        // validates the two passwords
+        validator: PasswordValidation.Match('pwdNew', 'pwdNew2'), 
       });
     }
 
     onSubmit() {
+    
+      //deactivate the registration button
      this.submitted = true;
 
       // stop here if form is invalid
@@ -56,7 +64,7 @@ import { AlertService } from '../service/alert.service';
       this.alertService.success("Ihr Passwort wurde erfolgreich geändert!");  
     }
   
-
+    //getter for the old and new passwords
     get pwdOld() { return this.changeFormGroup.get('pwdOld'); }
 
     get pwdNew() { return this.changeFormGroup.get('pwdNew'); }

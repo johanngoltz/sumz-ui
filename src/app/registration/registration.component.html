@@ -43,7 +43,7 @@
                 </p>
 
                 <br>
-                <button mat-raised-button color="accent" class="register-btn">Register</button>
+                <button mat-raised-button [disabled]="submitted" color="accent" class="register-btn">Register</button>
               </form>
               <div class="register-footer">
                 <button mat-button class="login-btn" routerLink="../login">Jetzt einloggen!</button>
