@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 
 import { PasswordValidation } from '../registration/registration.passwordvalidation';
 import { AuthenticationService } from '../service/authentication.service';
+import { AlertService } from '../service/alert.service';
 
 
 @Component({
@@ -14,12 +15,14 @@ import { AuthenticationService } from '../service/authentication.service';
 
   [x: string]: any;
     registerFormGroup: FormGroup;
+    submitted = false;
     hide_pw1 = true;
     hide_pw2 = true;
 
-    constructor(private _formBuilder: FormBuilder, private authenticationService: AuthenticationService) {
-
-    }
+    constructor(
+      private _formBuilder: FormBuilder, 
+      private authenticationService: AuthenticationService, 
+      private alertService: AlertService) {}
 
     ngOnInit() {
       this.registerFormGroup = this._formBuilder.group({
@@ -41,8 +44,14 @@ import { AuthenticationService } from '../service/authentication.service';
           return;
       }
 
-      this.authenticationService.registration(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString());
-      console.log('fdsadgds');
+      this.authenticationService.registration(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString())
+      .catch(
+        error => {
+          this.alertService.error(error);
+          this.loading = false;
+        });
+
+      this.alertService.success("Die Registrierung war erfolgreich! Ein Link zur Aktivierung Ihres Profils wurde an die von Ihnen angegebene Email-Adresse versandt.");
     }
 
     get mailCtrl() { return this.registerFormGroup.get('mailCtrl'); }

@@ -74,8 +74,8 @@ export class AuthenticationService {
     }
   }
 
-    // reset the password (is called in resetpassword.component)
-    async resetpassword(passwordold: string, passwordnew: string, passwordnew2: string) {
+    // changes the password (is called in changepassword.component)
+    async changepassword(passwordold: string, passwordnew: string, passwordnew2: string) {
       const response = await this._apiClient.request({
         url: '/users/id',
         data: {passwordold, passwordnew, passwordnew2},
