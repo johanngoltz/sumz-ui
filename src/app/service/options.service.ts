@@ -1,29 +1,40 @@
-import { Injectable, Inject } from '@angular/core';
-import { LocalConfig, LOCAL_CONFIG, AppConfig, PersistedConfig } from '../app.config';
-import { Observable, BehaviorSubject, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Observable, ReplaySubject, of } from 'rxjs';
+import { map, switchMapTo, tap } from 'rxjs/operators';
+import { RemoteConfig } from '../api/config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OptionsService {
-  public config$: Observable<AppConfig>;
-  private _config$: BehaviorSubject<AppConfig>;
-  private _configStorage: PersistedConfig;
+  public config$: Observable<RemoteConfig>;
+  private _config$: ReplaySubject<RemoteConfig>;
+  private _remoteConfig: RemoteConfig = {
+    showResult: { apv: true, cvd: true, fcf: false, fte: false },
+  };
 
-  constructor(@Inject(LOCAL_CONFIG) private _localConfig: LocalConfig) { }
+  constructor() {
+    this._config$ = new ReplaySubject();
+    this.config$ = this._config$.asObservable();
+  }
 
   getConfig() {
-    const receivedConfig: PersistedConfig = {
-      displayResults: [true, false, false],
-    };
+    // TODO: Make Backend request here
+    return of(this._remoteConfig).pipe(
+      tap(remoteConfig => this._config$.next(remoteConfig)),
+      switchMapTo(this.config$),
+    );
+  }
 
-    of(receivedConfig).pipe(
-      switchMap(persistedConfig => {
-        this._configStorage = persistedConfig;
-        this._config$.next(Object.assign(this._configStorage, this._localConfig));
-        return this.config$;
-      })
+  setConfig(modifiedConfig: RemoteConfig) {
+    // TODO: Make Backend request here
+    return of({ data: modifiedConfig }).pipe(
+      map(response => response.data),
+      tap(remoteConfig => {
+        this._remoteConfig = remoteConfig;
+        this._config$.next({ ...remoteConfig });
+      }),
+      switchMapTo(this.config$),
     );
   }
 }
