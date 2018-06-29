@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, 
 import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { debounceTime, map } from 'rxjs/operators';
 import { Scenario } from '../api/scenario';
-import { Wrapper } from '../api/wrapper';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-accounting-data',
@@ -11,34 +11,47 @@ import { Wrapper } from '../api/wrapper';
 })
 export class AccountingDataComponent implements OnInit {
   @Input() editable: Boolean;
-  @Input() @Optional() initialData?: Wrapper<Scenario>;
+  @Input() @Optional() initialData?: Observable<Scenario>;
   @Output() formGroupOutput = new EventEmitter<FormGroup>();
   formGroup: FormGroup;
   @ViewChild('scrollable') dataScrollContainer: ElementRef;
   @ViewChild('fkrow') fkRow: ElementRef;
-  paramData: Object;
+  paramData = {
+    revenue: { displayName: 'Umsatzerlöse', showOnCalculation: true },
+    additionalIncome: { displayName: 'Sonstige Erlöse', showOnCalculation: true },
+    costOfMaterial: { displayName: 'Materialkosten', showOnCalculation: true },
+    costOfStaff: { displayName: 'Personalkosten', showOnCalculation: true },
+    additionalCosts: { displayName: 'Sonstige Kosten', showOnCalculation: true },
+    investments: { displayName: 'Investitionen', showOnCalculation: true },
+    divestments: { displayName: 'Desinvestitionen', showOnCalculation: true },
+    liabilities: { displayName: 'Verbindlichkeiten', showOnCalculation: true },
+    freeCashFlows: { displayName: 'Free Cash Flow', showOnCalculation: false },
+    externalCapital: { displayName: 'Fremdkapital' },
+  };
   keys = Object.keys; // needed due to context issues in ngFor
   baseYear: number;
   startYear: number; // debounced values
   endYear: number;
 
   constructor(private formBuilder: FormBuilder) {
-    this.paramData = {
-      revenue: { displayName: 'Umsatzerlöse', showOnCalculation: true },
-      additionalIncome: { displayName: 'Sonstige Erlöse', showOnCalculation: true },
-      costOfMaterial: { displayName: 'Materialkosten', showOnCalculation: true },
-      costOfStaff: { displayName: 'Personalkosten', showOnCalculation: true },
-      additionalCosts: { displayName: 'Sonstige Kosten', showOnCalculation: true },
-      investments: { displayName: 'Investitionen', showOnCalculation: true },
-      divestments: { displayName: 'Desinvestitionen', showOnCalculation: true },
-      liabilities: { displayName: 'Verbindlichkeiten', showOnCalculation: true },
-      freeCashFlows: { displayName: 'Free Cash Flow', showOnCalculation: false },
-      externalCapital: { displayName: 'Fremdkapital' },
-    };
   }
 
   ngOnInit() {
+    this.buildForm();
     if (this.initialData) {
+      this.initialData.subscribe((scenario) => this.buildForm(scenario));
+    }
+    /*new MutationObserver(
+      // besser und logischer wäre scrollLeftMax, aber das scheint es nur in Firefox zu geben.
+      () => this.dataScrollContainer.nativeElement.scrollLeft =
+        this.dataScrollContainer.nativeElement.scrollLeft
+      ).observe(
+      this.fkRow.nativeElement,
+      { childList: true });*/
+  }
+
+  buildForm(scenario?: Scenario) {
+    if (scenario) {
       this.calculateInterval();
     } else {
       this.baseYear = new Date().getFullYear() - 1;
@@ -49,10 +62,10 @@ export class AccountingDataComponent implements OnInit {
       startYear: [this.startYear, Validators.required],
       endYear: [this.endYear, Validators.required],
       baseYear: [this.baseYear, Validators.required],
-      calculateFcf: [this.initialData ? this.initialData.valueOf().freeCashFlows.timeSeries.length > 0 : false,
+      calculateFcf: [(scenario && scenario.freeCashFlows.timeSeries.length > 0),
         Validators.required],
     });
-    this.buildParamFormGroups();
+    this.buildParamFormGroups(scenario);
     this.formGroupOutput.emit(this.formGroup);
     this.formGroup.controls.startYear.valueChanges.pipe(debounceTime(500)).subscribe(val => {
       this.startYear = val;
@@ -63,13 +76,6 @@ export class AccountingDataComponent implements OnInit {
       this.updateTable();
     });
     this.updateTable();
-    /*new MutationObserver(
-      // besser und logischer wäre scrollLeftMax, aber das scheint es nur in Firefox zu geben.
-      () => this.dataScrollContainer.nativeElement.scrollLeft =
-        this.dataScrollContainer.nativeElement.scrollLeft
-      ).observe(
-      this.fkRow.nativeElement,
-      { childList: true });*/
   }
 
   calculateInterval() {
@@ -88,15 +94,15 @@ export class AccountingDataComponent implements OnInit {
     }
   }
 
-  buildParamFormGroups() {
+  buildParamFormGroups(scenario?: Scenario) {
     Object.keys(this.paramData).forEach((param) => {
       const timeSeries = [];
-      if (this.initialData) {
-        this.initialData.valueOf()[param].timeSeries.forEach((financialData) => {
+      if (scenario) {
+        scenario[param].timeSeries.forEach((dataPoint) => {
           timeSeries.push(this.formBuilder.group({
-            year: financialData.year,
-            quarter: financialData.quarter,
-            amount: financialData.amount,
+            year: dataPoint.year,
+            quarter: dataPoint.quarter,
+            amount: [dataPoint.amount, Validators.required],
           }));
         });
       }
