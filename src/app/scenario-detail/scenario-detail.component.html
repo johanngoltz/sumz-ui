@@ -23,7 +23,7 @@
           <tr class="mat-row">
             <td class="mat-cell">
               <mat-form-field floatLabel="never">
-                <input matInput placeholder="Name" [formControl]="nameFormControl" [value]="(forScenario$ | async)?.name" (ngModel)="forScenario$.name"
+                <input matInput placeholder="Name" [formControl]="nameFormControl" [value]="(forScenario$ | async)?.name" (blur)="saveScenario($event)"
                   [errorStateMatcher]="nameMatcher" />
                 <mat-error *ngIf="nameFormControl.hasError('required')">
                   Name wird
@@ -34,14 +34,14 @@
 
             <td class="mat-cell">
               <mat-form-field>
-                <input matInput placeholder="Beschreibung" [value]="(forScenario$ | async)?.description" (ngModel)="forScenario$.description"
+                <input matInput placeholder="Beschreibung" [value]="(forScenario$ | async)?.description"
                 />
               </mat-form-field>
             </td>
 
             <td class="mat-cell">
               <mat-form-field floatLabel="never">
-                <input matInput type="number" placeholder="Periode" [formControl]="periodsFormControl" [value]="(forScenario$ | async)?.periods" (ngModel)="forScenario$.periods"
+                <input matInput type="number" placeholder="Periode" [formControl]="periodsFormControl" [value]="(forScenario$ | async)?.periods"
                   [errorStateMatcher]="periodsMatcher" />
                 <mat-error *ngIf="periodsFormControl.hasError('required')">
                   Periode wird
@@ -96,7 +96,7 @@
         <mat-checkbox class="margin" [(ngModel)]="showFcf">FCF</mat-checkbox>
         <mat-checkbox class="margin" [(ngModel)]="showFte">FTE</mat-checkbox>
       </div>
-      
+
       <!-- TODO: Tabellenheader nach links statt mittig -->
       <div class="flex-container">
         <div [hidden]="!showCvd" class="flex-item">
@@ -104,7 +104,7 @@
           <h1>Unternehmenswertverteilung</h1>
           <ngx-charts-bar-vertical [results]="data" [scheme]="colorScheme" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis"
             [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-            [yAxisLabel]="yAxisLabel" [barPadding]="barPadding" (select)="onSelect($event)">
+            [yAxisLabel]="yAxisLabel" [barPadding]="barPadding">
           </ngx-charts-bar-vertical>
         </div>
 
@@ -129,7 +129,6 @@
               </tr>
             </tbody>
           </table>
-
         </div>
 
         <div [hidden]="!showFcf" class="flex-item">
@@ -151,7 +150,6 @@
               </tr>
             </tbody>
           </table>
-
         </div>
 
         <div [hidden]="!showFte" class="flex-item">
@@ -171,7 +169,6 @@
           </table>
         </div>
       </div>
-
 
       <mat-action-row>
         <button mat-button color="warn" (click)="prevStep()">Zurück</button>

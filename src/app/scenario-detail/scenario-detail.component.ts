@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { Observable, of, fromEvent } from 'rxjs';
+import { switchMap, withLatestFrom } from 'rxjs/operators';
 import { Scenario } from '../api/scenario';
 import { ScenariosService } from '../service/scenarios.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 
-/** Error when invalid control is dirty, touched, or submitted. */
+/** Error when invalid control is dirty. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    return !!(control && control.invalid && control.dirty);
   }
 }
 
@@ -23,37 +22,37 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 
 export class ScenarioDetailComponent implements OnInit {
-  private forScenario$: Observable<Scenario>;
-
-  timeSeriesColumns = ['year', 'externalCapital', 'fcf'];
-  scenarioColumns = ['position', 'equityInterest', 'outsideCapitalInterest', 'corporateTax'];
+  forScenario$: Observable < Scenario > ;
 
   /* step holder for panels */
-  private step = 0;
+  step = 0;
 
   /* selection */
-  private showCvd;
-  private showApv;
-  private showFcf;
-  private showFte;
+  showCvd;
+  showApv;
+  showFcf;
+  showFte;
 
   /* graph */
-  private data;
-  private barPadding = 0;
-  private showXAxis = true;
-  private showYAxis = true;
-  private gradient = false;
-  private showLegend = false;
-  private showXAxisLabel = true;
-  private xAxisLabel = 'Jahr';
-  private showYAxisLabel = true;
-  private yAxisLabel = 'Unternehmenswert';
-  private colorScheme = {
+  data;
+  barPadding = 0;
+  showXAxis = true;
+  showYAxis = true;
+  gradient = false;
+  showLegend = false;
+  showXAxisLabel = true;
+  xAxisLabel = 'Jahr';
+  showYAxisLabel = true;
+  yAxisLabel = 'Unternehmenswert';
+  colorScheme = {
     domain: ['#0D9A39'],
   };
 
   /* forms */
-  /* TODO: Fehlermeldung wird angezeigt, obwohl Text da ist*/
+  /* TODO: Fehlermeldung wird angezeigt, obwohl Text da ist
+  /* Problem: Wenn FormControl genutzt wird, muss der Wert auch über FormControl gesetzt werden
+  /* an sonsten ist validator.required true beim ersten klicken
+  */
   nameFormControl = new FormControl('', [Validators.required]);
   nameMatcher = new MyErrorStateMatcher();
 
@@ -62,12 +61,11 @@ export class ScenarioDetailComponent implements OnInit {
 
 
   constructor(private _scenariosService: ScenariosService,
-    private route: ActivatedRoute) {
-  }
+    private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.forScenario$ = this.route.paramMap.pipe(
-      switchMap(params => of(Number.parseFloat(params.get('id')))),
+      switchMap(params => of (Number.parseFloat(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
 
     this.showCvd = true;
@@ -75,8 +73,7 @@ export class ScenarioDetailComponent implements OnInit {
     this.showFcf = true;
     this.showFte = true;
 
-    this.data = [
-      {
+    this.data = [{
         'name': '2018',
         'value': 100,
       },
@@ -112,4 +109,13 @@ export class ScenarioDetailComponent implements OnInit {
     this.step--;
   }
 
+  saveScenario(event) {
+    if (!this.nameFormControl.hasError('required') && !this.periodsFormControl.hasError('required')) {
+      console.log(event);
+      fromEvent(event, 'blur').pipe(withLatestFrom(this.forScenario$)).subscribe();
+    } else {
+      console.log('Name ' , this.nameFormControl.hasError('required'));
+      console.log('periods ' , this.periodsFormControl.hasError('required'));
+    }
+  }
 }
