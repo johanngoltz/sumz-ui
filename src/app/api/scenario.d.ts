@@ -24,11 +24,11 @@ export class Scenario {
 
 export class AccountingFigure {
     isHistoric: Boolean;
-    timeSeries: {
+    timeSeries: [{
         year: Date;
         quarter: 1 | 2 | 3 | 4;
         amount: number;
-    }[]
+    }]
 }
 
 export class DistributedCompanyValue {
