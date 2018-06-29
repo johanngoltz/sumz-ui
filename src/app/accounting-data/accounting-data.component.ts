@@ -32,7 +32,6 @@ export class AccountingDataComponent implements OnInit {
       investments: { displayName: 'Investitionen', showOnCalculation: true },
       divestments: { displayName: 'Desinvestitionen', showOnCalculation: true },
       liabilities: { displayName: 'Verbindlichkeiten', showOnCalculation: true },
-      interestOnLiabilities: { displayName: 'Zinsen auf Verbindlichkeiten', showOnCalculation: true },
       freeCashFlows: { displayName: 'Free Cash Flow', showOnCalculation: false },
       externalCapital: { displayName: 'Fremdkapital' },
     };
