@@ -31,4 +31,13 @@ export interface UserAPI {
             },
         }
     },
+    'TODO nachdem die definiert haben': {
+        PUT: {
+            body: {
+                passwordnew: string,
+                passwordnew2: string
+            },
+        }
+    },
+
 }

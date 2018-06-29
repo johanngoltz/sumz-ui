@@ -83,8 +83,19 @@ export class AuthenticationService {
       });
       // if credentials correct, redirect to main page
       if (response.status === 200) {  // should be 302
-        console.log('Reset klappt');
-        // redirect to "successful registration"
+        this.router.navigate(['/users']);
+      }
+    }
+
+    // changes the password (is called in changepassword.component)
+    async newpassword(passwordnew: string, passwordnew2: string) {
+      const response = await this._apiClient.request({
+        url: 'TODO nachdem die definiert haben',
+        data: {passwordnew, passwordnew2},
+        method: 'PUT',
+      });
+      // if credentials correct, redirect to main page
+      if (response.status === 200) {  
         this.router.navigate(['/users']);
       }
     }

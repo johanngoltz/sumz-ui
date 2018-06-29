@@ -13,8 +13,8 @@ import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { ChangePasswordComponent } from './changepassword/changepassword.component';
+import { NewPasswordComponent } from './newpassword/newpassword.component';
 import { AlertComponent } from './alert/alert.component';
-
 import { ScenarioCardComponent } from './scenario-card/scenario-card.component';
 import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.component';
 import { ScenariosComponent } from './scenarios/scenarios.component';
@@ -34,6 +34,7 @@ import { ToDoubleDirective } from './to-double.directive';
     LoginComponent,
     RegistrationComponent,
     ChangePasswordComponent,
+    NewPasswordComponent,
     AlertComponent,
   ],
   imports: [

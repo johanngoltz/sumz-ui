@@ -32,6 +32,14 @@ export interface SumzAPI {
             },
         }
     },
+    'TODO nachdem die definiert haben': {
+        PUT: {
+            body: {
+                passwordnew: string,
+                passwordnew2: string
+            },
+        }
+    },
     '/scenario': {
         GET: { response: Scenario[] },
         POST: { body: Scenario, response: Scenario }
