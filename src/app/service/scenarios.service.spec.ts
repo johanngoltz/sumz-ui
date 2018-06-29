@@ -15,9 +15,9 @@ describe('ScenariosService', () => {
       providers: [ScenariosService, {
         provide: ScenarioClient,
         useFactory: () => {
-          const axiosInstance = axios.create<ScenarioAPI>({ baseURL: 'http://localhost:8080' });
+          const axiosInstance = axios.create<ScenarioAPI>();
           const data = [{ id: 2500 }, { id: 2501 }, { id: 2502 }, { id: 2510 }] as Scenario[];
-          new MockAdapter(axios)
+          new MockAdapter(axiosInstance)
             .onGet('/scenario').reply(config => {
               return [200, [...data]];
             })
