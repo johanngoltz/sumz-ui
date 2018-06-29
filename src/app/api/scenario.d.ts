@@ -6,6 +6,7 @@ export class Scenario {
     equityInterest: number;
     outsideCapitalInterest: number;
     corporateTax: number;
+    stochastic?: Boolean;
     additionalIncome: AccountingFigure;
     additionalCosts: AccountingFigure;
     investments: AccountingFigure;
@@ -14,7 +15,6 @@ export class Scenario {
     costOfMaterial: AccountingFigure;
     costOfStaff: AccountingFigure;
     liabilities: AccountingFigure;
-    interestOnLiabilities: AccountingFigure;
     freeCashFlows: AccountingFigure;
     companyValueDistribution: DistributedCompanyValue[];
     fteValuationResult: { companyValue: number; };
@@ -32,13 +32,18 @@ export class AccountingFigure {
 }
 
 export class DistributedCompanyValue {
-
+    num: number;
+    rangeMin: number;
+    rangeMax: number;
+    height: number;
 }
 
 export class FcfValuationResult {
-
+    companyValue: number;
+    marketValueTotalAssets: number;
+    totalLiabilities: number;
 }
 
-export class ApvValuationResult {
-
+export class ApvValuationResult extends FcfValuationResult {
+    taxShield: number;
 }

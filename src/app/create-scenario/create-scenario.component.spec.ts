@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { MaterialModule } from '../material.module';
 import { CreateScenarioComponent } from './create-scenario.component';
 import { AccountingDataComponent } from '../accounting-data/accounting-data.component';
+import { ScenariosService } from '../service/scenarios.service';
 
 
 describe('CreateScenarioComponent', () => {
@@ -17,6 +18,7 @@ describe('CreateScenarioComponent', () => {
       imports: [MaterialModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule],
       providers: [
         { provide: Router, useValue: { navigate() { return true; } } },
+        { provide: ScenariosService, useValue: undefined },
       ],
     })
       .compileComponents();

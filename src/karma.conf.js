@@ -9,6 +9,7 @@ module.exports = function (config) {
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
+      require('karma-firefox-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
       require('@angular-devkit/build-angular/plugins/karma')
@@ -22,10 +23,22 @@ module.exports = function (config) {
       fixWebpackSourcePaths: true
     },
     customLaunchers: {
-      chrome_debug: {
+      ChromeDebug: {
         base: 'Chrome',
         flags: ['--remote-debugging-port=9222'],
         debug: true
+      },
+      FirefoxHeadless: {
+        base: 'Firefox',
+        flags: ['-headless'],
+      },
+      FirefoxDevHeadless: {
+        base: 'FirefoxDeveloper',
+        flags: ['-headless'],
+      },
+      ChromeHeadAndSandboxless: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox'],
       }
     },
     reporters: ['progress', 'kjhtml'],
@@ -33,7 +46,7 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome'],
+    browsers: ['ChromeHeadAndSandboxless'],
     singleRun: true
   });
 };
