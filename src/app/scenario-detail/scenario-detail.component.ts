@@ -3,7 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, of, fromEvent, from, EMPTY } from 'rxjs';
 import { switchMap, withLatestFrom, tap, first } from 'rxjs/operators';
 import { Scenario } from '../api/scenario';
+import { RemoteConfig } from '../api/config';
 import { ScenariosService } from '../service/scenarios.service';
+import { OptionsService } from '../service/options.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -23,6 +25,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 
 export class ScenarioDetailComponent implements OnInit {
   forScenario$: Observable<Scenario>;
+  forConfig$: Observable<RemoteConfig>;
 
   /* step holder for panels */
   step = 0;
@@ -57,13 +60,14 @@ export class ScenarioDetailComponent implements OnInit {
   periodsFormControl = new FormControl('', [Validators.required]);
   periodsMatcher = new MyErrorStateMatcher();
 
-  constructor(private _scenariosService: ScenariosService,
+  constructor(private _scenariosService: ScenariosService, private _optionsService: OptionsService,
     private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.forScenario$ = this.route.paramMap.pipe(
       switchMap(params => of(Number.parseFloat(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
+    this.forConfig$ = this._optionsService.getConfig();
 
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
       this.nameFormControl.setValue(currentScenario.name);
@@ -71,10 +75,12 @@ export class ScenarioDetailComponent implements OnInit {
       this.periodsFormControl.setValue(currentScenario.periods);
     });
 
-    this.showCvd = true;
-    this.showApv = true;
-    this.showFcf = true;
-    this.showFte = true;
+    this.forConfig$.pipe(first()).subscribe(config => {
+      this.showCvd = config.showResult.cvd;
+      this.showApv = config.showResult.apv;
+      this.showFcf = config.showResult.fcf;
+      this.showFte = config.showResult.fte;
+    });
 
     this.data = [{
       'name': '2018',
