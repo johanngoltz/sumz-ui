@@ -49,16 +49,13 @@ export class ScenarioDetailComponent implements OnInit {
   };
 
   /* forms */
-  /* TODO: Fehlermeldung wird angezeigt, obwohl Text da ist
-  /* Problem: Wenn FormControl genutzt wird, muss der Wert auch über FormControl gesetzt werden
-  /* an sonsten ist validator.required true beim ersten klicken
-  */
   nameFormControl = new FormControl('', [Validators.required]);
   nameMatcher = new MyErrorStateMatcher();
 
+  descriptionFormControl = new FormControl('', []);
+
   periodsFormControl = new FormControl('', [Validators.required]);
   periodsMatcher = new MyErrorStateMatcher();
-
 
   constructor(private _scenariosService: ScenariosService,
     private route: ActivatedRoute) { }
@@ -67,6 +64,12 @@ export class ScenarioDetailComponent implements OnInit {
     this.forScenario$ = this.route.paramMap.pipe(
       switchMap(params => of(Number.parseFloat(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
+
+    this.forScenario$.pipe(first()).subscribe(currentScenario => {
+      this.nameFormControl.setValue(currentScenario.name);
+      this.descriptionFormControl.setValue(currentScenario.description);
+      this.periodsFormControl.setValue(currentScenario.periods);
+    });
 
     this.showCvd = true;
     this.showApv = true;
@@ -112,8 +115,11 @@ export class ScenarioDetailComponent implements OnInit {
   saveScenario() {
     if (!this.nameFormControl.hasError('required') && !this.periodsFormControl.hasError('required')) {
       this.forScenario$.pipe(first()).subscribe(currentScenario => {
-        console.log('Updating Scenario');
-        // TODO: Modify Scenario
+
+        currentScenario.name = this.nameFormControl.value;
+        currentScenario.description = this.descriptionFormControl.value;
+        currentScenario.periods = this.periodsFormControl.value;
+
         this._scenariosService.updateScenario(currentScenario);
       });
     } else {

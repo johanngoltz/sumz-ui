@@ -23,8 +23,8 @@
           <tr class="mat-row">
             <td class="mat-cell">
               <mat-form-field floatLabel="never">
-                <input matInput placeholder="Name" [formControl]="nameFormControl" [value]="(forScenario$ | async)?.name" (blur)="saveScenario()"
-                  [errorStateMatcher]="nameMatcher" />
+                <input matInput placeholder="Name" [formControl]="nameFormControl" (blur)="saveScenario()" [errorStateMatcher]="nameMatcher"
+                />
                 <mat-error *ngIf="nameFormControl.hasError('required')">
                   Name wird
                   <strong>benötigt</strong>
@@ -34,15 +34,14 @@
 
             <td class="mat-cell">
               <mat-form-field>
-                <input matInput placeholder="Beschreibung" [value]="(forScenario$ | async)?.description"
-                />
+                <input matInput placeholder="Beschreibung" [formControl]="descriptionFormControl" (blur)="saveScenario()" />
               </mat-form-field>
             </td>
 
             <td class="mat-cell">
               <mat-form-field floatLabel="never">
-                <input matInput type="number" placeholder="Periode" [formControl]="periodsFormControl" [value]="(forScenario$ | async)?.periods"
-                  [errorStateMatcher]="periodsMatcher" />
+                <input matInput type="number" placeholder="Periode" [formControl]="periodsFormControl" (blur)="saveScenario()" [errorStateMatcher]="periodsMatcher"
+                />
                 <mat-error *ngIf="periodsFormControl.hasError('required')">
                   Periode wird
                   <strong>benötigt</strong>
@@ -54,7 +53,6 @@
       </table>
 
       <mat-action-row>
-        <button mat-button color="secondary" color="" (click)="saveScenario()">Speichern</button>
         <button mat-button color="primary" (click)="nextStep()">Weiter</button>
       </mat-action-row>
     </mat-expansion-panel>
@@ -72,7 +70,6 @@
       TODO: Cashflowberechnungstabelle implementieren
 
       <mat-action-row>
-        <button mat-button color="secondary" color="" (click)="saveScenario()">Speichern</button>
         <button mat-button color="warn" (click)="prevStep()">Zurück</button>
         <button mat-button color="primary" (click)="nextStep()">Weiter</button>
       </mat-action-row>
