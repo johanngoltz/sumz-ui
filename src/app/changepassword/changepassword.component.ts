@@ -44,12 +44,16 @@ import { AlertService } from '../service/alert.service';
           return;
       }
 
+      //call the method to change the password
       this.authenticationService.changepassword(this.pwdOld.value.toString(), this.pwdNew.value.toString(), this.pwdNew2.value.toString())
-      .catch(
+      .catch( //catch the error-warnings if the method fails
         error => {
           this.alertService.error(error);
           this.loading = false;
         });
+
+      //if the change was successful
+      this.alertService.success("Ihr Passwort wurde erfolgreich geändert!");  
     }
   
 
