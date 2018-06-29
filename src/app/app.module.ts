@@ -16,7 +16,6 @@ import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.compo
 import { ScenariosComponent } from './scenarios/scenarios.component';
 import { SelectScenarioComponent } from './select-scenario/select-scenario.component';
 import { ToDoubleDirective } from './to-double.directive';
-import { LOCAL_CONFIG, DEV_LOCAL_CONFIG } from './app.config';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
@@ -42,7 +41,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     FlexLayoutModule,
     NgxChartsModule,
   ],
-  providers: [{ provide: LOCAL_CONFIG, useValue: DEV_LOCAL_CONFIG }],
   bootstrap: [AppComponent],
   entryComponents: [SelectScenarioComponent, DeleteDialogComponent],
 })
