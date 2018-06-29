@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Scenario } from '../api/scenario';
 import { MaterialModule } from '../material.module';
 import { ScenarioCardComponent, Wrapper } from './scenario-card.component';
+import { ScenariosService } from '../service/scenarios.service';
 
 describe('ScenarioCardComponent', () => {
   let component: ScenarioCardComponent;
@@ -11,8 +12,9 @@ describe('ScenarioCardComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ScenarioCardComponent],
       imports: [MaterialModule],
+      providers: [{ provide: ScenariosService, useValue: undefined }]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

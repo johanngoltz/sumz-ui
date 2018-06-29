@@ -84,11 +84,4 @@ export class ScenariosService {
       }),
     );
   }
-
-  private ensureStatus(allowStatus: number) {
-    return (response: { status: number }) =>
-      response.status === allowStatus ?
-        of(response) :
-        throwError(response);
-  }
 }
