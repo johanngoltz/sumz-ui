@@ -1,9 +1,11 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
-import { of } from 'rxjs';
+import { of, EMPTY, NEVER } from 'rxjs';
 import { MaterialModule } from '../material.module';
 import { ScenarioDetailComponent } from './scenario-detail.component';
+import { ScenariosService } from '../service/scenarios.service';
+import { Scenario } from '../api/scenario';
 
 
 describe('ScenarioDetailComponent', () => {
@@ -19,6 +21,11 @@ describe('ScenarioDetailComponent', () => {
         useValue: {
           paramMap: of(convertToParamMap({ 'id': 1 })),
         } as ActivatedRoute,
+      }, {
+        provide: ScenariosService, useValue: {
+          scenarios$: of([{ id: 1, name: 'Eins', description: 'Das erste Szenario' } as Scenario]),
+          getScenarios: () => this.scenarios$,
+        } as ScenariosService,
       }],
     })
       .compileComponents();
