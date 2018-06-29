@@ -88,10 +88,10 @@
       </mat-expansion-panel-header>
 
       <div class="selection">
-        <mat-checkbox class="margin" [(ngModel)]="showCvd">CVD</mat-checkbox>
-        <mat-checkbox class="margin" [(ngModel)]="showApv">APV</mat-checkbox>
-        <mat-checkbox class="margin" [(ngModel)]="showFcf">FCF</mat-checkbox>
-        <mat-checkbox class="margin" [(ngModel)]="showFte">FTE</mat-checkbox>
+        <mat-checkbox class="margin" [(ngModel)]="showCvd" (click)="saveConfig()">CVD</mat-checkbox>
+        <mat-checkbox class="margin" [(ngModel)]="showApv" (click)="saveConfig()">APV</mat-checkbox>
+        <mat-checkbox class="margin" [(ngModel)]="showFcf" (click)="saveConfig()">FCF</mat-checkbox>
+        <mat-checkbox class="margin" [(ngModel)]="showFte" (click)="saveConfig()">FTE</mat-checkbox>
       </div>
 
       <!-- TODO: Tabellenheader nach links statt mittig -->

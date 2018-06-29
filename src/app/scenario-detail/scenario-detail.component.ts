@@ -133,4 +133,15 @@ export class ScenarioDetailComponent implements OnInit {
       console.log('periods ', this.periodsFormControl.hasError('required'));
     }
   }
+
+  saveConfig(){
+    this.forConfig$.pipe(first()).subscribe(config => {
+      config.showResult.cvd = this.showCvd;
+      config.showResult.apv = this.showApv;
+      config.showResult.fcf = this.showFcf;
+      config.showResult.fte = this.showFte;
+
+      this._optionsService.setConfig(config);
+    });
+  }
 }
