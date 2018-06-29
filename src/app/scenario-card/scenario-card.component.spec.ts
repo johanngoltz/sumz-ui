@@ -12,7 +12,7 @@ describe('ScenarioCardComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ScenarioCardComponent],
       imports: [MaterialModule],
-      providers: [{ provide: ScenariosService, useValue: undefined }]
+      providers: [{ provide: ScenariosService, useValue: undefined }],
     })
       .compileComponents();
   }));
