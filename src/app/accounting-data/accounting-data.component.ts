@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, Optional } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { debounceTime, map } from 'rxjs/operators';
 import { Scenario } from '../api/scenario';
@@ -11,14 +11,14 @@ import { Wrapper } from '../api/wrapper';
 })
 export class AccountingDataComponent implements OnInit {
   @Input() editable: Boolean;
-  @Input() initialData: Wrapper<Scenario>;
+  @Input() @Optional() initialData?: Wrapper<Scenario>;
   @Output() formGroupOutput = new EventEmitter<FormGroup>();
   formGroup: FormGroup;
   @ViewChild('scrollable') dataScrollContainer: ElementRef;
   @ViewChild('fkrow') fkRow: ElementRef;
   paramData: Object;
-  prevYear: number;
   keys = Object.keys; // needed due to context issues in ngFor
+  baseYear: number;
   startYear: number; // debounced values
   endYear: number;
 
@@ -38,21 +38,21 @@ export class AccountingDataComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.prevYear = new Date().getFullYear() - 1;
-    this.startYear = this.prevYear - 1;
-    this.endYear = this.prevYear + 1;
+    if (this.initialData) {
+      this.calculateInterval();
+    } else {
+      this.baseYear = new Date().getFullYear() - 1;
+      this.startYear = this.baseYear - 1;
+      this.endYear = this.baseYear;
+    }
     this.formGroup = this.formBuilder.group({
-      startYear: [this.prevYear - 1, Validators.required],
-      endYear: [this.prevYear + 1, Validators.required],
-      baseYear: [this.prevYear, Validators.required],
-      calculateFcf: [false, Validators.required],
+      startYear: [this.startYear, Validators.required],
+      endYear: [this.endYear, Validators.required],
+      baseYear: [this.baseYear, Validators.required],
+      calculateFcf: [this.initialData ? this.initialData.valueOf().freeCashFlows.timeSeries.length > 0 : false,
+        Validators.required],
     });
-    Object.keys(this.paramData).forEach((param) => {
-      this.formGroup.addControl(param, this.formBuilder.group({
-        isHistoric: false,
-        timeSeries: this.formBuilder.array([]),
-      }));
-    });
+    this.buildParamFormGroups();
     this.formGroupOutput.emit(this.formGroup);
     this.formGroup.controls.startYear.valueChanges.pipe(debounceTime(500)).subscribe(val => {
       this.startYear = val;
@@ -70,6 +70,41 @@ export class AccountingDataComponent implements OnInit {
       ).observe(
       this.fkRow.nativeElement,
       { childList: true });*/
+  }
+
+  calculateInterval() {
+    for (let i = 0; i < Object.keys(this.paramData).length; i++) {
+      const accountingFigure = this.initialData.valueOf()[this.paramData[i]];
+      if (!this.startYear && accountingFigure.isHistoric) {
+        this.startYear = accountingFigure.timeSeries.at(0).value.year;
+        this.baseYear = this.baseYear || accountingFigure.timeSeries.at(-1).value.year;
+      } else if (!this.endYear && !accountingFigure.isHistoric) {
+        this.endYear = accountingFigure.timeSeries.at(-1).value.year;
+        this.baseYear = this.baseYear || accountingFigure.timeSeries.at(0).value.year;
+      }
+      if (this.startYear && this.endYear) {
+        break;
+      }
+    }
+  }
+
+  buildParamFormGroups() {
+    Object.keys(this.paramData).forEach((param) => {
+      const timeSeries = [];
+      if (this.initialData) {
+        this.initialData.valueOf()[param].timeSeries.forEach((financialData) => {
+          timeSeries.push(this.formBuilder.group({
+            year: financialData.year,
+            quarter: financialData.quarter,
+            amount: financialData.amount,
+          }));
+        });
+      }
+      this.formGroup.addControl(param, this.formBuilder.group({
+        isHistoric: this.initialData ? this.initialData.valueOf()[param].isHistoric : false,
+        timeSeries: this.formBuilder.array(timeSeries),
+      }));
+    });
   }
 
   createFinancialData(year: number, quarter: number, index?: number) {
@@ -141,6 +176,31 @@ export class AccountingDataComponent implements OnInit {
       } else {
         quarter++;
       }
+    }
+    for (; j < years.length; j++) {
+      this.removeFinancialData(j);
+      years.splice(j, 1);
+      j--;
+    }
+  }
+
+  checkStartYearIntegrity() {
+    if (this.formGroup.controls.startYear.value >= this.baseYear) {
+      this.formGroup.controls.startYear.setValue(this.baseYear - 1);
+    }
+  }
+
+  checkBaseYearIntegrity() {
+    if (this.formGroup.controls.baseYear.value <= this.startYear) {
+      this.formGroup.controls.baseYear.setValue(this.startYear + 1);
+    } else if (this.formGroup.controls.baseYear.value > this.endYear) {
+      this.formGroup.controls.baseYear.setValue(this.endYear);
+    }
+  }
+
+  checkEndYearIntegrity() {
+    if (this.formGroup.controls.endYear.value < this.baseYear) {
+      this.formGroup.controls.endYear.setValue(this.baseYear);
     }
   }
 }

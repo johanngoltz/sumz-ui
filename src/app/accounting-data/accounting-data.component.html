@@ -16,7 +16,7 @@
                 {{formGroup.value.startYear}}
               </span>
               <mat-form-field class="table-input-right" *ngIf="editable" [formGroup]="formGroup">
-                <input type="number" matInput formControlName="startYear" required placeholder="Startjahr">
+                <input type="number" matInput formControlName="startYear" required placeholder="Startjahr" (input)="checkStartYearIntegrity($event)">
               </mat-form-field>
               <div class="indicator"></div>
             </div>
@@ -25,7 +25,7 @@
                 {{formGroup.value.baseYear}}
               </span>
               <mat-form-field class="table-input-right" *ngIf="editable" [formGroup]="formGroup">
-                <input type="number" matInput formControlName="baseYear" required placeholder="Basisjahr">
+                <input type="number" matInput formControlName="baseYear" required placeholder="Basisjahr" (input)="checkBaseYearIntegrity($event)">
               </mat-form-field>
               <div class="indicator"></div>
             </div>
@@ -34,7 +34,7 @@
                 {{formGroup.value.endYear}}
               </span>
               <mat-form-field class="table-input-right" *ngIf="editable" [formGroup]="formGroup" (focusout)="updateTable()">
-                <input type="number" matInput formControlName="endYear" required placeholder="Endjahr">
+                <input type="number" matInput formControlName="endYear" required placeholder="Endjahr" (input)="checkEndYearIntegrity($event)">
               </mat-form-field>
               <div class="indicator"></div>
             </div>
