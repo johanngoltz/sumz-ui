@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@angular/core';
 import axios, { TypedAxiosInstance } from 'restyped-axios';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { UserAPI } from '../user-api';
 import { SumzAPI } from '../api/api';
 import { HttpClient } from './http-client';
 
