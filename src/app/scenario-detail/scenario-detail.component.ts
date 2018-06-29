@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of, fromEvent } from 'rxjs';
-import { switchMap, withLatestFrom } from 'rxjs/operators';
+import { Observable, of, fromEvent, from, EMPTY } from 'rxjs';
+import { switchMap, withLatestFrom, tap } from 'rxjs/operators';
 import { Scenario } from '../api/scenario';
 import { ScenariosService } from '../service/scenarios.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -22,7 +22,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 
 export class ScenarioDetailComponent implements OnInit {
-  forScenario$: Observable < Scenario > ;
+  forScenario$: Observable<Scenario>;
 
   /* step holder for panels */
   step = 0;
@@ -61,11 +61,11 @@ export class ScenarioDetailComponent implements OnInit {
 
 
   constructor(private _scenariosService: ScenariosService,
-    private route: ActivatedRoute) {}
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.forScenario$ = this.route.paramMap.pipe(
-      switchMap(params => of (Number.parseFloat(params.get('id')))),
+      switchMap(params => of(Number.parseFloat(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
 
     this.showCvd = true;
@@ -74,25 +74,25 @@ export class ScenarioDetailComponent implements OnInit {
     this.showFte = true;
 
     this.data = [{
-        'name': '2018',
-        'value': 100,
-      },
-      {
-        'name': '2019',
-        'value': 120,
-      },
-      {
-        'name': '2020',
-        'value': 125,
-      },
-      {
-        'name': '2021',
-        'value': 140,
-      },
-      {
-        'name': '2022',
-        'value': 100,
-      },
+      'name': '2018',
+      'value': 100,
+    },
+    {
+      'name': '2019',
+      'value': 120,
+    },
+    {
+      'name': '2020',
+      'value': 125,
+    },
+    {
+      'name': '2021',
+      'value': 140,
+    },
+    {
+      'name': '2022',
+      'value': 100,
+    },
     ];
   }
 
@@ -109,13 +109,16 @@ export class ScenarioDetailComponent implements OnInit {
     this.step--;
   }
 
-  saveScenario(event) {
+  saveScenario() {
     if (!this.nameFormControl.hasError('required') && !this.periodsFormControl.hasError('required')) {
-      console.log(event);
-      fromEvent(event, 'blur').pipe(withLatestFrom(this.forScenario$)).subscribe();
+      this.forScenario$.subscribe(currentScenario => {
+        console.log('Updating Scenario');
+        // TODO: Modify Scenario
+        this._scenariosService.updateScenario(currentScenario);
+      });
     } else {
-      console.log('Name ' , this.nameFormControl.hasError('required'));
-      console.log('periods ' , this.periodsFormControl.hasError('required'));
+      console.log('Name ', this.nameFormControl.hasError('required'));
+      console.log('periods ', this.periodsFormControl.hasError('required'));
     }
   }
 }
