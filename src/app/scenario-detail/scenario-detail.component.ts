@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, fromEvent, from, EMPTY } from 'rxjs';
 import { switchMap, withLatestFrom, tap, first } from 'rxjs/operators';
@@ -23,7 +23,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./scenario-detail.component.css'],
 })
 
-export class ScenarioDetailComponent implements OnInit {
+export class ScenarioDetailComponent implements OnInit, OnDestroy {
   forScenario$: Observable<Scenario>;
   forConfig$: Observable<RemoteConfig>;
 
@@ -105,6 +105,10 @@ export class ScenarioDetailComponent implements OnInit {
     ];
   }
 
+  ngOnDestroy() {
+    this.saveConfig();
+  }
+
   /* functions for panels */
   setStep(index: number) {
     this.step = index;
@@ -134,7 +138,7 @@ export class ScenarioDetailComponent implements OnInit {
     }
   }
 
-  saveConfig(){
+  saveConfig() {
     this.forConfig$.pipe(first()).subscribe(config => {
       config.showResult.cvd = this.showCvd;
       config.showResult.apv = this.showApv;
