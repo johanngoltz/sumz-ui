@@ -6,9 +6,9 @@ import { Scenario } from '../api/scenario';
 import { RemoteConfig } from '../api/config';
 import { ScenariosService } from '../service/scenarios.service';
 import { OptionsService } from '../service/options.service';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
+
 
 /** Error when invalid control is dirty. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -60,6 +60,12 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
   periodsFormControl = new FormControl('', [Validators.required]);
   periodsMatcher = new MyErrorStateMatcher();
 
+  equityFormControl = new FormControl('', []);
+
+  outsideFormControl = new FormControl('', []);
+
+  taxFormControl = new FormControl('', []);
+
   constructor(private _scenariosService: ScenariosService, private _optionsService: OptionsService,
     private route: ActivatedRoute) { }
 
@@ -73,6 +79,9 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
       this.nameFormControl.setValue(currentScenario.name);
       this.descriptionFormControl.setValue(currentScenario.description);
       this.periodsFormControl.setValue(currentScenario.periods);
+      this.equityFormControl.setValue(currentScenario.equityInterest);
+      this.outsideFormControl.setValue(currentScenario.outsideCapitalInterest);
+      this.taxFormControl.setValue(currentScenario.corporateTax);
     });
 
     this.forConfig$.pipe(first()).subscribe(config => {
@@ -129,6 +138,9 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
         currentScenario.name = this.nameFormControl.value;
         currentScenario.description = this.descriptionFormControl.value;
         currentScenario.periods = this.periodsFormControl.value;
+        currentScenario.equityInterest = this.equityFormControl.value;
+        currentScenario.outsideCapitalInterest = this.outsideFormControl.value;
+        currentScenario.corporateTax = this.taxFormControl.value;
 
         this._scenariosService.updateScenario(currentScenario);
       });

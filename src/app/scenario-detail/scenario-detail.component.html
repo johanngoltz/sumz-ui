@@ -32,7 +32,7 @@
               </mat-form-field>
             </td>
 
-            <td class="mat-cell">
+            <td class="mat-cell" floatLabel="never">
               <mat-form-field>
                 <input matInput placeholder="Beschreibung" [formControl]="descriptionFormControl" (blur)="saveScenario()" />
               </mat-form-field>
@@ -40,12 +40,45 @@
 
             <td class="mat-cell">
               <mat-form-field floatLabel="never">
-                <input matInput type="number" placeholder="Periode" [formControl]="periodsFormControl" (blur)="saveScenario()" [errorStateMatcher]="periodsMatcher"
+                <input matInput type="number" min="1" default="1" placeholder="Periode" [formControl]="periodsFormControl" (blur)="saveScenario()" [errorStateMatcher]="periodsMatcher"
                 />
                 <mat-error *ngIf="periodsFormControl.hasError('required')">
                   Periode wird
                   <strong>benötigt</strong>
                 </mat-error>
+              </mat-form-field>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="mat-table">
+        <thead>
+          <tr class="mat-header-row">
+            <th class="mat-header-cell">Eigenkapitalzinsen</th>
+            <th class="mat-header-cell">Fremdkapitalzinsen</th>
+            <th class="mat-header-cell">Unternehmenssteuer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="mat-row">
+            <td class="mat-cell">
+              <mat-form-field floatLabel="never">
+                <input matInput type="number" min="0" default="0" placeholder="Eigenkapitalzinsen" [formControl]="equityFormControl" (blur)="saveScenario()"
+                />
+              </mat-form-field>
+            </td>
+
+            <td class="mat-cell">
+              <mat-form-field floatLabel="never">
+                <input matInput type="number" min="0" default="0" placeholder="Fremdkapitalzinsen" [formControl]="outsideFormControl" (blur)="saveScenario()" />
+              </mat-form-field>
+            </td>
+
+            <td class="mat-cell">
+              <mat-form-field floatLabel="never">
+                <input matInput type="number" min="0" default="0" placeholder="Steuern" [formControl]="taxFormControl" (blur)="saveScenario()"
+                />
               </mat-form-field>
             </td>
           </tr>
