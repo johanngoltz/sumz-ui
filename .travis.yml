@@ -4,3 +4,6 @@ node_js:
   - 'lts/*'
 before_script:
   - ng lint
+cache:
+  directories:
+    - node_modules
