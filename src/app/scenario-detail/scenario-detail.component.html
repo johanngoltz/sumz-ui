@@ -31,7 +31,22 @@
                   </mat-error>
                 </mat-form-field>
               </td>
+              <!--
+                        <input matInput placeholder="Name" [formControl]="nameFormControl" (blur)="saveScenario()" [errorStateMatcher]="nameMatcher"
+                        />
+                        <mat-error *ngIf="nameFormControl.hasError('required')">
+                          Name wird
+                          <strong>benötigt</strong>
+                        </mat-error>
+                      </mat-form-field>
+                    </td>
 
+                    <td class="mat-cell" floatLabel="never">
+                      <mat-form-field>
+                        <input matInput placeholder="Beschreibung" [formControl]="descriptionFormControl" (blur)="saveScenario()" />
+                      </mat-form-field>
+                    </td>
+                  -->
               <td class="mat-cell">
                 <mat-form-field>
                   <input matInput placeholder="Beschreibung" formControlName="description" />
@@ -40,8 +55,8 @@
               <!--
             <td class="mat-cell">
               <mat-form-field floatLabel="never">
-                <input matInput type="number" placeholder="Periode" [formControl]="periodsFormControl" [value]="(forScenario$ | async)?.periods" (ngModel)="forScenario$.periods"
-                  [errorStateMatcher]="periodsMatcher" />
+                <input matInput type="number" min="1" default="1" placeholder="Periode" [formControl]="periodsFormControl" (blur)="saveScenario()" [errorStateMatcher]="periodsMatcher"
+                />
                 <mat-error *ngIf="periodsFormControl.hasError('required')">
                   Periode wird
                   <strong>benötigt</strong>
@@ -52,11 +67,45 @@
             </tr>
           </tbody>
         </table>
-        <mat-action-row>
-          <button mat-button color="secondary" color="" (click)="saveScenario()">Speichern</button>
-          <button mat-button color="primary" (click)="nextStep()">Weiter</button>
-        </mat-action-row>
       </form>
+
+      <table class="mat-table">
+        <thead>
+          <tr class="mat-header-row">
+            <th class="mat-header-cell">Eigenkapitalzinsen</th>
+            <th class="mat-header-cell">Fremdkapitalzinsen</th>
+            <th class="mat-header-cell">Unternehmenssteuer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="mat-row">
+            <td class="mat-cell">
+              <mat-form-field floatLabel="never">
+                <input matInput type="number" min="0" default="0" placeholder="Eigenkapitalzinsen" [formControl]="equityFormControl" (blur)="saveScenario()"
+                />
+              </mat-form-field>
+            </td>
+
+            <td class="mat-cell">
+              <mat-form-field floatLabel="never">
+                <input matInput type="number" min="0" default="0" placeholder="Fremdkapitalzinsen" [formControl]="outsideFormControl" (blur)="saveScenario()"
+                />
+              </mat-form-field>
+            </td>
+
+            <td class="mat-cell">
+              <mat-form-field floatLabel="never">
+                <input matInput type="number" min="0" default="0" placeholder="Steuern" [formControl]="taxFormControl" (blur)="saveScenario()"
+                />
+              </mat-form-field>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <mat-action-row>
+        <button mat-button color="primary" (click)="nextStep()">Weiter</button>
+      </mat-action-row>
     </mat-expansion-panel>
 
     <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="true">
@@ -72,7 +121,6 @@
       TODO: Cashflowberechnungstabelle implementieren
       <app-accounting-data [initialData]="forScenario$" (formGroupOutput)="formGroup2 = $event" [editable]="false"></app-accounting-data>
       <mat-action-row>
-        <button mat-button color="secondary" color="" (click)="saveScenario()">Speichern</button>
         <button mat-button color="warn" (click)="prevStep()">Zurück</button>
         <button mat-button color="primary" (click)="nextStep()">Weiter</button>
       </mat-action-row>
@@ -104,7 +152,7 @@
           <h1>Unternehmenswertverteilung</h1>
           <ngx-charts-bar-vertical [results]="data" [scheme]="colorScheme" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis"
             [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-            [yAxisLabel]="yAxisLabel" [barPadding]="barPadding" (select)="onSelect($event)">
+            [yAxisLabel]="yAxisLabel" [barPadding]="barPadding">
           </ngx-charts-bar-vertical>
         </div>
 
@@ -129,7 +177,6 @@
               </tr>
             </tbody>
           </table>
-
         </div>
 
         <div [hidden]="!showFcf" class="flex-item">
@@ -151,7 +198,6 @@
               </tr>
             </tbody>
           </table>
-
         </div>
 
         <div [hidden]="!showFte" class="flex-item">
@@ -171,7 +217,6 @@
           </table>
         </div>
       </div>
-
 
       <mat-action-row>
         <button mat-button color="warn" (click)="prevStep()">Zurück</button>

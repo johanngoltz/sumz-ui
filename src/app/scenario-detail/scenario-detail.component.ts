@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { Observable, of, fromEvent, from, EMPTY } from 'rxjs';
+import { switchMap, withLatestFrom, tap, first } from 'rxjs/operators';
 import { Scenario } from '../api/scenario';
+import { RemoteConfig } from '../api/config';
 import { ScenariosService } from '../service/scenarios.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { OptionsService } from '../service/options.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 
-/** Error when invalid control is dirty, touched, or submitted. */
+
+/** Error when invalid control is dirty. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    return !!(control && control.invalid && control.dirty);
   }
 }
 
@@ -22,87 +24,101 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./scenario-detail.component.css'],
 })
 
-export class ScenarioDetailComponent implements OnInit {
-  private forScenario$: Observable<Scenario>;
-  private formGroup: FormGroup;
-
-  timeSeriesColumns = ['year', 'externalCapital', 'fcf'];
-  scenarioColumns = ['position', 'equityInterest', 'outsideCapitalInterest', 'corporateTax'];
+export class ScenarioDetailComponent implements OnInit, OnDestroy {
+  forScenario$: Observable<Scenario>;
+  forConfig$: Observable<RemoteConfig>;
+  formGroup: FormGroup;
 
   /* step holder for panels */
-  private step = 0;
+  step = 0;
 
   /* selection */
-  private showCvd;
-  private showApv;
-  private showFcf;
-  private showFte;
+  showCvd;
+  showApv;
+  showFcf;
+  showFte;
 
   /* graph */
-  private data;
-  private barPadding = 0;
-  private showXAxis = true;
-  private showYAxis = true;
-  private gradient = false;
-  private showLegend = false;
-  private showXAxisLabel = true;
-  private xAxisLabel = 'Jahr';
-  private showYAxisLabel = true;
-  private yAxisLabel = 'Unternehmenswert';
-  private colorScheme = {
+  data;
+  barPadding = 0;
+  showXAxis = true;
+  showYAxis = true;
+  gradient = false;
+  showLegend = false;
+  showXAxisLabel = true;
+  xAxisLabel = 'Jahr';
+  showYAxisLabel = true;
+  yAxisLabel = 'Unternehmenswert';
+  colorScheme = {
     domain: ['#0D9A39'],
   };
 
   /* forms */
-  /* TODO: Fehlermeldung wird angezeigt, obwohl Text da ist*/
   nameFormControl = new FormControl('', [Validators.required]);
   nameMatcher = new MyErrorStateMatcher();
+
+  descriptionFormControl = new FormControl('', []);
 
   periodsFormControl = new FormControl('', [Validators.required]);
   periodsMatcher = new MyErrorStateMatcher();
 
+  equityFormControl = new FormControl('', []);
+  outsideFormControl = new FormControl('', []);
+  taxFormControl = new FormControl('', []);
 
-  constructor(private _scenariosService: ScenariosService, private _formBuilder: FormBuilder,
-    private route: ActivatedRoute) {
-  }
+  constructor(private _scenariosService: ScenariosService, private _formBuilder: FormBuilder, private _optionsService: OptionsService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.forScenario$ = this.route.paramMap.pipe(
       switchMap(params => of(Number.parseFloat(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
-
+    this.forConfig$ = this._optionsService.getConfig();
     this.formGroup = this._formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
     });
+    this.forScenario$.pipe(first()).subscribe(currentScenario => {
+      this.nameFormControl.setValue(currentScenario.name);
+      this.descriptionFormControl.setValue(currentScenario.description);
+      this.periodsFormControl.setValue(currentScenario.periods);
+      this.equityFormControl.setValue(currentScenario.equityInterest);
+      this.outsideFormControl.setValue(currentScenario.outsideCapitalInterest);
+      this.taxFormControl.setValue(currentScenario.corporateTax);
+    });
 
-    this.showCvd = true;
-    this.showApv = true;
-    this.showFcf = true;
-    this.showFte = true;
+    this.forConfig$.pipe(first()).subscribe(config => {
+      this.showCvd = config.showResult.cvd;
+      this.showApv = config.showResult.apv;
+      this.showFcf = config.showResult.fcf;
+      this.showFte = config.showResult.fte;
+    });
 
-    this.data = [
-      {
-        'name': '2018',
-        'value': 100,
-      },
-      {
-        'name': '2019',
-        'value': 120,
-      },
-      {
-        'name': '2020',
-        'value': 125,
-      },
-      {
-        'name': '2021',
-        'value': 140,
-      },
-      {
-        'name': '2022',
-        'value': 100,
-      },
+    this.data = [{
+      'name': '2018',
+      'value': 100,
+    },
+    {
+      'name': '2019',
+      'value': 120,
+    },
+    {
+      'name': '2020',
+      'value': 125,
+    },
+    {
+      'name': '2021',
+      'value': 140,
+    },
+    {
+      'name': '2022',
+      'value': 100,
+    },
     ];
+  }
+
+  ngOnDestroy() {
+    this.saveConfig();
   }
 
   /* functions for panels */
@@ -118,4 +134,33 @@ export class ScenarioDetailComponent implements OnInit {
     this.step--;
   }
 
+  saveScenario() {
+    if (!this.nameFormControl.hasError('required') && !this.periodsFormControl.hasError('required')) {
+      this.forScenario$.pipe(first()).subscribe(currentScenario => {
+
+        currentScenario.name = this.nameFormControl.value;
+        currentScenario.description = this.descriptionFormControl.value;
+        currentScenario.periods = this.periodsFormControl.value;
+        currentScenario.equityInterest = this.equityFormControl.value;
+        currentScenario.outsideCapitalInterest = this.outsideFormControl.value;
+        currentScenario.corporateTax = this.taxFormControl.value;
+
+        this._scenariosService.updateScenario(currentScenario);
+      });
+    } else {
+      console.log('Name ', this.nameFormControl.hasError('required'));
+      console.log('periods ', this.periodsFormControl.hasError('required'));
+    }
+  }
+
+  saveConfig() {
+    this.forConfig$.pipe(first()).subscribe(config => {
+      config.showResult.cvd = this.showCvd;
+      config.showResult.apv = this.showApv;
+      config.showResult.fcf = this.showFcf;
+      config.showResult.fte = this.showFte;
+
+      this._optionsService.setConfig(config);
+    });
+  }
 }

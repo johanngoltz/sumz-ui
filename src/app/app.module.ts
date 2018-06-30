@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -42,7 +43,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     FlexLayoutModule,
     NgxChartsModule,
   ],
-  providers: [],
   bootstrap: [AppComponent],
   entryComponents: [SelectScenarioComponent, DeleteDialogComponent],
 })
