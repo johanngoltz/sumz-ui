@@ -85,4 +85,8 @@ export class AppComponent {
     this.authenticationService.logout();
     this._router.navigateByUrl('/login');
   }
+
+  change() {
+    this._router.navigateByUrl('changepassword');
+  }
 }

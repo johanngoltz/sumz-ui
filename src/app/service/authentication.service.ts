@@ -105,13 +105,13 @@ export class AuthenticationService {
     });
   }
 
-    // reset the password (is called in resetpassword.component)
-    async resetpassword(passwordold: string, passwordnew: string, passwordnew2: string) {
+    // changes the password (is called in changepassword.component)
+    async changepassword(passwordold: string, passwordnew: string, passwordnew2: string) {
       await this._apiClient.request({
         url: '/users/id',
         data: {passwordold, passwordnew, passwordnew2},
         method: 'PUT',
-      }).then(response => {
+      }).then( response => {
         // if credentials correct, redirect to main page
         if (response.status === 200) {  // should be 302
           console.log('Reset klappt');
@@ -119,6 +119,19 @@ export class AuthenticationService {
           this.router.navigate(['/users']);
         }
       });
+    }
+
+    // changes the password (is called in changepassword.component)
+    async newpassword(passwordnew: string, passwordnew2: string) {
+      const response = await this._apiClient.request({
+        url: 'TODO nachdem die definiert haben',
+        data: {passwordnew, passwordnew2},
+        method: 'PUT',
+      });
+      // if credentials correct, redirect to main page
+      if (response.status === 200) {
+        this.router.navigate(['/users']);
+      }
     }
 
   logout() {

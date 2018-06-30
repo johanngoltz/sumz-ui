@@ -1,6 +1,5 @@
-import { Scenario } from './scenario';
-
-export interface SumzAPI {
+// definition of communication-structure (see API documentation)
+export interface UserAPI {
     '/oauth/token': {
         POST: {
             body: { },
@@ -40,14 +39,5 @@ export interface SumzAPI {
             },
         }
     },
-    '/scenario': {
-        GET: { response: Scenario[] },
-        POST: { body: Scenario, response: Scenario }
-    },
-    '/scenario/:sId': {
-        params: { sId: number },
-        GET: { response: Scenario },
-        PUT: { body: Scenario, response: Scenario },
-        DELETE: {}
-    },
+
 }
