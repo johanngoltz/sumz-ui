@@ -16,7 +16,7 @@ scenario.routes.forEach(function (routeDefinition) {
 });
 
 Sandbox.define('/project', 'GET', function (req, res) {
-  // Interceptor test
+  // // Interceptor test
   // if(!(req.get('Authorization') === 'bearer 214vg3hg2v123f123f4ghv_')) {
   //   return res.send(401, 'Invalid token_02');
   // }
@@ -124,7 +124,7 @@ Sandbox.define('/oauth/token', 'POST', function (req, res) {
   // get new access_token
   if (req.query.grant_type === 'refresh_token') {
     // check if refresh_token is valid
-    if(!(req.query.refresh_token === 'dfshbfhb367gfvagfasf')) {
+    if(req.query.refresh_token !== 'dfshbfhb367gfvagfasf') {
       return res.send(401, 'Invalid refresh token');
     }
 
@@ -132,7 +132,7 @@ Sandbox.define('/oauth/token', 'POST', function (req, res) {
     res.status(200);
     res.json(
       {
-        access_token: "214vg3hg2v123f123f4ghv2_",
+        access_token: "214vg3hg2v123f123f4ghv_",
         refresh_token: "dfshbfhb367gfvagfasf",
         token_type: "bearer",
         expires_in: 1234,			

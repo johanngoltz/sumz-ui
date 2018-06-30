@@ -18,7 +18,8 @@ export class ScenariosService {
     this._scenarios$ = new ReplaySubject();
     this.scenarios$ = this._scenarios$.asObservable();
 
-    this.getScenarios().subscribe(console.log);
+    // TODO doppelt (wird in scenarios.component.ts schon aufgerufen)
+    // this.getScenarios().subscribe(console.log);
   }
 
   getScenarios() {

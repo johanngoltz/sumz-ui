@@ -16,6 +16,7 @@ export class AuthGuard implements CanActivate {
       // updaten authorization header (is sent with every axios http request)
       this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
       axios.defaults.headers.common['Authorization'] = this.currentUser.token_type + ' ' + this.currentUser.access_token;
+      axios.defaults.headers.common['_isRetry'] = false;
 
       return true;
     }

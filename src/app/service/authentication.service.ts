@@ -1,9 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
-import axios, { TypedAxiosInstance } from 'restyped-axios';
+import { TypedAxiosInstance } from 'restyped-axios';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { SumzAPI } from '../api/api';
 import { HttpClient } from './http-client';
+import { AlertService } from './alert.service';
+
 
 @Injectable({
   providedIn: 'root',
@@ -14,24 +16,53 @@ export class AuthenticationService {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private alertService: AlertService,
     @Inject(HttpClient) private _apiClient: TypedAxiosInstance<SumzAPI>,
-  ) { }
+  ) {
+    // handle expired access_token
+    _apiClient.interceptors.response.use( response => {
+      return response;
+    }, error => {
+      // debugger;
+      if (error.response.status === 401 && localStorage.getItem('currentUser') && !error.response.config.headers._isRetry) {
+        // get new access_token
+        this.refresh()
+        .then( () => {
+          error.config.headers.Authorization = JSON.parse(localStorage.getItem('currentUser')).token_type
+            + ' '
+            + JSON.parse(localStorage.getItem('currentUser')).access_token;
+          error.config.headers._isRetry = true;
+
+          return _apiClient.request(error.config);
+          // .then( (response) => {
+          //   debugger;
+          //   return Promise.resolve(response);
+          // });
+        })
+        .catch( () => {
+          console.log('Refresh login error: ', error);
+          return Promise.reject(error);
+        });
+      }
+    });
+
+  }
 
   // signin (is called in login.component)
   async login(email: string, password: string ) {
-    const response = await this._apiClient.request({
+    await this._apiClient.request({
       url: '/oauth/token',
       params: {email, password, 'grant_type' : 'password'},
       method: 'POST',
+    }).then(response => {
+      if (response.status === 200) {
+        // store user details in local storage to keep user logged in
+        localStorage.setItem('currentUser', JSON.stringify(response.data));
+        // navigate to return url from route parameters or default to '/'
+        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        this.router.navigate([this.returnUrl]);
+      }
     });
-    // if credentials correct, redirect to main page or return url
-    if (response.status === 200) {
-      // store user details in local storage to keep user logged in
-      localStorage.setItem('currentUser', JSON.stringify(response.data));
-      // navigate to return url from route parameters or default to '/'
-      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-      this.router.navigate([this.returnUrl]);
-    }
   }
 
   // get refresh token
@@ -40,7 +71,8 @@ export class AuthenticationService {
       url: '/oauth/token',
       params: {
         'refresh_token' : JSON.parse(localStorage.getItem('currentUser')).refresh_token,
-        'grant_type' : 'refresh'},
+        'grant_type' : 'refresh_token'},
+      headers: { '_isRetry': true },
       method: 'POST',
     });
 
@@ -51,41 +83,42 @@ export class AuthenticationService {
     if (response.status === 200) {
       // store new user details in local storage to keep user logged in
       localStorage.setItem('currentUser', JSON.stringify(response.data));
-      // navigate to return url from route parameters or default to '/'
-      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-      this.router.navigate([this.returnUrl]);
+    } else {
+      return;
     }
   }
 
   // registration (is called in registration.component)
   async registration(email: string, password: string) {
-    const response = await this._apiClient.request({
+    await this._apiClient.request({
       url: '/users',
       data: {email, password},
       method: 'POST',
+    }).then(response => {
+      // if credentials correct, redirect to main page
+      if (response.status === 200) {  // should be 302
+        console.log('Registrierung klappt');
+        // navigate to return url from route parameters or default to '/'
+        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        this.router.navigate([this.returnUrl]);
+      }
     });
-    // if credentials correct, redirect to main page
-    if (response.status === 200) {  // should be 302
-      console.log('Registrierung klappt');
-      // navigate to return url from route parameters or default to '/'
-      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-      this.router.navigate([this.returnUrl]);
-    }
   }
 
     // reset the password (is called in resetpassword.component)
     async resetpassword(passwordold: string, passwordnew: string, passwordnew2: string) {
-      const response = await this._apiClient.request({
+      await this._apiClient.request({
         url: '/users/id',
         data: {passwordold, passwordnew, passwordnew2},
         method: 'PUT',
+      }).then(response => {
+        // if credentials correct, redirect to main page
+        if (response.status === 200) {  // should be 302
+          console.log('Reset klappt');
+          // redirect to "successful registration"
+          this.router.navigate(['/users']);
+        }
       });
-      // if credentials correct, redirect to main page
-      if (response.status === 200) {  // should be 302
-        console.log('Reset klappt');
-        // redirect to "successful registration"
-        this.router.navigate(['/users']);
-      }
     }
 
   logout() {

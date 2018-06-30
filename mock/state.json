@@ -11,6 +11,17 @@
       "description": "Das zweite Szenario",
       "periods": 5,
       "id": 2
+    },
+    {
+      "timeSeries": [],
+      "name": "Drei",
+      "deterministic": true,
+      "baseYear": 2017,
+      "description": "Das dreite Szenario",
+      "prognosisLength": 5,
+      "id": null,
+      "iterations": 10000,
+      "algorithm": "fcf"
     }
   ]
 }

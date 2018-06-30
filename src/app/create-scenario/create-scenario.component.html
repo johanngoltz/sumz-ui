@@ -74,7 +74,7 @@
       </form>
     </mat-step>
     <mat-step label="Zahlungsreihe angeben" [stepControl]="formGroup3">
-      <form [formGroup]="formGroup3" (ngSubmit)="createProject()">
+      <form [formGroup]="formGroup3" (ngSubmit)="createScenario()">
         <mat-card class="form-container" [class.busy]="busy">
           <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
           <mat-card-title>Zahlungsreihe</mat-card-title>
