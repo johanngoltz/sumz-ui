@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AccountingFigure, Scenario } from '../api/scenario';
 import { SelectScenarioComponent } from '../select-scenario/select-scenario.component';
 import { ScenariosService } from '../service/scenarios.service';
+import { paramData } from '../api/paramData';
 
 @Component({
   selector: 'app-create-scenario',
@@ -14,7 +15,9 @@ import { ScenariosService } from '../service/scenarios.service';
 export class CreateScenarioComponent implements OnInit {
   formGroup1: FormGroup;
   formGroup2: FormGroup;
+  formGroup3: FormGroup;
   busy: Boolean;
+  paramData = paramData;
 
   constructor(private _formBuilder: FormBuilder, private _scenariosService: ScenariosService, private _router: Router,
     private _snackBar: MatSnackBar, private _bottomSheet: MatBottomSheet) {
@@ -26,20 +29,37 @@ export class CreateScenarioComponent implements OnInit {
       name: ['', Validators.required],
       description: '',
     });
-    this.formGroup2 = this._formBuilder.group({});
+    this.formGroup2 = this._formBuilder.group({
+      equityInterest: ['', Validators.required],
+      corporateTax: ['', Validators.required],
+    });
+    this.formGroup3 = this._formBuilder.group({});
   }
 
   createScenario() {
-    if (this.formGroup2.valid) {
+    if (this.formGroup3.valid) {
       this.busy = true;
       const scenario = {
         id: null,
         ...this.formGroup1.value,
         ...this.formGroup2.value,
+        ...this.formGroup3.value,
+        stochastic: false,
         prognosisLength: 5,
       };
-      scenario.timeSeries = scenario.timeSeries.map((o) =>
-        (o.year === scenario.baseYear || (o.year > scenario.baseYear) === scenario.deterministic) ? o : false).filter(Boolean);
+      Object.keys(paramData).forEach((param) => {
+        const paramFormGroup = this.formGroup3.controls[param];
+        if (paramFormGroup.value.isHistoric && !scenario.stochastic) {
+          scenario.stochastic = true;
+        }
+        scenario[param] = {
+          isHistoric: paramFormGroup.value.isHistoric,
+          timeSeries: paramFormGroup.value.timeSeries.filter(dataPoint =>
+            dataPoint.year >= this.formGroup3.value.startYear
+            && dataPoint.year <= this.formGroup3.value.endYear
+            && (dataPoint.year < this.formGroup3.value.baseYear) === paramFormGroup.value.isHistoric),
+        };
+      });
       this._scenariosService.addScenario(scenario)
       .subscribe(
         (createdScenario) => {
@@ -66,13 +86,13 @@ export class CreateScenarioComponent implements OnInit {
     if (that.formGroup1.value.description.length === 0) {
       that.formGroup1.controls.description.patchValue(scenario.description);
     }
-    while ((<FormArray> that.formGroup2.controls.timeSeries).length > 0) {
-      (<FormArray> that.formGroup2.controls.timeSeries).removeAt(0);
+    while ((<FormArray> that.formGroup3.controls.timeSeries).length > 0) {
+      (<FormArray> that.formGroup3.controls.timeSeries).removeAt(0);
     }
 
     // TODO Fix import; calculate BaseYear, StartYear, EndYear
     /*project.timeSeries.forEach((financialData: AccountingData) => {
-      (<FormArray> that.formGroup2.controls.timeSeries).push()
+      (<FormArray> that.formGroup3.controls.timeSeries).push()
     }
     scenario.timeSeries.forEach((financialData: AccountingFigure) => {
       that.timeSeries.push(

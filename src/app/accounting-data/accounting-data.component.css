@@ -89,3 +89,7 @@ mat-checkbox {
     display: block;
     font-weight: normal;
 }
+
+.no-bold {
+    font-weight: normal;
+}

@@ -30,13 +30,32 @@
         </mat-card>
       </form>
     </mat-step>
-    <mat-step label="Zahlungsreihe angeben" [stepControl]="formGroup2">
-      <form [formGroup]="formGroup2" (ngSubmit)="createScenario()">
+    <mat-step label="Umweltfaktoren" [stepControl]="formGroup2">
+      <form [formGroup]="formGroup2">
+        <mat-card class="form-container">
+          <mat-card-title>Umweltfaktoren</mat-card-title>
+          <mat-card-content>
+            <mat-form-field>
+              <input type="text" id="equityInterest" name="equityInterest" matInput placeholder="Kapitalzinssatz" required formControlName="equityInterest">
+            </mat-form-field>
+            <mat-form-field>
+              <input type="text" id="corporateTax" name="corporateTax" matInput placeholder="Unternehmenssteuersatz" required formControlName="corporateTax">
+            </mat-form-field>
+          </mat-card-content>
+          <mat-card-actions class="stepper-actions">
+            <button mat-button matStepperPrevious>Zurück</button>
+            <button mat-raised-button matStepperNext color="accent">Weiter</button>
+          </mat-card-actions>
+        </mat-card>
+      </form>
+    </mat-step>
+    <mat-step label="Zahlungsreihe angeben" [stepControl]="formGroup3">
+      <form [formGroup]="formGroup3" (ngSubmit)="createScenario()">
         <mat-card class="form-container" [class.busy]="busy">
           <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
           <mat-card-title>Zahlungsreihe</mat-card-title>
           <mat-card-content>
-            <app-accounting-data [editable]="true" (formGroupOutput)="formGroup2 = $event"></app-accounting-data>
+            <app-accounting-data [editable]="true" (formGroupOutput)="formGroup3 = $event"></app-accounting-data>
           </mat-card-content>
           <mat-card-actions class="stepper-actions">
             <button mat-button matStepperPrevious [disabled]="busy">Zurück</button>

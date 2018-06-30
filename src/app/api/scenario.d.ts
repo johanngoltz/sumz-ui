@@ -6,7 +6,7 @@ export class Scenario {
     equityInterest: number;
     outsideCapitalInterest: number;
     corporateTax: number;
-    stochastic?: Boolean;
+    stochastic: Boolean;
     additionalIncome: AccountingFigure;
     additionalCosts: AccountingFigure;
     investments: AccountingFigure;
@@ -24,11 +24,11 @@ export class Scenario {
 
 export class AccountingFigure {
     isHistoric: Boolean;
-    timeSeries: [{
-        year: Date;
+    timeSeries: {
+        year: number;
         quarter: 1 | 2 | 3 | 4;
         amount: number;
-    }]
+    }[]
 }
 
 export class DistributedCompanyValue {

@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, Optional } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { debounceTime, map } from 'rxjs/operators';
 import { Scenario } from '../api/scenario';
 import { Observable } from 'rxjs';
+import { paramData } from '../api/paramData';
 
 @Component({
   selector: 'app-accounting-data',
@@ -11,27 +12,16 @@ import { Observable } from 'rxjs';
 })
 export class AccountingDataComponent implements OnInit {
   @Input() editable: Boolean;
-  @Input() @Optional() initialData?: Observable<Scenario>;
+  @Input() initialData: Observable<Scenario>;
   @Output() formGroupOutput = new EventEmitter<FormGroup>();
   formGroup: FormGroup;
   @ViewChild('scrollable') dataScrollContainer: ElementRef;
   @ViewChild('fkrow') fkRow: ElementRef;
-  paramData = {
-    revenue: { displayName: 'Umsatzerlöse', showOnCalculation: true },
-    additionalIncome: { displayName: 'Sonstige Erlöse', showOnCalculation: true },
-    costOfMaterial: { displayName: 'Materialkosten', showOnCalculation: true },
-    costOfStaff: { displayName: 'Personalkosten', showOnCalculation: true },
-    additionalCosts: { displayName: 'Sonstige Kosten', showOnCalculation: true },
-    investments: { displayName: 'Investitionen', showOnCalculation: true },
-    divestments: { displayName: 'Desinvestitionen', showOnCalculation: true },
-    liabilities: { displayName: 'Verbindlichkeiten', showOnCalculation: true },
-    freeCashFlows: { displayName: 'Free Cash Flow', showOnCalculation: false },
-    externalCapital: { displayName: 'Fremdkapital' },
-  };
   keys = Object.keys; // needed due to context issues in ngFor
   baseYear: number;
   startYear: number; // debounced values
   endYear: number;
+  paramData = paramData;
 
   constructor(private formBuilder: FormBuilder) {
   }
@@ -52,7 +42,7 @@ export class AccountingDataComponent implements OnInit {
 
   buildForm(scenario?: Scenario) {
     if (scenario) {
-      this.calculateInterval();
+      this.calculateInterval(scenario);
     } else {
       this.baseYear = new Date().getFullYear() - 1;
       this.startYear = this.baseYear - 1;
@@ -62,7 +52,7 @@ export class AccountingDataComponent implements OnInit {
       startYear: [this.startYear, Validators.required],
       endYear: [this.endYear, Validators.required],
       baseYear: [this.baseYear, Validators.required],
-      calculateFcf: [(scenario && scenario.freeCashFlows.timeSeries.length > 0),
+      calculateFcf: [(scenario && scenario.additionalIncome.timeSeries.length > 0) || false,
         Validators.required],
     });
     this.buildParamFormGroups(scenario);
@@ -78,9 +68,9 @@ export class AccountingDataComponent implements OnInit {
     this.updateTable();
   }
 
-  calculateInterval() {
+  calculateInterval(scenario: Scenario) {
     for (let i = 0; i < Object.keys(this.paramData).length; i++) {
-      const accountingFigure = this.initialData.valueOf()[this.paramData[i]];
+      const accountingFigure = scenario[this.paramData[i]];
       if (!this.startYear && accountingFigure.isHistoric) {
         this.startYear = accountingFigure.timeSeries.at(0).value.year;
         this.baseYear = this.baseYear || accountingFigure.timeSeries.at(-1).value.year;
@@ -95,7 +85,7 @@ export class AccountingDataComponent implements OnInit {
   }
 
   buildParamFormGroups(scenario?: Scenario) {
-    Object.keys(this.paramData).forEach((param) => {
+    Object.keys(this.paramData).forEach(param => {
       const timeSeries = [];
       if (scenario) {
         scenario[param].timeSeries.forEach((dataPoint) => {
@@ -107,7 +97,7 @@ export class AccountingDataComponent implements OnInit {
         });
       }
       this.formGroup.addControl(param, this.formBuilder.group({
-        isHistoric: this.initialData ? this.initialData.valueOf()[param].isHistoric : false,
+        isHistoric: scenario ? scenario[param].isHistoric : false,
         timeSeries: this.formBuilder.array(timeSeries),
       }));
     });
