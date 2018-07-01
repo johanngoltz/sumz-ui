@@ -11,8 +11,8 @@ import { ScenarioClient } from './http-client';
 })
 export class ScenariosService {
   public scenarios$: Observable<Scenario[]>;
-  private _scenarios$: ReplaySubject<Scenario[]>;
-  private _scenariosStorage: Scenario[];
+  protected _scenarios$: ReplaySubject<Scenario[]>;
+  protected _scenariosStorage: Scenario[];
 
   constructor(@Inject(ScenarioClient) private _apiClient: TypedAxiosInstance<ScenarioAPI>) {
     this._scenarios$ = new ReplaySubject();

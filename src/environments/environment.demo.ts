@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  emergencyDemo: false,
-  apiUrl: 'http://localhost:8080',
+  emergencyDemo: true,
+  apiUrl: '',
 };
 
 /*

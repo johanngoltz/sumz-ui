@@ -25,7 +25,11 @@ export class Scenario {
 export class AccountingFigure {
     isHistoric: Boolean;
     timeSeries: {
+<<<<<<< HEAD
         year: number;
+=======
+        year: Date;
+>>>>>>> origin/master
         quarter: 1 | 2 | 3 | 4;
         amount: number;
     }[]
