@@ -7,7 +7,5 @@ import { environment } from '../../environments/environment';
 export const ScenarioClient = new InjectionToken(
     'TypedAxiosInstance', {
         providedIn: 'root',
-        factory: () => axios.create<ScenarioAPI>({
-            baseURL: environment.production ? 'http://sumz1718.dh-karlsruhe.de:8080' : 'http://localhost:8080',
-        }),
+        factory: () => axios.create<ScenarioAPI>({ baseURL: environment.apiUrl }),
     });
