@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { TypedAxiosInstance, TypedAxiosResponse } from 'restyped-axios';
-import { Observable, ReplaySubject, from, of, throwError, concat } from 'rxjs';
-import { filter, flatMap, retry, switchMap, tap, debounceTime, concatMap, map } from 'rxjs/operators';
+import { Observable, ReplaySubject, from, of, throwError, concat, EMPTY, Subject } from 'rxjs';
+import { filter, flatMap, retry, switchMap, tap, debounceTime, concatMap, map, debounce, mergeMap } from 'rxjs/operators';
 import { ScenarioAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
 import { ScenarioClient } from './http-client';
@@ -22,6 +22,14 @@ export class ScenariosService {
   }
 
   getScenarios() {
+    // mergeMap??
+    // throttle
+    /*
+      race(
+        request,
+        debounce-Timer
+      )
+    */
     return from(this._apiClient.request({ url: '/scenario' })).pipe(
       // TODO: wird vllt nicht wie gedacht funktionieren
       switchMap(response => response.status === 200 ?
@@ -51,6 +59,7 @@ export class ScenariosService {
       data: scenario,
       method: 'POST',
     })).pipe(
+      // auf flatMap ändern
       switchMap(response => response.status === 201 ? of(response) : throwError(response)),
       retry(2),
       switchMap(response => {
@@ -63,6 +72,7 @@ export class ScenariosService {
 
   updateScenario(scenario: Scenario) {
     return from(this._apiClient.put(`/scenario/${scenario.id}`, scenario)).pipe(
+      // auf flatMap ändern
       switchMap(response => response.status === 200 ? of(response) : throwError(response)),
       retry(2),
       switchMap(response => {
@@ -74,6 +84,7 @@ export class ScenariosService {
   }
 
   removeScenario(scenario: Scenario) {
+    // auf flatMap ändern
     return from(this._apiClient.delete(`/scenario/${scenario.id}`)).pipe(
       switchMap(response => response.status === 200 ? of(response) : throwError(response)),
       retry(2),
