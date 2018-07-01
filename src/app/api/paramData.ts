@@ -7,5 +7,5 @@ export let paramData = {
     investments: { displayName: 'Investitionen', showOnCalculation: true },
     divestments: { displayName: 'Desinvestitionen', showOnCalculation: true },
     freeCashFlows: { displayName: 'Free Cash Flow', showOnCalculation: false },
-    liabilities: { displayName: 'Fremdkapital' },
+    liabilities: { displayName: 'Fremdkapital', shiftDeterministic: true },
 };

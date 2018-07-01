@@ -33,14 +33,14 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
         query(':leave', [
           animate('.2s cubic-bezier(0.4, 0.0, 1, 1)', keyframes([
             style({ transform: 'translateY(0px)', opacity: 1 }),
-            style({ transform: 'translateY(25px)', opacity: 0 }),
+            style({ transform: 'translateY(15px)', opacity: 0 }),
           ])),
           style({ position: 'absolute', opacity: 0, right: 0 }),
         ], { optional: true }),
         query(':enter', [
           style({ position: 'static' }),
           animate('.2s cubic-bezier(0.0, 0.0, 0.2, 1)', keyframes([
-            style({ transform: 'translateY(25px)', opacity: 0 }),
+            style({ transform: 'translateY(15px)', opacity: 0 }),
             style({ transform: 'translateY(0px)', opacity: 1 }),
           ])),
         ], { optional: true }),
@@ -91,7 +91,6 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
     this.forScenario$ = this.route.paramMap.pipe(
       switchMap(params => of(Number.parseInt(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
-    console.log(this._scenariosService);
     this.forConfig$ = this._optionsService.getConfig();
     this.formGroup = this._formBuilder.group({
       name: ['', Validators.required],
