@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
-import { debounceTime, map } from 'rxjs/operators';
+import { debounceTime, map, first } from 'rxjs/operators';
 import { Scenario } from '../api/scenario';
 import { Observable } from 'rxjs';
 import { paramData } from '../api/paramData';
@@ -11,7 +11,7 @@ import { paramData } from '../api/paramData';
   styleUrls: ['./accounting-data.component.css'],
 })
 export class AccountingDataComponent implements OnInit {
-  @Input() editable: Boolean;
+  @Input() private _editable: Boolean;
   @Input() initialData: Observable<Scenario>;
   @Output() formGroupOutput = new EventEmitter<FormGroup>();
   formGroup: FormGroup;
@@ -23,7 +23,7 @@ export class AccountingDataComponent implements OnInit {
   endYear: number;
   paramData = paramData;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private _formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
@@ -40,6 +40,15 @@ export class AccountingDataComponent implements OnInit {
       { childList: true });*/
   }
 
+  @Input() set editable(value: Boolean) {
+    if (this._editable !== value) {
+      this._editable = value;
+      if (this.initialData) {
+        this.initialData.pipe(first()).subscribe((scenario) => this.buildForm(scenario));
+      }
+    }
+  }
+
   buildForm(scenario?: Scenario) {
     if (scenario) {
       this.calculateInterval(scenario);
@@ -48,14 +57,19 @@ export class AccountingDataComponent implements OnInit {
       this.startYear = this.baseYear - 1;
       this.endYear = this.baseYear;
     }
-    this.formGroup = this.formBuilder.group({
+    const newFormGroup = this._formBuilder.group({
       startYear: [this.startYear, Validators.required],
       endYear: [this.endYear, Validators.required],
       baseYear: [this.baseYear, Validators.required],
-      calculateFcf: [(scenario && scenario.additionalIncome.timeSeries.length > 0) || false,
-        Validators.required],
-    });
-    this.buildParamFormGroups(scenario);
+      calculateFcf: [(scenario && scenario.additionalIncome && scenario.additionalIncome.timeSeries.length > 0) || false,
+      Validators.required],
+    }, {
+        validator: (formGroup: FormGroup) => {
+          return this.validateForm(formGroup);
+        },
+      });
+    this.buildParamFormGroups(newFormGroup, scenario);
+    this.formGroup = newFormGroup;
     this.formGroupOutput.emit(this.formGroup);
     this.formGroup.controls.startYear.valueChanges.pipe(debounceTime(500)).subscribe(val => {
       this.startYear = val;
@@ -69,14 +83,15 @@ export class AccountingDataComponent implements OnInit {
   }
 
   calculateInterval(scenario: Scenario) {
-    for (let i = 0; i < Object.keys(this.paramData).length; i++) {
-      const accountingFigure = scenario[this.paramData[i]];
+    const params = Object.keys(this.paramData);
+    for (let i = 0; i < params.length; i++) {
+      const accountingFigure = scenario[params[i]];
       if (!this.startYear && accountingFigure.isHistoric) {
-        this.startYear = accountingFigure.timeSeries.at(0).value.year;
-        this.baseYear = this.baseYear || accountingFigure.timeSeries.at(-1).value.year;
+        this.startYear = accountingFigure.timeSeries[0].year;
+        this.baseYear = this.baseYear || accountingFigure.timeSeries[accountingFigure.timeSeries.length - 1].year;
       } else if (!this.endYear && !accountingFigure.isHistoric) {
-        this.endYear = accountingFigure.timeSeries.at(-1).value.year;
-        this.baseYear = this.baseYear || accountingFigure.timeSeries.at(0).value.year;
+        this.endYear = accountingFigure.timeSeries[accountingFigure.timeSeries.length - 1].year;
+        this.baseYear = this.baseYear || accountingFigure.timeSeries[0].value.year;
       }
       if (this.startYear && this.endYear) {
         break;
@@ -84,21 +99,73 @@ export class AccountingDataComponent implements OnInit {
     }
   }
 
-  buildParamFormGroups(scenario?: Scenario) {
+  buildParamFormGroups(formGroup: FormGroup, scenario?: Scenario) {
     Object.keys(this.paramData).forEach(param => {
       const timeSeries = [];
-      if (scenario) {
-        scenario[param].timeSeries.forEach((dataPoint) => {
-          timeSeries.push(this.formBuilder.group({
-            year: dataPoint.year,
-            quarter: dataPoint.quarter,
-            amount: [dataPoint.amount, Validators.required],
-          }));
-        });
+      if (scenario && scenario[param]) {
+        const items = scenario[param].timeSeries.filter(dataPoint =>
+          dataPoint.year >= this.startYear &&
+          dataPoint.year <= this.endYear
+        );
+        if (items.length > 0) {
+          const firstItem = items[0];
+          const lastItem = items[items.length - 1];
+          if (firstItem.year > this.startYear
+            || (firstItem.year === this.startYear && firstItem.quarter > 1)) {
+            let year = this.startYear;
+            let quarter = 1;
+            while (firstItem.year > year
+              || (firstItem.year === year && firstItem.quarter > quarter)) {
+              timeSeries.push(this._formBuilder.group({
+                year: year,
+                quarter: quarter,
+                amount: [0, Validators.required],
+              }));
+              if (quarter === 4) {
+                year++;
+                quarter = 1;
+              } else {
+                quarter++;
+              }
+            }
+          }
+          items.forEach((dataPoint) => {
+            timeSeries.push(this._formBuilder.group({
+              year: dataPoint.year,
+              quarter: dataPoint.quarter,
+              amount: [dataPoint.amount, Validators.required],
+            }));
+          });
+          if (lastItem.year < this.endYear
+            || (lastItem.year === this.endYear && lastItem.quarter < 4)) {
+            let year = lastItem.year;
+            let quarter = lastItem.quarter;
+            if (quarter === 4) {
+              year++;
+              quarter = 1;
+            } else {
+              quarter++;
+            }
+            while (this.endYear > year
+              || (this.endYear === year && quarter <= 4)) {
+              timeSeries.push(this._formBuilder.group({
+                year: year,
+                quarter: quarter,
+                amount: [0, Validators.required],
+              }));
+              if (quarter === 4) {
+                year++;
+                quarter = 1;
+              } else {
+                quarter++;
+              }
+            }
+          }
+        }
       }
-      this.formGroup.addControl(param, this.formBuilder.group({
-        isHistoric: scenario ? scenario[param].isHistoric : false,
-        timeSeries: this.formBuilder.array(timeSeries),
+      formGroup.addControl(param, this._formBuilder.group({
+        isHistoric: scenario && scenario[param] ? scenario[param].isHistoric : false,
+        timeSeries: this._formBuilder.array(timeSeries),
       }));
     });
   }
@@ -106,7 +173,7 @@ export class AccountingDataComponent implements OnInit {
   createFinancialData(year: number, quarter: number, index?: number) {
     Object.keys(this.paramData).forEach((param) => {
       const array = <FormArray>(<FormGroup>this.formGroup.controls[param]).controls.timeSeries;
-      const group = this.formBuilder.group({
+      const group = this._formBuilder.group({
         year: year,
         quarter: quarter,
         amount: [0, Validators.required],
@@ -133,7 +200,7 @@ export class AccountingDataComponent implements OnInit {
   updateTable() {
     const startYear = this.startYear;
     const endYear = this.endYear;
-    const years = (<FormGroup>this.formGroup.controls.externalCapital).controls.timeSeries.value.map(o => {
+    const years = (<FormGroup>this.formGroup.controls.liabilities).controls.timeSeries.value.map(o => {
       return { year: o.year, quarter: o.quarter };
     });
     let quarter = 1;
@@ -151,7 +218,7 @@ export class AccountingDataComponent implements OnInit {
             break;
           } else if ((years[j].year === year && years[j].quarter > quarter) || years[j].year > year) {
             this.createFinancialData(year, quarter, j);
-            years.splice(j, 0, {year: year, quarter: quarter});
+            years.splice(j, 0, { year: year, quarter: quarter });
             j++;
             found = true;
             break;
@@ -177,6 +244,41 @@ export class AccountingDataComponent implements OnInit {
       this.removeFinancialData(j);
       years.splice(j, 1);
       j--;
+    }
+  }
+
+  validateForm(formGroup: FormGroup) {
+    const params = Object.keys(this.paramData).map(param => {
+      const paramFormGroup = (<FormGroup>formGroup.controls[param]);
+      if (paramFormGroup) {
+        const timeSeries = (<FormArray>paramFormGroup.controls.timeSeries).controls;
+        return timeSeries.filter(dataPoint =>
+          dataPoint.value.year >= formGroup.value.startYear
+          && dataPoint.value.year <= formGroup.value.endYear
+          && (dataPoint.value.year < formGroup.value.baseYear) === paramFormGroup.value.isHistoric)
+          .map(dataPoint => dataPoint.valid)
+          .filter(valid => valid === false)
+          .length === 0;
+      } else {
+        return false;
+      }
+    }).filter(valid => valid === false)
+      .length === 0;
+
+    const interval = formGroup.controls.baseYear.valid &&
+      formGroup.controls.startYear.valid &&
+      formGroup.controls.endYear.valid;
+
+    if (params && interval) {
+      return null;
+    } else {
+      const errors = {};
+      if (!params) {
+        errors['params'] = { valid: params };
+      }
+      if (!interval) {
+        errors['interval'] = { valid: params };
+      }
     }
   }
 

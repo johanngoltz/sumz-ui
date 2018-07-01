@@ -64,15 +64,15 @@
 }
 
 #startyear-container {
-    left: -2px;
-}
-
-#startyear-container.editable {
     left: -3px;
 }
 
 #baseyear-container {
     left: 0;
+}
+
+#baseyear-container > span {
+    text-align: center;
 }
 
 #startyear-container, #baseyear-container {

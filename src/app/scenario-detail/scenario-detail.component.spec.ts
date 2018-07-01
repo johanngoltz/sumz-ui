@@ -160,21 +160,6 @@ describe('ScenarioDetailComponent', () => {
           },
         ],
       },
-      'externalCapital': {
-        'isHistoric': true,
-        'timeSeries': [
-          {
-            'year': 2001,
-            'quarter': 3,
-            'amount': 345.56,
-          },
-          {
-            'year': 2001,
-            'quarter': 3,
-            'amount': 345.56,
-          },
-        ],
-      },
       'companyValueDistribution': [
         {
           'num': 1,

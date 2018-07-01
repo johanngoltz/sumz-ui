@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
@@ -17,6 +17,7 @@ export class CreateScenarioComponent implements OnInit {
   formGroup2: FormGroup;
   formGroup3: FormGroup;
   busy: Boolean;
+  importedScenario: EventEmitter<Scenario>;
   paramData = paramData;
 
   constructor(private _formBuilder: FormBuilder, private _scenariosService: ScenariosService, private _router: Router,
@@ -30,10 +31,12 @@ export class CreateScenarioComponent implements OnInit {
       description: '',
     });
     this.formGroup2 = this._formBuilder.group({
-      equityInterest: ['', Validators.required],
-      corporateTax: ['', Validators.required],
+      equityInterest: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      outsideCapitalInterest: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      corporateTax: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
     });
     this.formGroup3 = this._formBuilder.group({});
+    this.importedScenario = new EventEmitter<Scenario>();
   }
 
   createScenario() {
@@ -43,11 +46,12 @@ export class CreateScenarioComponent implements OnInit {
         id: null,
         ...this.formGroup1.value,
         ...this.formGroup2.value,
-        ...this.formGroup3.value,
         stochastic: false,
-        prognosisLength: 5,
+        periods: (this.formGroup3.value.endYear - this.formGroup3.value.startYear) * 4,
       };
-      Object.keys(paramData).forEach((param) => {
+      Object.keys(this.paramData)
+      .filter(param => [undefined, this.formGroup3.value.calculateFcf].indexOf(this.paramData[param].showOnCalculation) > -1)
+      .forEach((param) => {
         const paramFormGroup = this.formGroup3.controls[param];
         if (paramFormGroup.value.isHistoric && !scenario.stochastic) {
           scenario.stochastic = true;
@@ -81,29 +85,15 @@ export class CreateScenarioComponent implements OnInit {
 
   insertScenarioData(scenario: Scenario, that: CreateScenarioComponent) {
     if (that.formGroup1.value.name.length === 0) {
-      that.formGroup1.controls.name.patchValue(scenario.name);
+      that.formGroup1.controls.name.setValue(scenario.name);
     }
     if (that.formGroup1.value.description.length === 0) {
-      that.formGroup1.controls.description.patchValue(scenario.description);
+      that.formGroup1.controls.description.setValue(scenario.description);
     }
-    while ((<FormArray> that.formGroup3.controls.timeSeries).length > 0) {
-      (<FormArray> that.formGroup3.controls.timeSeries).removeAt(0);
-    }
-
-    // TODO Fix import; calculate BaseYear, StartYear, EndYear
-    /*project.timeSeries.forEach((financialData: AccountingData) => {
-      (<FormArray> that.formGroup3.controls.timeSeries).push()
-    }
-    scenario.timeSeries.forEach((financialData: AccountingFigure) => {
-      that.timeSeries.push(
-        that._formBuilder.group({
-          year: [financialData.year, Validators.required],
-          externalCapital: [financialData.externalCapital, Validators.required],
-          fcf: [financialData.fcf, Validators.required],
-        })
-      );
-    });
-    */
+    that.formGroup2.controls.equityInterest.setValue(scenario.equityInterest);
+    that.formGroup2.controls.outsideCapitalInterest.setValue(scenario.outsideCapitalInterest);
+    that.formGroup2.controls.corporateTax.setValue(scenario.corporateTax);
+    that.importedScenario.emit(scenario);
     that._snackBar.open(`Die Daten des Projekts "${scenario.name}" wurden erfolgreich übernommen`, undefined, { duration: 5000 });
   }
 

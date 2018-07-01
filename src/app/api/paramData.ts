@@ -6,7 +6,6 @@ export let paramData = {
     additionalCosts: { displayName: 'Sonstige Kosten', showOnCalculation: true },
     investments: { displayName: 'Investitionen', showOnCalculation: true },
     divestments: { displayName: 'Desinvestitionen', showOnCalculation: true },
-    liabilities: { displayName: 'Verbindlichkeiten', showOnCalculation: true },
     freeCashFlows: { displayName: 'Free Cash Flow', showOnCalculation: false },
-    externalCapital: { displayName: 'Fremdkapital' },
+    liabilities: { displayName: 'Fremdkapital' },
 };

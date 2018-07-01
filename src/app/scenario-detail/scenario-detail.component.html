@@ -1,108 +1,58 @@
 <div class="content-container">
+  <h1>
+    {{(forScenario$ | async)?.name}}
+    <div [@toggleEditAnimation]="editable">
+      <button type="button" mat-button color="primary" *ngIf="!editable" (click)="setEditable(true)">
+        Szenario bearbeiten
+      </button>
+      <button type="button" mat-button color="primary" *ngIf="editable" (click)="setEditable(false)" class="space-right">
+        Änderungen Verwerfen
+      </button>
+      <button type="button" mat-raised-button color="accent" *ngIf="editable" (click)="setEditable(false, true)">
+        Speichern
+      </button>
+    </div>
+  </h1>
   <!-- panels for different parts of Scenario-->
   <mat-accordion multi="false" class="headers-align">
-    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
-      <form [formGroup]="formGroup">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Daten
-          </mat-panel-title>
-          <mat-panel-description>
-            Kopfdaten des Szenarios
-            <mat-icon>work</mat-icon>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <table class="mat-table">
-          <thead>
-            <tr class="mat-header-row">
-              <th class="mat-header-cell">Name</th>
-              <th class="mat-header-cell">Beschreibung</th>
-              <!--<th class="mat-header-cell">Perioden</th>-->
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="mat-row">
-              <td class="mat-cell">
-                <mat-form-field floatLabel="never">
-                  <input matInput placeholder="Name" formControlName="name" />
-                  <mat-error *ngIf="formGroup.controls.name.hasError('required')">
-                    Name wird
-                    <strong>benötigt</strong>
-                  </mat-error>
-                </mat-form-field>
-              </td>
-              <!--
-                        <input matInput placeholder="Name" [formControl]="nameFormControl" (blur)="saveScenario()" [errorStateMatcher]="nameMatcher"
-                        />
-                        <mat-error *ngIf="nameFormControl.hasError('required')">
-                          Name wird
-                          <strong>benötigt</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </td>
-
-                    <td class="mat-cell" floatLabel="never">
-                      <mat-form-field>
-                        <input matInput placeholder="Beschreibung" [formControl]="descriptionFormControl" (blur)="saveScenario()" />
-                      </mat-form-field>
-                    </td>
-                  -->
-              <td class="mat-cell">
-                <mat-form-field>
-                  <input matInput placeholder="Beschreibung" formControlName="description" />
-                </mat-form-field>
-              </td>
-              <!--
-            <td class="mat-cell">
-              <mat-form-field floatLabel="never">
-                <input matInput type="number" min="1" default="1" placeholder="Periode" [formControl]="periodsFormControl" (blur)="saveScenario()" [errorStateMatcher]="periodsMatcher"
-                />
-                <mat-error *ngIf="periodsFormControl.hasError('required')">
-                  Periode wird
-                  <strong>benötigt</strong>
-                </mat-error>
-              </mat-form-field>
-            </td>
-            -->
-            </tr>
-          </tbody>
-        </table>
-      </form>
-
-      <table class="mat-table">
-        <thead>
-          <tr class="mat-header-row">
-            <th class="mat-header-cell">Eigenkapitalzinsen</th>
-            <th class="mat-header-cell">Fremdkapitalzinsen</th>
-            <th class="mat-header-cell">Unternehmenssteuer</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="mat-row">
-            <td class="mat-cell">
-              <mat-form-field floatLabel="never">
-                <input matInput type="number" min="0" default="0" placeholder="Eigenkapitalzinsen" [formControl]="equityFormControl" (blur)="saveScenario()"
-                />
-              </mat-form-field>
-            </td>
-
-            <td class="mat-cell">
-              <mat-form-field floatLabel="never">
-                <input matInput type="number" min="0" default="0" placeholder="Fremdkapitalzinsen" [formControl]="outsideFormControl" (blur)="saveScenario()"
-                />
-              </mat-form-field>
-            </td>
-
-            <td class="mat-cell">
-              <mat-form-field floatLabel="never">
-                <input matInput type="number" min="0" default="0" placeholder="Steuern" [formControl]="taxFormControl" (blur)="saveScenario()"
-                />
-              </mat-form-field>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true" [formGroup]="formGroup">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Daten
+        </mat-panel-title>
+        <mat-panel-description>
+          Kopfdaten des Szenarios
+          <mat-icon>work</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="divided-form">
+        <div>
+          <h3>Grundlegendes</h3>
+          <mat-form-field floatLabel="always">
+            <input matInput placeholder="Name" formControlName="name" />
+            <mat-error *ngIf="formGroup.controls.name.hasError('required')">
+              Name wird
+              <strong>benötigt</strong>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field floatLabel="always">
+            <textarea matInput cdkTextareaAutosize placeholder="Beschreibung" formControlName="description"></textarea>
+          </mat-form-field>
+        </div>
+        <mat-divider vertical="true"></mat-divider>
+        <div>
+          <h3>Umweltfaktoren</h3>
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" toDouble placeholder="Eigenkapitalzinsen" formControlName="equityInterest" />
+          </mat-form-field>
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" toDouble placeholder="Fremdkapitalzinsen" formControlName="outsideCapitalInterest" />
+          </mat-form-field>
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" toDouble placeholder="Unternehmenssteuersatz" formControlName="corporateTax" />
+          </mat-form-field>
+        </div>
+      </div>
       <mat-action-row>
         <button mat-button color="primary" (click)="nextStep()">Weiter</button>
       </mat-action-row>
@@ -118,8 +68,7 @@
           <mat-icon>euro_symbol</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
-      TODO: Cashflowberechnungstabelle implementieren
-      <app-accounting-data [initialData]="forScenario$" (formGroupOutput)="formGroup2 = $event" [editable]="false"></app-accounting-data>
+      <app-accounting-data [initialData]="forScenario$" (formGroupOutput)="accountingDataFormGroup = $event" [editable]="editable"></app-accounting-data>
       <mat-action-row>
         <button mat-button color="warn" (click)="prevStep()">Zurück</button>
         <button mat-button color="primary" (click)="nextStep()">Weiter</button>
@@ -170,10 +119,10 @@
             </thead>
             <tbody>
               <tr class="mat-row">
-                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult.companyValue}}</td>
-                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult.marketValueTotalAssets}}</td>
-                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult.totalLiabilities}}</td>
-                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult.taxShield}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.companyValue}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.marketValueTotalAssets}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.totalLiabilities}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.taxShield}}</td>
               </tr>
             </tbody>
           </table>
@@ -192,9 +141,9 @@
             </thead>
             <tbody>
               <tr class="mat-row">
-                <td class="mat-cell">{{(forScenario$ | async)?.fcfValuationResult.companyValue}}</td>
-                <td class="mat-cell">{{(forScenario$ | async)?.fcfValuationResult.marketValueTotalAssets}}</td>
-                <td class="mat-cell">{{(forScenario$ | async)?.fcfValuationResult.totalLiabilities}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.fcfValuationResult?.companyValue}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.fcfValuationResult?.marketValueTotalAssets}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.fcfValuationResult?.totalLiabilities}}</td>
               </tr>
             </tbody>
           </table>
@@ -211,7 +160,7 @@
             </thead>
             <tbody>
               <tr class="mat-row">
-                <td class="mat-cell">{{(forScenario$ | async)?.fteValuationResult.companyValue}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.fteValuationResult?.companyValue}}</td>
               </tr>
             </tbody>
           </table>
