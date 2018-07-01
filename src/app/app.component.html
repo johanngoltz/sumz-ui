@@ -3,8 +3,20 @@
   <a routerLink="" id="logo-link">
     <img id="logo" src="../assets/logo.svg" alt="business horizon">
   </a>
-  <button mat-button id="change-btn" (click)='change()'>Passwort ändern</button>
-  <button mat-button id="logout-btn" (click)='logout()'>Abmelden</button>
+  
+  <button mat-icon-button id="user-menu-btn" [matMenuTriggerFor]="userMenu">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+  <mat-menu #userMenu="matMenu">
+    <button mat-menu-item id="change-btn" (click)='change()'>
+      <mat-icon>edit</mat-icon>
+      <span>Passwort ändern</span>      
+    </button>
+    <button mat-menu-item id="logout-btn" (click)='logout()'>
+      <mat-icon>exit_to_app</mat-icon>
+      <span>Abmelden</span>
+    </button>
+  </mat-menu>
 </mat-toolbar>
 
 <main [@routerTransition]="getState(o)">

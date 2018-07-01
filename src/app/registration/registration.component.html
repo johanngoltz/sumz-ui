@@ -5,49 +5,50 @@
         <mat-card-title>Registrierung</mat-card-title>
         <mat-divider></mat-divider>
 
-            <form [formGroup]="registerFormGroup" id="register-form" (ngSubmit) = "onSubmit()">
-                <p>
-                    <mat-icon class="register-icon">mail</mat-icon>
-                    <mat-form-field>
-                      <input type="text" id="email" name="email" matInput placeholder="E-Mail" required formControlName="mailCtrl">
-                      <mat-error *ngIf="mailCtrl.errors?.required">
-                        Dieses Feld ist ein <strong>Pflichtfeld</strong>
-                      </mat-error>
-                      <mat-error *ngIf="mailCtrl.errors?.email">
-                        Bitte geben Sie eine gültige E-Mail-Adresse ein
-                      </mat-error>
-                    </mat-form-field>
-                </p>
+        <form [formGroup]="registerFormGroup" id="register-form" (ngSubmit) = "onSubmit()">
+            <p>
+                <mat-icon class="register-icon">mail</mat-icon>
+                <mat-form-field>
+                  <input type="text" id="email" name="email" matInput placeholder="E-Mail" required formControlName="mailCtrl">
+                  <mat-error *ngIf="mailCtrl.errors?.required">
+                    Dieses Feld ist ein <strong>Pflichtfeld</strong>
+                  </mat-error>
+                  <mat-error *ngIf="mailCtrl.errors?.email">
+                    Bitte geben Sie eine gültige E-Mail-Adresse ein
+                  </mat-error>
+                </mat-form-field>
+            </p>
 
-                <p>
-                  <mat-icon class="register-icon">lock</mat-icon>  
-                  <mat-form-field>
-                    <input [type]="hide_pw1 ? 'password' : 'text'" id="password" name="password" matInput placeholder="Passwort" formControlName="pwdCtrl">
-                    <mat-icon matSuffix (click)="hide_pw1 = !hide_pw1">{{hide_pw1 ? 'visibility' : 'visibility_off'}}</mat-icon>
-                    <mat-error >
-                      Bitte ein Passwort mit mind. 6 Zeichen eingeben
-                    </mat-error>
-                  </mat-form-field>
-                  
-                </p>
-                <p>
-                    <mat-icon class="register-icon">lock</mat-icon>  
-                    <mat-form-field>
-                      <input [type]="hide_pw2 ? 'password' : 'text'" id="passwordrepeat" name="passwordrepeat" matInput placeholder="Passwort" formControlName="pwdrptCtrl">
-                      <mat-icon matSuffix (click)="hide_pw2 = !hide_pw2">{{hide_pw2 ? 'visibility' : 'visibility_off'}}</mat-icon>
-                      <mat-error>
-                        Passwörter müssen übereinstimmen
-                      </mat-error>
+            <p>
+              <mat-icon class="register-icon">lock</mat-icon>  
+              <mat-form-field>
+                <input [type]="hide_pw1 ? 'password' : 'text'" id="password" name="password" matInput placeholder="Passwort" formControlName="pwdCtrl">
+                <mat-icon matSuffix (click)="hide_pw1 = !hide_pw1">{{hide_pw1 ? 'visibility' : 'visibility_off'}}</mat-icon>
+                <mat-error >
+                  Bitte ein Passwort mit mind. 6 Zeichen eingeben
+                </mat-error>
+              </mat-form-field>
+              
+            </p>
+            <p>
+                <mat-icon class="register-icon">lock</mat-icon>  
+                <mat-form-field>
+                  <input [type]="hide_pw2 ? 'password' : 'text'" id="passwordrepeat" name="passwordrepeat" matInput placeholder="Passwort" formControlName="pwdrptCtrl">
+                  <mat-icon matSuffix (click)="hide_pw2 = !hide_pw2">{{hide_pw2 ? 'visibility' : 'visibility_off'}}</mat-icon>
+                  <mat-error>
+                    Passwörter müssen übereinstimmen
+                  </mat-error>
 
-                    </mat-form-field>
-                </p>
+                </mat-form-field>
+            </p>
 
-                <br>
-                <button mat-raised-button [disabled]="submitted" color="accent" class="register-btn">Register</button>
-              </form>
-              <div class="register-footer">
-                <button mat-button class="login-btn" routerLink="../login">Jetzt einloggen!</button>
-              </div>
-</mat-card-content>
-</mat-card>
+            <br>
+            <button mat-raised-button [disabled]="submitted" color="accent" class="register-btn">Neuen Account anlegen</button>
+          </form>
+          
+          <div class="register-footer">
+            <button mat-button class="login-btn" routerLink="../login">Jetzt einloggen!</button>
+          </div>
+      </mat-card-content>
+  </mat-card>
 </div>

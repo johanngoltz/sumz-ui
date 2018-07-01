@@ -18,30 +18,7 @@ export class AuthenticationService {
     @Inject(HttpClient) private _apiClient: TypedAxiosInstance<SumzAPI>,
   ) {
     // handle expired access_token
-    _apiClient.interceptors.response.use( response => {
-        return response;
-      },
-      error => {
-        if (error.response.status === 401 && localStorage.getItem('currentUser') && !error.response.config.headers._isRetry) {
-          // get new access_token
-          return this.refresh()
-          .then( () => {
-            error.config.headers.Authorization = JSON.parse(localStorage.getItem('currentUser')).token_type
-              + ' '
-              + JSON.parse(localStorage.getItem('currentUser')).access_token;
-
-            error.config.headers._isRetry = true;
-
-            // return the response with a new access_token
-            return _apiClient.request(error.config);
-          })
-          .catch( () => {
-            console.log('Refresh login error: ', error);
-            return Promise.reject(error);
-          });
-        }
-      });
-
+    this.addInterceptor();
   }
 
   /**
@@ -165,5 +142,36 @@ export class AuthenticationService {
   logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
+  }
+
+  /**
+   * Intercepts a response and refreshes access_token.
+   * Afterwards, the http-request is executed with the new access_token.
+   * @returns {void}
+   */
+  addInterceptor() {
+    this._apiClient.interceptors.response.use( response => {
+      return response;
+    },
+    error => {
+      if (error.response.status === 401 && localStorage.getItem('currentUser') && !error.response.config.headers._isRetry) {
+        // get new access_token
+        return this.refresh()
+        .then( () => {
+          error.config.headers.Authorization = JSON.parse(localStorage.getItem('currentUser')).token_type
+            + ' '
+            + JSON.parse(localStorage.getItem('currentUser')).access_token;
+
+          error.config.headers._isRetry = true;
+
+          // return the response with a new access_token
+          return this._apiClient.request(error.config);
+        })
+        .catch( () => {
+          console.log('Refresh login error: ', error);
+          return Promise.reject(error);
+        });
+      }
+    });
   }
 }

@@ -13,13 +13,8 @@ mat-toolbar {
     width: auto;
 }
 
-#logout-btn {
+#user-menu-btn {
     margin-left: auto;
-}
-
-#change-btn {
-    margin-left: auto; 
-    
 }
 
 ::ng-deep app-projects, ::ng-deep app-create-project, ::ng-deep app-project-detail, ::ng-deep app-login, ::ng-deep app-registration, ::ng-deep app-changepassword, ::ng-deep app-newpassword {
