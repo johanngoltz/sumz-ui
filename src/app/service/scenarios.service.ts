@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
-import { TypedAxiosInstance, TypedAxiosResponse } from 'restyped-axios';
-import { Observable, ReplaySubject, from, of, throwError, concat, BehaviorSubject } from 'rxjs';
-import { filter, flatMap, retry, switchMap, tap, debounceTime, concatMap, map } from 'rxjs/operators';
+import { TypedAxiosInstance } from 'restyped-axios';
+import { from, Observable, of, ReplaySubject, throwError } from 'rxjs';
+import { filter, retry, switchMap } from 'rxjs/operators';
 import { ScenarioAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
 import { ScenarioClient } from './http-client';
@@ -11,11 +11,11 @@ import { ScenarioClient } from './http-client';
 })
 export class ScenariosService {
   public scenarios$: Observable<Scenario[]>;
-  protected _scenarios$: BehaviorSubject<Scenario[]>;
+  protected _scenarios$: ReplaySubject<Scenario[]>;
   protected _scenariosStorage: Scenario[];
 
   constructor(@Inject(ScenarioClient) private _apiClient: TypedAxiosInstance<ScenarioAPI>) {
-    this._scenarios$ = new BehaviorSubject(undefined);
+    this._scenarios$ = new ReplaySubject(1);
     this.scenarios$ = this._scenarios$.asObservable();
 
     this.getScenarios().subscribe();
