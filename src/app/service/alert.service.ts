@@ -3,6 +3,15 @@ import { MatSnackBar } from '@angular/material';
 
 import { AlertComponent } from '../alert/alert.component';
 
+
+// maps message-type to an icon
+enum Icon {
+  INFO = 'info',
+  SUCCESS = 'check_circle',
+  WARN = 'warning',
+  ERROR = 'error',
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -32,12 +41,4 @@ export class AlertService {
   error(message: string) {
     this.openSnackBar(Icon.ERROR, message);
   }
-}
-
-// maps message-type to an icon
-enum Icon {
-  INFO = 'info',
-  SUCCESS = 'check_circle',
-  WARN = 'warning',
-  ERROR = 'error',
 }
