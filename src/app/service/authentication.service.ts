@@ -125,6 +125,7 @@ export class AuthenticationService {
    */
   async newpassword(passwordnew: string, passwordnew2: string) {
     const response = await this._apiClient.request({
+      // TODO: URL anpassen
       url: 'TODO nachdem die definiert haben',
       data: {passwordnew, passwordnew2},
       method: 'PUT',

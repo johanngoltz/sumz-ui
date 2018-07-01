@@ -32,6 +32,7 @@ export interface SumzAPI {
             },
         }
     },
+    // TODO: ändern, sobald Backend die Endpunkte definiert hat
     'TODO nachdem die definiert haben': {
         PUT: {
             body: {
