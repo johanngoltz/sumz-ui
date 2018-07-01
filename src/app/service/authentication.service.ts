@@ -19,30 +19,28 @@ export class AuthenticationService {
   ) {
     // handle expired access_token
     _apiClient.interceptors.response.use( response => {
-      return response;
-    }, error => {
-      // debugger;
-      if (error.response.status === 401 && localStorage.getItem('currentUser') && !error.response.config.headers._isRetry) {
-        // get new access_token
-        this.refresh()
-        .then( () => {
-          error.config.headers.Authorization = JSON.parse(localStorage.getItem('currentUser')).token_type
-            + ' '
-            + JSON.parse(localStorage.getItem('currentUser')).access_token;
-          error.config.headers._isRetry = true;
+        return response;
+      },
+      error => {
+        if (error.response.status === 401 && localStorage.getItem('currentUser') && !error.response.config.headers._isRetry) {
+          // get new access_token
+          return this.refresh()
+          .then( () => {
+            error.config.headers.Authorization = JSON.parse(localStorage.getItem('currentUser')).token_type
+              + ' '
+              + JSON.parse(localStorage.getItem('currentUser')).access_token;
 
-          return _apiClient.request(error.config);
-          // .then( (response) => {
-          //   debugger;
-          //   return Promise.resolve(response);
-          // });
-        })
-        .catch( () => {
-          console.log('Refresh login error: ', error);
-          return Promise.reject(error);
-        });
-      }
-    });
+            error.config.headers._isRetry = true;
+
+            // return the response with a new access_token
+            return _apiClient.request(error.config);
+          })
+          .catch( () => {
+            console.log('Refresh login error: ', error);
+            return Promise.reject(error);
+          });
+        }
+      });
 
   }
 
@@ -89,6 +87,7 @@ export class AuthenticationService {
     if (response.status === 200) {
       // store new user details in local storage to keep user logged in
       localStorage.setItem('currentUser', JSON.stringify(response.data));
+      return;
     } else {
       return;
     }
