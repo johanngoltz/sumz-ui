@@ -14,8 +14,8 @@ const routes: Routes = [
   { path: '', pathMatch: 'full', component: ScenariosComponent, data: {state: 'scenarios'}, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent, data: {state: 'login'} },
   { path: 'registration', component: RegistrationComponent, data: {state: 'registration'} },
-  { path: 'changepassword', component: ChangePasswordComponent, data: {state: 'changepassword'} },
-  { path: 'newpassword', component: NewPasswordComponent, data: {state: 'newpassword'} },
+  { path: 'changepassword', component: ChangePasswordComponent, data: {state: 'changepassword'}, canActivate: [AuthGuard] },
+  { path: 'resetpassword', component: NewPasswordComponent, data: {state: 'newpassword'} },
   { path: 'create', component: CreateScenarioComponent, data: {state: 'create'}, canActivate: [AuthGuard] },
   { path: 'scenario/:id', component: ScenarioDetailComponent, data: {state: 'details'}, canActivate: [AuthGuard] },
 ];

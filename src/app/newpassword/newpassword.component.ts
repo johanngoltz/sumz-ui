@@ -15,7 +15,7 @@ import { AlertService } from '../service/alert.service';
    * @author Burkart
    */
   export class NewPasswordComponent implements OnInit {
-
+    // TODO: Input-Feld für Email hinzufügen
   [x: string]: any;
     newFormGroup: FormGroup;
     submitted = false;
