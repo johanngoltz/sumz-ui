@@ -7,11 +7,11 @@ import {AbstractControl} from '@angular/forms';
 export class PasswordValidation {
 
   /**
-   * Match two passwords if they are the same, used for the registration of new users
-   * @param password1 the first password
-   * @param password2 the second password
-   * @returns {(AC: AbstractControl) => any}
-   * @constructor
+   * Match two passwords if they are the same.
+   * (Used for the registration of new users)
+   * @param {string} password1 the first password
+   * @param {string} password2 the second password
+   * @returns {AbstractControl} AbstractControl
    */
   static Match(password1: string, password2: string) {
     return (AC: AbstractControl) => {

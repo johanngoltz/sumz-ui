@@ -24,13 +24,13 @@ import { AlertService } from '../service/alert.service';
     hide_pw2 = true;
 
     constructor(
-      private _formBuilder: FormBuilder, 
-      private authenticationService: AuthenticationService, 
+      private _formBuilder: FormBuilder,
+      private authenticationService: AuthenticationService,
       private alertService: AlertService) {}
 
     ngOnInit() {
       this.registerFormGroup = this._formBuilder.group({
-        //Validators to check the syntax of the email-adress and the length of the password
+        // Validators to check the syntax of the email-adress and the length of the password
         mailCtrl: ['', Validators.email],
         pwdCtrl: ['', Validators.minLength(8)],
         pwdrptCtrl: ['', Validators.minLength(8)],
@@ -38,13 +38,13 @@ import { AlertService } from '../service/alert.service';
       },
       {
         // validates the two passwords
-        validator: PasswordValidation.Match('pwdCtrl', 'pwdrptCtrl'), 
+        validator: PasswordValidation.Match('pwdCtrl', 'pwdrptCtrl'),
       });
     }
 
     onSubmit() {
 
-      //deactivate the registration button
+      // deactivate the registration button
      this.submitted = true;
 
       // stop here if form is invalid
@@ -59,11 +59,12 @@ import { AlertService } from '../service/alert.service';
           this.loading = false;
         });
 
-      //if the registration was successful inform them to check their mails and activate their account
-      this.alertService.success("Die Registrierung war erfolgreich! Ein Link zur Aktivierung Ihres Profils wurde an die von Ihnen angegebene Email-Adresse versandt.");
+      // if the registration was successful inform them to check their mails and activate their account
+      this.alertService.success('Die Registrierung war erfolgreich! ' +
+      'Ein Link zur Aktivierung Ihres Profils wurde an die von Ihnen angegebene Email-Adresse versandt.');
     }
 
-    //getter for the email-adress and the two passwords to check if they match
+    // getter for the email-adress and the two passwords to check if they match
     get mailCtrl() { return this.registerFormGroup.get('mailCtrl'); }
 
     get pwdCtrl() { return this.registerFormGroup.get('pwdCtrl'); }
