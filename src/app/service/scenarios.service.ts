@@ -1,8 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
-import { TypedAxiosInstance, TypedAxiosResponse } from 'restyped-axios';
-import { Observable, ReplaySubject, from, of, throwError, concat } from 'rxjs';
-import { filter, flatMap, retry, switchMap, tap, debounceTime, concatMap, map } from 'rxjs/operators';
-
+import { TypedAxiosInstance } from 'restyped-axios';
+import { from, Observable, of, ReplaySubject, throwError } from 'rxjs';
+import { filter, retry, switchMap } from 'rxjs/operators';
 import { SumzAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
 import { HttpClient } from './http-client';
@@ -12,15 +11,14 @@ import { HttpClient } from './http-client';
 })
 export class ScenariosService {
   public scenarios$: Observable<Scenario[]>;
-  private _scenarios$: ReplaySubject<Scenario[]>;
-  private _scenariosStorage: Scenario[];
+  protected _scenarios$: ReplaySubject<Scenario[]>;
+  protected _scenariosStorage: Scenario[];
 
   constructor(@Inject(HttpClient) private _apiClient: TypedAxiosInstance<SumzAPI>) {
     this._scenarios$ = new ReplaySubject();
     this.scenarios$ = this._scenarios$.asObservable();
 
-    // FIXME: doppelt (wird in scenarios.component.ts schon aufgerufen)
-    // this.getScenarios().subscribe();
+    this.getScenarios().subscribe();
   }
 
   getScenarios() {

@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MaterialModule } from '../material.module';
 
 import { NewPasswordComponent } from './newpassword.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('NewPasswordComponent', () => {
   let component: NewPasswordComponent;
@@ -9,6 +11,7 @@ describe('NewPasswordComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [NewPasswordComponent],
+      imports: [MaterialModule, ReactiveFormsModule],
     })
     .compileComponents();
   }));
