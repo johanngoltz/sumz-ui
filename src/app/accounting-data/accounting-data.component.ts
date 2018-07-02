@@ -63,7 +63,7 @@ export class AccountingDataComponent implements OnInit {
       base: this._formBuilder.group({ year: [this.base.year, Validators.required], quarter: [this.base.quarter, Validators.required] }),
       calculateFcf: [(scenario && scenario.additionalIncome && scenario.additionalIncome.timeSeries.length > 0) || false,
       Validators.required],
-      quarterly: [scenario && scenario.additionalIncome.timeSeries[0].quarter !== undefined, Validators.required],
+      quarterly: [(scenario && scenario.liabilities.timeSeries[0].quarter) || false, Validators.required],
     }, {
         validator: (formGroup: FormGroup) => {
           return this.validateForm(formGroup);
@@ -74,6 +74,10 @@ export class AccountingDataComponent implements OnInit {
     console.log(this.formGroup);
     this.updateTable();
     this.formGroupOutput.emit(this.formGroup);
+    this.formGroup.controls.quarterly.valueChanges.pipe(debounceTime(500)).subscribe(val => {
+      this.quarterlyChanged();
+      this.updateTable();
+    });
     this.formGroup.controls.start.valueChanges.pipe(debounceTime(500)).subscribe(val => {
       this.start = val;
       this.updateTable();
@@ -170,7 +174,44 @@ export class AccountingDataComponent implements OnInit {
     });
   }
 
-  createFinancialData(timeSeries, year: number, quarter?: number) {
+  quarterlyChanged() {
+    const quarterly = this.formGroup.controls.quarterly.value;
+    Object.keys(this.paramData).forEach(param => {
+      const newTimeSeries = [];
+      const timeSeries = <FormArray>(<FormGroup>this.formGroup.controls[param]).controls.timeSeries;
+      if (quarterly) {
+        timeSeries.value.forEach(dataPoint => {
+          for (let i = 1; i < 5; i++) {
+            if ((dataPoint.year === this.start.year && dataPoint.quarter < this.start.quarter) ||
+            (dataPoint.year === this.end.year && dataPoint.quarter > this.end.quarter)) {
+              continue;
+            } else {
+              newTimeSeries.push(this._formBuilder.group({
+                year: dataPoint.year,
+                quarter: i,
+                amount: dataPoint.amount / 4,
+              }));
+            }
+          }
+        });
+      } else {
+        while (timeSeries.length > 0) {
+          const values = [];
+          do {
+          values.push(timeSeries.value[0]);
+          timeSeries.removeAt(0);
+          } while (timeSeries.length > 0 && timeSeries.value[0].year === values[0].year);
+          newTimeSeries.push(this._formBuilder.group({
+            year: values[0].year,
+            amount: values.reduce((a, b) => a + b, 0) / values.length,
+          }));
+        }
+      }
+      (<FormGroup> this.formGroup.controls[param]).setControl('timeSeries', this._formBuilder.array(newTimeSeries));
+    });
+  }
+
+  createFinancialData(timeSeries: FormArray, year: number, quarter?: number, index?: number) {
     let group;
     if (quarter) {
       group = this._formBuilder.group({
@@ -184,27 +225,25 @@ export class AccountingDataComponent implements OnInit {
         amount: [0, Validators.required],
       });
     }
-    timeSeries.push(group);
+    if (index !== undefined) {
+      timeSeries.insert(index, group);
+    } else {
+      timeSeries.push(group);
+    }
   }
 
-  removeFinancialData(index: number) {
-    Object.keys(this.paramData).forEach((param) => {
-      const array = <FormArray>(<FormGroup>this.formGroup.controls[param]).controls.timeSeries;
-      array.removeAt(index);
-    });
-  }
-
-  fillTimeSeriesGaps(timeSeries, start, end, shiftByOne?: Boolean) {
+  fillTimeSeriesGaps(timeSeries, start, end, insertAtStart = false, shiftByOne = false) {
     const quarterly = this.formGroup.value.quarterly;
+    let insertCount = 0;
     for (let currentYear = start.year + (shiftByOne ? 1 : 0); currentYear < end.year + (quarterly || shiftByOne ? 1 : 0); currentYear++) {
       if (quarterly) {
         for (let currentQuarter = (currentYear === start.year ?
           (start.quarter + (shiftByOne ? 1 : 0) === 4 ? 1 : start.quarter + (shiftByOne ? 1 : 0)) : 1);
           currentQuarter < (currentYear === end.year ? end.quarter + (shiftByOne ? 1 : 0) : 5); currentQuarter++) {
-          this.createFinancialData(timeSeries, currentYear, currentQuarter);
+          this.createFinancialData(timeSeries, currentYear, currentQuarter, insertAtStart ? insertCount++ : undefined);
         }
       } else {
-        this.createFinancialData(timeSeries, currentYear);
+        this.createFinancialData(timeSeries, currentYear, undefined, insertAtStart ? insertCount++ : undefined);
       }
     }
   }
@@ -227,8 +266,8 @@ export class AccountingDataComponent implements OnInit {
       }
       // Fill up missing values between the start and first value
       if (timeSeries.length > 0) {
-        this.fillTimeSeriesGaps(timeSeries, start, timeSeries.value[0]);
-        this.fillTimeSeriesGaps(timeSeries, timeSeries.value[timeSeries.value.length - 1], end, true);
+        this.fillTimeSeriesGaps(timeSeries, start, timeSeries.value[0], true);
+        this.fillTimeSeriesGaps(timeSeries, timeSeries.value[timeSeries.value.length - 1], end, false, true);
       } else {
         this.fillTimeSeriesGaps(timeSeries, start, end);
         this.createFinancialData(timeSeries, end.year, this.formGroup.value.quarterly ? end.quarter : undefined);
@@ -279,16 +318,16 @@ export class AccountingDataComponent implements OnInit {
         (quarterly && value.year === this.end.year && value.quarter <= this.end.quarter));
   }
 
-  checkVisibility(value, requireHistoric: Boolean, shifted?: Boolean) {
-    const end = this.formGroup.controls.end.value;
+  checkVisibility(value, requireHistoric: Boolean, shifted = false) {
     return this.checkValue(value, requireHistoric, shifted) &&
-      (!shifted || value.year !== end.year || (this.formGroup.value.quarterly && value.quarter !== end.quarter));
+      (!shifted || value.year !== this.end.year || (this.formGroup.value.quarterly && value.quarter !== this.end.quarter));
   }
 
-  checkValue(value, requireHistoric: Boolean, shifted?: Boolean) {
-    const base = this.formGroup.controls.base.value;
+  checkValue(value, requireHistoric: Boolean, shifted = false) {
     const quarterly = this.formGroup.value.quarterly;
-    return (value.year < base.year) || (value.year === base.year && (!quarterly || value.quarter <= base.quarter)) === requireHistoric
+    const base = this.formGroup.controls.base.value;
+    return ((value.year < base.year) || (value.year === base.year &&
+      (!quarterly || value.quarter <= base.quarter))) === requireHistoric
       || (shifted && value.year === base.year && (!quarterly || value.quarter === base.quarter));
   }
 

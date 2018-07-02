@@ -50,32 +50,32 @@ export class CreateScenarioComponent implements OnInit {
         periods: (this.formGroup3.value.endYear - this.formGroup3.value.startYear) * 4,
       };
       Object.keys(this.paramData)
-      .filter(param => [undefined, this.formGroup3.value.calculateFcf].indexOf(this.paramData[param].showOnCalculation) > -1)
-      .forEach((param) => {
-        const paramFormGroup = this.formGroup3.controls[param];
-        if (paramFormGroup.value.isHistoric && !scenario.stochastic) {
-          scenario.stochastic = true;
-        }
-        scenario[param] = {
-          isHistoric: paramFormGroup.value.isHistoric,
-          timeSeries: paramFormGroup.value.timeSeries.filter(dataPoint =>
-            dataPoint.year >= this.formGroup3.value.startYear
-            && dataPoint.year <= this.formGroup3.value.endYear
-            && (dataPoint.year < this.formGroup3.value.baseYear) === paramFormGroup.value.isHistoric),
-        };
-      });
+        .filter(param => [undefined, this.formGroup3.value.calculateFcf].indexOf(this.paramData[param].showOnCalculation) > -1)
+        .forEach((param) => {
+          const paramFormGroup = this.formGroup3.controls[param];
+          if (paramFormGroup.value.isHistoric && !scenario.stochastic) {
+            scenario.stochastic = true;
+          }
+          scenario[param] = {
+            isHistoric: paramFormGroup.value.isHistoric,
+            timeSeries: paramFormGroup.value.timeSeries.filter(dataPoint =>
+              dataPoint.year >= this.formGroup3.value.startYear
+              && dataPoint.year <= this.formGroup3.value.endYear
+              && (dataPoint.year < this.formGroup3.value.baseYear) === paramFormGroup.value.isHistoric),
+          };
+        });
       this._scenariosService.addScenario(scenario)
-      .subscribe(
-        (createdScenario) => {
-          this._snackBar.open('Das Projekt wurde erfolgreich erstellt', undefined, { duration: 5000 });
-          this._router.navigate(['/scenario', createdScenario.id]);
-        },
-        (error) => {
-          this._snackBar.open(`Das Projekt konnte nicht erstellt werden. (${error.statusText})`, undefined,
-          { panelClass: 'snack-mat-warn', duration: 5000 });
-        },
-        () => this.busy = false
-      );
+        .subscribe(
+          (createdScenario) => {
+            this._snackBar.open('Das Projekt wurde erfolgreich erstellt', undefined, { duration: 5000 });
+            this._router.navigate(['/scenario', createdScenario.id]);
+          },
+          (error) => {
+            this._snackBar.open(`Das Projekt konnte nicht erstellt werden. (${error.statusText})`, undefined,
+              { panelClass: 'snack-mat-warn', duration: 5000 });
+          },
+          () => this.busy = false
+        );
     }
   }
 
@@ -84,17 +84,19 @@ export class CreateScenarioComponent implements OnInit {
   }
 
   insertScenarioData(scenario: Scenario, that: CreateScenarioComponent) {
-    if (that.formGroup1.value.name.length === 0) {
-      that.formGroup1.controls.name.setValue(scenario.name);
+    if (scenario) {
+      if (that.formGroup1.value.name.length === 0) {
+        that.formGroup1.controls.name.setValue(scenario.name);
+      }
+      if (that.formGroup1.value.description.length === 0) {
+        that.formGroup1.controls.description.setValue(scenario.description);
+      }
+      that.formGroup2.controls.equityInterest.setValue(scenario.equityInterest);
+      that.formGroup2.controls.outsideCapitalInterest.setValue(scenario.outsideCapitalInterest);
+      that.formGroup2.controls.corporateTax.setValue(scenario.corporateTax);
+      that.importedScenario.emit(scenario);
+      that._snackBar.open(`Die Daten des Projekts "${scenario.name}" wurden erfolgreich übernommen`, undefined, { duration: 5000 });
     }
-    if (that.formGroup1.value.description.length === 0) {
-      that.formGroup1.controls.description.setValue(scenario.description);
-    }
-    that.formGroup2.controls.equityInterest.setValue(scenario.equityInterest);
-    that.formGroup2.controls.outsideCapitalInterest.setValue(scenario.outsideCapitalInterest);
-    that.formGroup2.controls.corporateTax.setValue(scenario.corporateTax);
-    that.importedScenario.emit(scenario);
-    that._snackBar.open(`Die Daten des Projekts "${scenario.name}" wurden erfolgreich übernommen`, undefined, { duration: 5000 });
   }
 
 }

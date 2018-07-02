@@ -63,6 +63,10 @@
     flex-grow: 0;
 }
 
+.leveraged-field .small-field ::ng-deep .mat-form-field-infix {
+    width: 40px;
+}
+
 #startyear-container {
     left: -3px;
 }
@@ -92,4 +96,8 @@ mat-checkbox {
 
 .no-bold {
     font-weight: normal;
+}
+
+.flex {
+    display: flex;
 }

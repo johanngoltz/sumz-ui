@@ -193,6 +193,24 @@
         "taxShield": 123,
         "totalLiabilities": 112
       }
+    },
+    {
+      "equityInterest": 23,
+      "corporateTax": 21,
+      "freeCashFlows": {
+        "isHistoric": true,
+        "timeSeries": []
+      },
+      "name": "Michael Schäfer",
+      "liabilities": {
+        "isHistoric": false,
+        "timeSeries": []
+      },
+      "description": "",
+      "stochastic": true,
+      "periods": null,
+      "id": 79437,
+      "outsideCapitalInterest": 13
     }
   ]
 }
