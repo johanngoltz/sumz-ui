@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+import { AuthenticationService } from '../service/authentication.service';
+import { AlertService } from '../service/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -7,18 +10,44 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
+  loginFormGroup: FormGroup;
+  loading = false;
+  hide = true;
 
-  constructor(private formBuilder: FormBuilder) {
-    this.loginForm = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
+  constructor(
+    private formBuilder: FormBuilder,
+    private authenticationService: AuthenticationService,
+    private alertService: AlertService,
+  ) { }
+
+  ngOnInit() {
+    this.loginFormGroup = this.formBuilder.group({
+      mailCtrl: ['', Validators.email],
+      pwdCtrl: '',
     });
   }
 
-  hide = true;
+  onSubmit() {
+    // abort if form is invalid
+    if (this.loginFormGroup.invalid) {
+      return;
+    }
 
-  ngOnInit() {
+    // disable login button
+    this.loading = true;
+
+    // reset login status
+    this.authenticationService.logout();
+
+    this.authenticationService.login(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString())
+      .catch(
+        error => {
+          this.alertService.error(error);
+          this.loading = false;
+        });
   }
 
+  get mailCtrl() { return this.loginFormGroup.get('mailCtrl'); }
+
+  get pwdCtrl() { return this.loginFormGroup.get('pwdCtrl'); }
 }

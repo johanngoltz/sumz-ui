@@ -1,9 +1,9 @@
 import { TestBed, inject } from '@angular/core/testing';
 import MockAdapter from 'axios-mock-adapter';
 import axios, { TypedAxiosInstance } from 'restyped-axios';
-import { ScenarioAPI } from '../api/api';
+import { SumzAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
-import { ScenarioClient } from './http-client';
+import { HttpClient } from './http-client';
 import { ScenariosService } from './scenarios.service';
 import { Subject, EMPTY } from 'rxjs';
 import { withLatestFrom, mapTo, flatMap, combineLatest, combineAll, map, skip } from 'rxjs/operators';
@@ -13,9 +13,9 @@ describe('ScenariosService', () => {
 
     TestBed.configureTestingModule({
       providers: [ScenariosService, {
-        provide: ScenarioClient,
+        provide: HttpClient,
         useFactory: () => {
-          const axiosInstance = axios.create<ScenarioAPI>();
+          const axiosInstance = axios.create<SumzAPI>();
           const data = [{ id: 2500 }, { id: 2501 }, { id: 2502 }, { id: 2510 }] as Scenario[];
           new MockAdapter(axiosInstance)
             .onGet('/scenario').reply(config => {
@@ -52,7 +52,7 @@ describe('ScenariosService', () => {
       fail);
   }));
 
-  it('should throw an error when trying to get a non-existing scenario', inject([ScenariosService, ScenarioClient],
+  it('should throw an error when trying to get a non-existing scenario', inject([ScenariosService, HttpClient],
     (service: ScenariosService, client: TypedAxiosInstance) => {
       service.getScenario(-1).subscribe(
         success => fail('was not supposed to return something'),
