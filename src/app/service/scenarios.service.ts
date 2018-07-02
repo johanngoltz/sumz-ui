@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { TypedAxiosInstance } from 'restyped-axios';
-import { EMPTY, from, interval, NEVER, Observable, of, race, ReplaySubject, throwError } from 'rxjs';
-import { filter, flatMap, retry, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { Observable, ReplaySubject, from, of, throwError } from 'rxjs';
+import { filter, flatMap, retry, switchMap } from 'rxjs/operators';
 import { ScenarioAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
 import { ScenarioClient } from './http-client';
@@ -14,8 +14,6 @@ export class ScenariosService {
   protected _scenarios$: ReplaySubject<Scenario[]>;
   protected _scenariosStorage: Scenario[];
 
-  private _getScenariosInterval$: Observable<number> = NEVER;
-
   constructor(@Inject(ScenarioClient) private _apiClient: TypedAxiosInstance<ScenarioAPI>) {
     this._scenarios$ = new ReplaySubject();
     this.scenarios$ = this._scenarios$.asObservable();
@@ -24,25 +22,18 @@ export class ScenariosService {
   }
 
   getScenarios() {
-    const getFromBackend = from(this._apiClient.request({ url: '/scenario' })).pipe(
+    return from(this._apiClient.request({ url: '/scenario' })).pipe(
       switchMap(response => response.status === 200 ?
         of(response) :
         throwError(response)
       ),
-      retry(2)
-    );
-    getFromBackend.subscribe(() => this._getScenariosInterval$ = interval(5000));
-    return race(
-      this._getScenariosInterval$,
-      getFromBackend.pipe(
-        flatMap(response => {
-          console.log('Receiving data');
-          this._scenariosStorage = response.data;
-          this._scenarios$.next([...response.data]);
-          return EMPTY;
-        }),
-      ))
-      .pipe(switchMapTo(this.scenarios$));
+      retry(2),
+      flatMap(response => {
+        console.log('Receiving data');
+        this._scenariosStorage = response.data;
+        this._scenarios$.next([...response.data]);
+        return this.scenarios$;
+      }));
   }
 
   getScenario(id: number) {
@@ -59,7 +50,6 @@ export class ScenariosService {
       data: scenario,
       method: 'POST',
     })).pipe(
-      // auf flatMap ändern
       switchMap(response => response.status === 201 ? of(response) : throwError(response)),
       retry(2),
       switchMap(response => {
@@ -72,7 +62,6 @@ export class ScenariosService {
 
   updateScenario(scenario: Scenario) {
     return from(this._apiClient.put(`/scenario/${scenario.id}`, scenario)).pipe(
-      // auf flatMap ändern
       switchMap(response => response.status === 200 ? of(response) : throwError(response)),
       retry(2),
       switchMap(response => {
@@ -84,7 +73,6 @@ export class ScenariosService {
   }
 
   removeScenario(scenario: Scenario) {
-    // auf flatMap ändern
     return from(this._apiClient.delete(`/scenario/${scenario.id}`)).pipe(
       switchMap(response => response.status === 200 ? of(response) : throwError(response)),
       retry(2),
