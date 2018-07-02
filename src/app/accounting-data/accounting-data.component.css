@@ -63,16 +63,20 @@
     flex-grow: 0;
 }
 
-#startyear-container {
-    left: -2px;
+.leveraged-field .small-field ::ng-deep .mat-form-field-infix {
+    width: 40px;
 }
 
-#startyear-container.editable {
+#startyear-container {
     left: -3px;
 }
 
 #baseyear-container {
     left: 0;
+}
+
+#baseyear-container > span {
+    text-align: center;
 }
 
 #startyear-container, #baseyear-container {
@@ -88,4 +92,12 @@
 mat-checkbox {
     display: block;
     font-weight: normal;
+}
+
+.no-bold {
+    font-weight: normal;
+}
+
+.flex {
+    display: flex;
 }

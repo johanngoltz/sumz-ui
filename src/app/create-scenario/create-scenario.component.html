@@ -10,7 +10,7 @@
               <input type="text" id="name" name="name" matInput placeholder="Name" required formControlName="name">
             </mat-form-field>
             <mat-form-field>
-              <textarea id="description" name="description" matInput placeholder="Beschreibung" formControlName="description"></textarea>
+              <textarea id="description" name="description" matInput cdkTextareaAutosize placeholder="Beschreibung" formControlName="description"></textarea>
             </mat-form-field>
             <div class="info">
               <h4>Aus bestehendem Projekt erstellen</h4>
@@ -30,13 +30,50 @@
         </mat-card>
       </form>
     </mat-step>
-    <mat-step label="Zahlungsreihe angeben" [stepControl]="formGroup2">
-      <form [formGroup]="formGroup2" (ngSubmit)="createScenario()">
+    <mat-step label="Umweltfaktoren" [stepControl]="formGroup2">
+      <form [formGroup]="formGroup2">
+        <mat-card class="form-container">
+          <mat-card-title>Umweltfaktoren</mat-card-title>
+          <mat-card-content>
+            <mat-form-field>
+              <input type="text" id="equityInterest" name="equityInterest" matInput appToDouble placeholder="Eigenkapitalzinssatz" required
+                formControlName="equityInterest">
+              <span matSuffix>%</span>
+              <mat-error *ngIf="formGroup2.controls.equityInterest.hasError('min') || formGroup2.controls.equityInterest.hasError('max')">
+                Der Wert muss zwischen 0% und 100% liegen
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input type="text" id="outsideCapitalInterest" name="outsideCapitalInterest" matInput appToDouble placeholder="Fremdkapitalzinssatz" required
+                  formControlName="outsideCapitalInterest">
+                <span matSuffix>%</span>
+                <mat-error *ngIf="formGroup2.controls.outsideCapitalInterest.hasError('min') || formGroup2.controls.outsideCapitalInterest.hasError('max')">
+                  Der Wert muss zwischen 0% und 100% liegen
+                </mat-error>
+              </mat-form-field>
+            <mat-form-field>
+              <input type="text" id="corporateTax" name="corporateTax" matInput appToDouble placeholder="Unternehmenssteuersatz" required
+                formControlName="corporateTax">
+              <span matSuffix>%</span>
+              <mat-error *ngIf="formGroup2.controls.corporateTax.hasError('min') || formGroup2.controls.corporateTax.hasError('max')">
+                Der Wert muss zwischen 0% und 100% liegen
+              </mat-error>
+            </mat-form-field>
+          </mat-card-content>
+          <mat-card-actions class="stepper-actions">
+            <button mat-button matStepperPrevious>Zurück</button>
+            <button mat-raised-button matStepperNext color="accent">Weiter</button>
+          </mat-card-actions>
+        </mat-card>
+      </form>
+    </mat-step>
+    <mat-step label="Zahlungsreihe angeben" [stepControl]="formGroup3">
+      <form [formGroup]="formGroup3" (ngSubmit)="createScenario()">
         <mat-card class="form-container" [class.busy]="busy">
           <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
           <mat-card-title>Zahlungsreihe</mat-card-title>
           <mat-card-content>
-            <app-accounting-data [editable]="true" (formGroupOutput)="formGroup2 = $event"></app-accounting-data>
+            <app-accounting-data [editable]="true" [initialData]="importedScenario" (formGroupOutput)="formGroup3 = $event"></app-accounting-data>
           </mat-card-content>
           <mat-card-actions class="stepper-actions">
             <button mat-button matStepperPrevious [disabled]="busy">Zurück</button>

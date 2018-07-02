@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
+import { AuthenticationService } from './service/authentication.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -62,7 +64,11 @@ export class AppComponent {
   log: NavigationEnd[];
   title = 'SUMZ';
 
-  constructor(router: Router) {
+  constructor(
+    router: Router,
+    private _router: Router,
+    private authenticationService: AuthenticationService,
+  ) {
     this.log = [];
     router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -73,5 +79,14 @@ export class AppComponent {
 
   getState(outlet) {
     return outlet.activatedRouteData.state;
+  }
+
+  logout() {
+    this.authenticationService.logout();
+    this._router.navigateByUrl('/login');
+  }
+
+  change() {
+    this._router.navigateByUrl('changepassword');
   }
 }

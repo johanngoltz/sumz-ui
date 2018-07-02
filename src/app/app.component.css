@@ -13,7 +13,11 @@ mat-toolbar {
     width: auto;
 }
 
-::ng-deep app-scenarios, ::ng-deep app-create-scenario, ::ng-deep app-scenario-detail, ::ng-deep app-login {
+#user-menu-btn {
+    margin-left: auto;
+}
+
+::ng-deep app-scenarios, ::ng-deep app-create-scenario, ::ng-deep app-scenario-detail, ::ng-deep app-login, ::ng-deep app-registration, ::ng-deep app-changepassword, ::ng-deep app-newpassword {
     width: 100%;
     min-height: calc(100% - 64px);
     display: block;
@@ -21,9 +25,4 @@ mat-toolbar {
 
 ::ng-deep .content-conatiner {
     display: block;
-}
-
-::ng-deep .snack-mat-warn {
-    background: #c62828;
-    color: #FFF;
 }
