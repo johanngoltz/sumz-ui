@@ -15,6 +15,9 @@ import { ScenariosComponent } from './scenarios/scenarios.component';
 import { SelectScenarioComponent } from './select-scenario/select-scenario.component';
 import { AccountingDataComponent } from './accounting-data/accounting-data.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ChangePasswordComponent } from './changepassword/changepassword.component';
+import { AlertComponent } from './alert/alert.component';
+import { NewPasswordComponent } from './newpassword/newpassword.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -30,6 +33,9 @@ describe('AppComponent', () => {
         RegistrationComponent,
         DeleteDialogComponent,
         AccountingDataComponent,
+        ChangePasswordComponent,
+        AlertComponent,
+        NewPasswordComponent,
       ],
       imports: [
         MaterialModule,

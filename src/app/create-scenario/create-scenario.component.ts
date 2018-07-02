@@ -6,6 +6,7 @@ import { AccountingFigure, Scenario } from '../api/scenario';
 import { SelectScenarioComponent } from '../select-scenario/select-scenario.component';
 import { ScenariosService } from '../service/scenarios.service';
 import { paramData } from '../api/paramData';
+import { AlertService } from '../service/alert.service';
 
 @Component({
   selector: 'app-create-scenario',
@@ -21,7 +22,7 @@ export class CreateScenarioComponent implements OnInit {
   paramData = paramData;
 
   constructor(private _formBuilder: FormBuilder, private _scenariosService: ScenariosService, private _router: Router,
-    private _snackBar: MatSnackBar, private _bottomSheet: MatBottomSheet) {
+    private _alertService: AlertService, private _bottomSheet: MatBottomSheet) {
   }
 
   ngOnInit() {
@@ -90,12 +91,11 @@ export class CreateScenarioComponent implements OnInit {
       this._scenariosService.addScenario(scenario)
         .subscribe(
           (createdScenario) => {
-            this._snackBar.open('Das Projekt wurde erfolgreich erstellt', undefined, { duration: 5000 });
+            this._alertService.success('Das Szenario wurde erfolgreich erstellt');
             this._router.navigate(['/scenario', createdScenario.id]);
           },
           (error) => {
-            this._snackBar.open(`Das Projekt konnte nicht erstellt werden. (${error.statusText})`, undefined,
-              { panelClass: 'snack-mat-warn', duration: 5000 });
+            this._alertService.error(`Das Szenario konnte nicht erstellt werden. (${error.statusText})`);
           },
           () => this.busy = false
         );
@@ -118,7 +118,7 @@ export class CreateScenarioComponent implements OnInit {
       that.formGroup2.controls.outsideCapitalInterest.setValue(scenario.outsideCapitalInterest);
       that.formGroup2.controls.corporateTax.setValue(scenario.corporateTax);
       that.importedScenario.emit(scenario);
-      that._snackBar.open(`Die Daten des Projekts "${scenario.name}" wurden erfolgreich übernommen`, undefined, { duration: 5000 });
+      that._alertService.success(`Die Daten des Szenarios "${scenario.name}" wurden erfolgreich übernommen`);
     }
   }
 
