@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
-import { PasswordValidation } from '../registration/registration.passwordvalidation';
+import { PasswordValidation } from 'src/app/registration/registration.passwordvalidation';
 import { AuthenticationService } from '../service/authentication.service';
 import { AlertService } from '../service/alert.service';
 
@@ -29,10 +29,12 @@ import { AlertService } from '../service/alert.service';
 
     ngOnInit() {
       this.changeFormGroup = this._formBuilder.group({
+
         // Validators to check the length of the password
         pwdOld: ['', Validators.minLength(8)],
         pwdNew: ['', Validators.minLength(8)],
         pwdNew2: ['', Validators.minLength(8)],
+
       },
       {
         // validates the two passwords
@@ -41,7 +43,8 @@ import { AlertService } from '../service/alert.service';
     }
 
     onSubmit() {
-      // deactivate the registration button
+
+      // deactivate the change password button
      this.submitted = true;
 
       // stop here if form is invalid
@@ -51,14 +54,17 @@ import { AlertService } from '../service/alert.service';
 
       // call the method to change the password
       this.authenticationService.changepassword(this.pwdOld.value.toString(), this.pwdNew.value.toString(), this.pwdNew2.value.toString())
+      .then( () => {
+          // if the change was successful
+          this.alertService.success('Ihr Passwort wurde erfolgreich geändert!');
+      })
       .catch( // catch the error-warnings if the method fails
         error => {
           this.alertService.error(error);
           this.loading = false;
         });
 
-      // if the change was successful
-      this.alertService.success('Ihr Passwort wurde erfolgreich geändert!');
+
     }
 
     // getter for the old and new passwords
@@ -67,4 +73,5 @@ import { AlertService } from '../service/alert.service';
     get pwdNew() { return this.changeFormGroup.get('pwdNew'); }
 
     get pwdNew2() { return this.changeFormGroup.get('pwdNew2'); }
+
 }
