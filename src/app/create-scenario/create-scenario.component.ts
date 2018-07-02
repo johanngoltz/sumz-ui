@@ -39,6 +39,25 @@ export class CreateScenarioComponent implements OnInit {
     this.importedScenario = new EventEmitter<Scenario>();
   }
 
+  checkVisibility(value, requireHistoric: Boolean, quarterly: Boolean, base, end, shifted = false) {
+    return this.checkValue(value, requireHistoric, quarterly, base, shifted) &&
+      (!shifted || value.year !== end.year || (quarterly && value.quarter !== end.quarter));
+  }
+
+  checkValue(value, requireHistoric: Boolean, quarterly: Boolean, base, shifted = false) {
+    return ((value.year < base.year) || (value.year === base.year &&
+      (!quarterly || value.quarter <= base.quarter))) === requireHistoric
+      || (shifted && value.year === base.year && (!quarterly || value.quarter === base.quarter));
+  }
+
+  isInsideBounds(quarterly, start, end, value) {
+    return (value.year > start.year - (quarterly ? 0 : 1) ||
+      (quarterly && value.year === start.year
+        && value.quarter >= start.quarter)) &&
+      (value.year < end.year + (quarterly ? 0 : 1) ||
+        (quarterly && value.year === end.year && value.quarter <= end.quarter));
+  }
+
   createScenario() {
     if (this.formGroup3.valid) {
       this.busy = true;
@@ -49,6 +68,10 @@ export class CreateScenarioComponent implements OnInit {
         stochastic: false,
         periods: (this.formGroup3.value.endYear - this.formGroup3.value.startYear) * 4,
       };
+      const start = this.formGroup3.controls.start.value;
+      const base = this.formGroup3.controls.base.value;
+      const end = this.formGroup3.controls.end.value;
+      const quarterly = this.formGroup3.controls.quarterly.value;
       Object.keys(this.paramData)
         .filter(param => [undefined, this.formGroup3.value.calculateFcf].indexOf(this.paramData[param].showOnCalculation) > -1)
         .forEach((param) => {
@@ -59,9 +82,9 @@ export class CreateScenarioComponent implements OnInit {
           scenario[param] = {
             isHistoric: paramFormGroup.value.isHistoric,
             timeSeries: paramFormGroup.value.timeSeries.filter(dataPoint =>
-              dataPoint.year >= this.formGroup3.value.startYear
-              && dataPoint.year <= this.formGroup3.value.endYear
-              && (dataPoint.year < this.formGroup3.value.baseYear) === paramFormGroup.value.isHistoric),
+              this.isInsideBounds(quarterly, start, end, dataPoint)
+              && this.checkVisibility(dataPoint, paramFormGroup.value.isHistoric, quarterly, base, end,
+                this.paramData[param].shiftDeterministic)),
           };
         });
       this._scenariosService.addScenario(scenario)

@@ -169,6 +169,11 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
 
       currentScenario.stochastic = false;
       currentScenario.periods = (this.accountingDataFormGroup.value.endYear - this.accountingDataFormGroup.value.startYear) * 4;
+
+      const quarterly = this.accountingDataFormGroup.controls.quarterly.value;
+      const start = this.accountingDataFormGroup.controls.start.value;
+      const base = this.accountingDataFormGroup.controls.base.value;
+      const end = this.accountingDataFormGroup.controls.end.value;
       Object.keys(paramData)
       .filter(param => [undefined, this.accountingDataFormGroup.value.calculateFcf].indexOf(this.paramData[param].showOnCalculation) > -1)
       .forEach((param) => {
@@ -179,9 +184,8 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
         currentScenario[param] = {
           isHistoric: paramFormGroup.value.isHistoric,
           timeSeries: paramFormGroup.value.timeSeries.filter(dataPoint =>
-            dataPoint.year >= this.accountingDataFormGroup.value.startYear
-            && dataPoint.year <= this.accountingDataFormGroup.value.endYear
-            && (dataPoint.year < this.accountingDataFormGroup.value.baseYear) === paramFormGroup.value.isHistoric),
+            this.isInsideBounds(quarterly, start, end, dataPoint)
+            && this.checkVisibility(dataPoint, paramFormGroup.value.isHistoric, quarterly, base, end, paramData[param].shiftDeterministic)),
         };
       });
 
@@ -224,4 +228,24 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  checkVisibility(value, requireHistoric: Boolean, quarterly: Boolean, base, end, shifted = false) {
+    return this.checkValue(value, requireHistoric, quarterly, base, shifted) &&
+      (!shifted || value.year !== end.year || (quarterly && value.quarter !== end.quarter));
+  }
+
+  checkValue(value, requireHistoric: Boolean, quarterly: Boolean, base, shifted = false) {
+    return ((value.year < base.year) || (value.year === base.year &&
+      (!quarterly || value.quarter <= base.quarter))) === requireHistoric
+      || (shifted && value.year === base.year && (!quarterly || value.quarter === base.quarter));
+  }
+
+  isInsideBounds(quarterly, start, end, value) {
+    return (value.year > start.year - (quarterly ? 0 : 1) ||
+      (quarterly && value.year === start.year
+        && value.quarter >= start.quarter)) &&
+      (value.year < end.year + (quarterly ? 0 : 1) ||
+        (quarterly && value.year === end.year && value.quarter <= end.quarter));
+  }
+
 }
