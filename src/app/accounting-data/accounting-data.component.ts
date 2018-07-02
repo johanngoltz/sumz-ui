@@ -156,31 +156,6 @@ export class AccountingDataComponent implements OnInit {
               amount: [dataPoint.amount, Validators.required],
             }));
           });
-          /*if (lastItem.year < this.end.year
-            || (lastItem.year === this.end.year && lastItem.quarter < 4)) {
-            let year = lastItem.year;
-            let quarter = lastItem.quarter;
-            if (quarter === 4) {
-              year++;
-              quarter = 1;
-            } else {
-              quarter++;
-            }
-            while (this.end.year > year
-              || (this.end.year === year && quarter <= 4)) {
-              timeSeries.push(this._formBuilder.group({
-                year: year,
-                quarter: quarter,
-                amount: [0, Validators.required],
-              }));
-              if (quarter === 4) {
-                year++;
-                quarter = 1;
-              } else {
-                quarter++;
-              }
-            }
-          }*/
         }
       }
       formGroup.addControl(param, this._formBuilder.group({

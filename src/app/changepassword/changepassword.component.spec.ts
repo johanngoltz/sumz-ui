@@ -2,14 +2,17 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MaterialModule } from '../material.module';
 
 import { ChangePasswordComponent } from './changepassword.component';
+import { MaterialModule } from '../material.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
-describe('ResetPasswordComponent', () => {
+describe('ChangePasswordComponent', () => {
   let component: ChangePasswordComponent;
   let fixture: ComponentFixture<ChangePasswordComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ChangePasswordComponent],
+      imports: [MaterialModule, ReactiveFormsModule],
     })
     .compileComponents();
   }));

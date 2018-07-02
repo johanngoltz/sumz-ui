@@ -37,7 +37,7 @@ export class ScenarioCardComponent implements OnInit {
             .subscribe(
               removed => this._snackBar.open(`Das Szenario "${this.scenario.valueOf().name}" wurde erfolgreich gelöscht`, undefined,
                 { duration: 5000 }),
-              error => this._snackBar.open(`Das Projekt "${this.scenario.valueOf().name}" konnte nicht gelöscht werden (${error.message})`,
+              error => this._snackBar.open(`Das Szenario "${this.scenario.valueOf().name}" konnte nicht gelöscht werden (${error.message})`,
                 undefined, { panelClass: 'mat-warn', duration: 5000 }));
         }
       });
