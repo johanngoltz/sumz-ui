@@ -4,7 +4,7 @@ export interface SumzAPI {
     '/oauth/token': {
         POST: {
             body: { },
-            respose: {
+            response: {
                 access_token: string,
                 refresh_token: string;
                 token_type: string;
@@ -32,11 +32,17 @@ export interface SumzAPI {
             },
         }
     },
-    'TODO nachdem die definiert haben': {
-        PUT: {
+    '/users/forgot': {
+        POST: {
             body: {
-                passwordnew: string,
-                passwordnew2: string
+                email: string
+            },
+        }
+    },
+    '/users/reset/token': {
+        POST: {
+            body: {
+                password: string
             },
         }
     },

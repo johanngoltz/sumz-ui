@@ -14,6 +14,7 @@ import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { ChangePasswordComponent } from './changepassword/changepassword.component';
 import { NewPasswordComponent } from './newpassword/newpassword.component';
+import { NewPasswordEmailComponent } from './newpasswordemail/newpasswordemail.component';
 import { AlertComponent } from './alert/alert.component';
 import { ScenarioCardComponent } from './scenario-card/scenario-card.component';
 import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.component';
@@ -35,6 +36,7 @@ import { ToDoubleDirective } from './to-double.directive';
     RegistrationComponent,
     ChangePasswordComponent,
     NewPasswordComponent,
+    NewPasswordEmailComponent,
     AlertComponent,
   ],
   imports: [
