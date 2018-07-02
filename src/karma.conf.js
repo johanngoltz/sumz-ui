@@ -25,7 +25,7 @@ module.exports = function (config) {
     customLaunchers: {
       ChromeDebug: {
         base: 'Chrome',
-        flags: ['--remote-debugging-port=9222'],
+        flags: ['--headless', '--disable-gpu', '--remote-debugging-port=9222'],
         debug: true
       },
       FirefoxHeadless: {

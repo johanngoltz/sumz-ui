@@ -14,6 +14,8 @@ import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.compo
 import { ScenariosComponent } from './scenarios/scenarios.component';
 import { SelectScenarioComponent } from './select-scenario/select-scenario.component';
 import { ChangePasswordComponent} from './changepassword/changepassword.component';
+import { AccountingDataComponent } from './accounting-data/accounting-data.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -29,6 +31,7 @@ describe('AppComponent', () => {
         RegistrationComponent,
         DeleteDialogComponent,
         ChangePasswordComponent,
+        AccountingDataComponent,
       ],
       imports: [
         MaterialModule,
@@ -36,6 +39,7 @@ describe('AppComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
+        NgxChartsModule,
       ],
       providers: [
         { provide: APP_BASE_HREF, useValue: '/' },

@@ -16,6 +16,7 @@ exports.routes = [{
   route: '/scenario',
   verb: 'POST',
   handler: function (req, res) {
+    req.body.id = Math.round(Math.random()*99999);
     state.scenarios.push(req.body)
     res.json(req.body);
     res.status(201);
@@ -41,11 +42,12 @@ exports.routes = [{
   route: '/scenario/:sId',
   verb: 'DELETE',
   handler: function (req, res) {
+    var sId = parseInt(req.params.sId);
     state.scenarios.splice(
       utils.findIndex(state.scenarios, function (scenario) {
-        return scenario.id === req.params.sId;
+        return scenario.id === sId;
       }),
-      0);
+      1);
     res.send(true);
   }
 }
