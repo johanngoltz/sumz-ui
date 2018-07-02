@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MaterialModule } from '../material.module';
+import { ReactiveFormsModule } from '@angular/forms';
 import { NewPasswordEmailComponent } from './newpasswordemail.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('newpasswordemailComponent', () => {
   let component: NewPasswordEmailComponent;
@@ -9,6 +12,12 @@ describe('newpasswordemailComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [NewPasswordEmailComponent],
+      imports: [
+        MaterialModule,
+        ReactiveFormsModule,
+        RouterTestingModule,
+        BrowserAnimationsModule,
+      ],
     })
     .compileComponents();
   }));

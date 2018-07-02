@@ -18,6 +18,7 @@ import { AccountingDataComponent } from './accounting-data/accounting-data.compo
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AlertComponent } from './alert/alert.component';
 import { NewPasswordComponent } from './newpassword/newpassword.component';
+import { NewPasswordEmailComponent } from './newpasswordemail/newpasswordemail.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -37,6 +38,7 @@ describe('AppComponent', () => {
         ChangePasswordComponent,
         AlertComponent,
         NewPasswordComponent,
+        NewPasswordEmailComponent,
       ],
       imports: [
         MaterialModule,
