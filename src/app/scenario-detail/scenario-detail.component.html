@@ -99,10 +99,6 @@
         <div [hidden]="!showCvd" class="flex-item">
           <mat-divider></mat-divider>
           <h1>Unternehmenswertverteilung</h1>
-          <ngx-charts-bar-vertical [results]="data" [scheme]="colorScheme" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis"
-            [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-            [yAxisLabel]="yAxisLabel" [barPadding]="barPadding">
-          </ngx-charts-bar-vertical>
         </div>
 
         <div [hidden]="!showApv" class="flex-item">

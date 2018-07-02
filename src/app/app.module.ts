@@ -26,7 +26,6 @@ import { ScenariosService } from './service/scenarios.service';
 import { ScenariosServiceMock } from './service/scenarios.service.mock';
 import { ToDoubleDirective } from './to-double.directive';
 import { CreateScenarioComponent } from './create-scenario/create-scenario.component';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -54,7 +53,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
-    NgxChartsModule,
   ],
   providers: [environment.emergencyDemo ? {
     provide: ScenariosService, useFactory: () => new ScenariosServiceMock(DEFAULT_MOCK_DATA),

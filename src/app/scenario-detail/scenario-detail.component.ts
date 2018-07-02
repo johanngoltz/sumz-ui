@@ -5,7 +5,6 @@ import { switchMap, withLatestFrom, tap, first } from 'rxjs/operators';
 import { Scenario } from '../api/scenario';
 import { RemoteConfig } from '../api/config';
 import { ScenariosService } from '../service/scenarios.service';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { OptionsService } from '../service/options.service';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -68,21 +67,6 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
   showFcf;
   showFte;
 
-  /* graph */
-  data;
-  barPadding = 0;
-  showXAxis = true;
-  showYAxis = true;
-  gradient = false;
-  showLegend = false;
-  showXAxisLabel = true;
-  xAxisLabel = 'Jahr';
-  showYAxisLabel = true;
-  yAxisLabel = 'Unternehmenswert';
-  colorScheme = {
-    domain: ['#0D9A39'],
-  };
-
   constructor(private _scenariosService: ScenariosService, private _formBuilder: FormBuilder, private _optionsService: OptionsService,
     private route: ActivatedRoute) { }
 
@@ -107,28 +91,6 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
       this.showFcf = config.showResult.fcf;
       this.showFte = config.showResult.fte;
     });
-
-    this.data = [{
-      'name': '2018',
-      'value': 100,
-    },
-    {
-      'name': '2019',
-      'value': 120,
-    },
-    {
-      'name': '2020',
-      'value': 125,
-    },
-    {
-      'name': '2021',
-      'value': 140,
-    },
-    {
-      'name': '2022',
-      'value': 100,
-    },
-    ];
   }
 
   ngOnDestroy() {
