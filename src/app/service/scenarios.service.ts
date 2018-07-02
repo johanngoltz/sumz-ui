@@ -29,7 +29,6 @@ export class ScenariosService {
       ),
       retry(2),
       flatMap(response => {
-        console.log('Receiving data');
         this._scenariosStorage = response.data;
         this._scenarios$.next([...response.data]);
         return this.scenarios$;
