@@ -13,6 +13,7 @@ import { ScenarioCardComponent } from '../scenario-card/scenario-card.component'
 import { ScenarioDetailComponent } from '../scenario-detail/scenario-detail.component';
 import { ScenariosService } from '../service/scenarios.service';
 import { ScenariosComponent } from './scenarios.component';
+import { AccountingDataComponent } from '../accounting-data/accounting-data.component';
 
 
 describe('ScenariosComponent', () => {
@@ -22,7 +23,7 @@ describe('ScenariosComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ScenariosComponent, ScenarioCardComponent, CreateScenarioComponent, ScenarioDetailComponent, LoginComponent,
-        RegistrationComponent],
+        RegistrationComponent, AccountingDataComponent],
       imports: [MaterialModule, FormsModule, ReactiveFormsModule, AppRoutingModule, BrowserAnimationsModule],
       providers: [
         { provide: APP_BASE_HREF, useValue: '/' },

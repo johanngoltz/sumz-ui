@@ -13,6 +13,7 @@ import { ScenarioCardComponent } from './scenario-card/scenario-card.component';
 import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.component';
 import { ScenariosComponent } from './scenarios/scenarios.component';
 import { SelectScenarioComponent } from './select-scenario/select-scenario.component';
+import { AccountingDataComponent } from './accounting-data/accounting-data.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -27,6 +28,7 @@ describe('AppComponent', () => {
         LoginComponent,
         RegistrationComponent,
         DeleteDialogComponent,
+        AccountingDataComponent,
       ],
       imports: [
         MaterialModule,

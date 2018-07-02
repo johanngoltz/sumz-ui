@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Scenario } from '../api/scenario';
 import { MaterialModule } from '../material.module';
-import { ScenarioCardComponent, Wrapper } from './scenario-card.component';
 import { ScenariosService } from '../service/scenarios.service';
+import { ScenarioCardComponent } from './scenario-card.component';
+import { Wrapper } from '../api/wrapper';
 
 describe('ScenarioCardComponent', () => {
   let component: ScenarioCardComponent;

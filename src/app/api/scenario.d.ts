@@ -6,7 +6,7 @@ export class Scenario {
     equityInterest: number;
     outsideCapitalInterest: number;
     corporateTax: number;
-    stochastic: Boolean;
+    stochastic?: Boolean;
     additionalIncome: AccountingFigure;
     additionalCosts: AccountingFigure;
     investments: AccountingFigure;

@@ -20,12 +20,13 @@ describe('ScenarioDetailComponent', () => {
         provide: ActivatedRoute,
         useValue: {
           paramMap: of(convertToParamMap({ 'id': 1 })),
-        } as ActivatedRoute,
+        },
       }, {
         provide: ScenariosService, useValue: {
           scenarios$: of([{ id: 1, name: 'Eins', description: 'Das erste Szenario' } as Scenario]),
           getScenarios: () => this.scenarios$,
-        } as ScenariosService,
+          getScenario: (id) => of([{ id: 1, name: 'Eins', description: 'Das erste Szenario' } as Scenario]),
+        },
       }],
     })
       .compileComponents();
