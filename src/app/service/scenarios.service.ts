@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
-import { TypedAxiosInstance, TypedAxiosResponse } from 'restyped-axios';
-import { Observable, ReplaySubject, from, of, throwError, concat, EMPTY, Subject } from 'rxjs';
-import { filter, flatMap, retry, switchMap, tap, debounceTime, concatMap, map, debounce, mergeMap } from 'rxjs/operators';
+import { TypedAxiosInstance } from 'restyped-axios';
+import { EMPTY, from, interval, NEVER, Observable, of, race, ReplaySubject, throwError } from 'rxjs';
+import { filter, flatMap, retry, switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { ScenarioAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
 import { ScenarioClient } from './http-client';
@@ -14,6 +14,8 @@ export class ScenariosService {
   protected _scenarios$: ReplaySubject<Scenario[]>;
   protected _scenariosStorage: Scenario[];
 
+  private _getScenariosInterval$: Observable<number> = NEVER;
+
   constructor(@Inject(ScenarioClient) private _apiClient: TypedAxiosInstance<ScenarioAPI>) {
     this._scenarios$ = new ReplaySubject();
     this.scenarios$ = this._scenarios$.asObservable();
@@ -22,27 +24,25 @@ export class ScenariosService {
   }
 
   getScenarios() {
-    // mergeMap??
-    // throttle
-    /*
-      race(
-        request,
-        debounce-Timer
-      )
-    */
-    return from(this._apiClient.request({ url: '/scenario' })).pipe(
-      // TODO: wird vllt nicht wie gedacht funktionieren
+    const getFromBackend = from(this._apiClient.request({ url: '/scenario' })).pipe(
       switchMap(response => response.status === 200 ?
         of(response) :
         throwError(response)
       ),
-      retry(2),
-      switchMap(response => {
-        this._scenariosStorage = response.data;
-        this._scenarios$.next([...response.data]);
-        return this.scenarios$;
-      })
+      retry(2)
     );
+    getFromBackend.subscribe(() => this._getScenariosInterval$ = interval(5000));
+    return race(
+      this._getScenariosInterval$,
+      getFromBackend.pipe(
+        flatMap(response => {
+          console.log('Receiving data');
+          this._scenariosStorage = response.data;
+          this._scenarios$.next([...response.data]);
+          return EMPTY;
+        }),
+      ))
+      .pipe(switchMapTo(this.scenarios$));
   }
 
   getScenario(id: number) {
