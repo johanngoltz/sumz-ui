@@ -2,7 +2,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MaterialModule } from '../material.module';
 
 import { ChangePasswordComponent } from './changepassword.component';
-import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
 describe('ChangePasswordComponent', () => {

@@ -16,7 +16,6 @@ import { SelectScenarioComponent } from './select-scenario/select-scenario.compo
 import { ChangePasswordComponent} from './changepassword/changepassword.component';
 import { AccountingDataComponent } from './accounting-data/accounting-data.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { ChangePasswordComponent } from './changepassword/changepassword.component';
 import { AlertComponent } from './alert/alert.component';
 import { NewPasswordComponent } from './newpassword/newpassword.component';
 
