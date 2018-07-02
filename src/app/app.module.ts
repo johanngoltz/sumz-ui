@@ -1,7 +1,7 @@
 
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { HttpClientModule } from '@angular/common/http';
+// import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
@@ -28,6 +28,7 @@ import { ToDoubleDirective } from './to-double.directive';
 import { CreateScenarioComponent } from './create-scenario/create-scenario.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,7 +49,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    HttpClientModule,
+    // HttpClientModule,
     MaterialModule,
     AppRoutingModule,
     FormsModule,
