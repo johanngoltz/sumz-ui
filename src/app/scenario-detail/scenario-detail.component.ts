@@ -10,14 +10,7 @@ import { OptionsService } from '../service/options.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { trigger, transition, query, animate, style, keyframes } from '@angular/animations';
 import { paramData } from '../api/paramData';
-
-
-/** Error when invalid control is dirty. */
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    return !!(control && control.invalid && control.dirty);
-  }
-}
+import { Chart } from "angular-highcharts";
 
 @Component({
   selector: 'app-scenario-detail',
@@ -67,6 +60,9 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
   showFcf;
   showFte;
 
+  /*chart */
+  chart;
+
   constructor(private _scenariosService: ScenariosService, private _formBuilder: FormBuilder, private _optionsService: OptionsService,
     private route: ActivatedRoute) { }
 
@@ -79,9 +75,9 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
     this.formGroup = this._formBuilder.group({
       name: ['', Validators.required],
       description: '',
-      equityInterest: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
-      outsideCapitalInterest: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
-      corporateTax: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      equityInterest: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
+      outsideCapitalInterest: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
+      corporateTax: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
     });
     this.formGroup.disable();
     this.initData();
@@ -91,6 +87,62 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
       this.showFcf = config.showResult.fcf;
       this.showFte = config.showResult.fte;
     });
+
+  this.chart = new Chart({
+    chart: {
+      type: 'line',
+    },
+    credits: {
+      enabled: false,
+    },
+    legend: {
+      enabled: false,
+    },
+    yAxis: {
+      title: {text: 'Unternehmenswert in €'},
+    },
+    xAxis: {
+      categories: [
+        '-3 σ',
+        '',
+        '',
+        '',
+        '',
+        '-2 σ',
+        '',
+        '',
+        '',
+        '',
+        '-1 σ',
+        '',
+        '',
+        '',
+        '',
+        'μ',
+        '',
+        '',
+        '',
+        '',
+        '1 σ',
+        '',
+        '',
+        '',
+        '',
+        '2 σ',
+        '',
+        '',
+        '',
+        '',
+        '3 σ',
+      ],
+    },
+    series: [
+      {
+        name: ' ',
+        data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
+      },
+    ],
+  });
   }
 
   ngOnDestroy() {

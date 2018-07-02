@@ -13,17 +13,29 @@
       "periods": 5
     },
     {
-      "id": 3,
-      "name": "Drei",
-      "description": "Das Dritte Scenario",
-      "periods": 2,
       "equityInterest": 23,
-      "outsideCapitalInterest": 22,
       "corporateTax": 21,
-      "stochastic": true,
-      "additionalIncome": {
+      "companyValueDistribution": [
+        {
+          "num": 1,
+          "rangeMin": 1000,
+          "rangeMax": 2000,
+          "height": 0.1
+        }
+      ],
+      "divestments": {
         "isHistoric": true,
         "timeSeries": [
+          {
+            "year": 2001,
+            "quarter": 1,
+            "amount": 0
+          },
+          {
+            "year": 2001,
+            "quarter": 2,
+            "amount": 0
+          },
           {
             "year": 2001,
             "quarter": 3,
@@ -36,26 +48,22 @@
           }
         ]
       },
-      "additionalCosts": {
-        "isHistoric": true,
-        "timeSeries": [
-          {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
-          },
-          {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
-          }
-        ]
-      },
+      "description": "Das Dritte Scenario",
       "investments": {
         "isHistoric": true,
         "timeSeries": [
           {
             "year": 2001,
+            "quarter": 1,
+            "amount": 0
+          },
+          {
+            "year": 2001,
+            "quarter": 2,
+            "amount": 0
+          },
+          {
+            "year": 2001,
             "quarter": 3,
             "amount": 345.56
           },
@@ -66,7 +74,37 @@
           }
         ]
       },
-      "divestments": {
+      "costOfStaff": {
+        "isHistoric": true,
+        "timeSeries": [
+          {
+            "year": 2001,
+            "quarter": 1,
+            "amount": 0
+          },
+          {
+            "year": 2001,
+            "quarter": 2,
+            "amount": 0
+          },
+          {
+            "year": 2001,
+            "quarter": 3,
+            "amount": 0
+          },
+          {
+            "year": 2001,
+            "quarter": 4,
+            "amount": 345.56
+          },
+          {
+            "year": 2001,
+            "quarter": 3,
+            "amount": 345.56
+          }
+        ]
+      },
+      "externalCapital": {
         "isHistoric": true,
         "timeSeries": [
           {
@@ -86,6 +124,41 @@
         "timeSeries": [
           {
             "year": 2001,
+            "quarter": 1,
+            "amount": 0
+          },
+          {
+            "year": 2001,
+            "quarter": 2,
+            "amount": 0
+          },
+          {
+            "year": 2001,
+            "quarter": 3,
+            "amount": 345.56
+          },
+          {
+            "year": 2001,
+            "quarter": 3,
+            "amount": 345.56
+          }
+        ]
+      },
+      "additionalCosts": {
+        "isHistoric": true,
+        "timeSeries": [
+          {
+            "year": 2001,
+            "quarter": 1,
+            "amount": 0
+          },
+          {
+            "year": 2001,
+            "quarter": 2,
+            "amount": 0
+          },
+          {
+            "year": 2001,
             "quarter": 3,
             "amount": 345.56
           },
@@ -101,34 +174,14 @@
         "timeSeries": [
           {
             "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            "quarter": 1,
+            "amount": 0
           },
           {
             "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
-          }
-        ]
-      },
-      "costOfStaff": {
-        "isHistoric": true,
-        "timeSeries": [
-          {
-            "year": 2001,
-            "quarter": 4,
-            "amount": 345.56
+            "quarter": 2,
+            "amount": 0
           },
-          {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
-          }
-        ]
-      },
-      "liabilities": {
-        "isHistoric": true,
-        "timeSeries": [
           {
             "year": 2001,
             "quarter": 3,
@@ -156,9 +209,20 @@
           }
         ]
       },
-      "externalCapital": {
+      "name": "Drei",
+      "additionalIncome": {
         "isHistoric": true,
         "timeSeries": [
+          {
+            "year": 2001,
+            "quarter": 1,
+            "amount": 0
+          },
+          {
+            "year": 2001,
+            "quarter": 2,
+            "amount": 0
+          },
           {
             "year": 2001,
             "quarter": 3,
@@ -171,28 +235,49 @@
           }
         ]
       },
-      "companyValueDistribution": [
-        {
-          "num": 1,
-          "rangeMin": 1000,
-          "rangeMax": 2000,
-          "height": 0.1
-        }
-      ],
+      "liabilities": {
+        "isHistoric": true,
+        "timeSeries": [
+          {
+            "year": 2001,
+            "quarter": 1,
+            "amount": 0
+          },
+          {
+            "year": 2001,
+            "quarter": 2,
+            "amount": 0
+          },
+          {
+            "year": 2001,
+            "quarter": 3,
+            "amount": 345.56
+          },
+          {
+            "year": 2001,
+            "quarter": 3,
+            "amount": 345.56
+          }
+        ]
+      },
+      "periods": null,
+      "stochastic": true,
       "fteValuationResult": {
         "companyValue": 8888899
-      },
-      "fcfValuationResult": {
-        "companyValue": 8888899,
-        "marketValueTotalAssets": 12123,
-        "totalLiabilities": 112
       },
       "apvValuationResult": {
         "companyValue": 8888899,
         "marketValueTotalAssets": 12123,
         "taxShield": 123,
         "totalLiabilities": 112
-      }
+      },
+      "id": 3,
+      "fcfValuationResult": {
+        "companyValue": 8888899,
+        "marketValueTotalAssets": 12123,
+        "totalLiabilities": 112
+      },
+      "outsideCapitalInterest": 22
     },
     {
       "equityInterest": 23,

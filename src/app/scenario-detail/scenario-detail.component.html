@@ -14,7 +14,7 @@
     </div>
   </h1>
   <!-- panels for different parts of Scenario-->
-  <mat-accordion multi="false" class="headers-align">
+  <mat-accordion multi="true" class="headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true" [formGroup]="formGroup">
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -44,12 +44,42 @@
           <h3>Umweltfaktoren</h3>
           <mat-form-field floatLabel="always">
             <input matInput type="text" toDouble placeholder="Eigenkapitalzinsen" formControlName="equityInterest" />
+            <mat-error *ngIf="formGroup.controls.equityInterest.hasError('min') || formGroup.controls.equityInterest.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.equityInterest.hasError('required')">
+              Eigenkapitalzinsen werden
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.equityInterest.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
           </mat-form-field>
           <mat-form-field floatLabel="always">
             <input matInput type="text" toDouble placeholder="Fremdkapitalzinsen" formControlName="outsideCapitalInterest" />
+            <mat-error *ngIf="formGroup.controls.outsideCapitalInterest.hasError('min') || formGroup.controls.outsideCapitalInterest.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.outsideCapitalInterest.hasError('required')">
+              Fremdkapitalzinsen werden
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.outsideCapitalInterest.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
           </mat-form-field>
           <mat-form-field floatLabel="always">
             <input matInput type="text" toDouble placeholder="Unternehmenssteuersatz" formControlName="corporateTax" />
+            <mat-error *ngIf="formGroup.controls.corporateTax.hasError('min') || formGroup.controls.corporateTax.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.corporateTax.hasError('required')">
+              Unternehmenssteuersatz wird
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.corporateTax.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -99,6 +129,7 @@
         <div [hidden]="!showCvd" class="flex-item">
           <mat-divider></mat-divider>
           <h1>Unternehmenswertverteilung</h1>
+          <div [chart]="chart"></div>
         </div>
 
         <div [hidden]="!showApv" class="flex-item">
