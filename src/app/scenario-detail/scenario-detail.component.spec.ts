@@ -6,9 +6,9 @@ import { MaterialModule } from '../material.module';
 import { ScenarioDetailComponent } from './scenario-detail.component';
 import { ScenariosService } from '../service/scenarios.service';
 import { Scenario } from '../api/scenario';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
 import { AccountingDataComponent } from '../accounting-data/accounting-data.component';
+import { Chart } from 'angular-highcharts';
 
 
 describe('ScenarioDetailComponent', () => {
@@ -185,7 +185,7 @@ describe('ScenarioDetailComponent', () => {
     };
     TestBed.configureTestingModule({
       declarations: [ScenarioDetailComponent, AccountingDataComponent],
-      imports: [MaterialModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule, NgxChartsModule],
+      imports: [MaterialModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule, Chart],
       providers: [{
         provide: ActivatedRoute,
         useValue: {

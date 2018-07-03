@@ -1,61 +1,16 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy
-} from '@angular/core';
-import {
-  ActivatedRoute
-} from '@angular/router';
-import {
-  Observable,
-  of ,
-  fromEvent,
-  from,
-  EMPTY
-} from 'rxjs';
-import {
-  switchMap,
-  withLatestFrom,
-  tap,
-  first
-} from 'rxjs/operators';
-import {
-  Scenario
-} from '../api/scenario';
-import {
-  RemoteConfig
-} from '../api/config';
-import {
-  ScenariosService
-} from '../service/scenarios.service';
-import {
-  AlertService
-} from '../service/alert.service';
-import {
-  FormControl,
-  FormGroupDirective,
-  NgForm,
-  Validators,
-  FormGroup,
-  FormBuilder
-} from '@angular/forms';
-import {
-  OptionsService
-} from '../service/options.service';
-import {
-  trigger,
-  transition,
-  query,
-  animate,
-  style,
-  keyframes
-} from '@angular/animations';
-import {
-  paramData
-} from '../api/paramData';
-import {
-  Chart
-} from 'angular-highcharts';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { switchMap, first } from 'rxjs/operators';
+import { Scenario } from '../api/scenario';
+import { RemoteConfig } from '../api/config';
+import { ScenariosService } from '../service/scenarios.service';
+import { AlertService } from '../service/alert.service';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { OptionsService } from '../service/options.service';
+import { trigger, transition, query, animate, style, keyframes } from '@angular/animations';
+import { paramData } from '../api/paramData';
+import { Chart } from 'angular-highcharts';
 
 @Component({
   selector: 'app-scenario-detail',
