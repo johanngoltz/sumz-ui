@@ -1,34 +1,38 @@
 mat-toolbar {
-    position: sticky;
-    top: 0;
-    z-index: 8;
+  position: sticky;
+  top: 0;
+  z-index: 8;
 }
 
 #logo-link {
-    display: flex;
+  display: flex;
 }
 
 #logo {
-    height: 50px;
-    width: auto;
+  height: 50px;
+  width: auto;
 }
 
-::ng-deep app-projects, ::ng-deep app-create-project, ::ng-deep app-project-detail, ::ng-deep app-login {
-    width: 100%;
-    min-height: calc(100% - 64px);
-    display: block;
+::ng-deep app-projects,
+::ng-deep app-create-project,
+::ng-deep app-project-detail,
+::ng-deep app-login,
+::ng-deep app-credits {
+  width: 100%;
+  min-height: calc(100% - 64px);
+  display: block;
 }
 
 ::ng-deep .content-conatiner {
-    display: block;
+  display: block;
 }
 
 ::ng-deep snack-bar-container.mat-accent {
-    background: #2e7d32;
-    color: #FFF;
+  background: #2e7d32;
+  color: #FFF;
 }
 
 ::ng-deep snack-bar-container.mat-warn {
-    background: #c62828;
-    color: #FFF;
+  background: #c62828;
+  color: #FFF;
 }

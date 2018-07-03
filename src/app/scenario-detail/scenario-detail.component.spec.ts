@@ -6,6 +6,7 @@ import { MaterialModule } from '../material.module';
 import { ScenarioDetailComponent } from './scenario-detail.component';
 import { ScenariosService } from '../service/scenarios.service';
 import { Scenario } from '../api/scenario';
+import { DEFAULT_MOCK_DATA } from '../service/mockdata';
 
 
 describe('ScenarioDetailComponent', () => {
@@ -25,6 +26,7 @@ describe('ScenarioDetailComponent', () => {
         provide: ScenariosService, useValue: {
           scenarios$: of([{ id: 1, name: 'Eins', description: 'Das erste Szenario' } as Scenario]),
           getScenarios: () => this.scenarios$,
+          getScenario: (id: number) => of(DEFAULT_MOCK_DATA[0]),
         } as ScenariosService,
       }],
     })
