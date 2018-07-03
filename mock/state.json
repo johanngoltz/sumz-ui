@@ -1,28 +1,69 @@
 {
   "scenarios": [
     {
-      "id": 1,
+      "businessTaxRate": "3",
+      "interestOnLiabilitiesRate": "2",
+      "corporateTaxRate": "4",
+      "freeCashFlows": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "year": 2018,
+            "amount": 0
+          }
+        ]
+      },
       "name": "Eins",
+      "liabilities": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "year": 2017,
+            "amount": 0
+          }
+        ]
+      },
       "description": "Das erste Szenario",
-      "periods": 2
+      "periods": null,
+      "stochastic": false,
+      "equityInterestRate": "1",
+      "id": 1,
+      "solidaryTaxRate": "5"
     },
     {
-      "id": 2,
+      "businessTaxRate": "3",
+      "interestOnLiabilitiesRate": "4",
+      "corporateTaxRate": "2",
+      "freeCashFlows": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "year": 2018,
+            "amount": 0
+          }
+        ]
+      },
       "name": "Zwei",
+      "liabilities": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "year": 2017,
+            "amount": 0
+          }
+        ]
+      },
       "description": "Das zweite Szenario",
-      "periods": 5
+      "periods": null,
+      "stochastic": false,
+      "equityInterestRate": "5",
+      "id": 2,
+      "solidaryTaxRate": "1"
     },
     {
+      "businessTaxRate": "12",
       "equityInterest": 23,
       "corporateTax": 21,
-      "companyValueDistribution": [
-        {
-          "num": 1,
-          "rangeMin": 1000,
-          "rangeMax": 2000,
-          "height": 0.1
-        }
-      ],
       "divestments": {
         "isHistoric": true,
         "timeSeries": [
@@ -48,6 +89,7 @@
           }
         ]
       },
+      "corporateTaxRate": "13",
       "description": "Das Dritte Scenario",
       "investments": {
         "isHistoric": true,
@@ -99,47 +141,9 @@
           }
         ]
       },
-      "externalCapital": {
-        "isHistoric": true,
-        "timeSeries": [
-          {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
-          },
-          {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
-          }
-        ]
-      },
+      "solidaryTaxRate": "5",
+      "interestOnLiabilitiesRate": "11",
       "revenue": {
-        "isHistoric": true,
-        "timeSeries": [
-          {
-            "year": 2001,
-            "quarter": 1,
-            "amount": 0
-          },
-          {
-            "year": 2001,
-            "quarter": 2,
-            "amount": 0
-          },
-          {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
-          },
-          {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
-          }
-        ]
-      },
-      "additionalCosts": {
         "isHistoric": true,
         "timeSeries": [
           {
@@ -189,22 +193,6 @@
           }
         ]
       },
-      "freeCashFlows": {
-        "isHistoric": true,
-        "timeSeries": [
-          {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
-          },
-          {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
-          }
-        ]
-      },
-      "name": "Drei",
       "additionalIncome": {
         "isHistoric": true,
         "timeSeries": [
@@ -257,9 +245,6 @@
       },
       "periods": null,
       "stochastic": true,
-      "fteValuationResult": {
-        "companyValue": 8888899
-      },
       "apvValuationResult": {
         "companyValue": 8888899,
         "marketValueTotalAssets": 12123,
@@ -272,42 +257,75 @@
         "marketValueTotalAssets": 12123,
         "totalLiabilities": 112
       },
-      "outsideCapitalInterest": 22
-    },
-    {
-      "equityInterest": 23,
-      "corporateTax": 21,
+      "outsideCapitalInterest": 22,
+      "companyValueDistribution": [
+        {
+          "num": 1,
+          "rangeMin": 1000,
+          "rangeMax": 2000,
+          "height": 0.1
+        }
+      ],
+      "externalCapital": {
+        "isHistoric": true,
+        "timeSeries": [
+          {
+            "year": 2001,
+            "quarter": 3,
+            "amount": 345.56
+          },
+          {
+            "year": 2001,
+            "quarter": 3,
+            "amount": 345.56
+          }
+        ]
+      },
+      "additionalCosts": {
+        "isHistoric": true,
+        "timeSeries": [
+          {
+            "year": 2001,
+            "quarter": 1,
+            "amount": 0
+          },
+          {
+            "year": 2001,
+            "quarter": 2,
+            "amount": 0
+          },
+          {
+            "year": 2001,
+            "quarter": 3,
+            "amount": 345.56
+          },
+          {
+            "year": 2001,
+            "quarter": 3,
+            "amount": 345.56
+          }
+        ]
+      },
       "freeCashFlows": {
         "isHistoric": true,
         "timeSeries": [
           {
-            "year": 2016,
-            "quarter": null,
-            "amount": 0
+            "year": 2001,
+            "quarter": 3,
+            "amount": 345.56
           },
           {
-            "year": 2017,
-            "quarter": null,
-            "amount": 0
+            "year": 2001,
+            "quarter": 3,
+            "amount": 345.56
           }
         ]
       },
-      "name": "Michael Schaefer",
-      "liabilities": {
-        "isHistoric": false,
-        "timeSeries": [
-          {
-            "year": 2017,
-            "quarter": null,
-            "amount": 0
-          }
-        ]
+      "name": "Drei",
+      "fteValuationResult": {
+        "companyValue": 8888899
       },
-      "description": "Das ist Michaels Szenario",
-      "stochastic": true,
-      "periods": null,
-      "id": 79437,
-      "outsideCapitalInterest": 13
+      "equityInterestRate": "10"
     }
   ]
 }

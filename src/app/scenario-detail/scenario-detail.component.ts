@@ -100,12 +100,15 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
       switchMap(params => of (Number.parseInt(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
     this.forConfig$ = this._optionsService.getConfig();
+    // TODO: Aktuell werden nur ganzzahlige Prozentzahlen akzeptiert
     this.formGroup = this._formBuilder.group({
       name: ['', Validators.required],
       description: '',
-      equityInterest: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
-      outsideCapitalInterest: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
-      corporateTax: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
+      equityInterestRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
+      interestOnLiabilitiesRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
+      businessTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
+      corporateTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
+      solidaryTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
     });
     this.formGroup.disable();
     this.initData();
@@ -119,35 +122,35 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
         this.showFte = (config.showResult.fte != null) ? config.showResult.fte : false;
       });
 
-      // this.chart = new Chart({
-      //   chart: {
-      //     type: 'line',
-      //   },
-      //   credits: {
-      //     enabled: false,
-      //   },
-      //   legend: {
-      //     enabled: false,
-      //   },
-      //   title: {
-      //     text: '',
-      //   },
-      //   yAxis: {
-      //     title: {
-      //       text: 'Verteilung',
-      //     },
-      //   },
-      //   xAxis: {
-      //     categories: currentScenario.companyValueDistribution.xValues,
-      //     title: {
-      //       text: 'Unternehmenswert in €',
-      //     },
-      //   },
-      //   series: [{
-      //     name: ' ',
-      //     data: currentScenario.companyValueDistribution.yValues,
-      //   }],
-      // });
+      this.chart = new Chart({
+        chart: {
+          type: 'line',
+        },
+        credits: {
+          enabled: false,
+        },
+        legend: {
+          enabled: false,
+        },
+        title: {
+          text: '',
+        },
+        yAxis: {
+          title: {
+            text: 'Verteilung',
+          },
+        },
+        xAxis: {
+          categories: currentScenario.companyValueDistribution.xValues,
+          title: {
+            text: 'Unternehmenswert in €',
+          },
+        },
+        series: [{
+          name: ' ',
+          data: currentScenario.companyValueDistribution.yValues,
+        }],
+      });
     });
   }
 
@@ -159,9 +162,11 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
       this.formGroup.controls.name.setValue(currentScenario.name);
       this.formGroup.controls.description.setValue(currentScenario.description);
-      this.formGroup.controls.equityInterest.setValue(currentScenario.equityInterest);
-      this.formGroup.controls.outsideCapitalInterest.setValue(currentScenario.outsideCapitalInterest);
-      this.formGroup.controls.corporateTax.setValue(currentScenario.corporateTax);
+      this.formGroup.controls.equityInterestRate.setValue(currentScenario.equityInterestRate);
+      this.formGroup.controls.interestOnLiabilitiesRate.setValue(currentScenario.interestOnLiabilitiesRate);
+      this.formGroup.controls.businessTaxRate.setValue(currentScenario.businessTaxRate);
+      this.formGroup.controls.corporateTaxRate.setValue(currentScenario.corporateTaxRate);
+      this.formGroup.controls.solidaryTaxRate.setValue(currentScenario.solidaryTaxRate);
     });
   }
 
@@ -183,9 +188,11 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
 
       currentScenario.name = this.formGroup.controls.name.value;
       currentScenario.description = this.formGroup.controls.description.value;
-      currentScenario.equityInterest = this.formGroup.controls.equityInterest.value;
-      currentScenario.outsideCapitalInterest = this.formGroup.controls.outsideCapitalInterest.value;
-      currentScenario.corporateTax = this.formGroup.controls.corporateTax.value;
+      currentScenario.equityInterestRate = this.formGroup.controls.equityInterestRate.value;
+      currentScenario.interestOnLiabilitiesRate = this.formGroup.controls.interestOnLiabilitiesRate.value;
+      currentScenario.businessTaxRate = this.formGroup.controls.businessTaxRate.value;
+      currentScenario.corporateTaxRate = this.formGroup.controls.corporateTaxRate.value;
+      currentScenario.solidaryTaxRate = this.formGroup.controls.solidaryTaxRate.value;
 
       currentScenario.stochastic = false;
       currentScenario.periods = (this.accountingDataFormGroup.value.endYear - this.accountingDataFormGroup.value.startYear) * 4;
@@ -230,7 +237,7 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
         config.showResult.fcf = this.showFcf;
         config.showResult.fte = this.showFte;
         remote.scenarioConfig.set(currentScenario.id, config);
-        console.log(remote);
+
         this._optionsService.setConfig(remote);
       });
     });

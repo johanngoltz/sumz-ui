@@ -43,44 +43,76 @@
         <div>
           <h3>Umweltfaktoren</h3>
           <mat-form-field floatLabel="always">
-            <input matInput type="text" toDouble placeholder="Eigenkapitalzinsen" formControlName="equityInterest" />
+            <input matInput type="text" toDouble placeholder="Eigenkapitalzinsen" formControlName="equityInterestRate" />
             <span matPrefix>% &nbsp;</span>
-            <mat-error *ngIf="formGroup.controls.equityInterest.hasError('min') || formGroup.controls.equityInterest.hasError('max')">
+            <mat-error *ngIf="formGroup.controls.equityInterestRate.hasError('min') || formGroup.controls.equityInterestRate.hasError('max')">
               Der Wert muss zwischen 0% und 100% liegen
             </mat-error>
-            <mat-error *ngIf="formGroup.controls.equityInterest.hasError('required')">
+            <mat-error *ngIf="formGroup.controls.equityInterestRate.hasError('required')">
               Eigenkapitalzinsen werden
               <strong>benötigt</strong>
             </mat-error>
-            <mat-error *ngIf="formGroup.controls.equityInterest.hasError('pattern')">
+            <mat-error *ngIf="formGroup.controls.equityInterestRate.hasError('pattern')">
               Nur Zahlen erlaubt
             </mat-error>
           </mat-form-field>
+
           <mat-form-field floatLabel="always">
-            <input matInput type="text" toDouble placeholder="Fremdkapitalzinsen" formControlName="outsideCapitalInterest" />
+            <input matInput type="text" toDouble placeholder="Zinssatz für Verbindlichkeiten" formControlName="interestOnLiabilitiesRate" />
             <span matPrefix>% &nbsp;</span>
-            <mat-error *ngIf="formGroup.controls.outsideCapitalInterest.hasError('min') || formGroup.controls.outsideCapitalInterest.hasError('max')">
+            <mat-error *ngIf="formGroup.controls.interestOnLiabilitiesRate.hasError('min') || formGroup.controls.interestOnLiabilitiesRate.hasError('max')">
               Der Wert muss zwischen 0% und 100% liegen
             </mat-error>
-            <mat-error *ngIf="formGroup.controls.outsideCapitalInterest.hasError('required')">
-              Fremdkapitalzinsen werden
+            <mat-error *ngIf="formGroup.controls.interestOnLiabilitiesRate.hasError('required')">
+              Zinssatz für Verbindlichkeiten wird
               <strong>benötigt</strong>
             </mat-error>
-            <mat-error *ngIf="formGroup.controls.outsideCapitalInterest.hasError('pattern')">
+            <mat-error *ngIf="formGroup.controls.interestOnLiabilitiesRate.hasError('pattern')">
               Nur Zahlen erlaubt
             </mat-error>
           </mat-form-field>
+
           <mat-form-field floatLabel="always">
-            <input matInput type="text" toDouble placeholder="Unternehmenssteuersatz" formControlName="corporateTax" />
+            <input matInput type="text" toDouble placeholder="Gewerbesteuersatz" formControlName="businessTaxRate" />
             <span matPrefix>% &nbsp;</span>
-            <mat-error *ngIf="formGroup.controls.corporateTax.hasError('min') || formGroup.controls.corporateTax.hasError('max')">
+            <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('min') || formGroup.controls.businessTaxRate.hasError('max')">
               Der Wert muss zwischen 0% und 100% liegen
             </mat-error>
-            <mat-error *ngIf="formGroup.controls.corporateTax.hasError('required')">
-              Unternehmenssteuersatz wird
+            <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('required')">
+             Gewerbesteuersatz wird
               <strong>benötigt</strong>
             </mat-error>
-            <mat-error *ngIf="formGroup.controls.corporateTax.hasError('pattern')">
+            <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" toDouble placeholder="Körperschaftssteuersatz" formControlName="corporateTaxRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('min') || formGroup.controls.corporateTaxRate.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('required')">
+              Köroerschaftssteuersatz wird
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" toDouble placeholder="Solidaritätszuschlag" formControlName="solidaryTaxRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('min') || formGroup.controls.solidaryTaxRate.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('required')">
+              Solidaritätszuschlag wird
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('pattern')">
               Nur Zahlen erlaubt
             </mat-error>
           </mat-form-field>
