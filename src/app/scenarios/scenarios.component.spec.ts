@@ -14,7 +14,8 @@ import { ScenarioDetailComponent } from '../scenario-detail/scenario-detail.comp
 import { ScenariosService } from '../service/scenarios.service';
 import { ScenariosComponent } from './scenarios.component';
 import { AccountingDataComponent } from '../accounting-data/accounting-data.component';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { Chart } from 'angular-highcharts';
+
 
 
 describe('ScenariosComponent', () => {
@@ -25,7 +26,7 @@ describe('ScenariosComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ScenariosComponent, ScenarioCardComponent, CreateScenarioComponent, ScenarioDetailComponent, LoginComponent,
         RegistrationComponent, AccountingDataComponent],
-      imports: [MaterialModule, FormsModule, ReactiveFormsModule, AppRoutingModule, BrowserAnimationsModule, NgxChartsModule],
+      imports: [MaterialModule, FormsModule, ReactiveFormsModule, AppRoutingModule, BrowserAnimationsModule, Chart],
       providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
         {
