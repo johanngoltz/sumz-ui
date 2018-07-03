@@ -44,6 +44,7 @@
           <h3>Umweltfaktoren</h3>
           <mat-form-field floatLabel="always">
             <input matInput type="text" toDouble placeholder="Eigenkapitalzinsen" formControlName="equityInterest" />
+            <span matPrefix>% &nbsp;</span>
             <mat-error *ngIf="formGroup.controls.equityInterest.hasError('min') || formGroup.controls.equityInterest.hasError('max')">
               Der Wert muss zwischen 0% und 100% liegen
             </mat-error>
@@ -57,6 +58,7 @@
           </mat-form-field>
           <mat-form-field floatLabel="always">
             <input matInput type="text" toDouble placeholder="Fremdkapitalzinsen" formControlName="outsideCapitalInterest" />
+            <span matPrefix>% &nbsp;</span>
             <mat-error *ngIf="formGroup.controls.outsideCapitalInterest.hasError('min') || formGroup.controls.outsideCapitalInterest.hasError('max')">
               Der Wert muss zwischen 0% und 100% liegen
             </mat-error>
@@ -70,6 +72,7 @@
           </mat-form-field>
           <mat-form-field floatLabel="always">
             <input matInput type="text" toDouble placeholder="Unternehmenssteuersatz" formControlName="corporateTax" />
+            <span matPrefix>% &nbsp;</span>
             <mat-error *ngIf="formGroup.controls.corporateTax.hasError('min') || formGroup.controls.corporateTax.hasError('max')">
               Der Wert muss zwischen 0% und 100% liegen
             </mat-error>

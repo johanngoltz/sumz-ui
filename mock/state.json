@@ -94,11 +94,6 @@
           },
           {
             "year": 2001,
-            "quarter": 4,
-            "amount": 345.56
-          },
-          {
-            "year": 2001,
             "quarter": 3,
             "amount": 345.56
           }
@@ -284,14 +279,31 @@
       "corporateTax": 21,
       "freeCashFlows": {
         "isHistoric": true,
-        "timeSeries": []
+        "timeSeries": [
+          {
+            "year": 2016,
+            "quarter": null,
+            "amount": 0
+          },
+          {
+            "year": 2017,
+            "quarter": null,
+            "amount": 0
+          }
+        ]
       },
-      "name": "Michael Schäfer",
+      "name": "Michael Schaefer",
       "liabilities": {
         "isHistoric": false,
-        "timeSeries": []
+        "timeSeries": [
+          {
+            "year": 2017,
+            "quarter": null,
+            "amount": 0
+          }
+        ]
       },
-      "description": "",
+      "description": "Das ist Michaels Szenario",
       "stochastic": true,
       "periods": null,
       "id": 79437,
