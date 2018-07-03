@@ -10,7 +10,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class CreditsComponent implements OnInit {
 
-  private dependencies =
+  dependencies =
     licenses
       .filter(dependency =>
         (dependency.summary.includes('MIT') ||
