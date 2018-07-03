@@ -159,7 +159,6 @@
         <mat-checkbox class="margin" [(ngModel)]="showFte">FTE</mat-checkbox>
       </div>
 
-      <!-- TODO: Tabellenheader nach links statt mittig -->
       <div class="flex-container">
         <div [hidden]="!showCvd" class="flex-item">
           <mat-divider></mat-divider>
@@ -176,7 +175,8 @@
                 <th class="mat-header-cell">Unternehmenswert</th>
                 <th class="mat-header-cell">Bilanzsumme</th>
                 <th class="mat-header-cell">Verbindlichkeiten</th>
-                <th class="mat-header-cell">TaxShield</th>
+                <th class="mat-header-cell">Steuervergünstigungen</th>
+                <th class="mat-header-cell">Barwert der Cashflows</th>
               </tr>
             </thead>
             <tbody>
@@ -185,6 +185,7 @@
                 <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.marketValueTotalAssets}}</td>
                 <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.totalLiabilities}}</td>
                 <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.taxShield}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.presentValueOfCashflows}}</td>
               </tr>
             </tbody>
           </table>

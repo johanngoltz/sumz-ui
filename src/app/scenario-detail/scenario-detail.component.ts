@@ -100,7 +100,7 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
       switchMap(params => of (Number.parseInt(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
     this.forConfig$ = this._optionsService.getConfig();
-    // TODO: Aktuell werden nur ganzzahlige Prozentzahlen akzeptiert
+    // TODO: Aktuell werden nur ganzzahlige Prozentzahlen akzeptiert, Umrechnung von 0.1 aus Service zu 10%
     this.formGroup = this._formBuilder.group({
       name: ['', Validators.required],
       description: '',
@@ -116,10 +116,10 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
       this.forConfig$.subscribe( remote => {
         const config = remote.scenarioConfig.get(currentScenario.id);
-        this.showCvd = (config.showResult.cvd != null) ? config.showResult.cvd : false;
-        this.showApv = (config.showResult.apv != null) ? config.showResult.apv : false;
-        this.showFcf = (config.showResult.fcf != null) ? config.showResult.fcf : false;
-        this.showFte = (config.showResult.fte != null) ? config.showResult.fte : false;
+        this.showCvd = !!config.showResult.cvd;
+        this.showApv = !!config.showResult.apv;
+        this.showFcf = !!config.showResult.fcf;
+        this.showFte = !!config.showResult.fte;
       });
 
       this.chart = new Chart({
