@@ -13,13 +13,13 @@ import { ScenariosService } from '../service/scenarios.service';
 })
 
 export class ScenarioDetailComponent implements OnInit {
-  private forScenario$: Observable<Scenario>;
+  forScenario$: Observable<Scenario>;
 
   timeSeriesColumns = ['year', 'externalCapital', 'fcf'];
   scenarioColumns = ['position', 'equityInterest', 'outsideCapitalInterest', 'corporateTax'];
 
   /* step holder for panels */
-  private step = 0;
+  step = 0;
 
   /* variables for chart */
   private chartData: any[];
