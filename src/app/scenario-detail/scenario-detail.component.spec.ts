@@ -17,33 +17,83 @@ describe('ScenarioDetailComponent', () => {
 
   beforeEach(async(() => {
     const testScenario = <Scenario> {
-      'businessTaxRate': '12',
+      'depreciation': {
+        'isHistoric': true,
+        'timeSeries': [
+          {
+            'year': 2001,
+            'quarter': 1,
+            'amount': 0,
+          },
+          {
+            'year': 2001,
+            'quarter': 2,
+            'amount': 0,
+          },
+          {
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56,
+          },
+          {
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56,
+          },
+        ],
+      },
+      'freeCashflows': {
+        'isHistoric': true,
+        'timeSeries': [
+          {
+            'year': 2001,
+            'quarter': 1,
+            'amount': 0,
+          },
+          {
+            'year': 2001,
+            'quarter': 2,
+            'amount': 0,
+          },
+          {
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56,
+          },
+          {
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56,
+          },
+        ],
+      },
+      'businessTaxRate': 0.12,
       'divestments': {
         'isHistoric': true,
         'timeSeries': [
           {
             'year': 2001,
             'quarter': 1,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 2,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
+            'amount': 345.56,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
-          }
-        ]
+            'amount': 345.56,
+          },
+        ],
       },
-      'corporateTaxRate': '13',
+      'corporateTaxRate': 0.13,
       'description': 'Das Dritte Scenario',
       'investments': {
         'isHistoric': true,
@@ -51,24 +101,24 @@ describe('ScenarioDetailComponent', () => {
           {
             'year': 2001,
             'quarter': 1,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 2,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
+            'amount': 345.56,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
-          }
-        ]
+            'amount': 345.56,
+          },
+        ],
       },
       'costOfStaff': {
         'isHistoric': true,
@@ -76,51 +126,51 @@ describe('ScenarioDetailComponent', () => {
           {
             'year': 2001,
             'quarter': 1,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 2,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
-          }
-        ]
+            'amount': 345.56,
+          },
+        ],
       },
-      'solidaryTaxRate': '5',
-      'interestOnLiabilitiesRate': '11',
+      'solidaryTaxRate': 0.05,
+      'interestOnLiabilitiesRate': 0.11,
       'revenue': {
         'isHistoric': true,
         'timeSeries': [
           {
             'year': 2001,
             'quarter': 1,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 2,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
+            'amount': 345.56,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
-          }
-        ]
+            'amount': 345.56,
+          },
+        ],
       },
       'costOfMaterial': {
         'isHistoric': true,
@@ -128,49 +178,24 @@ describe('ScenarioDetailComponent', () => {
           {
             'year': 2001,
             'quarter': 1,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 2,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
+            'amount': 345.56,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
-          }
-        ]
-      },
-      'deprecation': {
-        'isHistoric': true,
-        'timeSeries': [
-          {
-            'year': 2001,
-            'quarter': 1,
-            'amount': 0
+            'amount': 345.56,
           },
-          {
-            'year': 2001,
-            'quarter': 2,
-            'amount': 0
-          },
-          {
-            'year': 2001,
-            'quarter': 3,
-            'amount': 345.56
-          },
-          {
-            'year': 2001,
-            'quarter': 3,
-            'amount': 345.56
-          }
-        ]
+        ],
       },
       'additionalIncome': {
         'isHistoric': true,
@@ -178,24 +203,24 @@ describe('ScenarioDetailComponent', () => {
           {
             'year': 2001,
             'quarter': 1,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 2,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
+            'amount': 345.56,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
-          }
-        ]
+            'amount': 345.56,
+          },
+        ],
       },
       'liabilities': {
         'isHistoric': true,
@@ -203,24 +228,24 @@ describe('ScenarioDetailComponent', () => {
           {
             'year': 2001,
             'quarter': 1,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 2,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
+            'amount': 345.56,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
-          }
-        ]
+            'amount': 345.56,
+          },
+        ],
       },
       'periods': null,
       'stochastic': true,
@@ -228,36 +253,34 @@ describe('ScenarioDetailComponent', () => {
         'companyValue': 8888899,
         'marketValueTotalAssets': 12123,
         'taxShield': 123,
-        'totalLiabilities': 112
+        'totalLiabilities': 112,
+        'presentValueOfCashflows': 10000,
       },
       'id': 3,
       'fcfValuationResult': {
         'companyValue': 8888899,
         'marketValueTotalAssets': 12123,
-        'totalLiabilities': 112
+        'totalLiabilities': 112,
       },
-      'companyValueDistribution': [
+      'companyValueDistribution':
         {
-          'num': 1,
-          'rangeMin': 1000,
-          'rangeMax': 2000,
-          'height': 0.1
-        }
-      ],
+          xValues: [...Array(31).keys()].map(i => i * 10000),
+          yValues: [...Array(31).keys()].map(i => i / 30),
+        },
       'externalCapital': {
         'isHistoric': true,
         'timeSeries': [
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
+            'amount': 345.56,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
-          }
-        ]
+            'amount': 345.56,
+          },
+        ],
       },
       'additionalCosts': {
         'isHistoric': true,
@@ -265,24 +288,24 @@ describe('ScenarioDetailComponent', () => {
           {
             'year': 2001,
             'quarter': 1,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 2,
-            'amount': 0
+            'amount': 0,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
+            'amount': 345.56,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
-          }
-        ]
+            'amount': 345.56,
+          },
+        ],
       },
       'freeCashFlows': {
         'isHistoric': true,
@@ -290,20 +313,20 @@ describe('ScenarioDetailComponent', () => {
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
+            'amount': 345.56,
           },
           {
             'year': 2001,
             'quarter': 3,
-            'amount': 345.56
-          }
-        ]
+            'amount': 345.56,
+          },
+        ],
       },
       'name': 'Drei',
       'fteValuationResult': {
-        'companyValue': 8888899
+        'companyValue': 8888899,
       },
-      'equityInterestRate': '10',
+      'equityInterestRate': 0.1,
     };
 
     TestBed.configureTestingModule({
