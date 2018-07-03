@@ -19,6 +19,8 @@ import { DEFAULT_MOCK_DATA } from './service/mockdata';
 import { ScenariosService } from './service/scenarios.service';
 import { ScenariosServiceMock } from './service/scenarios.service.mock';
 import { ToDoubleDirective } from './to-double.directive';
+import { CreditsComponent } from './credits/credits.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { ToDoubleDirective } from './to-double.directive';
     DeleteDialogComponent,
     LoginComponent,
     RegistrationComponent,
+    CreditsComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,6 +44,7 @@ import { ToDoubleDirective } from './to-double.directive';
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
+    HttpClientModule,
   ],
   providers: [environment.emergencyDemo ? {
     provide: ScenariosService, useFactory: () => new ScenariosServiceMock(DEFAULT_MOCK_DATA),
