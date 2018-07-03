@@ -9,6 +9,8 @@ import { ScenariosService } from '../service/scenarios.service';
   styleUrls: ['./select-scenario.component.css'],
 })
 export class SelectScenarioComponent implements OnInit {
+  scenarios$ = this._scenariosService.scenarios$;
+
   constructor(private bottomSheetRef: MatBottomSheetRef<SelectScenarioComponent>, private _scenariosService: ScenariosService) { }
 
   ngOnInit() {

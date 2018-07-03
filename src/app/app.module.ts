@@ -46,9 +46,11 @@ import { HttpClientModule } from '@angular/common/http';
     FlexLayoutModule,
     HttpClientModule,
   ],
-  providers: [environment.emergencyDemo ? {
-    provide: ScenariosService, useFactory: () => new ScenariosServiceMock(DEFAULT_MOCK_DATA),
-  } : { provide: ScenariosService, useClass: ScenariosService }],
+  providers: [
+    environment.emergencyDemo
+      ? { provide: ScenariosService, useClass: ScenariosServiceMock }
+      : ScenariosService,
+  ],
   bootstrap: [AppComponent],
   entryComponents: [SelectScenarioComponent, DeleteDialogComponent],
 })
