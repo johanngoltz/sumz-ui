@@ -2,7 +2,7 @@ export interface RemoteConfig {
     scenarioConfig: Map<number, ScenarioConfig>;
 }
 
-interface ScenarioConfig {
+export interface ScenarioConfig {
     showResult: {
         cvd: boolean,
         apv: boolean,

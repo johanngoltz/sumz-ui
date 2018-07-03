@@ -109,42 +109,45 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
     });
     this.formGroup.disable();
     this.initData();
-    this.forConfig$.pipe(first()).subscribe(config => {
-      this.showCvd = config.showResult.cvd;
-      this.showApv = config.showResult.apv;
-      this.showFcf = config.showResult.fcf;
-      this.showFte = config.showResult.fte;
-    });
+
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
-      this.chart = new Chart({
-        chart: {
-          type: 'line',
-        },
-        credits: {
-          enabled: false,
-        },
-        legend: {
-          enabled: false,
-        },
-        title: {
-          text: '',
-        },
-        yAxis: {
-          title: {
-            text: 'Verteilung',
-          },
-        },
-        xAxis: {
-          categories: currentScenario.companyValueDistribution.xValues,
-          title: {
-            text: 'Unternehmenswert in €',
-          },
-        },
-        series: [{
-          name: ' ',
-          data: currentScenario.companyValueDistribution.yValues,
-        }],
+      this.forConfig$.subscribe( remote => {
+        const config = remote.scenarioConfig.get(currentScenario.id);
+        this.showCvd = (config.showResult.cvd != null) ? config.showResult.cvd : false;
+        this.showApv = (config.showResult.apv != null) ? config.showResult.apv : false;
+        this.showFcf = (config.showResult.fcf != null) ? config.showResult.fcf : false;
+        this.showFte = (config.showResult.fte != null) ? config.showResult.fte : false;
       });
+
+      // this.chart = new Chart({
+      //   chart: {
+      //     type: 'line',
+      //   },
+      //   credits: {
+      //     enabled: false,
+      //   },
+      //   legend: {
+      //     enabled: false,
+      //   },
+      //   title: {
+      //     text: '',
+      //   },
+      //   yAxis: {
+      //     title: {
+      //       text: 'Verteilung',
+      //     },
+      //   },
+      //   xAxis: {
+      //     categories: currentScenario.companyValueDistribution.xValues,
+      //     title: {
+      //       text: 'Unternehmenswert in €',
+      //     },
+      //   },
+      //   series: [{
+      //     name: ' ',
+      //     data: currentScenario.companyValueDistribution.yValues,
+      //   }],
+      // });
     });
   }
 
@@ -218,16 +221,19 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
   }
 
   saveConfig() {
-    this.forConfig$.pipe(first()).subscribe(config => {
-      config.showResult.cvd = this.showCvd;
-      config.showResult.apv = this.showApv;
-      config.showResult.fcf = this.showFcf;
-      config.showResult.fte = this.showFte;
-
-      this._optionsService.setConfig(config);
+    this.forScenario$.pipe(first()).subscribe(currentScenario => {
+      this.forConfig$.subscribe( remote => {
+        // TODO: this.show*** ändert sich aktuell nicht ...
+        const config = remote.scenarioConfig.get(currentScenario.id);
+        config.showResult.cvd = this.showCvd;
+        config.showResult.apv = this.showApv;
+        config.showResult.fcf = this.showFcf;
+        config.showResult.fte = this.showFte;
+        remote.scenarioConfig.set(currentScenario.id, config);
+        console.log(remote);
+        this._optionsService.setConfig(remote);
+      });
     });
-
-    this._alertService.success('Konfiguration wurde gespeichert');
   }
 
   setEditable(editable: Boolean, save ?: Boolean) {
