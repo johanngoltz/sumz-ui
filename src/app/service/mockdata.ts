@@ -9,6 +9,7 @@ export interface AccountingFigures {
     divestments: AccountingFigure;
     investments: AccountingFigure;
     liabilities: AccountingFigure;
+    depreciation: AccountingFigure;
 }
 
 const rawAccountingFigures = {
@@ -20,6 +21,7 @@ const rawAccountingFigures = {
     divestments: [295, 456, 45, 231],
     investments: [347, 21, 454, 655],
     liabilities: [16917, 16069, 15679, 16605],
+    depreciation: [1000, 900, 800, 700],
 };
 const accountingFigures = Object.entries(rawAccountingFigures).reduce(
     (allFigures, [key, figureSeries]) => {
@@ -39,15 +41,16 @@ const accountingFigures = Object.entries(rawAccountingFigures).reduce(
         return allFigures;
     }, {} as AccountingFigures);
 
-const valueDistributionProbabilities = [...Array(11).keys()].map(i => 1 / (Math.pow(5 - i, 2) + 1));
 export const DEFAULT_MOCK_DATA: Scenario[] = [{
     ...{
         id: 69190,
         name: 'Testszenario',
         description: 'KPMG-geprüfte, garantiert fehlerfreie Unternehmensbewertung',
-        corporateTax: 25,
-        equityInterest: 4,
-        outsideCapitalInterest: 1,
+        businessTaxRate: .25,
+        corporateTaxRate: .2,
+        solidaryTaxRate: .055,
+        equityInterestRate: .4,
+        interestOnLiabilitiesRate: .1,
         periods: 4,
         stochastic: true,
         fcfValuationResult: {
@@ -61,16 +64,13 @@ export const DEFAULT_MOCK_DATA: Scenario[] = [{
             marketValueTotalAssets: 50000,
             taxShield: 5000,
             totalLiabilities: 20000,
+            presentValueOfCashflows: 10000,
         },
-        companyValueDistribution: [...Array(11).keys()].map(i => {
-            return {
-                num: i + 1,
-                rangeMin: i / 5 * 122000,
-                rangeMax: (i + 1) / 5 * 122000,
-                height: valueDistributionProbabilities[i],
-            };
-        }),
-        freeCashFlows: {} as AccountingFigure,
+        companyValueDistribution: {
+            xValues: [...Array(31).keys()].map(i => i * 10000),
+            yValues: [...Array(31).keys()].map(i => i / 30),
+        },
+        freeCashflows: {} as AccountingFigure,
     },
     ...accountingFigures,
 }];
