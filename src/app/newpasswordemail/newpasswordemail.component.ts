@@ -5,23 +5,20 @@ import { AuthenticationService } from '../service/authentication.service';
 import { AlertService } from '../service/alert.service';
 
 @Component({
-    selector: 'app-newpassword',
-    templateUrl: './newpassword.component.html',
-    styleUrls: ['./newpassword.component.css'],
+    selector: 'app-newpasswordemail',
+    templateUrl: './newpasswordemail.component.html',
+    styleUrls: ['./newpasswordemail.component.css'],
   })
 
   /**
-   * Changing the password of an existing user account is implemented in this class after the reset
-   * in component newpasswordemail.
+   * Changing the password of an existing user account is implemented in this class.
    * @author Burkart
    */
-  export class NewPasswordComponent implements OnInit {
-
+  export class NewPasswordEmailComponent implements OnInit {
+    // TODO: Input-Feld für Email hinzufügen
   [x: string]: any;
     newFormGroup: FormGroup;
     submitted = false;
-    hide_pw1 = true;
-    hide_pw2 = true;
 
     constructor(
       private _formBuilder: FormBuilder,
@@ -31,13 +28,7 @@ import { AlertService } from '../service/alert.service';
     ngOnInit() {
       this.newFormGroup = this._formBuilder.group({
         // Validators to check the length of the passwords
-        pwdNew1: ['', Validators.minLength(8)],
-        pwdNew2: ['', Validators.minLength(8)],
-      },
-      {
-        // validates the two passwords
-        validator: PasswordValidation.Match('pwdNew1', 'pwdNew2'),
-      });
+        mailCtrl: ['', Validators.email]});
     }
 
     onSubmit() {
@@ -50,7 +41,7 @@ import { AlertService } from '../service/alert.service';
       }
 
       // call the method to request a new password
-      this.authenticationService.postnewpassword(this.pwdNew1.value.toString())
+      this.authenticationService.newpassword(this.mailCtrl.value.toString())
         .catch( // catch the error-warnings if the method fails
           error => {
             this.alertService.error(error);
@@ -62,7 +53,5 @@ import { AlertService } from '../service/alert.service';
     }
 
     // getter for the email, old and new passwords
-    get pwdNew1() { return this.newFormGroup.get('pwdNew1'); }
-
-    get pwdNew2() { return this.newFormGroup.get('pwdNew2'); }
+    get mailCtrl() { return this.newFormGroup.get('mailCtrl'); }
 }

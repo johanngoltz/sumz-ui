@@ -1,29 +1,29 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MaterialModule } from '../material.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NewPasswordEmailComponent } from './newpasswordemail.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ChangePasswordComponent } from './changepassword.component';
-import { ReactiveFormsModule } from '@angular/forms';
-
-describe('ChangePasswordComponent', () => {
-  let component: ChangePasswordComponent;
-  let fixture: ComponentFixture<ChangePasswordComponent>;
+describe('newpasswordemailComponent', () => {
+  let component: NewPasswordEmailComponent;
+  let fixture: ComponentFixture<NewPasswordEmailComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ChangePasswordComponent],
+      declarations: [NewPasswordEmailComponent],
       imports: [
         MaterialModule,
-        RouterTestingModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule],
+        RouterTestingModule,
+        BrowserAnimationsModule,
+      ],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ChangePasswordComponent);
+    fixture = TestBed.createComponent(NewPasswordEmailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

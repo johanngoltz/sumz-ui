@@ -1,6 +1,6 @@
-<h1 mat-dialog-title>{{data.project ? 'Projekt' : data.scenario ? 'Szenario' : ''}} löschen?</h1>
+<h1 mat-dialog-title>{{data.project ? 'Szenario' : data.scenario ? 'Szenario' : ''}} löschen?</h1>
 <div mat-dialog-content>
-  <p>{{data.project ? 'Das Projekt ' + data.project.name : data.scenario ? 'Das Szenario ' + data.scenario.name : ''}} kann danach nicht mehr wiederhergestellt werden.</p>
+  <p>{{data.project ? 'Das Szenario ' + data.project.name : data.scenario ? 'Das Szenario ' + data.scenario.name : ''}} kann danach nicht mehr wiederhergestellt werden.</p>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()" cdkFocusInitial>Abbrechen</button>

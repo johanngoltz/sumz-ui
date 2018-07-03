@@ -1,8 +1,6 @@
 
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { HttpClientModule } from '@angular/common/http';
-
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +14,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { AccountingDataComponent } from './accounting-data/accounting-data.component';
 import { ChangePasswordComponent } from './changepassword/changepassword.component';
 import { NewPasswordComponent } from './newpassword/newpassword.component';
+import { NewPasswordEmailComponent } from './newpasswordemail/newpasswordemail.component';
 import { AlertComponent } from './alert/alert.component';
 import { ScenarioCardComponent } from './scenario-card/scenario-card.component';
 import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.component';
@@ -27,6 +26,8 @@ import { ScenariosServiceMock } from './service/scenarios.service.mock';
 import { ToDoubleDirective } from './to-double.directive';
 import { CreateScenarioComponent } from './create-scenario/create-scenario.component';
 import { ChartModule } from 'angular-highcharts';
+import { AuthGuard } from './auth.guard';
+
 
 @NgModule({
   declarations: [
@@ -43,12 +44,12 @@ import { ChartModule } from 'angular-highcharts';
     CreateScenarioComponent,
     ChangePasswordComponent,
     NewPasswordComponent,
+    NewPasswordEmailComponent,
     AlertComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    HttpClientModule,
     MaterialModule,
     AppRoutingModule,
     FormsModule,
@@ -56,9 +57,12 @@ import { ChartModule } from 'angular-highcharts';
     FlexLayoutModule,
     ChartModule,
   ],
-  providers: [environment.emergencyDemo ? {
+  providers: [
+    environment.emergencyDemo ? {
     provide: ScenariosService, useFactory: () => new ScenariosServiceMock(DEFAULT_MOCK_DATA),
-  } : { provide: ScenariosService, useClass: ScenariosService }],
+    } : { provide: ScenariosService, useClass: ScenariosService },
+    AuthGuard,
+  ],
   bootstrap: [AppComponent],
   entryComponents: [SelectScenarioComponent, DeleteDialogComponent, AlertComponent],
 })

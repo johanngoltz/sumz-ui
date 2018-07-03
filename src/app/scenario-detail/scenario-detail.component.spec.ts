@@ -17,271 +17,293 @@ describe('ScenarioDetailComponent', () => {
 
   beforeEach(async(() => {
     const testScenario = <Scenario> {
-      "businessTaxRate": "12",
-      "equityInterest": 23,
-      "corporateTax": 21,
-      "divestments": {
-        "isHistoric": true,
-        "timeSeries": [
+      'businessTaxRate': '12',
+      'divestments': {
+        'isHistoric': true,
+        'timeSeries': [
           {
-            "year": 2001,
-            "quarter": 1,
-            "amount": 0
+            'year': 2001,
+            'quarter': 1,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 2,
-            "amount": 0
+            'year': 2001,
+            'quarter': 2,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           }
         ]
       },
-      "corporateTaxRate": "13",
-      "description": "Das Dritte Scenario",
-      "investments": {
-        "isHistoric": true,
-        "timeSeries": [
+      'corporateTaxRate': '13',
+      'description': 'Das Dritte Scenario',
+      'investments': {
+        'isHistoric': true,
+        'timeSeries': [
           {
-            "year": 2001,
-            "quarter": 1,
-            "amount": 0
+            'year': 2001,
+            'quarter': 1,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 2,
-            "amount": 0
+            'year': 2001,
+            'quarter': 2,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           }
         ]
       },
-      "costOfStaff": {
-        "isHistoric": true,
-        "timeSeries": [
+      'costOfStaff': {
+        'isHistoric': true,
+        'timeSeries': [
           {
-            "year": 2001,
-            "quarter": 1,
-            "amount": 0
+            'year': 2001,
+            'quarter': 1,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 2,
-            "amount": 0
+            'year': 2001,
+            'quarter': 2,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 0
+            'year': 2001,
+            'quarter': 3,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           }
         ]
       },
-      "solidaryTaxRate": "5",
-      "interestOnLiabilitiesRate": "11",
-      "revenue": {
-        "isHistoric": true,
-        "timeSeries": [
+      'solidaryTaxRate': '5',
+      'interestOnLiabilitiesRate': '11',
+      'revenue': {
+        'isHistoric': true,
+        'timeSeries': [
           {
-            "year": 2001,
-            "quarter": 1,
-            "amount": 0
+            'year': 2001,
+            'quarter': 1,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 2,
-            "amount": 0
+            'year': 2001,
+            'quarter': 2,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           }
         ]
       },
-      "costOfMaterial": {
-        "isHistoric": true,
-        "timeSeries": [
+      'costOfMaterial': {
+        'isHistoric': true,
+        'timeSeries': [
           {
-            "year": 2001,
-            "quarter": 1,
-            "amount": 0
+            'year': 2001,
+            'quarter': 1,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 2,
-            "amount": 0
+            'year': 2001,
+            'quarter': 2,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           }
         ]
       },
-      "additionalIncome": {
-        "isHistoric": true,
-        "timeSeries": [
+      'deprecation': {
+        'isHistoric': true,
+        'timeSeries': [
           {
-            "year": 2001,
-            "quarter": 1,
-            "amount": 0
+            'year': 2001,
+            'quarter': 1,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 2,
-            "amount": 0
+            'year': 2001,
+            'quarter': 2,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           }
         ]
       },
-      "liabilities": {
-        "isHistoric": true,
-        "timeSeries": [
+      'additionalIncome': {
+        'isHistoric': true,
+        'timeSeries': [
           {
-            "year": 2001,
-            "quarter": 1,
-            "amount": 0
+            'year': 2001,
+            'quarter': 1,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 2,
-            "amount": 0
+            'year': 2001,
+            'quarter': 2,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           }
         ]
       },
-      "periods": null,
-      "stochastic": true,
-      "apvValuationResult": {
-        "companyValue": 8888899,
-        "marketValueTotalAssets": 12123,
-        "taxShield": 123,
-        "totalLiabilities": 112
+      'liabilities': {
+        'isHistoric': true,
+        'timeSeries': [
+          {
+            'year': 2001,
+            'quarter': 1,
+            'amount': 0
+          },
+          {
+            'year': 2001,
+            'quarter': 2,
+            'amount': 0
+          },
+          {
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
+          },
+          {
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
+          }
+        ]
       },
-      "id": 3,
-      "fcfValuationResult": {
-        "companyValue": 8888899,
-        "marketValueTotalAssets": 12123,
-        "totalLiabilities": 112
+      'periods': null,
+      'stochastic': true,
+      'apvValuationResult': {
+        'companyValue': 8888899,
+        'marketValueTotalAssets': 12123,
+        'taxShield': 123,
+        'totalLiabilities': 112
       },
-      "outsideCapitalInterest": 22,
-      "companyValueDistribution": [
+      'id': 3,
+      'fcfValuationResult': {
+        'companyValue': 8888899,
+        'marketValueTotalAssets': 12123,
+        'totalLiabilities': 112
+      },
+      'companyValueDistribution': [
         {
-          "num": 1,
-          "rangeMin": 1000,
-          "rangeMax": 2000,
-          "height": 0.1
+          'num': 1,
+          'rangeMin': 1000,
+          'rangeMax': 2000,
+          'height': 0.1
         }
       ],
-      "externalCapital": {
-        "isHistoric": true,
-        "timeSeries": [
+      'externalCapital': {
+        'isHistoric': true,
+        'timeSeries': [
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           }
         ]
       },
-      "additionalCosts": {
-        "isHistoric": true,
-        "timeSeries": [
+      'additionalCosts': {
+        'isHistoric': true,
+        'timeSeries': [
           {
-            "year": 2001,
-            "quarter": 1,
-            "amount": 0
+            'year': 2001,
+            'quarter': 1,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 2,
-            "amount": 0
+            'year': 2001,
+            'quarter': 2,
+            'amount': 0
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           }
         ]
       },
-      "freeCashFlows": {
-        "isHistoric": true,
-        "timeSeries": [
+      'freeCashFlows': {
+        'isHistoric': true,
+        'timeSeries': [
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           },
           {
-            "year": 2001,
-            "quarter": 3,
-            "amount": 345.56
+            'year': 2001,
+            'quarter': 3,
+            'amount': 345.56
           }
         ]
       },
-      "name": "Drei",
-      "fteValuationResult": {
-        "companyValue": 8888899
+      'name': 'Drei',
+      'fteValuationResult': {
+        'companyValue': 8888899
       },
-      "equityInterestRate": "10"
+      'equityInterestRate': '10',
     };
 
     TestBed.configureTestingModule({

@@ -4,19 +4,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { Scenario } from '../api/scenario';
-import { AppRoutingModule } from '../app-routing.module';
 import { CreateScenarioComponent } from '../create-scenario/create-scenario.component';
-import { LoginComponent } from '../login/login.component';
 import { MaterialModule } from '../material.module';
-import { RegistrationComponent } from '../registration/registration.component';
-import { ScenarioCardComponent } from '../scenario-card/scenario-card.component';
 import { ScenarioDetailComponent } from '../scenario-detail/scenario-detail.component';
 import { ScenariosService } from '../service/scenarios.service';
 import { ScenariosComponent } from './scenarios.component';
 import { AccountingDataComponent } from '../accounting-data/accounting-data.component';
 import { Chart } from 'angular-highcharts';
-
-
+import { RouterTestingModule } from '@angular/router/testing';
+import { ScenarioCardComponent } from '../scenario-card/scenario-card.component';
 
 describe('ScenariosComponent', () => {
   let component: ScenariosComponent;
@@ -24,9 +20,12 @@ describe('ScenariosComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ScenariosComponent, ScenarioCardComponent, CreateScenarioComponent, ScenarioDetailComponent, LoginComponent,
-        RegistrationComponent, AccountingDataComponent],
-      imports: [MaterialModule, FormsModule, ReactiveFormsModule, AppRoutingModule, BrowserAnimationsModule, Chart],
+      declarations: [ScenariosComponent, ScenarioDetailComponent, CreateScenarioComponent, ScenarioCardComponent, AccountingDataComponent],
+      imports: [MaterialModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule, Chart,
+        RouterTestingModule.withRoutes(
+          [{ path: 'scenario/:id', component: ScenarioDetailComponent },
+          { path: 'create', component: CreateScenarioComponent }]
+        )],
       providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
         {

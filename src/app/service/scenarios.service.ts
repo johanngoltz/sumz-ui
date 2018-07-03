@@ -18,8 +18,7 @@ export class ScenariosService {
     this._scenarios$ = new ReplaySubject();
     this.scenarios$ = this._scenarios$.asObservable();
 
-    // FIXME: doppelt (wird in scenarios.component.ts schon aufgerufen)
-    // this.getScenarios().subscribe();
+    this.getScenarios().subscribe();
   }
 
   getScenarios() {

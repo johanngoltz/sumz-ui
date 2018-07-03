@@ -1,5 +1,5 @@
 <div class="content-container">
-  <h1>Neues Projekt erstellen</h1>
+  <h1>Neues Szenario erstellen</h1>
   <mat-vertical-stepper linear [class.navigation-disabled]="busy">
     <mat-step label="Grundlegendes" [stepControl]="formGroup1">
       <form [formGroup]="formGroup1">
@@ -13,13 +13,13 @@
               <textarea id="description" name="description" matInput cdkTextareaAutosize placeholder="Beschreibung" formControlName="description"></textarea>
             </mat-form-field>
             <div class="info">
-              <h4>Aus bestehendem Projekt erstellen</h4>
+              <h4>Aus bestehendem Szenario erstellen</h4>
               <p>
-                Sie können bereits bestehende Projekte als Vorlage für dieses Projekt nutzen. Wählen Sie hierzu über den folgenden Button
-                einfach ein Projekt aus, um dessen Daten in die Eingabefelder zu übertragen.
+                Sie können bereits bestehende Szenarien als Vorlage für dieses Szenario nutzen. Wählen Sie hierzu über den folgenden Button
+                einfach ein Szenario aus, um dessen Daten in die Eingabefelder zu übertragen.
               </p>
               <div class="info-action">
-                <button mat-button type="button" color="accent" (click)="openSelectionSheet()">Bestehendes Projekt auswählen</button>
+                <button mat-button type="button" color="accent" (click)="openSelectionSheet()">Bestehendes Szenario auswählen</button>
               </div>
             </div>
           </mat-card-content>
@@ -77,7 +77,7 @@
           </mat-card-content>
           <mat-card-actions class="stepper-actions">
             <button mat-button matStepperPrevious [disabled]="busy">Zurück</button>
-            <button mat-raised-button matStepperNext color="accent" [disabled]="busy">Projekt anlegen</button>
+            <button mat-raised-button matStepperNext color="accent" [disabled]="busy">Szenario anlegen</button>
           </mat-card-actions>
         </mat-card>
       </form>

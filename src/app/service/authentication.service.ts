@@ -117,23 +117,30 @@ export class AuthenticationService {
   }
 
   /**
-   * overrides the current password
-   * (is called in changepassword.component)
-   * @param {string} passwordnew new password
-   * @param {string} passwordnew2 new password
+   * send a request to reset the current password
+   * (is called in newpassword.component)
+   * @param {string} email email
    * @returns {Promise} Promise
    */
-  async newpassword(passwordnew: string, passwordnew2: string) {
-    const response = await this._apiClient.request({
-      // TODO: URL anpassen
-      url: 'TODO nachdem die definiert haben',
-      data: {passwordnew, passwordnew2},
-      method: 'PUT',
+  async newpassword(email: string) {
+    await this._apiClient.request({
+      url: '/users/forgot',
+      data: {email},
+      method: 'POST',
     });
-    // if credentials correct, redirect to main page
-    if (response.status === 200) {
-      this.router.navigate(['/users']);
-    }
+  }
+
+  /**
+   * sends the new password after the reset
+   * @param {string} password new passwoed
+   * @returns {Promise} Promise
+   */
+  async postnewpassword(password: string) {
+    await this._apiClient.request({
+      url: '/users/reset/token',
+      data: {password},
+      method: 'POST',
+    });
   }
 
   /**
