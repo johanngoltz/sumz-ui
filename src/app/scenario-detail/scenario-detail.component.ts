@@ -47,7 +47,7 @@ export class ScenarioDetailComponent implements OnInit {
   }
 
   private addScenario() {
-    of({ corporateTax: 25 } as Scenario).pipe(
+    of({ businessTaxRate: 25 } as Scenario).pipe(
       tap(scenario => this._scenariosService.addScenario(scenario))
     ).subscribe(next => console.log('Scenario added: ', next));
   }
