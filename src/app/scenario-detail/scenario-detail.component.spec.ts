@@ -9,7 +9,7 @@ import { Scenario } from '../api/scenario';
 import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
 import { AccountingDataComponent } from '../accounting-data/accounting-data.component';
 import { DEFAULT_MOCK_DATA } from '../service/mockdata';
-import { Chart } from 'angular-highcharts';
+import { ChartModule } from 'angular-highcharts';
 
 
 describe('ScenarioDetailComponent', () => {
@@ -19,7 +19,7 @@ describe('ScenarioDetailComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ScenarioDetailComponent, AccountingDataComponent],
-      imports: [MaterialModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule, Chart],
+      imports: [MaterialModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule, ChartModule],
       providers: [{
         provide: ActivatedRoute,
         useValue: {
