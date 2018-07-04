@@ -3,20 +3,26 @@ export class Scenario {
     name: string;
     description: string;
     periods: number;
-    equityInterest: number;
-    outsideCapitalInterest: number;
-    corporateTax: number;
+    
+    equityInterestRate: number;
+    interestOnLiabilitiesRate: number;
+    businessTaxRate: number;
+    corporateTaxRate: number;
+    solidaryTaxRate: number;
     stochastic: Boolean;
+
     additionalIncome: AccountingFigure;
     additionalCosts: AccountingFigure;
     investments: AccountingFigure;
     divestments: AccountingFigure;
+    depreciation: AccountingFigure;
     revenue: AccountingFigure;
     costOfMaterial: AccountingFigure;
     costOfStaff: AccountingFigure;
     liabilities: AccountingFigure;
-    freeCashFlows: AccountingFigure;
-    companyValueDistribution: DistributedCompanyValue[];
+    freeCashflows: AccountingFigure;
+
+    companyValueDistribution: DistributedCompanyValue;
     fteValuationResult: { companyValue: number; };
     fcfValuationResult: FcfValuationResult;
     apvValuationResult: ApvValuationResult;
@@ -32,10 +38,8 @@ export class AccountingFigure {
 }
 
 export class DistributedCompanyValue {
-    num: number;
-    rangeMin: number;
-    rangeMax: number;
-    height: number;
+    xValues: number[];
+    yValues: number[];
 }
 
 export class FcfValuationResult {
@@ -46,4 +50,5 @@ export class FcfValuationResult {
 
 export class ApvValuationResult extends FcfValuationResult {
     taxShield: number;
+    presentValueOfCashflows: number;
 }

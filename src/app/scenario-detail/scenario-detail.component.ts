@@ -139,9 +139,9 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
       this.formGroup.controls.name.setValue(currentScenario.name);
       this.formGroup.controls.description.setValue(currentScenario.description);
-      this.formGroup.controls.equityInterest.setValue(currentScenario.equityInterest);
-      this.formGroup.controls.outsideCapitalInterest.setValue(currentScenario.outsideCapitalInterest);
-      this.formGroup.controls.corporateTax.setValue(currentScenario.corporateTax);
+      this.formGroup.controls.equityInterest.setValue(currentScenario.equityInterestRate);
+      this.formGroup.controls.outsideCapitalInterest.setValue(currentScenario.interestOnLiabilitiesRate);
+      this.formGroup.controls.corporateTax.setValue(currentScenario.solidaryTaxRate);
     });
   }
 

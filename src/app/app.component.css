@@ -1,28 +1,35 @@
 mat-toolbar {
-    position: sticky;
-    top: 0;
-    z-index: 8;
+  position: sticky;
+  top: 0;
+  z-index: 8;
 }
 
 #logo-link {
-    display: flex;
+  display: flex;
 }
 
 #logo {
-    height: 50px;
-    width: auto;
+  height: 50px;
+  width: auto;
 }
 
 #user-menu-btn {
-    margin-left: auto;
+  margin-left: auto;
 }
 
-::ng-deep app-scenarios, ::ng-deep app-create-scenario, ::ng-deep app-scenario-detail, ::ng-deep app-login, ::ng-deep app-registration, ::ng-deep app-changepassword, ::ng-deep app-newpassword {
-    width: 100%;
-    min-height: calc(100% - 64px);
-    display: block;
+::ng-deep app-scenarios,
+::ng-deep app-create-scenario,
+::ng-deep app-scenario-detail,
+::ng-deep app-login,
+::ng-deep app-registration,
+::ng-deep app-changepassword,
+::ng-deep app-newpassword,
+::ng-deep app-credits {
+  width: 100%;
+  min-height: calc(100% - 64px);
+  display: block;
 }
 
 ::ng-deep .content-conatiner {
-    display: block;
+  display: block;
 }

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { TypedAxiosInstance } from 'restyped-axios';
-import { from, Observable, of, ReplaySubject, throwError } from 'rxjs';
-import { filter, retry, switchMap } from 'rxjs/operators';
+import { Observable, ReplaySubject, from, of, throwError } from 'rxjs';
+import { filter, flatMap, retry, switchMap } from 'rxjs/operators';
 import { SumzAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
 import { HttpClient } from './http-client';
@@ -23,18 +23,16 @@ export class ScenariosService {
 
   getScenarios() {
     return from(this._apiClient.request({ url: '/scenario' })).pipe(
-      // TODO: wird vllt nicht wie gedacht funktionieren
       switchMap(response => response.status === 200 ?
         of(response) :
         throwError(response)
       ),
       retry(2),
-      switchMap(response => {
+      flatMap(response => {
         this._scenariosStorage = response.data;
         this._scenarios$.next([...response.data]);
         return this.scenarios$;
-      })
-    );
+      }));
   }
 
   getScenario(id: number) {

@@ -27,6 +27,7 @@ import { ScenariosServiceMock } from './service/scenarios.service.mock';
 import { ToDoubleDirective } from './to-double.directive';
 import { CreateScenarioComponent } from './create-scenario/create-scenario.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { CreditsComponent } from './credits/credits.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     ChangePasswordComponent,
     NewPasswordComponent,
     AlertComponent,
+    CreditsComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,10 +57,13 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     ReactiveFormsModule,
     FlexLayoutModule,
     NgxChartsModule,
+    HttpClientModule,
   ],
-  providers: [environment.emergencyDemo ? {
-    provide: ScenariosService, useFactory: () => new ScenariosServiceMock(DEFAULT_MOCK_DATA),
-  } : { provide: ScenariosService, useClass: ScenariosService }],
+  providers: [
+    environment.emergencyDemo
+      ? { provide: ScenariosService, useClass: ScenariosServiceMock }
+      : ScenariosService,
+  ],
   bootstrap: [AppComponent],
   entryComponents: [SelectScenarioComponent, DeleteDialogComponent, AlertComponent],
 })

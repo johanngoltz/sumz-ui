@@ -9,10 +9,10 @@ import { MaterialModule } from '../material.module';
 import { ScenarioDetailComponent } from '../scenario-detail/scenario-detail.component';
 import { ScenariosService } from '../service/scenarios.service';
 import { ScenariosComponent } from './scenarios.component';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ScenarioCardComponent } from '../scenario-card/scenario-card.component';
 import { AccountingDataComponent } from '../accounting-data/accounting-data.component';
+import { CreditsComponent } from '../credits/credits.component';
 
 describe('ScenariosComponent', () => {
   let component: ScenariosComponent;
@@ -21,7 +21,7 @@ describe('ScenariosComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ScenariosComponent, ScenarioDetailComponent, CreateScenarioComponent, ScenarioCardComponent, AccountingDataComponent],
-      imports: [MaterialModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule, NgxChartsModule,
+      imports: [MaterialModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule,
         RouterTestingModule.withRoutes(
           [{ path: 'scenario/:id', component: ScenarioDetailComponent },
           { path: 'create', component: CreateScenarioComponent }]
