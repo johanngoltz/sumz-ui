@@ -10,7 +10,7 @@ export class TimeSeriesMethodsService {
 
   checkVisibility(value: TimePoint, requireHistoric: Boolean, quarterly: Boolean, base: TimePoint, end: TimePoint, shifted = false) {
     if (!quarterly) {
-      [value, base] = [value, base].map(this.removeQuarter);
+      [base, end, value] = [base, end, value].map(this.removeQuarter);
     }
 
     return (requireHistoric === !this.isBefore(base, value)
