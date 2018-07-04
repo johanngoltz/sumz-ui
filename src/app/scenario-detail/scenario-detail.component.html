@@ -14,7 +14,7 @@
     </div>
   </h1>
   <!-- panels for different parts of Scenario-->
-  <mat-accordion multi="false" class="headers-align">
+  <mat-accordion multi="true" class="headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true" [formGroup]="formGroup">
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -43,13 +43,78 @@
         <div>
           <h3>Umweltfaktoren</h3>
           <mat-form-field floatLabel="always">
-            <input matInput type="text" toDouble placeholder="Eigenkapitalzinsen" formControlName="equityInterest" />
+            <input matInput type="text" toDouble placeholder="Eigenkapitalzinsen" formControlName="equityInterestRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.equityInterestRate.hasError('min') || formGroup.controls.equityInterestRate.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.equityInterestRate.hasError('required')">
+              Eigenkapitalzinsen werden
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.equityInterestRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
           </mat-form-field>
+
           <mat-form-field floatLabel="always">
-            <input matInput type="text" toDouble placeholder="Fremdkapitalzinsen" formControlName="outsideCapitalInterest" />
+            <input matInput type="text" toDouble placeholder="Zinssatz für Verbindlichkeiten" formControlName="interestOnLiabilitiesRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.interestOnLiabilitiesRate.hasError('min') || formGroup.controls.interestOnLiabilitiesRate.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.interestOnLiabilitiesRate.hasError('required')">
+              Zinssatz für Verbindlichkeiten wird
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.interestOnLiabilitiesRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
           </mat-form-field>
+
           <mat-form-field floatLabel="always">
-            <input matInput type="text" toDouble placeholder="Unternehmenssteuersatz" formControlName="corporateTax" />
+            <input matInput type="text" toDouble placeholder="Gewerbesteuersatz" formControlName="businessTaxRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('min') || formGroup.controls.businessTaxRate.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('required')">
+             Gewerbesteuersatz wird
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" toDouble placeholder="Körperschaftssteuersatz" formControlName="corporateTaxRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('min') || formGroup.controls.corporateTaxRate.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('required')">
+              Köroerschaftssteuersatz wird
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" toDouble placeholder="Solidaritätszuschlag" formControlName="solidaryTaxRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('min') || formGroup.controls.solidaryTaxRate.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('required')">
+              Solidaritätszuschlag wird
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -94,15 +159,11 @@
         <mat-checkbox class="margin" [(ngModel)]="showFte">FTE</mat-checkbox>
       </div>
 
-      <!-- TODO: Tabellenheader nach links statt mittig -->
       <div class="flex-container">
         <div [hidden]="!showCvd" class="flex-item">
           <mat-divider></mat-divider>
           <h1>Unternehmenswertverteilung</h1>
-          <ngx-charts-bar-vertical [results]="data" [scheme]="colorScheme" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis"
-            [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-            [yAxisLabel]="yAxisLabel" [barPadding]="barPadding">
-          </ngx-charts-bar-vertical>
+          <div [chart]="chart"></div>
         </div>
 
         <div [hidden]="!showApv" class="flex-item">
@@ -114,7 +175,8 @@
                 <th class="mat-header-cell">Unternehmenswert</th>
                 <th class="mat-header-cell">Bilanzsumme</th>
                 <th class="mat-header-cell">Verbindlichkeiten</th>
-                <th class="mat-header-cell">TaxShield</th>
+                <th class="mat-header-cell">Steuervergünstigungen</th>
+                <th class="mat-header-cell">Barwert der Cashflows</th>
               </tr>
             </thead>
             <tbody>
@@ -123,6 +185,7 @@
                 <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.marketValueTotalAssets}}</td>
                 <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.totalLiabilities}}</td>
                 <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.taxShield}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.presentValueOfCashflows}}</td>
               </tr>
             </tbody>
           </table>

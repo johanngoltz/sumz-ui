@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MaterialModule } from '../material.module';
 
 import { AlertComponent } from './alert.component';
-import { MaterialModule } from '../material.module';
 import { MAT_SNACK_BAR_DATA } from '@angular/material';
 
 describe('AlertComponent', () => {
