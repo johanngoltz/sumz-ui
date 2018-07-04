@@ -324,6 +324,34 @@
         "companyValue": 8888899
       },
       "equityInterestRate": 0.105
+    },
+    {
+      "equityInterest": 12,
+      "corporateTax": 12,
+      "freeCashFlows": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "year": 2018,
+            "amount": 0
+          }
+        ]
+      },
+      "name": "Drölf",
+      "liabilities": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "year": 2017,
+            "amount": 0
+          }
+        ]
+      },
+      "description": "",
+      "stochastic": false,
+      "periods": null,
+      "id": 95473,
+      "outsideCapitalInterest": 12
     }
   ]
 }

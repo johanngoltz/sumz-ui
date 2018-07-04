@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { switchMap, first } from 'rxjs/operators';
@@ -69,11 +69,12 @@ import { Chart } from 'angular-highcharts';
   ],
 })
 
-export class ScenarioDetailComponent implements OnInit, OnDestroy {
+export class ScenarioDetailComponent implements OnInit {
   forScenario$: Observable < Scenario > ;
   forConfig$: Observable < RemoteConfig > ;
   formGroup: FormGroup;
   accountingDataFormGroup: FormGroup;
+  configFormGroup: FormGroup;
   paramData = paramData;
 
   /* edit mode */
@@ -81,12 +82,6 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
 
   /* step holder for panels */
   step = 0;
-
-  /* selection */
-  showCvd;
-  showApv;
-  showFcf;
-  showFte;
 
   /*chart */
   chart;
@@ -96,7 +91,7 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.editable = false;
-    this.forScenario$ = this.route.paramMap.pipe(
+    this.forScenario$ = this.route.paramMap.pipe(first(),
       switchMap(params => of (Number.parseInt(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
     this.forConfig$ = this._optionsService.getConfig();
@@ -112,15 +107,18 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
     this.formGroup.disable();
     this.initData();
 
-    this.forScenario$.pipe(first()).subscribe(currentScenario => {
-      this.forConfig$.subscribe( remote => {
-        const config = remote.scenarioConfig.get(currentScenario.id);
-        this.showCvd = !!config.showResult.cvd;
-        this.showApv = !!config.showResult.apv;
-        this.showFcf = !!config.showResult.fcf;
-        this.showFte = !!config.showResult.fte;
-      });
+    this.configFormGroup = this._formBuilder.group({
+      apv: false,
+      cvd: false,
+      fcf: false,
+      fte: false,
+    });
+    this.configFormGroup.disable();
+    this.initConfig();
 
+    this.configFormGroup.valueChanges.subscribe(value => console.log(value));
+
+    this.forScenario$.pipe(first()).subscribe(currentScenario => {
       this.chart = new Chart({
         chart: {
           type: 'line',
@@ -153,10 +151,6 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.saveConfig();
-  }
-
   initData() {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
       this.formGroup.controls.name.setValue(currentScenario.name);
@@ -169,7 +163,14 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  /* functions for panels */
+  initConfig() {
+    this.forScenario$.pipe(first()).subscribe(currentScenario => {
+      this.forConfig$.pipe(first()).subscribe( remote => {
+        this.configFormGroup.setValue(remote.scenarioConfig.get(currentScenario.id).showResult);
+      });
+    });
+  }
+
   setStep(index: number) {
     this.step = index;
   }
@@ -221,23 +222,25 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
           this.formGroup.disable();
           this._alertService.success('Scenario wurde gespeichert');
         },
-        () => this._alertService.warning('Scenario konnte nicht gespeichert werden'), // TODO error handling
+        () => this._alertService.warning('Scenario konnte nicht gespeichert werden'),
       );
     });
   }
 
   saveConfig() {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
-      this.forConfig$.subscribe( remote => {
-        // TODO: this.show*** ändert sich aktuell nicht ...
-        const config = remote.scenarioConfig.get(currentScenario.id);
-        config.showResult.cvd = this.showCvd;
-        config.showResult.apv = this.showApv;
-        config.showResult.fcf = this.showFcf;
-        config.showResult.fte = this.showFte;
-        remote.scenarioConfig.set(currentScenario.id, config);
+      this.forConfig$.pipe(first()).subscribe( remote => {
+        const currentConfig = {...remote.scenarioConfig.get(currentScenario.id),
+          showResult: {
+            apv: this.configFormGroup.controls.apv.value,
+            cvd: this.configFormGroup.controls.cvd.value,
+            fcf: this.configFormGroup.controls.fcf.value,
+            fte: this.configFormGroup.controls.fte.value,
+          }};
 
+        remote.scenarioConfig.set(currentScenario.id, currentConfig);
         this._optionsService.setConfig(remote);
+        this.configFormGroup.disable();
       });
     });
   }
@@ -245,10 +248,12 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
   setEditable(editable: Boolean, save ?: Boolean) {
     if (editable) {
       this.formGroup.enable();
+      this.configFormGroup.enable();
       this.editable = editable;
     } else {
       if (save) {
         if (this.formGroup.valid && this.accountingDataFormGroup.valid) {
+          this.saveConfig();
           this.saveScenario();
         } else {
           this._alertService.error('Speichern des Scenarios nicht möglich. Es sind noch Fehler vorhanden');
@@ -256,7 +261,9 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
       } else {
         this.editable = editable;
         this.formGroup.disable();
+        this.configFormGroup.disable();
         this.initData();
+        this.initConfig();
       }
     }
   }

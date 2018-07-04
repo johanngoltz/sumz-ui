@@ -5,10 +5,12 @@ import { of, EMPTY, NEVER } from 'rxjs';
 import { MaterialModule } from '../material.module';
 import { ScenarioDetailComponent } from './scenario-detail.component';
 import { ScenariosService } from '../service/scenarios.service';
+import { OptionsService } from '../service/options.service';
+import { RemoteConfig, ScenarioConfig } from '../api/config';
 import { Scenario } from '../api/scenario';
 import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
 import { AccountingDataComponent } from '../accounting-data/accounting-data.component';
-import { Chart } from 'angular-highcharts';
+import { ChartModule } from 'angular-highcharts';
 
 
 describe('ScenarioDetailComponent', () => {
@@ -329,9 +331,13 @@ describe('ScenarioDetailComponent', () => {
       'equityInterestRate': 0.1,
     };
 
+    const testRemoteConfig: RemoteConfig = { scenarioConfig: new Map<number, ScenarioConfig>([
+      [1, { showResult: { apv: true, cvd: true, fcf: false, fte: false } }],
+    ])};
+
     TestBed.configureTestingModule({
       declarations: [ScenarioDetailComponent, AccountingDataComponent],
-      imports: [MaterialModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule, Chart],
+      imports: [MaterialModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule, ChartModule],
       providers: [{
         provide: ActivatedRoute,
         useValue: {
@@ -342,6 +348,11 @@ describe('ScenarioDetailComponent', () => {
           scenarios$: of([testScenario]),
           getScenarios: () => this.scenarios$,
           getScenario: (id) => of(testScenario),
+        },
+      }, {
+        provide: OptionsService, useValue: {
+          RemoteConfig$: testRemoteConfig,
+          getConfig: () => this.RemoteConfig$,
         },
       }],
     })
