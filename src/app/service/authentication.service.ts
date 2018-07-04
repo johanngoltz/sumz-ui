@@ -131,6 +131,20 @@ export class AuthenticationService {
   }
 
   /**
+   * deletes an existing user
+   * @param {string} password password of the user account
+   * @returns {Promise} Promise
+   */
+  async deleteuser(password: string) {
+    const ab = JSON.stringify(JSON.parse(localStorage.getItem('currentUser')).id);
+    await this._apiClient.request({
+      url: `/users/delete/${123}`, 
+      data: {password},
+      method: 'POST',
+    });
+  }
+
+    /**
    * sends the new password after the reset
    * @param {string} password new passwoed
    * @returns {Promise} Promise

@@ -205,11 +205,31 @@ Sandbox.define('/users/forgot', 'POST', function (req, res) {
       
     }
   );
-
 })
 
 // set new password after requesting a new one
 Sandbox.define('/users/reset/token', 'POST', function (req, res) {
+  // Check the request, make sure it is a compatible type
+  if (!req.is('application/json')) {
+    return res.send(400, 'Invalid content type, expected application/json');
+  }
+
+  // Set the type of response, sets the content type.
+  res.type('application/json');
+
+  // Set the status code of the response.
+  res.status(200); 
+
+  res.json(
+    {
+      
+    }
+  );
+
+})
+
+// Delete user
+Sandbox.define('/users/{id}/delete', 'POST', function (req, res) {
   // Check the request, make sure it is a compatible type
   if (!req.is('application/json')) {
     return res.send(400, 'Invalid content type, expected application/json');

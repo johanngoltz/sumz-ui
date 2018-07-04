@@ -87,6 +87,11 @@ export class AppComponent {
   }
 
   change() {
-    this._router.navigateByUrl('changepassword');
+    this._router.navigateByUrl('/changepassword');
+  }
+
+  delete() {
+    this.authenticationService.logout();
+    this._router.navigateByUrl('/deleteuser');
   }
 }

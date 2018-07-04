@@ -17,7 +17,7 @@ mat-toolbar {
     margin-left: auto;
 }
 
-::ng-deep app-scenarios, ::ng-deep app-create-scenario, ::ng-deep app-scenario-detail, ::ng-deep app-login, ::ng-deep app-registration, ::ng-deep app-changepassword, ::ng-deep app-newpassword {
+::ng-deep app-scenarios, ::ng-deep app-create-scenario, ::ng-deep app-scenario-detail, ::ng-deep app-login, ::ng-deep app-registration, ::ng-deep app-changepassword, ::ng-deep app-newpassword, ::ng-deep app-deleteuser {
     width: 100%;
     min-height: calc(100% - 64px);
     display: block;

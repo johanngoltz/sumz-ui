@@ -15,6 +15,7 @@ import { AccountingDataComponent } from './accounting-data/accounting-data.compo
 import { ChangePasswordComponent } from './changepassword/changepassword.component';
 import { NewPasswordComponent } from './newpassword/newpassword.component';
 import { NewPasswordEmailComponent } from './newpasswordemail/newpasswordemail.component';
+import { DeleteUserComponent } from './deleteuser/deleteuser.component';
 import { AlertComponent } from './alert/alert.component';
 import { ScenarioCardComponent } from './scenario-card/scenario-card.component';
 import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.component';
@@ -45,6 +46,7 @@ import { AuthGuard } from './auth.guard';
     ChangePasswordComponent,
     NewPasswordComponent,
     NewPasswordEmailComponent,
+    DeleteUserComponent,
     AlertComponent,
   ],
   imports: [

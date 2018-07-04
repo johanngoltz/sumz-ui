@@ -1,0 +1,25 @@
+<div class="content-container">
+    <mat-card class="delete-card">
+        <mat-card-content>
+
+            <mat-card-title>Account wirklich löschen?</mat-card-title>
+            <mat-divider></mat-divider>
+
+            <form [formGroup]="deleteFormGroup" id="delete-form" (ngSubmit)="onSubmit()">
+                <p>
+                    <mat-icon class="delete-icon">lock</mat-icon>
+                    <mat-form-field>
+                        <input [type]="hide_pw1 ? 'password' : 'text'" id="password" name="password" matInput placeholder="Passwort"
+                            formControlName="pwd">
+                        <mat-icon matSuffix (click)="hide_pw1 = !hide_pw1">{{hide_pw1 ? 'visibility' : 'visibility_off'}}</mat-icon>
+                        <mat-error>
+                            Bitte ein Passwort mit mind. 6 Zeichen eingeben
+                        </mat-error>
+                    </mat-form-field>
+                </p>
+                <br>
+                <button mat-raised-button [disabled]="submitted" color="accent" class="delete-btn">Account löschen</button>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
