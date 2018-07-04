@@ -1,15 +1,18 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
-import { of } from 'rxjs';
+import { of, EMPTY, NEVER } from 'rxjs';
 import { MaterialModule } from '../material.module';
 import { ScenarioDetailComponent } from './scenario-detail.component';
 import { ScenariosService } from '../service/scenarios.service';
-import { OptionsService } from '../service/options.service';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { Scenario } from '../api/scenario';
+import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
 import { AccountingDataComponent } from '../accounting-data/accounting-data.component';
 import { DEFAULT_MOCK_DATA } from '../service/mockdata';
 import { ChartModule } from 'angular-highcharts';
+import { OptionsService } from '../service/options.service';
+import { RemoteConfig, ScenarioConfig } from '../api/config';
+
 
 describe('ScenarioDetailComponent', () => {
   let component: ScenarioDetailComponent;
@@ -37,7 +40,8 @@ describe('ScenarioDetailComponent', () => {
           }),
         },
       }],
-    }).compileComponents();
+    })
+      .compileComponents();
   }));
 
   beforeEach(() => {
