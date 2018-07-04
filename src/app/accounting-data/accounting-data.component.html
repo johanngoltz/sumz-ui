@@ -11,7 +11,7 @@
         <th class="mat-header-cell">
           <div class="bold">Jahr</div>{{formGroup.controls.quarterly.value ? 'Quartal' : ''}}</th>
         <ng-container *ngFor="let element of formGroup.controls.liabilities?.controls.timeSeries.controls; let i = index; trackBy: trackByYearQuarter">
-          <th class="mat-cell" *ngIf="isInsideBounds(element.value)">
+          <th class="mat-cell" *ngIf="_timeSeriesMethodsService.isInsideBounds(formGroup.controls.quarterly.value, start, end, element.value)">
             <div id="startyear-container" class="leveraged-field editable" *ngIf="_editable && element.value.year === start.year && (!formGroup.controls.quarterly.value || element.value.quarter === start.quarter)">
               <div [formGroup]="formGroup.controls.start" class="flex">
                 <mat-form-field class="table-input-right">
@@ -80,7 +80,7 @@
             <div *ngIf="!_editable" class="no-bold">&nbsp;{{formGroup.controls[ctrl].value.isHistoric ? 'Wird prognostiziert' : ''}}</div>
           </th>
           <td class="mat-cell" *ngFor="let element of formGroup.controls[ctrl].controls.timeSeries.controls; trackBy: trackByYearQuarter">
-            <ng-container *ngIf="checkVisibility(element.value, formGroup.controls[ctrl].controls.isHistoric.value, paramData[ctrl].shiftDeterministic)">
+            <ng-container *ngIf="_timeSeriesMethodsService.checkVisibility(element.value, formGroup.controls[ctrl].controls.isHistoric.value, formGroup.controls.quarterly.value, base, formGroup.controls.end.value, paramData[ctrl].shiftDeterministic)">
               <span class="table-data" *ngIf="!_editable">{{element.value.amount}}</span>
               <mat-form-field class="table-input-right" [formGroup]="element" *ngIf="_editable">
                 <input type="text" matInput formControlName="amount" appToDouble required>

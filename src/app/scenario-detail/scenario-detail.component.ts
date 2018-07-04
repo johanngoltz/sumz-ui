@@ -11,6 +11,7 @@ import { OptionsService } from '../service/options.service';
 import { trigger, transition, query, animate, style, keyframes } from '@angular/animations';
 import { paramData } from '../api/paramData';
 import { Chart } from 'angular-highcharts';
+import { TimeSeriesMethodsService } from '../service/time-series-methods.service';
 
 @Component({
   selector: 'app-scenario-detail',
@@ -91,8 +92,12 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
   /*chart */
   chart;
 
-  constructor(private _scenariosService: ScenariosService, private _formBuilder: FormBuilder, private _optionsService: OptionsService,
-    private _alertService: AlertService, private route: ActivatedRoute) {}
+  constructor(private _scenariosService: ScenariosService,
+    private _formBuilder: FormBuilder,
+    private _optionsService: OptionsService,
+    private _alertService: AlertService,
+    private route: ActivatedRoute,
+    private _timeSeriesMethodsService: TimeSeriesMethodsService) {}
 
   ngOnInit() {
     this.editable = false;
@@ -211,8 +216,14 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
           currentScenario[param] = {
             isHistoric: paramFormGroup.value.isHistoric,
             timeSeries: paramFormGroup.value.timeSeries.filter(dataPoint =>
-              this.isInsideBounds(quarterly, start, end, dataPoint) &&
-              this.checkVisibility(dataPoint, paramFormGroup.value.isHistoric, quarterly, base, end, paramData[param].shiftDeterministic)),
+              this._timeSeriesMethodsService.isInsideBounds(quarterly, start, end, dataPoint) &&
+              this._timeSeriesMethodsService.checkVisibility(
+                dataPoint,
+                paramFormGroup.value.isHistoric,
+                quarterly,
+                base,
+                end,
+                paramData[param].shiftDeterministic)),
           };
         });
 
@@ -261,24 +272,4 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
       }
     }
   }
-
-  checkVisibility(value, requireHistoric: Boolean, quarterly: Boolean, base, end, shifted = false) {
-    return this.checkValue(value, requireHistoric, quarterly, base, shifted) &&
-      (!shifted || value.year !== end.year || (quarterly && value.quarter !== end.quarter));
-  }
-
-  checkValue(value, requireHistoric: Boolean, quarterly: Boolean, base, shifted = false) {
-    return ((value.year < base.year) || (value.year === base.year &&
-        (!quarterly || value.quarter <= base.quarter))) === requireHistoric ||
-      (shifted && value.year === base.year && (!quarterly || value.quarter === base.quarter));
-  }
-
-  isInsideBounds(quarterly, start, end, value) {
-    return (value.year > start.year - (quarterly ? 0 : 1) ||
-        (quarterly && value.year === start.year &&
-          value.quarter >= start.quarter)) &&
-      (value.year < end.year + (quarterly ? 0 : 1) ||
-        (quarterly && value.year === end.year && value.quarter <= end.quarter));
-  }
-
 }

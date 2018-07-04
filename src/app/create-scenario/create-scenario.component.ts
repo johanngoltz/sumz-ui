@@ -7,6 +7,7 @@ import { SelectScenarioComponent } from '../select-scenario/select-scenario.comp
 import { ScenariosService } from '../service/scenarios.service';
 import { paramData } from '../api/paramData';
 import { AlertService } from '../service/alert.service';
+import { TimeSeriesMethodsService } from '../service/time-series-methods.service';
 
 @Component({
   selector: 'app-create-scenario',
@@ -21,8 +22,12 @@ export class CreateScenarioComponent implements OnInit {
   importedScenario: EventEmitter<Scenario>;
   paramData = paramData;
 
-  constructor(private _formBuilder: FormBuilder, private _scenariosService: ScenariosService, private _router: Router,
-    private _alertService: AlertService, private _bottomSheet: MatBottomSheet) {
+  constructor(private _formBuilder: FormBuilder,
+    private _scenariosService: ScenariosService,
+    private _router: Router,
+    private _alertService: AlertService,
+    private _bottomSheet: MatBottomSheet,
+    private _timeSeriesMethodsService: TimeSeriesMethodsService) {
   }
 
   ngOnInit() {
@@ -32,31 +37,14 @@ export class CreateScenarioComponent implements OnInit {
       description: '',
     });
     this.formGroup2 = this._formBuilder.group({
-      equityInterest: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
-      outsideCapitalInterest: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
-      corporateTax: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      equityInterestRate: ['', [Validators.required, Validators.pattern('^[0-9\.]*$')]],
+      interestOnLiabilitiesRate: ['', [Validators.required, Validators.pattern('^[0-9\.]*$')]],
+      businessTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9\.]*$')]],
+      corporateTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9\.]*$')]],
+      solidaryTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9\.]*$')]],
     });
     this.formGroup3 = this._formBuilder.group({});
     this.importedScenario = new EventEmitter<Scenario>();
-  }
-
-  checkVisibility(value, requireHistoric: Boolean, quarterly: Boolean, base, end, shifted = false) {
-    return this.checkValue(value, requireHistoric, quarterly, base, shifted) &&
-      (!shifted || value.year !== end.year || (quarterly && value.quarter !== end.quarter));
-  }
-
-  checkValue(value, requireHistoric: Boolean, quarterly: Boolean, base, shifted = false) {
-    return ((value.year < base.year) || (value.year === base.year &&
-      (!quarterly || value.quarter <= base.quarter))) === requireHistoric
-      || (shifted && value.year === base.year && (!quarterly || value.quarter === base.quarter));
-  }
-
-  isInsideBounds(quarterly, start, end, value) {
-    return (value.year > start.year - (quarterly ? 0 : 1) ||
-      (quarterly && value.year === start.year
-        && value.quarter >= start.quarter)) &&
-      (value.year < end.year + (quarterly ? 0 : 1) ||
-        (quarterly && value.year === end.year && value.quarter <= end.quarter));
   }
 
   createScenario() {
@@ -83,8 +71,8 @@ export class CreateScenarioComponent implements OnInit {
           scenario[param] = {
             isHistoric: paramFormGroup.value.isHistoric,
             timeSeries: paramFormGroup.value.timeSeries.filter(dataPoint =>
-              this.isInsideBounds(quarterly, start, end, dataPoint)
-              && this.checkVisibility(dataPoint, paramFormGroup.value.isHistoric, quarterly, base, end,
+              this._timeSeriesMethodsService.isInsideBounds(quarterly, start, end, dataPoint)
+              && this._timeSeriesMethodsService.checkVisibility(dataPoint, paramFormGroup.value.isHistoric, quarterly, base, end,
                 this.paramData[param].shiftDeterministic)),
           };
         });
@@ -114,9 +102,11 @@ export class CreateScenarioComponent implements OnInit {
       if (that.formGroup1.value.description.length === 0) {
         that.formGroup1.controls.description.setValue(scenario.description);
       }
-      that.formGroup2.controls.equityInterest.setValue(scenario.equityInterest);
-      that.formGroup2.controls.outsideCapitalInterest.setValue(scenario.outsideCapitalInterest);
-      that.formGroup2.controls.corporateTax.setValue(scenario.corporateTax);
+      that.formGroup2.controls.equityInterestRate.setValue(scenario.equityInterestRate);
+      that.formGroup2.controls.interestOnLiabilitiesRate.setValue(scenario.interestOnLiabilitiesRate);
+      that.formGroup2.controls.businessTaxRate.setValue(scenario.businessTaxRate);
+      that.formGroup2.controls.corporateTaxRate.setValue(scenario.corporateTaxRate);
+      that.formGroup2.controls.solidaryTaxRate.setValue(scenario.solidaryTaxRate);
       that.importedScenario.emit(scenario);
       that._alertService.success(`Die Daten des Szenarios "${scenario.name}" wurden erfolgreich übernommen`);
     }
