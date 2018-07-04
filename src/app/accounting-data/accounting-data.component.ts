@@ -31,13 +31,6 @@ export class AccountingDataComponent implements OnInit {
     if (this.initialData) {
       this.initialData.subscribe((scenario) => this.buildForm(scenario));
     }
-    /*new MutationObserver(
-      // besser und logischer wäre scrollLeftMax, aber das scheint es nur in Firefox zu geben.
-      () => this.dataScrollContainer.nativeElement.scrollLeft =
-        this.dataScrollContainer.nativeElement.scrollLeft
-      ).observe(
-      this.fkRow.nativeElement,
-      { childList: true });*/
   }
 
   @Input() set editable(value: Boolean) {
@@ -52,6 +45,7 @@ export class AccountingDataComponent implements OnInit {
   buildForm(scenario?: Scenario) {
     if (scenario) {
       this.calculateInterval(scenario);
+      console.log(scenario, this.base, this.start, this.end);
     } else {
       this.base = { year: new Date().getFullYear() - 1, quarter: 1 };
       this.start = { year: this.base.year - 1, quarter: 1 };
@@ -95,7 +89,7 @@ export class AccountingDataComponent implements OnInit {
     this.base = undefined;
     for (let i = 0; i < params.length; i++) {
       const accountingFigure = scenario[params[i]];
-      if (accountingFigure && accountingFigure.timeSeries.length) {
+      if (accountingFigure && accountingFigure.timeSeries && accountingFigure.timeSeries.length > 0) {
         if (!this.start && accountingFigure.isHistoric) {
           this.start = {
             year: accountingFigure.timeSeries[0].year,
@@ -146,7 +140,7 @@ export class AccountingDataComponent implements OnInit {
   buildParamFormGroups(formGroup: FormGroup, scenario?: Scenario) {
     Object.keys(this.paramData).forEach(param => {
       const timeSeries = [];
-      if (scenario && scenario[param]) {
+      if (scenario && scenario[param] && scenario[param].timeSeries) {
         const items = scenario[param].timeSeries.filter(dataPoint => this.isInsideBounds(dataPoint));
         if (items.length > 0) {
           items.forEach((dataPoint) => {
@@ -328,6 +322,27 @@ export class AccountingDataComponent implements OnInit {
       || (shifted && value.year === base.year && (!quarterly || value.quarter === base.quarter));
   }
 
+  checkMinIntegrity(limit, subject) {
+    if (limit.value.year > subject.value.year
+      || (limit.value.year === subject.value.year &&
+        limit.value.quarter >= subject.value.quarter)) {
+      subject.controls.year.setValue(limit.value.quarter === 4 || !this.formGroup.value.quarterly ?
+        limit.value.year + 1 : limit.value.year);
+      subject.controls.quarter.setValue(limit.value.quarter === 4 || !this.formGroup.value.quarterly ? 1 : limit.value.quarter + 1);
+    }
+  }
+
+  checkMaxIntegrity(limit, subject) {
+    if (limit.value.year < subject.value.year
+      || (limit.value.year === subject.value.year &&
+        limit.value.quarter <= subject.value.quarter)) {
+      subject.controls.year.setValue(limit.value.quarter === 1 ||
+        !this.formGroup.value.quarterly ? limit.value.year - 1 : limit.value.year);
+      subject.controls.quarter.setValue(limit.value.quarter === 1 && this.formGroup.value.quarterly ? 4 :
+        this.formGroup.value.quarterly ? 1 : limit.value.quarter - 1);
+    }
+  }
+
   checkStartIntegrity() {
     const start = <FormGroup>this.formGroup.controls.start;
     const base = <FormGroup>this.formGroup.controls.base;
@@ -365,8 +380,8 @@ export class AccountingDataComponent implements OnInit {
     if (end.value.year < base.value.year
       || (end.value.year === base.value.year &&
         end.value.quarter <= base.value.quarter)) {
-      base.controls.year.setValue(base.value.quarter === 4 || !this.formGroup.value.quarterly ? base.value.year + 1 : base.value.year);
-      base.controls.quarter.setValue(base.value.quarter === 4 || !this.formGroup.value.quarterly ? 1 : base.value.quarter + 1);
+      end.controls.year.setValue(base.value.quarter === 4 || !this.formGroup.value.quarterly ? base.value.year + 1 : base.value.year);
+      end.controls.quarter.setValue(base.value.quarter === 4 || !this.formGroup.value.quarterly ? 1 : base.value.quarter + 1);
     }
   }
 }

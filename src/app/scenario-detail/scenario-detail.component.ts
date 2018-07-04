@@ -28,17 +28,17 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     trigger('toggleEditAnimation', [
       transition('* => *', [
         query(':enter', [
-          style({ position: 'absolute', opacity: 0, right: 0 }),
+          style({ position: 'absolute', opacity: 0, left: 0, height: 0 }),
         ], { optional: true }),
         query(':leave', [
           animate('.2s cubic-bezier(0.4, 0.0, 1, 1)', keyframes([
             style({ transform: 'translateY(0px)', opacity: 1 }),
             style({ transform: 'translateY(15px)', opacity: 0 }),
           ])),
-          style({ position: 'absolute', opacity: 0, right: 0 }),
+          style({ position: 'absolute', opacity: 0, left: 0}),
         ], { optional: true }),
         query(':enter', [
-          style({ position: 'static' }),
+          style({ position: 'static', height: 'auto' }),
           animate('.2s cubic-bezier(0.0, 0.0, 0.2, 1)', keyframes([
             style({ transform: 'translateY(15px)', opacity: 0 }),
             style({ transform: 'translateY(0px)', opacity: 1 }),
