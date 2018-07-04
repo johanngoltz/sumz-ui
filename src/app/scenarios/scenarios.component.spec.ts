@@ -10,7 +10,7 @@ import { ScenarioDetailComponent } from '../scenario-detail/scenario-detail.comp
 import { ScenariosService } from '../service/scenarios.service';
 import { ScenariosComponent } from './scenarios.component';
 import { AccountingDataComponent } from '../accounting-data/accounting-data.component';
-import { Chart } from 'angular-highcharts';
+import { ChartModule } from 'angular-highcharts';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ScenarioCardComponent } from '../scenario-card/scenario-card.component';
 
@@ -21,7 +21,7 @@ describe('ScenariosComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ScenariosComponent, ScenarioDetailComponent, CreateScenarioComponent, ScenarioCardComponent, AccountingDataComponent],
-      imports: [MaterialModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule, Chart,
+      imports: [MaterialModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule, ChartModule,
         RouterTestingModule.withRoutes(
           [{ path: 'scenario/:id', component: ScenarioDetailComponent },
           { path: 'create', component: CreateScenarioComponent }]

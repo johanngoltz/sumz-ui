@@ -52,8 +52,8 @@ describe('ScenariosService', () => {
       fail);
   }));
 
-  it('should throw an error when trying to get a non-existing scenario', inject([ScenariosService, HttpClient],
-    (service: ScenariosService, client: TypedAxiosInstance) => {
+  it('should throw an error when trying to get a non-existing scenario', inject([ScenariosService],
+    (service: ScenariosService) => {
       service.getScenario(-1).subscribe(
         success => fail('was not supposed to return something'),
         error => expect().nothing());

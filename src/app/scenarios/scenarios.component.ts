@@ -50,7 +50,7 @@ import { ScenariosService } from '../service/scenarios.service';
   ],
 })
 export class ScenariosComponent implements OnInit {
-  private scenarios$: Observable<Scenario[]>;
+  scenarios$: Observable<Scenario[]>;
   constructor(private scenariosService: ScenariosService) { }
 
   ngOnInit() {

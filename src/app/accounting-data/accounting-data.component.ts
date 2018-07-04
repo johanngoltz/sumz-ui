@@ -4,6 +4,7 @@ import { debounceTime, map, first } from 'rxjs/operators';
 import { Scenario } from '../api/scenario';
 import { Observable } from 'rxjs';
 import { paramData } from '../api/paramData';
+import { TimeSeriesMethodsService } from '../service/time-series-methods.service';
 
 @Component({
   selector: 'app-accounting-data',
@@ -23,7 +24,7 @@ export class AccountingDataComponent implements OnInit {
   end: { year: number, quarter: number };
   paramData = paramData;
 
-  constructor(private _formBuilder: FormBuilder) {
+  constructor(private _formBuilder: FormBuilder, private _timeSeriesMethodsService: TimeSeriesMethodsService) {
   }
 
   ngOnInit() {
@@ -31,13 +32,6 @@ export class AccountingDataComponent implements OnInit {
     if (this.initialData) {
       this.initialData.subscribe((scenario) => this.buildForm(scenario));
     }
-    /*new MutationObserver(
-      // besser und logischer wäre scrollLeftMax, aber das scheint es nur in Firefox zu geben.
-      () => this.dataScrollContainer.nativeElement.scrollLeft =
-        this.dataScrollContainer.nativeElement.scrollLeft
-      ).observe(
-      this.fkRow.nativeElement,
-      { childList: true });*/
   }
 
   @Input() set editable(value: Boolean) {
@@ -95,7 +89,7 @@ export class AccountingDataComponent implements OnInit {
     this.base = undefined;
     for (let i = 0; i < params.length; i++) {
       const accountingFigure = scenario[params[i]];
-      if (accountingFigure && accountingFigure.timeSeries.length) {
+      if (accountingFigure && accountingFigure.timeSeries && accountingFigure.timeSeries.length > 0) {
         if (!this.start && accountingFigure.isHistoric) {
           this.start = {
             year: accountingFigure.timeSeries[0].year,
@@ -146,8 +140,13 @@ export class AccountingDataComponent implements OnInit {
   buildParamFormGroups(formGroup: FormGroup, scenario?: Scenario) {
     Object.keys(this.paramData).forEach(param => {
       const timeSeries = [];
-      if (scenario && scenario[param]) {
-        const items = scenario[param].timeSeries.filter(dataPoint => this.isInsideBounds(dataPoint));
+      if (scenario && scenario[param] && scenario[param].timeSeries) {
+        const items = scenario[param].timeSeries.filter(dataPoint => this._timeSeriesMethodsService.isInsideBounds(
+          this.formGroup.controls.quarterly.value,
+          this.start,
+          this.end,
+          dataPoint
+        ));
         if (items.length > 0) {
           items.forEach((dataPoint) => {
             timeSeries.push(this._formBuilder.group({
@@ -250,7 +249,12 @@ export class AccountingDataComponent implements OnInit {
       const timeSeries = <FormArray>(<FormGroup>this.formGroup.controls[param]).controls.timeSeries;
       // Remove values outside bounds
       for (let i = 0; i < timeSeries.length; i++) {
-        if (!this.isInsideBounds(timeSeries.at(i).value)) {
+        if (!this._timeSeriesMethodsService.isInsideBounds(
+          this.formGroup.controls.quarterly.value,
+          this.start,
+          this.end,
+          timeSeries.at(i).value)
+        ) {
           timeSeries.removeAt(i);
           i--;
         }
@@ -272,8 +276,19 @@ export class AccountingDataComponent implements OnInit {
       if (paramFormGroup) {
         const timeSeries = (<FormArray>paramFormGroup.controls.timeSeries).controls;
         return timeSeries.filter(dataPoint =>
-          this.isInsideBounds(dataPoint.value) &&
-          this.checkVisibility(dataPoint.value, paramFormGroup.value.isHistoric, this.paramData[param].shiftDeterministic))
+          this._timeSeriesMethodsService.isInsideBounds(
+            this.formGroup.controls.quarterly.value,
+            this.start,
+            this.end,
+            dataPoint.value
+          ) &&
+          this._timeSeriesMethodsService.checkVisibility(
+            dataPoint.value,
+            paramFormGroup.value.isHistoric,
+            this.formGroup.controls.quarterly.value,
+            this.formGroup.controls.base.value,
+            this.end,
+            this.paramData[param].shiftDeterministic))
           .map(dataPoint => dataPoint.valid)
           .filter(valid => valid === false)
           .length === 0;
@@ -300,32 +315,25 @@ export class AccountingDataComponent implements OnInit {
     }
   }
 
-  isInsideBounds(value) {
-    if (this.start && this.end && value && this.formGroup) {
-      const quarterly = this.formGroup.value.quarterly;
-      return (value.year > this.start.year - (quarterly ? 0 : 1) ||
-        (quarterly && value.year === this.start.year
-          && value.quarter >= this.start.quarter)) &&
-        (value.year < this.end.year + (quarterly ? 0 : 1) ||
-          (quarterly && value.year === this.end.year && value.quarter <= this.end.quarter));
-    } else {
-      return false;
+  checkMinIntegrity(limit, subject) {
+    if (limit.value.year > subject.value.year
+      || (limit.value.year === subject.value.year &&
+        limit.value.quarter >= subject.value.quarter)) {
+      subject.controls.year.setValue(limit.value.quarter === 4 || !this.formGroup.value.quarterly ?
+        limit.value.year + 1 : limit.value.year);
+      subject.controls.quarter.setValue(limit.value.quarter === 4 || !this.formGroup.value.quarterly ? 1 : limit.value.quarter + 1);
     }
   }
 
-  checkVisibility(value, requireHistoric: Boolean, shifted = false) {
-    if (this.start && this.end) {
-      return this.checkValue(value, requireHistoric, shifted) &&
-        (!shifted || value.year !== this.end.year || (this.formGroup.value.quarterly && value.quarter !== this.end.quarter));
+  checkMaxIntegrity(limit, subject) {
+    if (limit.value.year < subject.value.year
+      || (limit.value.year === subject.value.year &&
+        limit.value.quarter <= subject.value.quarter)) {
+      subject.controls.year.setValue(limit.value.quarter === 1 ||
+        !this.formGroup.value.quarterly ? limit.value.year - 1 : limit.value.year);
+      subject.controls.quarter.setValue(limit.value.quarter === 1 && this.formGroup.value.quarterly ? 4 :
+        this.formGroup.value.quarterly ? 1 : limit.value.quarter - 1);
     }
-  }
-
-  checkValue(value, requireHistoric: Boolean, shifted = false) {
-    const quarterly = this.formGroup.value.quarterly;
-    const base = this.formGroup.controls.base.value;
-    return ((value.year < base.year) || (value.year === base.year &&
-      (!quarterly || value.quarter <= base.quarter))) === requireHistoric
-      || (shifted && value.year === base.year && (!quarterly || value.quarter === base.quarter));
   }
 
   checkStartIntegrity() {
@@ -365,8 +373,8 @@ export class AccountingDataComponent implements OnInit {
     if (end.value.year < base.value.year
       || (end.value.year === base.value.year &&
         end.value.quarter <= base.value.quarter)) {
-      base.controls.year.setValue(base.value.quarter === 4 || !this.formGroup.value.quarterly ? base.value.year + 1 : base.value.year);
-      base.controls.quarter.setValue(base.value.quarter === 4 || !this.formGroup.value.quarterly ? 1 : base.value.quarter + 1);
+      end.controls.year.setValue(base.value.quarter === 4 || !this.formGroup.value.quarterly ? base.value.year + 1 : base.value.year);
+      end.controls.quarter.setValue(base.value.quarter === 4 || !this.formGroup.value.quarterly ? 1 : base.value.quarter + 1);
     }
   }
 }

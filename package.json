@@ -4,10 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "npm run-script gather-licenses && ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "gather-licenses": "cat ./src/app/credits/licenses-skeleton > ./src/app/credits/licenses.ts && nlf -c -r 1 | csv2json >> ./src/app/credits/licenses.ts"
   },
   "private": true,
   "dependencies": {

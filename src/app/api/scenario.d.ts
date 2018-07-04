@@ -3,7 +3,7 @@ export class Scenario {
     name: string;
     description: string;
     periods: number;
-    
+
     equityInterestRate: number;
     interestOnLiabilitiesRate: number;
     businessTaxRate: number;
@@ -30,11 +30,13 @@ export class Scenario {
 
 export class AccountingFigure {
     isHistoric: Boolean;
-    timeSeries: {
-        year: number;
-        quarter: 1 | 2 | 3 | 4;
-        amount: number;
-    }[]
+    timeSeries: DataPoint[];
+}
+
+export class DataPoint {
+    year: number;
+    quarter: 1 | 2 | 3 | 4;
+    amount: number;
 }
 
 export class DistributedCompanyValue {
