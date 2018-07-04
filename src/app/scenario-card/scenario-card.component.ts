@@ -1,9 +1,10 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatMenuTrigger, MatSnackBar } from '@angular/material';
+import { MatDialog, MatMenuTrigger } from '@angular/material';
 import { Scenario } from '../api/scenario';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { ScenariosService } from '../service/scenarios.service';
 import { Wrapper } from '../api/wrapper';
+import { AlertService } from '../service/alert.service';
 
 @Component({
   selector: 'app-scenario-card',
@@ -17,7 +18,8 @@ export class ScenarioCardComponent implements OnInit {
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   hovered: Boolean;
 
-  constructor(private _scenariosService: ScenariosService, private _snackBar: MatSnackBar,
+  constructor(private _scenariosService: ScenariosService,
+    private _alertService: AlertService,
     private _dialog: MatDialog) { }
 
   ngOnInit() {
@@ -35,10 +37,10 @@ export class ScenarioCardComponent implements OnInit {
         if (result === true) {
           this._scenariosService.removeScenario(this.scenario.valueOf())
             .subscribe(
-              removed => this._snackBar.open(`Das Szenario "${this.scenario.valueOf().name}" wurde erfolgreich gelöscht`, undefined,
-                { duration: 5000 }),
-              error => this._snackBar.open(`Das Szenario "${this.scenario.valueOf().name}" konnte nicht gelöscht werden (${error.message})`,
-                undefined, { panelClass: 'mat-warn', duration: 5000 }));
+              removed => this._alertService.success(`Das Szenario "${this.scenario.valueOf().name}" wurde erfolgreich gelöscht`),
+              error => this._alertService.error(`Das Szenario "${this.scenario.valueOf().name}" konnte nicht gelöscht werden
+                 (${error.message})`)
+            );
         }
       });
   }
