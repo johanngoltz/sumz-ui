@@ -58,12 +58,10 @@
       "stochastic": false,
       "equityInterestRate": "5",
       "id": 2,
-      "solidaryTaxRate": "1"
+      "solidaryTaxRate": "0,05"
     },
     {
-      "businessTaxRate": "12",
-      "equityInterest": 23,
-      "corporateTax": 21,
+      "businessTaxRate": 0.012,
       "divestments": {
         "isHistoric": true,
         "timeSeries": [
@@ -89,7 +87,7 @@
           }
         ]
       },
-      "corporateTaxRate": "13",
+      "corporateTaxRate": 0.102,
       "description": "Das Dritte Scenario",
       "investments": {
         "isHistoric": true,
@@ -141,8 +139,8 @@
           }
         ]
       },
-      "solidaryTaxRate": "5",
-      "interestOnLiabilitiesRate": "11",
+      "solidaryTaxRate": 0.001,
+      "interestOnLiabilitiesRate": 0.253,
       "revenue": {
         "isHistoric": true,
         "timeSeries": [
@@ -325,7 +323,7 @@
       "fteValuationResult": {
         "companyValue": 8888899
       },
-      "equityInterestRate": "10"
+      "equityInterestRate": 0.105
     }
   ]
 }

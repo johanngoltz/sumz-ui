@@ -100,15 +100,14 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
       switchMap(params => of (Number.parseInt(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
     this.forConfig$ = this._optionsService.getConfig();
-    // TODO: Aktuell werden nur ganzzahlige Prozentzahlen akzeptiert, Umrechnung von 0.1 aus Service zu 10%
     this.formGroup = this._formBuilder.group({
       name: ['', Validators.required],
       description: '',
-      equityInterestRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
-      interestOnLiabilitiesRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
-      businessTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
-      corporateTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
-      solidaryTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
+      equityInterestRate: ['', [Validators.required, Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')]],
+      interestOnLiabilitiesRate: ['', [Validators.required, Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')]],
+      businessTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')]],
+      corporateTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')]],
+      solidaryTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')]],
     });
     this.formGroup.disable();
     this.initData();
@@ -162,11 +161,11 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
       this.formGroup.controls.name.setValue(currentScenario.name);
       this.formGroup.controls.description.setValue(currentScenario.description);
-      this.formGroup.controls.equityInterestRate.setValue(currentScenario.equityInterestRate);
-      this.formGroup.controls.interestOnLiabilitiesRate.setValue(currentScenario.interestOnLiabilitiesRate);
-      this.formGroup.controls.businessTaxRate.setValue(currentScenario.businessTaxRate);
-      this.formGroup.controls.corporateTaxRate.setValue(currentScenario.corporateTaxRate);
-      this.formGroup.controls.solidaryTaxRate.setValue(currentScenario.solidaryTaxRate);
+      this.formGroup.controls.equityInterestRate.setValue(currentScenario.equityInterestRate * 100);
+      this.formGroup.controls.interestOnLiabilitiesRate.setValue(currentScenario.interestOnLiabilitiesRate * 100);
+      this.formGroup.controls.businessTaxRate.setValue(currentScenario.businessTaxRate * 100);
+      this.formGroup.controls.corporateTaxRate.setValue(currentScenario.corporateTaxRate * 100);
+      this.formGroup.controls.solidaryTaxRate.setValue(currentScenario.solidaryTaxRate * 100);
     });
   }
 
@@ -188,11 +187,11 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
 
       currentScenario.name = this.formGroup.controls.name.value;
       currentScenario.description = this.formGroup.controls.description.value;
-      currentScenario.equityInterestRate = this.formGroup.controls.equityInterestRate.value;
-      currentScenario.interestOnLiabilitiesRate = this.formGroup.controls.interestOnLiabilitiesRate.value;
-      currentScenario.businessTaxRate = this.formGroup.controls.businessTaxRate.value;
-      currentScenario.corporateTaxRate = this.formGroup.controls.corporateTaxRate.value;
-      currentScenario.solidaryTaxRate = this.formGroup.controls.solidaryTaxRate.value;
+      currentScenario.equityInterestRate = this.formGroup.controls.equityInterestRate.value / 100;
+      currentScenario.interestOnLiabilitiesRate = this.formGroup.controls.interestOnLiabilitiesRate.value / 100;
+      currentScenario.businessTaxRate = this.formGroup.controls.businessTaxRate.value / 100;
+      currentScenario.corporateTaxRate = this.formGroup.controls.corporateTaxRate.value / 100;
+      currentScenario.solidaryTaxRate = this.formGroup.controls.solidaryTaxRate.value / 100;
 
       currentScenario.stochastic = false;
       currentScenario.periods = (this.accountingDataFormGroup.value.endYear - this.accountingDataFormGroup.value.startYear) * 4;
@@ -252,7 +251,7 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
         if (this.formGroup.valid && this.accountingDataFormGroup.valid) {
           this.saveScenario();
         } else {
-          this._alertService.error('Speichern des Scenarios nicht möglich. Bitte alle benötigten Felder ausfüllen');
+          this._alertService.error('Speichern des Scenarios nicht möglich. Es sind noch Fehler vorhanden');
         }
       } else {
         this.editable = editable;

@@ -114,9 +114,9 @@ export class CreateScenarioComponent implements OnInit {
       if (that.formGroup1.value.description.length === 0) {
         that.formGroup1.controls.description.setValue(scenario.description);
       }
-      that.formGroup2.controls.equityInterest.setValue(scenario.equityInterest);
-      that.formGroup2.controls.outsideCapitalInterest.setValue(scenario.outsideCapitalInterest);
-      that.formGroup2.controls.corporateTax.setValue(scenario.corporateTax);
+      that.formGroup2.controls.equityInterest.setValue(scenario.businessTaxRate);
+      that.formGroup2.controls.outsideCapitalInterest.setValue(scenario.corporateTaxRate);
+      that.formGroup2.controls.corporateTax.setValue(scenario.corporateTaxRate);
       that.importedScenario.emit(scenario);
       that._alertService.success(`Die Daten des Szenarios "${scenario.name}" wurden erfolgreich übernommen`);
     }
