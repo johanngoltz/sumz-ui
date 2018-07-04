@@ -51,7 +51,7 @@ export class CreateScenarioComponent implements OnInit {
       || (shifted && value.year === base.year && (!quarterly || value.quarter === base.quarter));
   }
 
-  isInsideBounds(quarterly, start, end, value) {
+  isInsideBounds(quarterly: Boolean, start, end, value) {
     return (value.year > start.year - (quarterly ? 0 : 1) ||
       (quarterly && value.year === start.year
         && value.quarter >= start.quarter)) &&
