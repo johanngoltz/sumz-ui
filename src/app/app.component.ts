@@ -91,7 +91,6 @@ export class AppComponent {
   }
 
   delete() {
-    this.authenticationService.logout();
-    this._router.navigateByUrl('/deleteuser');
+    this._router.navigateByUrl('/users/delete');
   }
 }

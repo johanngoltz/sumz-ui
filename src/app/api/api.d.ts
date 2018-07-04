@@ -32,8 +32,8 @@ export interface SumzAPI {
             },
         }
     },
-    '/users/delete/:uid': {
-        params: {uid: string},
+    '/users/:id/delete': {
+        params: {id: number},
         POST: {
             body: {
                 password: string,

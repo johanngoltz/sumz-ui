@@ -136,12 +136,17 @@ export class AuthenticationService {
    * @returns {Promise} Promise
    */
   async deleteuser(password: string) {
+    // TODO: Übergabe der ID einrichten.
+    /*
     const ab = JSON.stringify(JSON.parse(localStorage.getItem('currentUser')).id);
-    await this._apiClient.request({
-      url: `/users/delete/${123}`, 
+    debugger;
+    await this._apiClient.post({
+      url: `/users/${JSON.parse(localStorage.getItem('currentUser')).id}/delete`,
+      //params: {'id' : JSON.parse(localStorage.getItem('currentUser')).id},
       data: {password},
       method: 'POST',
     });
+    */
   }
 
     /**
