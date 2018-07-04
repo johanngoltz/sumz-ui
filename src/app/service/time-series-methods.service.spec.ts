@@ -13,7 +13,6 @@ describe('TimeSeriesMethodsService', () => {
     expect(service).toBeTruthy();
   }));
 
-
   it('should correctly find out if a point is outside the time series\' bounds',
     inject([TimeSeriesMethodsService], (service: TimeSeriesMethodsService) => {
       const testData = [
