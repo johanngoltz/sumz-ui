@@ -10,6 +10,8 @@ import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
 import { AccountingDataComponent } from '../accounting-data/accounting-data.component';
 import { DEFAULT_MOCK_DATA } from '../service/mockdata';
 import { ChartModule } from 'angular-highcharts';
+import { OptionsService } from '../service/options.service';
+import { RemoteConfig, ScenarioConfig } from '../api/config';
 
 
 describe('ScenarioDetailComponent', () => {
@@ -30,6 +32,13 @@ describe('ScenarioDetailComponent', () => {
           getScenarios: () => this.scenarios$,
           getScenario: (id: number) => of(DEFAULT_MOCK_DATA[0]),
         } as ScenariosService,
+      }, {
+        provide: OptionsService, useValue: {
+          setConfig: () => { },
+          getConfig: () => of({
+            scenarioConfig: { get: () => ({ showResult: { apv: true, cvd: true, fcf: false, fte: false } }), set: () => { } },
+          }),
+        },
       }],
     })
       .compileComponents();
