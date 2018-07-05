@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ImportScenarioComponent } from './import-scenario.component';
 import { MaterialModule } from '../material.module';
+import { MatDialogRef } from '@angular/material';
 
 describe('ImportScenarioComponent', () => {
   let component: ImportScenarioComponent;
@@ -11,6 +12,7 @@ describe('ImportScenarioComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ImportScenarioComponent],
       imports: [MaterialModule],
+      providers: [{ provide: MatDialogRef, useValue: { close() { } } }],
     })
       .compileComponents();
   }));
