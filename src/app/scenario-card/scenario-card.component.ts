@@ -1,10 +1,11 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatMenuTrigger } from '@angular/material';
+import { MatDialog, MatMenuTrigger, MatBottomSheet } from '@angular/material';
 import { Scenario } from '../api/scenario';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { ScenariosService } from '../service/scenarios.service';
 import { Wrapper } from '../api/wrapper';
 import { AlertService } from '../service/alert.service';
+import { ExportScenarioComponent } from '../export-scenario/export-scenario.component';
 
 @Component({
   selector: 'app-scenario-card',
@@ -20,7 +21,8 @@ export class ScenarioCardComponent implements OnInit {
 
   constructor(private _scenariosService: ScenariosService,
     private _alertService: AlertService,
-    private _dialog: MatDialog) { }
+    private _dialog: MatDialog,
+    private _bottomSheet: MatBottomSheet) { }
 
   ngOnInit() {
     this.hovered = false;
@@ -44,5 +46,10 @@ export class ScenarioCardComponent implements OnInit {
         }
       });
   }
+
+  exportScenario() {
+    this._bottomSheet.open(ExportScenarioComponent, { data: { scenario: this.scenario } });
+  }
+
 }
 

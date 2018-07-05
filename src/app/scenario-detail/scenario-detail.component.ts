@@ -9,7 +9,7 @@ import { AlertService } from '../service/alert.service';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { OptionsService } from '../service/options.service';
 import { trigger, transition, query, animate, style, keyframes } from '@angular/animations';
-import { paramData } from '../api/paramData';
+import { accountingDataParams } from '../api/paramData';
 import { Chart } from 'angular-highcharts';
 import { TimeSeriesMethodsService } from '../service/time-series-methods.service';
 
@@ -27,8 +27,8 @@ import { TimeSeriesMethodsService } from '../service/time-series-methods.service
             right: 0,
           }),
         ], {
-          optional: true,
-        }),
+            optional: true,
+          }),
         query(':leave', [
           animate('.2s cubic-bezier(0.4, 0.0, 1, 1)', keyframes([
             style({
@@ -46,8 +46,8 @@ import { TimeSeriesMethodsService } from '../service/time-series-methods.service
             right: 0,
           }),
         ], {
-          optional: true,
-        }),
+            optional: true,
+          }),
         query(':enter', [
           style({
             position: 'static',
@@ -63,19 +63,19 @@ import { TimeSeriesMethodsService } from '../service/time-series-methods.service
             }),
           ])),
         ], {
-          optional: true,
-        }),
+            optional: true,
+          }),
       ]),
     ]),
   ],
 })
 
 export class ScenarioDetailComponent implements OnInit, OnDestroy {
-  forScenario$: Observable < Scenario > ;
-  forConfig$: Observable < RemoteConfig > ;
+  forScenario$: Observable<Scenario>;
+  forConfig$: Observable<RemoteConfig>;
   formGroup: FormGroup;
   accountingDataFormGroup: FormGroup;
-  paramData = paramData;
+  accountingDataParams = accountingDataParams;
 
   /* edit mode */
   editable;
@@ -97,12 +97,12 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
     private _optionsService: OptionsService,
     private _alertService: AlertService,
     private route: ActivatedRoute,
-    private _timeSeriesMethodsService: TimeSeriesMethodsService) {}
+    private _timeSeriesMethodsService: TimeSeriesMethodsService) { }
 
   ngOnInit() {
     this.editable = false;
     this.forScenario$ = this.route.paramMap.pipe(
-      switchMap(params => of (Number.parseInt(params.get('id')))),
+      switchMap(params => of(Number.parseInt(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
     this.forConfig$ = this._optionsService.getConfig();
     // TODO: Aktuell werden nur ganzzahlige Prozentzahlen akzeptiert, Umrechnung von 0.1 aus Service zu 10%
@@ -119,7 +119,7 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
     this.initData();
 
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
-      this.forConfig$.subscribe( remote => {
+      this.forConfig$.subscribe(remote => {
         const config = remote.scenarioConfig.get(currentScenario.id);
         this.showCvd = !!config.showResult.cvd;
         this.showApv = !!config.showResult.apv;
@@ -206,8 +206,9 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
       const start = this.accountingDataFormGroup.controls.start.value;
       const base = this.accountingDataFormGroup.controls.base.value;
       const end = this.accountingDataFormGroup.controls.end.value;
-      Object.keys(paramData)
-        .filter(param => [undefined, this.accountingDataFormGroup.value.calculateFcf].indexOf(this.paramData[param].showOnCalculation) > -1)
+      Object.keys(accountingDataParams)
+        .filter(param =>
+          [undefined, this.accountingDataFormGroup.value.calculateFcf].indexOf(this.accountingDataParams[param].showOnCalculation) > -1)
         .forEach((param) => {
           const paramFormGroup = this.accountingDataFormGroup.controls[param];
           if (paramFormGroup.value.isHistoric && !currentScenario.stochastic) {
@@ -223,7 +224,7 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
                 quarterly,
                 base,
                 end,
-                paramData[param].shiftDeterministic)),
+                accountingDataParams[param].shiftDeterministic)),
           };
         });
 
@@ -240,7 +241,7 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
 
   saveConfig() {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
-      this.forConfig$.subscribe( remote => {
+      this.forConfig$.subscribe(remote => {
         // TODO: this.show*** ändert sich aktuell nicht ...
         const config = remote.scenarioConfig.get(currentScenario.id);
         config.showResult.cvd = this.showCvd;
@@ -254,7 +255,7 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  setEditable(editable: Boolean, save ?: Boolean) {
+  setEditable(editable: Boolean, save?: Boolean) {
     if (editable) {
       this.formGroup.enable();
       this.editable = editable;

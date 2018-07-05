@@ -27,6 +27,8 @@ import { SelectScenarioComponent } from './select-scenario/select-scenario.compo
 import { ScenariosService } from './service/scenarios.service';
 import { ScenariosServiceMock } from './service/scenarios.service.mock';
 import { ToDoubleDirective } from './to-double.directive';
+import { ExportScenarioComponent } from './export-scenario/export-scenario.component';
+import { ImportScenarioComponent } from './import-scenario/import-scenario.component';
 
 
 @NgModule({
@@ -47,6 +49,8 @@ import { ToDoubleDirective } from './to-double.directive';
     NewPasswordEmailComponent,
     AlertComponent,
     CreditsComponent,
+    ExportScenarioComponent,
+    ImportScenarioComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,6 +69,6 @@ import { ToDoubleDirective } from './to-double.directive';
     AuthGuard,
   ],
   bootstrap: [AppComponent],
-  entryComponents: [SelectScenarioComponent, DeleteDialogComponent, AlertComponent],
+  entryComponents: [SelectScenarioComponent, DeleteDialogComponent, AlertComponent, ExportScenarioComponent, ImportScenarioComponent],
 })
 export class AppModule { }

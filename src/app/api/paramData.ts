@@ -1,4 +1,4 @@
-export let paramData = {
+export const accountingDataParams = {
     revenue: { displayName: 'Umsatzerlöse', showOnCalculation: true },
     additionalIncome: { displayName: 'Sonstige Erlöse', showOnCalculation: true },
     costOfMaterial: { displayName: 'Materialkosten', showOnCalculation: true },
@@ -8,4 +8,12 @@ export let paramData = {
     divestments: { displayName: 'Desinvestitionen', showOnCalculation: true },
     freeCashFlows: { displayName: 'Free Cash Flow', showOnCalculation: false },
     liabilities: { displayName: 'Fremdkapital', shiftDeterministic: true },
+};
+
+export let environmentParams = {
+    equityInterestRate: {},
+    interestOnLiabilitiesRate: {},
+    businessTaxRate: {},
+    corporateTaxRate: {},
+    solidaryTaxRate: {},
 };
