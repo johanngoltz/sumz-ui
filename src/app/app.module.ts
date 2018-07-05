@@ -28,6 +28,7 @@ import { SelectScenarioComponent } from './select-scenario/select-scenario.compo
 import { ScenariosService } from './service/scenarios.service';
 import { ScenariosServiceMock } from './service/scenarios.service.mock';
 import { ToDoubleDirective } from './to-double.directive';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -59,6 +60,7 @@ import { ToDoubleDirective } from './to-double.directive';
     ReactiveFormsModule,
     FlexLayoutModule,
     ChartModule,
+    HttpClientModule,
   ],
   providers: [
     environment.emergencyDemo
