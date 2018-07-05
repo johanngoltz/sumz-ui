@@ -1,8 +1,8 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material';
 import { Router } from '@angular/router';
-import { paramData } from '../api/paramData';
+import { AccountingDataParams } from '../api/paramData';
 import { Scenario } from '../api/scenario';
 import { SelectScenarioComponent } from '../select-scenario/select-scenario.component';
 import { AlertService } from '../service/alert.service';
@@ -20,7 +20,7 @@ export class CreateScenarioComponent implements OnInit {
   formGroup3: FormGroup;
   busy: Boolean;
   importedScenario: EventEmitter<Scenario>;
-  paramData = paramData;
+  accountingDataParams = AccountingDataParams.prototype;
 
   constructor(private _formBuilder: FormBuilder,
     private _scenariosService: ScenariosService,
@@ -49,6 +49,7 @@ export class CreateScenarioComponent implements OnInit {
 
   createScenario() {
     if (this.formGroup3.valid) {
+      Object.values(this.formGroup2.controls).forEach(control => control.setValue(control.value / 100));
       this.busy = true;
       const scenario = {
         id: null,
@@ -61,8 +62,9 @@ export class CreateScenarioComponent implements OnInit {
       const base = this.formGroup3.controls.base.value;
       const end = this.formGroup3.controls.end.value;
       const quarterly = this.formGroup3.controls.quarterly.value;
-      Object.keys(this.paramData)
-        .filter(param => [undefined, this.formGroup3.value.calculateFcf].indexOf(this.paramData[param].showOnCalculation) > -1)
+      Object.keys(this.accountingDataParams)
+        .filter((param: keyof AccountingDataParams) => this._timeSeriesMethodsService.shouldDisplayAccountingDataParam(
+          this.accountingDataParams, this.formGroup3.controls.calculateFcf.value, param))
         .forEach((param) => {
           const paramFormGroup = this.formGroup3.controls[param];
           if (paramFormGroup.value.isHistoric && !scenario.stochastic) {
@@ -73,7 +75,7 @@ export class CreateScenarioComponent implements OnInit {
             timeSeries: paramFormGroup.value.timeSeries.filter(dataPoint =>
               this._timeSeriesMethodsService.isInsideBounds(quarterly, start, end, dataPoint)
               && this._timeSeriesMethodsService.checkVisibility(dataPoint, paramFormGroup.value.isHistoric, quarterly, base, end,
-                this.paramData[param].shiftDeterministic)),
+                this.accountingDataParams[param].shiftDeterministic)),
           };
         });
       this._scenariosService.addScenario(scenario)
@@ -102,11 +104,7 @@ export class CreateScenarioComponent implements OnInit {
       if (this.formGroup1.value.description.length === 0) {
         this.formGroup1.controls.description.setValue(scenario.description);
       }
-      this.formGroup2.controls.equityInterestRate.setValue(scenario.equityInterestRate);
-      this.formGroup2.controls.interestOnLiabilitiesRate.setValue(scenario.interestOnLiabilitiesRate);
-      this.formGroup2.controls.businessTaxRate.setValue(scenario.businessTaxRate);
-      this.formGroup2.controls.corporateTaxRate.setValue(scenario.corporateTaxRate);
-      this.formGroup2.controls.solidaryTaxRate.setValue(scenario.solidaryTaxRate);
+      Object.entries(this.formGroup2.controls).forEach(([key, control]) => control.setValue(scenario[key] * 100));
       this.importedScenario.emit(scenario);
       this._alertService.success(`Die Daten des Szenarios "${scenario.name}" wurden erfolgreich übernommen`);
     }

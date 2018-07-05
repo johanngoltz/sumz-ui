@@ -29,6 +29,8 @@ import { ScenariosService } from './service/scenarios.service';
 import { ScenariosServiceMock } from './service/scenarios.service.mock';
 import { ToDoubleDirective } from './to-double.directive';
 import { HttpClientModule } from '@angular/common/http';
+import { ExportScenarioComponent } from './export-scenario/export-scenario.component';
+import { ImportScenarioComponent } from './import-scenario/import-scenario.component';
 
 
 @NgModule({
@@ -50,6 +52,8 @@ import { HttpClientModule } from '@angular/common/http';
     DeleteUserComponent,
     AlertComponent,
     CreditsComponent,
+    ExportScenarioComponent,
+    ImportScenarioComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,6 +73,6 @@ import { HttpClientModule } from '@angular/common/http';
     AuthGuard,
   ],
   bootstrap: [AppComponent],
-  entryComponents: [SelectScenarioComponent, DeleteDialogComponent, AlertComponent],
+  entryComponents: [SelectScenarioComponent, DeleteDialogComponent, AlertComponent, ExportScenarioComponent, ImportScenarioComponent],
 })
 export class AppModule { }

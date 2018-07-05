@@ -15,7 +15,7 @@ export class ScenariosService {
   protected _scenariosStorage: Scenario[];
 
   constructor(@Inject(HttpClient) private _apiClient: TypedAxiosInstance<SumzAPI>) {
-    this._scenarios$ = new ReplaySubject();
+    this._scenarios$ = new ReplaySubject(1);
     this.scenarios$ = this._scenarios$.asObservable();
 
     this.getScenarios().subscribe();
