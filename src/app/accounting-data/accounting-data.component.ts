@@ -12,7 +12,7 @@ import { TimeSeriesMethodsService } from '../service/time-series-methods.service
   styleUrls: ['./accounting-data.component.css'],
 })
 export class AccountingDataComponent implements OnInit {
-  @Input() private _editable: Boolean;
+  @Input() _editable: Boolean;
   @Input() initialData: Observable<Scenario>;
   @Output() formGroupOutput = new EventEmitter<FormGroup>();
   formGroup: FormGroup;
@@ -162,6 +162,10 @@ export class AccountingDataComponent implements OnInit {
         timeSeries: this._formBuilder.array(timeSeries),
       }));
     });
+  }
+
+  get timeSeriesControls() {
+    return ((this.formGroup.controls.liabilities as FormGroup).controls.timeSeries as FormArray).controls;
   }
 
   quarterlyChanged() {

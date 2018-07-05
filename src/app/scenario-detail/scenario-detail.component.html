@@ -43,11 +43,8 @@
         <div>
           <h3>Umweltfaktoren</h3>
           <mat-form-field floatLabel="always">
-            <input matInput type="text" toDouble placeholder="Eigenkapitalzinsen" formControlName="equityInterestRate" />
+            <input matInput type="text" appToDouble placeholder="Eigenkapitalzinsen" formControlName="equityInterestRate" />
             <span matPrefix>% &nbsp;</span>
-            <mat-error *ngIf="formGroup.controls.equityInterestRate.hasError('min') || formGroup.controls.equityInterestRate.hasError('max')">
-              Der Wert muss zwischen 0% und 100% liegen
-            </mat-error>
             <mat-error *ngIf="formGroup.controls.equityInterestRate.hasError('required')">
               Eigenkapitalzinsen werden
               <strong>benötigt</strong>
@@ -58,11 +55,8 @@
           </mat-form-field>
 
           <mat-form-field floatLabel="always">
-            <input matInput type="text" toDouble placeholder="Zinssatz für Verbindlichkeiten" formControlName="interestOnLiabilitiesRate" />
+            <input matInput type="text" appToDouble placeholder="Zinssatz für Verbindlichkeiten" formControlName="interestOnLiabilitiesRate" />
             <span matPrefix>% &nbsp;</span>
-            <mat-error *ngIf="formGroup.controls.interestOnLiabilitiesRate.hasError('min') || formGroup.controls.interestOnLiabilitiesRate.hasError('max')">
-              Der Wert muss zwischen 0% und 100% liegen
-            </mat-error>
             <mat-error *ngIf="formGroup.controls.interestOnLiabilitiesRate.hasError('required')">
               Zinssatz für Verbindlichkeiten wird
               <strong>benötigt</strong>
@@ -73,7 +67,7 @@
           </mat-form-field>
 
           <mat-form-field floatLabel="always">
-            <input matInput type="text" toDouble placeholder="Gewerbesteuersatz" formControlName="businessTaxRate" />
+            <input matInput type="text" appToDouble placeholder="Gewerbesteuersatz" formControlName="businessTaxRate" />
             <span matPrefix>% &nbsp;</span>
             <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('min') || formGroup.controls.businessTaxRate.hasError('max')">
               Der Wert muss zwischen 0% und 100% liegen
@@ -88,7 +82,7 @@
           </mat-form-field>
 
           <mat-form-field floatLabel="always">
-            <input matInput type="text" toDouble placeholder="Körperschaftssteuersatz" formControlName="corporateTaxRate" />
+            <input matInput type="text" appToDouble placeholder="Körperschaftssteuersatz" formControlName="corporateTaxRate" />
             <span matPrefix>% &nbsp;</span>
             <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('min') || formGroup.controls.corporateTaxRate.hasError('max')">
               Der Wert muss zwischen 0% und 100% liegen
@@ -103,7 +97,7 @@
           </mat-form-field>
 
           <mat-form-field floatLabel="always">
-            <input matInput type="text" toDouble placeholder="Solidaritätszuschlag" formControlName="solidaryTaxRate" />
+            <input matInput type="text" appToDouble placeholder="Solidaritätszuschlag" formControlName="solidaryTaxRate" />
             <span matPrefix>% &nbsp;</span>
             <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('min') || formGroup.controls.solidaryTaxRate.hasError('max')">
               Der Wert muss zwischen 0% und 100% liegen
@@ -141,7 +135,7 @@
     </mat-expansion-panel>
 
     <!-- Panel for Comparison-->
-    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="true">
+    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="true"  [formGroup]="configFormGroup">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Auswertung
@@ -153,20 +147,20 @@
       </mat-expansion-panel-header>
 
       <div class="selection">
-        <mat-checkbox class="margin" [(ngModel)]="showCvd">CVD</mat-checkbox>
-        <mat-checkbox class="margin" [(ngModel)]="showApv">APV</mat-checkbox>
-        <mat-checkbox class="margin" [(ngModel)]="showFcf">FCF</mat-checkbox>
-        <mat-checkbox class="margin" [(ngModel)]="showFte">FTE</mat-checkbox>
+        <mat-checkbox class="margin" formControlName="cvd">CVD</mat-checkbox>
+        <mat-checkbox class="margin" formControlName="apv">APV</mat-checkbox>
+        <mat-checkbox class="margin" formControlName="fcf">FCF</mat-checkbox>
+        <mat-checkbox class="margin" formControlName="fte">FTE</mat-checkbox>
       </div>
 
       <div class="flex-container">
-        <div [hidden]="!showCvd" class="flex-item">
+        <div [hidden]="!configFormGroup.controls.cvd.value" class="flex-item">
           <mat-divider></mat-divider>
           <h1>Unternehmenswertverteilung</h1>
           <div [chart]="chart"></div>
         </div>
 
-        <div [hidden]="!showApv" class="flex-item">
+        <div [hidden]="!configFormGroup.controls.apv.value" class="flex-item">
           <mat-divider></mat-divider>
           <h1>Ergebnis APV</h1>
           <table class="mat-table">
@@ -191,7 +185,7 @@
           </table>
         </div>
 
-        <div [hidden]="!showFcf" class="flex-item">
+        <div [hidden]="!configFormGroup.controls.fcf.value" class="flex-item">
           <mat-divider></mat-divider>
           <h1>Ergebnis FCF</h1>
           <table class="mat-table">
@@ -212,7 +206,7 @@
           </table>
         </div>
 
-        <div [hidden]="!showFte" class="flex-item">
+        <div [hidden]="!configFormGroup.controls.fte.value" class="flex-item">
           <mat-divider></mat-divider>
           <h1>Ergebnis FTE</h1>
           <table class="mat-table">

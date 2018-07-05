@@ -1,7 +1,7 @@
 <div class="content-container">
   <h1>Open-Source-Komponenten</h1>
   <mat-accordion multi="true">
-    <mat-expansion-panel *ngFor="let dependency of dependencies" (opened)="loadLicenseText(dependency)">
+    <mat-expansion-panel *ngFor="let dependency of dependencies">
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{dependency.name}}

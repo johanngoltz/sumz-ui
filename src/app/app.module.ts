@@ -64,7 +64,7 @@ import { ImportScenarioComponent } from './import-scenario/import-scenario.compo
   ],
   providers: [
     environment.emergencyDemo
-      ? { provide: ScenariosService, useFactory: () => new ScenariosServiceMock() }
+      ? { provide: ScenariosService, useClass: ScenariosServiceMock }
       : ScenariosService,
     AuthGuard,
   ],

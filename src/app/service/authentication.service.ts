@@ -71,13 +71,13 @@ export class AuthenticationService {
   }
 
   /**
-   * register an new user
+   * register a new user
    * (is called in registration.component)
    * @param {string} email Email
    * @param {string} password Password
    * @returns {Promise} Promise
    */
-  async registration(email: string, password: string) {
+  async register(email: string, password: string) {
     await this._apiClient.request({
       url: '/users',
       data: {email, password},
@@ -101,7 +101,7 @@ export class AuthenticationService {
    * @param {string} passwordnew2 new password
    * @returns {Promise} Promise
    */
-  async changepassword(passwordold: string, passwordnew: string, passwordnew2: string) {
+  async changePassword(passwordold: string, passwordnew: string, passwordnew2: string) {
     await this._apiClient.request({
       url: '/users/id',
       data: {passwordold, passwordnew, passwordnew2},
@@ -122,7 +122,7 @@ export class AuthenticationService {
    * @param {string} email email
    * @returns {Promise} Promise
    */
-  async newpassword(email: string) {
+  async resetPassword(email: string) {
     await this._apiClient.request({
       url: '/users/forgot',
       data: {email},
@@ -135,13 +135,14 @@ export class AuthenticationService {
    * @param {string} password new passwoed
    * @returns {Promise} Promise
    */
-  async postnewpassword(password: string) {
+  async postNewPassword(password: string) {
     await this._apiClient.request({
       url: '/users/reset/token',
       data: {password},
       method: 'POST',
     });
   }
+
 
   /**
    * removes user from local storage to log user out
@@ -157,7 +158,7 @@ export class AuthenticationService {
    * Afterwards, the http-request is executed with the new access_token.
    * @returns {void}
    */
-  addInterceptor() {
+  private addInterceptor() {
     this._apiClient.interceptors.response.use( response => {
       return response;
     },

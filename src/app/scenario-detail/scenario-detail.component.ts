@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { switchMap, first } from 'rxjs/operators';
@@ -70,11 +70,12 @@ import { TimeSeriesMethodsService } from '../service/time-series-methods.service
   ],
 })
 
-export class ScenarioDetailComponent implements OnInit, OnDestroy {
+export class ScenarioDetailComponent implements OnInit {
   forScenario$: Observable<Scenario>;
   forConfig$: Observable<RemoteConfig>;
   formGroup: FormGroup;
   accountingDataFormGroup: FormGroup;
+  configFormGroup: FormGroup;
   accountingDataParams = accountingDataParams;
 
   /* edit mode */
@@ -82,12 +83,6 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
 
   /* step holder for panels */
   step = 0;
-
-  /* selection */
-  showCvd;
-  showApv;
-  showFcf;
-  showFte;
 
   /*chart */
   chart;
@@ -105,28 +100,30 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
       switchMap(params => of(Number.parseInt(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
     this.forConfig$ = this._optionsService.getConfig();
-    // TODO: Aktuell werden nur ganzzahlige Prozentzahlen akzeptiert, Umrechnung von 0.1 aus Service zu 10%
     this.formGroup = this._formBuilder.group({
       name: ['', Validators.required],
       description: '',
-      equityInterestRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
-      interestOnLiabilitiesRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
-      businessTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
-      corporateTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
-      solidaryTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]*$')]],
+      equityInterestRate: ['', [Validators.required, Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')]],
+      interestOnLiabilitiesRate: ['', [Validators.required, Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')]],
+      businessTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')]],
+      corporateTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')]],
+      solidaryTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')]],
     });
     this.formGroup.disable();
     this.initData();
 
-    this.forScenario$.pipe(first()).subscribe(currentScenario => {
-      this.forConfig$.subscribe(remote => {
-        const config = remote.scenarioConfig.get(currentScenario.id);
-        this.showCvd = !!config.showResult.cvd;
-        this.showApv = !!config.showResult.apv;
-        this.showFcf = !!config.showResult.fcf;
-        this.showFte = !!config.showResult.fte;
-      });
+    this.configFormGroup = this._formBuilder.group({
+      apv: false,
+      cvd: false,
+      fcf: false,
+      fte: false,
+    });
+    this.configFormGroup.disable();
+    this.initConfig();
 
+    this.configFormGroup.valueChanges.subscribe(value => console.log(value));
+
+    this.forScenario$.pipe(first()).subscribe(currentScenario => {
       this.chart = new Chart({
         chart: {
           type: 'line',
@@ -159,23 +156,26 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.saveConfig();
-  }
-
   initData() {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
       this.formGroup.controls.name.setValue(currentScenario.name);
       this.formGroup.controls.description.setValue(currentScenario.description);
-      this.formGroup.controls.equityInterestRate.setValue(currentScenario.equityInterestRate);
-      this.formGroup.controls.interestOnLiabilitiesRate.setValue(currentScenario.interestOnLiabilitiesRate);
-      this.formGroup.controls.businessTaxRate.setValue(currentScenario.businessTaxRate);
-      this.formGroup.controls.corporateTaxRate.setValue(currentScenario.corporateTaxRate);
-      this.formGroup.controls.solidaryTaxRate.setValue(currentScenario.solidaryTaxRate);
+      this.formGroup.controls.equityInterestRate.setValue(currentScenario.equityInterestRate * 100);
+      this.formGroup.controls.interestOnLiabilitiesRate.setValue(currentScenario.interestOnLiabilitiesRate * 100);
+      this.formGroup.controls.businessTaxRate.setValue(currentScenario.businessTaxRate * 100);
+      this.formGroup.controls.corporateTaxRate.setValue(currentScenario.corporateTaxRate * 100);
+      this.formGroup.controls.solidaryTaxRate.setValue(currentScenario.solidaryTaxRate * 100);
     });
   }
 
-  /* functions for panels */
+  initConfig() {
+    this.forScenario$.pipe(first()).subscribe(currentScenario => {
+      this.forConfig$.pipe(first()).subscribe(remote => {
+        this.configFormGroup.setValue(remote.scenarioConfig.get(currentScenario.id).showResult);
+      });
+    });
+  }
+
   setStep(index: number) {
     this.step = index;
   }
@@ -193,11 +193,11 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
 
       currentScenario.name = this.formGroup.controls.name.value;
       currentScenario.description = this.formGroup.controls.description.value;
-      currentScenario.equityInterestRate = this.formGroup.controls.equityInterestRate.value;
-      currentScenario.interestOnLiabilitiesRate = this.formGroup.controls.interestOnLiabilitiesRate.value;
-      currentScenario.businessTaxRate = this.formGroup.controls.businessTaxRate.value;
-      currentScenario.corporateTaxRate = this.formGroup.controls.corporateTaxRate.value;
-      currentScenario.solidaryTaxRate = this.formGroup.controls.solidaryTaxRate.value;
+      currentScenario.equityInterestRate = this.formGroup.controls.equityInterestRate.value / 100;
+      currentScenario.interestOnLiabilitiesRate = this.formGroup.controls.interestOnLiabilitiesRate.value / 100;
+      currentScenario.businessTaxRate = this.formGroup.controls.businessTaxRate.value / 100;
+      currentScenario.corporateTaxRate = this.formGroup.controls.corporateTaxRate.value / 100;
+      currentScenario.solidaryTaxRate = this.formGroup.controls.solidaryTaxRate.value / 100;
 
       currentScenario.stochastic = false;
       currentScenario.periods = (this.accountingDataFormGroup.value.endYear - this.accountingDataFormGroup.value.startYear) * 4;
@@ -234,23 +234,27 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
           this.formGroup.disable();
           this._alertService.success('Scenario wurde gespeichert');
         },
-        () => this._alertService.warning('Scenario konnte nicht gespeichert werden'), // TODO error handling
+        () => this._alertService.warning('Scenario konnte nicht gespeichert werden'),
       );
     });
   }
 
   saveConfig() {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
-      this.forConfig$.subscribe(remote => {
-        // TODO: this.show*** ändert sich aktuell nicht ...
-        const config = remote.scenarioConfig.get(currentScenario.id);
-        config.showResult.cvd = this.showCvd;
-        config.showResult.apv = this.showApv;
-        config.showResult.fcf = this.showFcf;
-        config.showResult.fte = this.showFte;
-        remote.scenarioConfig.set(currentScenario.id, config);
+      this.forConfig$.pipe(first()).subscribe(remote => {
+        const currentConfig = {
+          ...remote.scenarioConfig.get(currentScenario.id),
+          showResult: {
+            apv: this.configFormGroup.controls.apv.value,
+            cvd: this.configFormGroup.controls.cvd.value,
+            fcf: this.configFormGroup.controls.fcf.value,
+            fte: this.configFormGroup.controls.fte.value,
+          },
+        };
 
+        remote.scenarioConfig.set(currentScenario.id, currentConfig);
         this._optionsService.setConfig(remote);
+        this.configFormGroup.disable();
       });
     });
   }
@@ -258,18 +262,22 @@ export class ScenarioDetailComponent implements OnInit, OnDestroy {
   setEditable(editable: Boolean, save?: Boolean) {
     if (editable) {
       this.formGroup.enable();
+      this.configFormGroup.enable();
       this.editable = editable;
     } else {
       if (save) {
         if (this.formGroup.valid && this.accountingDataFormGroup.valid) {
+          this.saveConfig();
           this.saveScenario();
         } else {
-          this._alertService.error('Speichern des Scenarios nicht möglich. Bitte alle benötigten Felder ausfüllen');
+          this._alertService.error('Speichern des Scenarios nicht möglich. Es sind noch Fehler vorhanden');
         }
       } else {
         this.editable = editable;
         this.formGroup.disable();
+        this.configFormGroup.disable();
         this.initData();
+        this.initConfig();
       }
     }
   }
