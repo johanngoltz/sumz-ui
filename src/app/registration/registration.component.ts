@@ -17,11 +17,11 @@ import { AlertService } from '../service/alert.service';
  */
 export class RegistrationComponent implements OnInit {
 
-  [x: string]: any;
   registerFormGroup: FormGroup;
   submitted = false;
   hide_pw1 = true;
   hide_pw2 = true;
+  loading: boolean;
 
   constructor(
     private _formBuilder: FormBuilder,

@@ -16,11 +16,13 @@ import { AuthenticationService } from '../service/authentication.service';
  */
 export class ChangePasswordComponent implements OnInit {
 
-  [x: string]: any;
   resetFormGroup: FormGroup;
   hide_pw1 = true;
   hide_pw2 = true;
   hide_pw3 = true;
+  submitted: boolean;
+  loading: boolean;
+  changeFormGroup: FormGroup;
 
   constructor(
     private _formBuilder: FormBuilder,
