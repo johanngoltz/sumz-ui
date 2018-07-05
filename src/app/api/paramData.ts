@@ -10,7 +10,7 @@ export const accountingDataParams = {
     liabilities: { displayName: 'Fremdkapital', showOnCalculation: undefined, shiftDeterministic: true },
 };
 
-export let environmentParams = {
+export const environmentParams = {
     equityInterestRate: {},
     interestOnLiabilitiesRate: {},
     businessTaxRate: {},
