@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material';
 import { Router } from '@angular/router';
-import { accountingDataParams } from '../api/paramData';
+import { AccountingDataParams } from '../api/paramData';
 import { Scenario } from '../api/scenario';
 import { SelectScenarioComponent } from '../select-scenario/select-scenario.component';
 import { AlertService } from '../service/alert.service';
@@ -20,7 +20,7 @@ export class CreateScenarioComponent implements OnInit {
   formGroup3: FormGroup;
   busy: Boolean;
   importedScenario: EventEmitter<Scenario>;
-  accountingDataParams = accountingDataParams;
+  accountingDataParams = AccountingDataParams.prototype;
 
   constructor(private _formBuilder: FormBuilder,
     private _scenariosService: ScenariosService,
@@ -63,7 +63,8 @@ export class CreateScenarioComponent implements OnInit {
       const end = this.formGroup3.controls.end.value;
       const quarterly = this.formGroup3.controls.quarterly.value;
       Object.keys(this.accountingDataParams)
-        .filter(this.shouldDisplayAccountingDataParam)
+        .filter((param: keyof AccountingDataParams) => this._timeSeriesMethodsService.shouldDisplayAccountingDataParam(
+          this.accountingDataParams, this.formGroup3.controls.calculateFcf.value, param))
         .forEach((param) => {
           const paramFormGroup = this.formGroup3.controls[param];
           if (paramFormGroup.value.isHistoric && !scenario.stochastic) {
@@ -89,10 +90,6 @@ export class CreateScenarioComponent implements OnInit {
           () => this.busy = false
         );
     }
-  }
-
-  private shouldDisplayAccountingDataParam(param: keyof typeof accountingDataParams) {
-    return [undefined, this.formGroup3.value.calculateFcf].indexOf(this.accountingDataParams[param].showOnCalculation) > -1;
   }
 
   openSelectionSheet() {

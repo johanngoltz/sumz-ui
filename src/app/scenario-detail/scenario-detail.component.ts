@@ -9,7 +9,7 @@ import { AlertService } from '../service/alert.service';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { OptionsService } from '../service/options.service';
 import { trigger, transition, query, animate, style, keyframes } from '@angular/animations';
-import { accountingDataParams } from '../api/paramData';
+import { AccountingDataParams } from '../api/paramData';
 import { Chart } from 'angular-highcharts';
 import { TimeSeriesMethodsService } from '../service/time-series-methods.service';
 
@@ -76,7 +76,7 @@ export class ScenarioDetailComponent implements OnInit {
   formGroup: FormGroup;
   accountingDataFormGroup: FormGroup;
   configFormGroup: FormGroup;
-  accountingDataParams = accountingDataParams;
+  accountingDataParams = AccountingDataParams.prototype;
 
   /* edit mode */
   editable;
@@ -206,9 +206,10 @@ export class ScenarioDetailComponent implements OnInit {
       const start = this.accountingDataFormGroup.controls.start.value;
       const base = this.accountingDataFormGroup.controls.base.value;
       const end = this.accountingDataFormGroup.controls.end.value;
-      Object.keys(accountingDataParams)
-        .filter(param =>
-          [undefined, this.accountingDataFormGroup.value.calculateFcf].indexOf(this.accountingDataParams[param].showOnCalculation) > -1)
+      Object.keys(AccountingDataParams)
+        .filter((param: keyof AccountingDataParams) =>
+          this._timeSeriesMethodsService.shouldDisplayAccountingDataParam(
+            this.accountingDataParams, this.accountingDataFormGroup.value.calculateFcf, param))
         .forEach((param) => {
           const paramFormGroup = this.accountingDataFormGroup.controls[param];
           if (paramFormGroup.value.isHistoric && !currentScenario.stochastic) {
@@ -224,7 +225,7 @@ export class ScenarioDetailComponent implements OnInit {
                 quarterly,
                 base,
                 end,
-                accountingDataParams[param].shiftDeterministic)),
+                AccountingDataParams[param].shiftDeterministic)),
           };
         });
 

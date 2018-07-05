@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Scenario } from '../api/scenario';
-import { environmentParams, accountingDataParams } from '../api/paramData';
+import { environmentParams, AccountingDataParams } from '../api/paramData';
 import { AlertService } from '../service/alert.service';
 import { ScenariosService } from '../service/scenarios.service';
 import { MatDialogRef } from '@angular/material';
@@ -56,8 +56,8 @@ export class ImportScenarioComponent implements OnInit {
   }
 
   checkAccountingDataParams(showOnCalculation: Boolean) {
-    const filteredParams = Object.keys(accountingDataParams)
-      .filter(param => accountingDataParams[param].showOnCalculation === showOnCalculation);
+    const filteredParams = Object.keys(AccountingDataParams)
+      .filter(param => AccountingDataParams.prototype[param].showOnCalculation === showOnCalculation);
     return filteredParams.length === filteredParams.filter(param => this.scenario[param]).length;
   }
 
