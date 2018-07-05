@@ -35,8 +35,7 @@ export class ToDoubleDirective implements ControlValueAccessor {
     this.onTouchedCallback();
   }
 
-  constructor(private _renderer: Renderer2, private _elementRef: ElementRef) {
-  }
+  constructor(private _renderer: Renderer2, private _elementRef: ElementRef) { }
 
   writeValue(value: any, skipLocale?: Boolean): void {
     this._renderer.setProperty(this._elementRef.nativeElement, 'value', skipLocale ? value : value.toLocaleString('de-de'));
@@ -45,19 +44,16 @@ export class ToDoubleDirective implements ControlValueAccessor {
   registerOnChange(fn: any) {
     this.onChangeCallback = fn;
   }
+
   registerOnTouched(fn: any) {
     this.onTouchedCallback = fn;
   }
 
-  getCaretPosition(inputField) {
-    // Initialize
-    let position = 0;
-    if (inputField.selectionStart || inputField.selectionStart === 0) {
-      position = inputField.selectionStart;
-    }
-    return position;
+  private getCaretPosition(inputField) {
+    return inputField.selectionStart || 0;
   }
-  setCaretPosition(inputElement, position: number) {
+
+  private setCaretPosition(inputElement, position: number) {
     if (inputElement.createTextRange) {
       const range = inputElement.createTextRange();
       range.move('character', position);
@@ -71,11 +67,12 @@ export class ToDoubleDirective implements ControlValueAccessor {
       }
     }
   }
-  countNumericChars(value: String) {
+
+  private countNumericChars(value: String) {
     return (value.match(/[0-9]/gi) || []).length;
   }
 
-  retrieveNewPosition(value: String, nums: Number) {
+  private retrieveNewPosition(value: String, nums: Number) {
     let count = 0;
     for (let i = 0; i < value.length; i++) {
       if (value[i].match(/[0-9]/)) {

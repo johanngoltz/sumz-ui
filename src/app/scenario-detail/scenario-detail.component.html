@@ -14,7 +14,7 @@
     </div>
   </h1>
   <!-- panels for different parts of Scenario-->
-  <mat-accordion multi="false" class="headers-align">
+  <mat-accordion multi="true" class="headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true" [formGroup]="formGroup">
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -43,13 +43,72 @@
         <div>
           <h3>Umweltfaktoren</h3>
           <mat-form-field floatLabel="always">
-            <input matInput type="text" toDouble placeholder="Eigenkapitalzinsen" formControlName="equityInterest" />
+            <input matInput type="text" appToDouble placeholder="Eigenkapitalzinsen" formControlName="equityInterestRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.equityInterestRate.hasError('required')">
+              Eigenkapitalzinsen werden
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.equityInterestRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
           </mat-form-field>
+
           <mat-form-field floatLabel="always">
-            <input matInput type="text" toDouble placeholder="Fremdkapitalzinsen" formControlName="outsideCapitalInterest" />
+            <input matInput type="text" appToDouble placeholder="Zinssatz für Verbindlichkeiten" formControlName="interestOnLiabilitiesRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.interestOnLiabilitiesRate.hasError('required')">
+              Zinssatz für Verbindlichkeiten wird
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.interestOnLiabilitiesRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
           </mat-form-field>
+
           <mat-form-field floatLabel="always">
-            <input matInput type="text" toDouble placeholder="Unternehmenssteuersatz" formControlName="corporateTax" />
+            <input matInput type="text" appToDouble placeholder="Gewerbesteuersatz" formControlName="businessTaxRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('min') || formGroup.controls.businessTaxRate.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('required')">
+             Gewerbesteuersatz wird
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" appToDouble placeholder="Körperschaftssteuersatz" formControlName="corporateTaxRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('min') || formGroup.controls.corporateTaxRate.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('required')">
+              Köroerschaftssteuersatz wird
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" appToDouble placeholder="Solidaritätszuschlag" formControlName="solidaryTaxRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('min') || formGroup.controls.solidaryTaxRate.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('required')">
+              Solidaritätszuschlag wird
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -76,7 +135,7 @@
     </mat-expansion-panel>
 
     <!-- Panel for Comparison-->
-    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="true">
+    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="true"  [formGroup]="configFormGroup">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Auswertung
@@ -88,24 +147,20 @@
       </mat-expansion-panel-header>
 
       <div class="selection">
-        <mat-checkbox class="margin" [(ngModel)]="showCvd">CVD</mat-checkbox>
-        <mat-checkbox class="margin" [(ngModel)]="showApv">APV</mat-checkbox>
-        <mat-checkbox class="margin" [(ngModel)]="showFcf">FCF</mat-checkbox>
-        <mat-checkbox class="margin" [(ngModel)]="showFte">FTE</mat-checkbox>
+        <mat-checkbox class="margin" formControlName="cvd">CVD</mat-checkbox>
+        <mat-checkbox class="margin" formControlName="apv">APV</mat-checkbox>
+        <mat-checkbox class="margin" formControlName="fcf">FCF</mat-checkbox>
+        <mat-checkbox class="margin" formControlName="fte">FTE</mat-checkbox>
       </div>
 
-      <!-- TODO: Tabellenheader nach links statt mittig -->
       <div class="flex-container">
-        <div [hidden]="!showCvd" class="flex-item">
+        <div [hidden]="!configFormGroup.controls.cvd.value" class="flex-item">
           <mat-divider></mat-divider>
           <h1>Unternehmenswertverteilung</h1>
-          <ngx-charts-bar-vertical [results]="data" [scheme]="colorScheme" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis"
-            [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-            [yAxisLabel]="yAxisLabel" [barPadding]="barPadding">
-          </ngx-charts-bar-vertical>
+          <div [chart]="chart"></div>
         </div>
 
-        <div [hidden]="!showApv" class="flex-item">
+        <div [hidden]="!configFormGroup.controls.apv.value" class="flex-item">
           <mat-divider></mat-divider>
           <h1>Ergebnis APV</h1>
           <table class="mat-table">
@@ -114,7 +169,8 @@
                 <th class="mat-header-cell">Unternehmenswert</th>
                 <th class="mat-header-cell">Bilanzsumme</th>
                 <th class="mat-header-cell">Verbindlichkeiten</th>
-                <th class="mat-header-cell">TaxShield</th>
+                <th class="mat-header-cell">Steuervergünstigungen</th>
+                <th class="mat-header-cell">Barwert der Cashflows</th>
               </tr>
             </thead>
             <tbody>
@@ -123,12 +179,13 @@
                 <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.marketValueTotalAssets}}</td>
                 <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.totalLiabilities}}</td>
                 <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.taxShield}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.presentValueOfCashflows}}</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <div [hidden]="!showFcf" class="flex-item">
+        <div [hidden]="!configFormGroup.controls.fcf.value" class="flex-item">
           <mat-divider></mat-divider>
           <h1>Ergebnis FCF</h1>
           <table class="mat-table">
@@ -149,7 +206,7 @@
           </table>
         </div>
 
-        <div [hidden]="!showFte" class="flex-item">
+        <div [hidden]="!configFormGroup.controls.fte.value" class="flex-item">
           <mat-divider></mat-divider>
           <h1>Ergebnis FTE</h1>
           <table class="mat-table">

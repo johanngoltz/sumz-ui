@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import { map, switchMapTo, tap } from 'rxjs/operators';
-import { RemoteConfig } from '../api/config';
+import { RemoteConfig, ScenarioConfig } from '../api/config';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +10,10 @@ export class OptionsService {
   public config$: Observable<RemoteConfig>;
   private _config$: ReplaySubject<RemoteConfig>;
   private _remoteConfig: RemoteConfig = {
-    showResult: { apv: true, cvd: true, fcf: false, fte: false },
+    scenarioConfig: new Map<number, ScenarioConfig>([
+      [1, { showResult: { apv: true, cvd: true, fcf: false, fte: false } }],
+      [2, { showResult: { apv: false, cvd: false, fcf: false, fte: false } }],
+      [3, { showResult: { apv: true, cvd: true, fcf: true, fte: true } }]]),
   };
 
   constructor() {
