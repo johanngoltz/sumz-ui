@@ -1,10 +1,13 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatBottomSheet, MatSnackBar } from '@angular/material';
+import { Component, EventEmitter, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatBottomSheet } from '@angular/material';
 import { Router } from '@angular/router';
-import { AccountingFigure, Scenario } from '../api/scenario';
+import { paramData } from '../api/paramData';
+import { Scenario } from '../api/scenario';
 import { SelectScenarioComponent } from '../select-scenario/select-scenario.component';
+import { AlertService } from '../service/alert.service';
 import { ScenariosService } from '../service/scenarios.service';
+import { TimeSeriesMethodsService } from '../service/time-series-methods.service';
 
 @Component({
   selector: 'app-create-scenario',
@@ -12,92 +15,36 @@ import { ScenariosService } from '../service/scenarios.service';
   styleUrls: ['./create-scenario.component.css'],
 })
 export class CreateScenarioComponent implements OnInit {
-  timeSeries: FormArray;
   formGroup1: FormGroup;
   formGroup2: FormGroup;
   formGroup3: FormGroup;
-  prevYear: number;
-  @ViewChild('scrollable') dataScrollContainer: ElementRef;
-  @ViewChild('fcfrow') fcfRow: ElementRef;
   busy: Boolean;
+  importedScenario: EventEmitter<Scenario>;
+  paramData = paramData;
 
-  constructor(private _formBuilder: FormBuilder, private _scenariosService: ScenariosService, private _router: Router,
-    private _snackBar: MatSnackBar, private _bottomSheet: MatBottomSheet) {
+  constructor(private _formBuilder: FormBuilder,
+    private _scenariosService: ScenariosService,
+    private _router: Router,
+    private _alertService: AlertService,
+    private _bottomSheet: MatBottomSheet,
+    private _timeSeriesMethodsService: TimeSeriesMethodsService) {
   }
 
   ngOnInit() {
     this.busy = false;
-    this.prevYear = new Date().getFullYear() - 1;
-    this.timeSeries = this._formBuilder.array([this._formBuilder.group({
-      year: [this.prevYear, Validators.required],
-      externalCapital: [0, Validators.required],
-      fcf: [0, Validators.required],
-    })]);
     this.formGroup1 = this._formBuilder.group({
       name: ['', Validators.required],
       description: '',
     });
     this.formGroup2 = this._formBuilder.group({
-      deterministic: true,
-      algorithm: 'fcf',
-      iterations: [10000, Validators.required],
-      prognosisLength: [5, Validators.required],
+      equityInterestRate: ['', [Validators.required, Validators.pattern('^[0-9\.]*$')]],
+      interestOnLiabilitiesRate: ['', [Validators.required, Validators.pattern('^[0-9\.]*$')]],
+      businessTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9\.]*$')]],
+      corporateTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9\.]*$')]],
+      solidaryTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9\.]*$')]],
     });
-    this.formGroup3 = this._formBuilder.group({
-      baseYear: [this.prevYear, Validators.required],
-      timeSeries: this.timeSeries,
-    });
-    new MutationObserver(
-      // besser und logischer wäre scrollLeftMax, aber das scheint es nur in Firefox zu geben.
-      () => this.dataScrollContainer.nativeElement.scrollLeft =
-        this.formGroup2.value.deterministic ? this.dataScrollContainer.nativeElement.scrollWidth :
-          this.dataScrollContainer.nativeElement.scrollLeft
-      ).observe(
-      this.fcfRow.nativeElement,
-      { childList: true });
-  }
-
-  createFinancialData(year: number, index?: number) {
-    const formGroup = this._formBuilder.group({
-      year: [year, Validators.required],
-      externalCapital: [0, Validators.required],
-      fcf: [0, Validators.required],
-    });
-
-    if (index !== undefined) {
-      this.timeSeries.insert(index, formGroup);
-    } else {
-      this.timeSeries.push(formGroup);
-    }
-  }
-
-  addYear() {
-    const years = this.timeSeries.controls.map(obj => obj.value.year);
-    if (this.timeSeries.controls.length > 0) {
-      if (this.formGroup2.value.deterministic) {
-        this.createFinancialData(Math.max(...years) + 1);
-      } else {
-        this.createFinancialData(Math.min(...years) - 1, 0);
-      }
-    } else {
-      this.createFinancialData(this.formGroup3.value.baseYear);
-    }
-  }
-
-  removeYear() {
-    if (this.timeSeries.value.length > 0) {
-      this.timeSeries.removeAt(this.formGroup2.value.deterministic ? -1 : 0);
-    }
-    if (this.timeSeries.value.filter(o => (o.year > this.formGroup3.value.baseYear) === this.formGroup2.value.deterministic ||
-      o.year === this.formGroup3.value.baseYear).length === 0) {
-      this.addYear();
-    }
-  }
-
-  // FIXME
-  trackByYear(i: number, o: AccountingFigure) {
-    // return o.year;
-    return -1;
+    this.formGroup3 = this._formBuilder.group({});
+    this.importedScenario = new EventEmitter<Scenario>();
   }
 
   createScenario() {
@@ -107,98 +54,62 @@ export class CreateScenarioComponent implements OnInit {
         id: null,
         ...this.formGroup1.value,
         ...this.formGroup2.value,
-        ...this.formGroup3.value,
-        prognosisLength: 5,
+        stochastic: false,
+        periods: (this.formGroup3.value.endYear - this.formGroup3.value.startYear) * 4,
       };
-      scenario.timeSeries = scenario.timeSeries.map((o) =>
-        (o.year === scenario.baseYear || (o.year > scenario.baseYear) === scenario.deterministic) ? o : false).filter(Boolean);
-      this._scenariosService.addScenario(scenario);
-      // FIXME
-      /* .then(createdScenario => {
-        this.busy = false;
-        this._snackBar.open('Das Projekt wurde erfolgreich erstellt', undefined, { duration: 5000 });
-        this._router.navigate(['/scenario', createdScenario.id]);
-      }
-      ).catch(e => {
-        this.busy = false;
-        this._snackBar.open(`Das Projekt konnte nicht erstellt werden. (${e.statusText})`, undefined,
-          { panelClass: 'mat-warn', duration: 5000 });
-      });*/
+      const start = this.formGroup3.controls.start.value;
+      const base = this.formGroup3.controls.base.value;
+      const end = this.formGroup3.controls.end.value;
+      const quarterly = this.formGroup3.controls.quarterly.value;
+      Object.keys(this.paramData)
+        .filter(param => [undefined, this.formGroup3.value.calculateFcf].indexOf(this.paramData[param].showOnCalculation) > -1)
+        .forEach((param) => {
+          const paramFormGroup = this.formGroup3.controls[param];
+          if (paramFormGroup.value.isHistoric && !scenario.stochastic) {
+            scenario.stochastic = true;
+          }
+          scenario[param] = {
+            isHistoric: paramFormGroup.value.isHistoric,
+            timeSeries: paramFormGroup.value.timeSeries.filter(dataPoint =>
+              this._timeSeriesMethodsService.isInsideBounds(quarterly, start, end, dataPoint)
+              && this._timeSeriesMethodsService.checkVisibility(dataPoint, paramFormGroup.value.isHistoric, quarterly, base, end,
+                this.paramData[param].shiftDeterministic)),
+          };
+        });
+      this._scenariosService.addScenario(scenario)
+        .subscribe(
+          (createdScenario) => {
+            this._alertService.success('Das Szenario wurde erfolgreich erstellt');
+            this._router.navigate(['/scenario', createdScenario.id]);
+          },
+          (error) => {
+            this._alertService.error(`Das Szenario konnte nicht erstellt werden. (${error.statusText})`);
+          },
+          () => this.busy = false
+        );
     }
   }
 
   openSelectionSheet() {
-    this._bottomSheet.open(SelectScenarioComponent).afterDismissed().subscribe((scenario) => this.insertScenarioData(scenario, this));
+    this._bottomSheet.open(SelectScenarioComponent).afterDismissed().subscribe(this.insertScenarioData.bind(this));
   }
 
-  insertScenarioData(scenario: Scenario, that: CreateScenarioComponent) {
-    if (that.formGroup1.value.name.length === 0) {
-      that.formGroup1.controls.name.patchValue(scenario.name);
+  insertScenarioData(scenario: Scenario) {
+    if (scenario) {
+      if (this.formGroup1.value.name.length === 0) {
+        this.formGroup1.controls.name.setValue(scenario.name);
+      }
+      if (this.formGroup1.value.description.length === 0) {
+        this.formGroup1.controls.description.setValue(scenario.description);
+      }
+      this.formGroup2.controls.equityInterestRate.setValue(scenario.equityInterestRate);
+      this.formGroup2.controls.interestOnLiabilitiesRate.setValue(scenario.interestOnLiabilitiesRate);
+      this.formGroup2.controls.businessTaxRate.setValue(scenario.businessTaxRate);
+      this.formGroup2.controls.corporateTaxRate.setValue(scenario.corporateTaxRate);
+      this.formGroup2.controls.solidaryTaxRate.setValue(scenario.solidaryTaxRate);
+      this.importedScenario.emit(scenario);
+      this._alertService.success(`Die Daten des Szenarios "${scenario.name}" wurden erfolgreich übernommen`);
     }
-    if (that.formGroup1.value.description.length === 0) {
-      that.formGroup1.controls.description.patchValue(scenario.description);
-    }
-    // FIXME
-    /*
-    that.formGroup2.controls.deterministic.patchValue(scenario.deterministic);
-    that.formGroup2.controls.algorithm.patchValue(scenario.algorithm);
-    that.formGroup2.controls.iterations.patchValue(scenario.iterations);
-    that.formGroup3.controls.baseYear.patchValue(scenario.baseYear);
-    */
-    while (that.timeSeries.length > 0) {
-      that.timeSeries.removeAt(0);
-    }
-    // FIXME
-    /*
-    scenario.timeSeries.forEach((financialData: AccountingFigure) => {
-      that.timeSeries.push(
-        that._formBuilder.group({
-          year: [financialData.year, Validators.required],
-          externalCapital: [financialData.externalCapital, Validators.required],
-          fcf: [financialData.fcf, Validators.required],
-        })
-      );
-    });
-    */
-    that._snackBar.open(`Die Daten des Projekts "${scenario.name}" wurden erfolgreich übernommen`, undefined, { duration: 5000 });
   }
 
-  updateTable() {
-    const baseYear = this.formGroup3.value.baseYear;
-    if (baseYear != null) {
-      const years = this.timeSeries.value.map(o => o.year);
-      const min = Math.min(...years);
-      const max = Math.max(...years);
-      if (baseYear > max) {
-        for (let i = 0; i < Math.min(baseYear - max, years.length); i++) {
-          if (this.timeSeries.controls[0].dirty) {
-            break;
-          } else {
-            this.timeSeries.removeAt(0);
-          }
-        }
-        if (this.timeSeries.length > 0) {
-          for (let i = max + 1; i <= baseYear; i++) {
-            this.createFinancialData(i);
-          }
-        }
-      } else if (baseYear < min) {
-        for (let i = years.length - 1; i >= Math.max(0, years.length - (min - baseYear)); i--) {
-          if (this.timeSeries.controls[i].dirty) {
-            break;
-          } else {
-            this.timeSeries.removeAt(i);
-          }
-        }
-        if (this.timeSeries.length > 0) {
-          for (let i = min - 1; i >= baseYear; i--) {
-            this.createFinancialData(i, 0);
-          }
-        }
-      }
-      if (this.timeSeries.length === 0) {
-        this.createFinancialData(baseYear);
-      }
-    }
-  }
 }

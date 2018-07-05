@@ -1,7 +1,21 @@
 <div class="content-container">
+  <h1>
+    {{(forScenario$ | async)?.name}}
+    <div [@toggleEditAnimation]="editable">
+      <button type="button" mat-button color="primary" *ngIf="!editable" (click)="setEditable(true)">
+        Szenario bearbeiten
+      </button>
+      <button type="button" mat-button color="primary" *ngIf="editable" (click)="setEditable(false)" class="space-right">
+        Änderungen Verwerfen
+      </button>
+      <button type="button" mat-raised-button color="accent" *ngIf="editable" (click)="setEditable(false, true)">
+        Speichern
+      </button>
+    </div>
+  </h1>
   <!-- panels for different parts of Scenario-->
-  <mat-accordion multi="false" class="example-headers-align">
-    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
+  <mat-accordion multi="true" class="headers-align">
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true" [formGroup]="formGroup">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Daten
@@ -11,24 +25,93 @@
           <mat-icon>work</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <table class="mat-table">
-        <thead>
-          <tr class="mat-header-row">
-            <th class="mat-header-cell">Name</th>
-            <th class="mat-header-cell">Beschreibung</th>
-            <th class="mat-header-cell">Basisjahr</th>
-            <th class="mat-header-cell">Perioden</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="mat-row">
-            <td class="mat-cell">{{(forScenario$ | async)?.name}}</td>
-            <td class="mat-cell">{{(forScenario$ | async)?.description}}</td>
-            <td class="mat-cell">{{(forScenario$ | async)?.periods}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="divided-form">
+        <div>
+          <h3>Grundlegendes</h3>
+          <mat-form-field floatLabel="always">
+            <input matInput placeholder="Name" formControlName="name" />
+            <mat-error *ngIf="formGroup.controls.name.hasError('required')">
+              Name wird
+              <strong>benötigt</strong>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field floatLabel="always">
+            <textarea matInput cdkTextareaAutosize placeholder="Beschreibung" formControlName="description"></textarea>
+          </mat-form-field>
+        </div>
+        <mat-divider vertical="true"></mat-divider>
+        <div>
+          <h3>Umweltfaktoren</h3>
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" appToDouble placeholder="Eigenkapitalzinsen" formControlName="equityInterestRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.equityInterestRate.hasError('required')">
+              Eigenkapitalzinsen werden
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.equityInterestRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
+          </mat-form-field>
 
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" appToDouble placeholder="Zinssatz für Verbindlichkeiten" formControlName="interestOnLiabilitiesRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.interestOnLiabilitiesRate.hasError('required')">
+              Zinssatz für Verbindlichkeiten wird
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.interestOnLiabilitiesRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" appToDouble placeholder="Gewerbesteuersatz" formControlName="businessTaxRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('min') || formGroup.controls.businessTaxRate.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('required')">
+             Gewerbesteuersatz wird
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" appToDouble placeholder="Körperschaftssteuersatz" formControlName="corporateTaxRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('min') || formGroup.controls.corporateTaxRate.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('required')">
+              Köroerschaftssteuersatz wird
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" appToDouble placeholder="Solidaritätszuschlag" formControlName="solidaryTaxRate" />
+            <span matPrefix>% &nbsp;</span>
+            <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('min') || formGroup.controls.solidaryTaxRate.hasError('max')">
+              Der Wert muss zwischen 0% und 100% liegen
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('required')">
+              Solidaritätszuschlag wird
+              <strong>benötigt</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('pattern')">
+              Nur Zahlen erlaubt
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
       <mat-action-row>
         <button mat-button color="primary" (click)="nextStep()">Weiter</button>
       </mat-action-row>
@@ -44,30 +127,106 @@
           <mat-icon>euro_symbol</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
-      TODO: Cashflowberechnungstabelle implementieren
+      <app-accounting-data [initialData]="forScenario$" (formGroupOutput)="accountingDataFormGroup = $event" [editable]="editable"></app-accounting-data>
       <mat-action-row>
-        <button mat-button color="warn" (click)="prevStep()">Previous</button>
-        <button mat-button color="primary" (click)="nextStep()">Next</button>
+        <button mat-button color="warn" (click)="prevStep()">Zurück</button>
+        <button mat-button color="primary" (click)="nextStep()">Weiter</button>
       </mat-action-row>
     </mat-expansion-panel>
 
     <!-- Panel for Comparison-->
-    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="true">
+    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="true"  [formGroup]="configFormGroup">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Auswertung
         </mat-panel-title>
         <mat-panel-description>
-          Vergleich der Szenarien
+          Alle Ergebnisse
           <mat-icon>bar_chart</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <canvas baseChart width="200" height="100"></canvas>
+      <div class="selection">
+        <mat-checkbox class="margin" formControlName="cvd">CVD</mat-checkbox>
+        <mat-checkbox class="margin" formControlName="apv">APV</mat-checkbox>
+        <mat-checkbox class="margin" formControlName="fcf">FCF</mat-checkbox>
+        <mat-checkbox class="margin" formControlName="fte">FTE</mat-checkbox>
+      </div>
+
+      <div class="flex-container">
+        <div [hidden]="!configFormGroup.controls.cvd.value" class="flex-item">
+          <mat-divider></mat-divider>
+          <h1>Unternehmenswertverteilung</h1>
+          <div [chart]="chart"></div>
+        </div>
+
+        <div [hidden]="!configFormGroup.controls.apv.value" class="flex-item">
+          <mat-divider></mat-divider>
+          <h1>Ergebnis APV</h1>
+          <table class="mat-table">
+            <thead>
+              <tr class="mat-header-row">
+                <th class="mat-header-cell">Unternehmenswert</th>
+                <th class="mat-header-cell">Bilanzsumme</th>
+                <th class="mat-header-cell">Verbindlichkeiten</th>
+                <th class="mat-header-cell">Steuervergünstigungen</th>
+                <th class="mat-header-cell">Barwert der Cashflows</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="mat-row">
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.companyValue}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.marketValueTotalAssets}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.totalLiabilities}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.taxShield}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.presentValueOfCashflows}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div [hidden]="!configFormGroup.controls.fcf.value" class="flex-item">
+          <mat-divider></mat-divider>
+          <h1>Ergebnis FCF</h1>
+          <table class="mat-table">
+            <thead>
+              <tr class="mat-header-row">
+                <th class="mat-header-cell">Unternehmenswert</th>
+                <th class="mat-header-cell">Bilanzsumme</th>
+                <th class="mat-header-cell">Verbindlichkeiten</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="mat-row">
+                <td class="mat-cell">{{(forScenario$ | async)?.fcfValuationResult?.companyValue}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.fcfValuationResult?.marketValueTotalAssets}}</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.fcfValuationResult?.totalLiabilities}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div [hidden]="!configFormGroup.controls.fte.value" class="flex-item">
+          <mat-divider></mat-divider>
+          <h1>Ergebnis FTE</h1>
+          <table class="mat-table">
+            <thead>
+              <tr class="mat-header-row">
+                <th class="mat-header-cell">Unternehmenswert</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="mat-row">
+                <td class="mat-cell">{{(forScenario$ | async)?.fteValuationResult?.companyValue}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       <mat-action-row>
-        <button mat-button color="warn" (click)="prevStep()">Previous</button>
-        <button mat-button color="primary" (click)="nextStep()">End</button>
+        <button mat-button color="warn" (click)="prevStep()">Zurück</button>
+        <button mat-button color="primary" (click)="nextStep()">Ende</button>
       </mat-action-row>
     </mat-expansion-panel>
   </mat-accordion>

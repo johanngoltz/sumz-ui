@@ -28,8 +28,8 @@ const accountingFigures = Object.entries(rawAccountingFigures).reduce(
         // Hab ich schon mal gesagt, dass JS-Datumsobjekte schlimm sind?
         allFigures[key] = figureSeries.reduce(
             (accumulated, figure, index) => {
-                const forYear = new Date(new Date().setFullYear(new Date().getFullYear() - index));
-                accumulated.timeSeries.push([1, 2, 3, 4].map(quarter => ({
+                const forYear = new Date().getFullYear() - 4 + index;
+                accumulated.timeSeries.push(...[1, 2, 3, 4].map(quarter => ({
                     year: forYear,
                     quarter: quarter,
                     amount: figure / 4,

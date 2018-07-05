@@ -6,7 +6,12 @@ import { MaterialModule } from '../material.module';
 import { ScenarioDetailComponent } from './scenario-detail.component';
 import { ScenariosService } from '../service/scenarios.service';
 import { Scenario } from '../api/scenario';
+import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
+import { AccountingDataComponent } from '../accounting-data/accounting-data.component';
 import { DEFAULT_MOCK_DATA } from '../service/mockdata';
+import { ChartModule } from 'angular-highcharts';
+import { OptionsService } from '../service/options.service';
+import { RemoteConfig, ScenarioConfig } from '../api/config';
 
 
 describe('ScenarioDetailComponent', () => {
@@ -15,19 +20,25 @@ describe('ScenarioDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ScenarioDetailComponent],
-      imports: [MaterialModule, BrowserAnimationsModule],
+      declarations: [ScenarioDetailComponent, AccountingDataComponent],
+      imports: [MaterialModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule, ChartModule],
       providers: [{
         provide: ActivatedRoute,
         useValue: {
           paramMap: of(convertToParamMap({ 'id': 1 })),
-        } as ActivatedRoute,
+        },
       }, {
         provide: ScenariosService, useValue: {
-          scenarios$: of([{ id: 1, name: 'Eins', description: 'Das erste Szenario' } as Scenario]),
           getScenarios: () => this.scenarios$,
           getScenario: (id: number) => of(DEFAULT_MOCK_DATA[0]),
         } as ScenariosService,
+      }, {
+        provide: OptionsService, useValue: {
+          setConfig: () => { },
+          getConfig: () => of({
+            scenarioConfig: { get: () => ({ showResult: { apv: true, cvd: true, fcf: false, fte: false } }), set: () => { } },
+          }),
+        },
       }],
     })
       .compileComponents();

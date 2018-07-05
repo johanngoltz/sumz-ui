@@ -24,19 +24,29 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-    color: #fff;
-    background-color: #0d9a39;
-    border-color: #0d9a39;
 }
 
 .forgot-btn {
-    width: 90%;
-    text-align: center;
-    display: block;
+    width: auto;
+    text-align: right;
     margin-left: auto;
+    margin-right: 5%;
+    margin-top: 5px;
+    color: darkgray;
+}
+
+.signup-btn {
+    width: auto;
+    text-align: center;
+    margin-left: 5%;
     margin-right: auto;
     margin-top: 5px;
     color: darkgray;
+}
+
+.login-footer {
+    display: flex;
+    flex-flow: row wrap;
 }
 
 mat-form-field {

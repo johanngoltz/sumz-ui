@@ -1,5 +1,5 @@
 <div class="content-container">
-  <h1>Neues Projekt erstellen</h1>
+  <h1>Neues Szenario erstellen</h1>
   <mat-vertical-stepper linear [class.navigation-disabled]="busy">
     <mat-step label="Grundlegendes" [stepControl]="formGroup1">
       <form [formGroup]="formGroup1">
@@ -10,16 +10,16 @@
               <input type="text" id="name" name="name" matInput placeholder="Name" required formControlName="name">
             </mat-form-field>
             <mat-form-field>
-              <textarea id="description" name="description" matInput placeholder="Beschreibung" formControlName="description"></textarea>
+              <textarea id="description" name="description" matInput cdkTextareaAutosize placeholder="Beschreibung" formControlName="description"></textarea>
             </mat-form-field>
             <div class="info">
-              <h4>Aus bestehendem Projekt erstellen</h4>
+              <h4>Aus bestehendem Szenario erstellen</h4>
               <p>
-                Sie können bereits bestehende Projekte als Vorlage für dieses Projekt nutzen. Wählen Sie hierzu über den folgenden Button
-                einfach ein Projekt aus, um dessen Daten in die Eingabefelder zu übertragen.
+                Sie können bereits bestehende Szenarien als Vorlage für dieses Szenario nutzen. Wählen Sie hierzu über den folgenden Button
+                einfach ein Szenario aus, um dessen Daten in die Eingabefelder zu übertragen.
               </p>
               <div class="info-action">
-                <button mat-button type="button" color="accent" (click)="openSelectionSheet()">Bestehendes Projekt auswählen</button>
+                <button mat-button type="button" color="accent" (click)="openSelectionSheet()">Bestehendes Szenario auswählen</button>
               </div>
             </div>
           </mat-card-content>
@@ -30,45 +30,88 @@
         </mat-card>
       </form>
     </mat-step>
-    <mat-step label="Methode wählen" [stepControl]="formGroup2">
+    <mat-step label="Umweltfaktoren" [stepControl]="formGroup2">
       <form [formGroup]="formGroup2">
         <mat-card class="form-container">
-          <mat-card-title>Methode & Algorithmus</mat-card-title>
+          <mat-card-title>Umweltfaktoren</mat-card-title>
           <mat-card-content>
-            <label class="grey" for="method">Berechnungsmethode</label>
-            <mat-radio-group id="method" name="method" formControlName="deterministic" required>
-              <mat-radio-button [value]="true">Deterministisch</mat-radio-button>
-              <mat-radio-button [value]="false">Stochastisch</mat-radio-button>
-            </mat-radio-group>
-            <div>
-              <mat-form-field id="prognosis" class="inline" [ngClass]="{disabled: this.formGroup2.value.deterministic}">
-                <input type="number" id="prognosisLength" name="prognosisLength" matInput placeholder="Anzahl Prognosejahre" formControlName="prognosisLength"
-                  [readonly]="this.formGroup2.value.deterministic" required>
-              </mat-form-field>
-            </div>
-            <label class="grey" for="algorithm">Algorithmus</label>
-            <mat-radio-group id="algorithm" name="algorithm" formControlName="algorithm" required>
-              <mat-radio-button value="apv">
-                APV
-                <mat-icon matTooltip="Das APV-Verfahren, auch Konzept des angepassten Barwerts, zählt - wie der WACC-Ansatz oder der TCF-Ansatz - zu den Entity-Methoden der DCF-Bewertung. Im Rahmen dieser Verfahren wird der Wert des Eigenkapitals eines Unternehmens durch Abzug der Nettofinanzverbindlichkeiten von dem Unternehmensgesamtwert (Entity Value) ermittelt. ">help</mat-icon>
-              </mat-radio-button>
-              <mat-radio-button value="fcf">
-                FCF
-                <mat-icon matTooltip="">help</mat-icon>
-              </mat-radio-button>
-              <mat-radio-button value="fte">
-                FTE
-                <mat-icon matTooltip="">help</mat-icon>
-              </mat-radio-button>
-            </mat-radio-group>
-            <mat-form-field class="inline">
-              <input type="number" id="iterations" name="iterations" matInput placeholder="Anzahl Iterationen" formControlName="iterations"
-                required>
+            <mat-form-field floatLabel="always">
+              <input matInput type="text" appToDouble placeholder="Eigenkapitalzinsen" formControlName="equityInterestRate" />
+              <span matPrefix>% &nbsp;</span>
+              <mat-error *ngIf="formGroup2.controls.equityInterestRate.hasError('min') || formGroup2.controls.equityInterestRate.hasError('max')">
+                Der Wert muss zwischen 0% und 100% liegen
+              </mat-error>
+              <mat-error *ngIf="formGroup2.controls.equityInterestRate.hasError('required')">
+                Eigenkapitalzinsen werden
+                <strong>benötigt</strong>
+              </mat-error>
+              <mat-error *ngIf="formGroup2.controls.equityInterestRate.hasError('pattern')">
+                Nur Zahlen erlaubt
+              </mat-error>
+            </mat-form-field>
+  
+            <mat-form-field floatLabel="always">
+              <input matInput type="text" appToDouble placeholder="Zinssatz für Verbindlichkeiten" formControlName="interestOnLiabilitiesRate" />
+              <span matPrefix>% &nbsp;</span>
+              <mat-error *ngIf="formGroup2.controls.interestOnLiabilitiesRate.hasError('min') || formGroup2.controls.interestOnLiabilitiesRate.hasError('max')">
+                Der Wert muss zwischen 0% und 100% liegen
+              </mat-error>
+              <mat-error *ngIf="formGroup2.controls.interestOnLiabilitiesRate.hasError('required')">
+                Zinssatz für Verbindlichkeiten wird
+                <strong>benötigt</strong>
+              </mat-error>
+              <mat-error *ngIf="formGroup2.controls.interestOnLiabilitiesRate.hasError('pattern')">
+                Nur Zahlen erlaubt
+              </mat-error>
+            </mat-form-field>
+  
+            <mat-form-field floatLabel="always">
+              <input matInput type="text" appToDouble placeholder="Gewerbesteuersatz" formControlName="businessTaxRate" />
+              <span matPrefix>% &nbsp;</span>
+              <mat-error *ngIf="formGroup2.controls.businessTaxRate.hasError('min') || formGroup2.controls.businessTaxRate.hasError('max')">
+                Der Wert muss zwischen 0% und 100% liegen
+              </mat-error>
+              <mat-error *ngIf="formGroup2.controls.businessTaxRate.hasError('required')">
+               Gewerbesteuersatz wird
+                <strong>benötigt</strong>
+              </mat-error>
+              <mat-error *ngIf="formGroup2.controls.businessTaxRate.hasError('pattern')">
+                Nur Zahlen erlaubt
+              </mat-error>
+            </mat-form-field>
+            {{formGroup2.controls.businessTaxRate.value}}
+            <mat-form-field floatLabel="always">
+              <input matInput type="text" appToDouble placeholder="Körperschaftssteuersatz" formControlName="corporateTaxRate" />
+              <span matPrefix>% &nbsp;</span>
+              <mat-error *ngIf="formGroup2.controls.corporateTaxRate.hasError('min') || formGroup2.controls.corporateTaxRate.hasError('max')">
+                Der Wert muss zwischen 0% und 100% liegen
+              </mat-error>
+              <mat-error *ngIf="formGroup2.controls.corporateTaxRate.hasError('required')">
+                Köroerschaftssteuersatz wird
+                <strong>benötigt</strong>
+              </mat-error>
+              <mat-error *ngIf="formGroup2.controls.corporateTaxRate.hasError('pattern')">
+                Nur Zahlen erlaubt
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field floatLabel="always">
+              <input matInput type="text" appToDouble placeholder="Solidaritätszuschlag" formControlName="solidaryTaxRate" />
+              <span matPrefix>% &nbsp;</span>
+              <mat-error *ngIf="formGroup2.controls.solidaryTaxRate.hasError('min') || formGroup2.controls.solidaryTaxRate.hasError('max')">
+                Der Wert muss zwischen 0% und 100% liegen
+              </mat-error>
+              <mat-error *ngIf="formGroup2.controls.solidaryTaxRate.hasError('required')">
+                Solidaritätszuschlag wird
+                <strong>benötigt</strong>
+              </mat-error>
+              <mat-error *ngIf="formGroup2.controls.solidaryTaxRate.hasError('pattern')">
+                Nur Zahlen erlaubt
+              </mat-error>
             </mat-form-field>
           </mat-card-content>
           <mat-card-actions class="stepper-actions">
             <button mat-button matStepperPrevious>Zurück</button>
-            <button mat-raised-button color="accent" matStepperNext>Weiter</button>
+            <button mat-raised-button matStepperNext color="accent">Weiter</button>
           </mat-card-actions>
         </mat-card>
       </form>
@@ -79,65 +122,11 @@
           <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
           <mat-card-title>Zahlungsreihe</mat-card-title>
           <mat-card-content>
-            <mat-form-field class="inline">
-              <input (input)="updateTable()" type="number" id="baseYear" name="baseYear" matInput placeholder="Basisjahr" formControlName="baseYear"
-                required>
-            </mat-form-field>
-            <div class="scrollable" #scrollable>
-              <table class="mat-table">
-                <thead>
-                  <tr class="mat-header-row">
-                    <th class="mat-header-cell">Jahr</th>
-                    <th class="mat-cell" *ngIf="!formGroup2.value.deterministic">{{(timeSeries.at(0) && timeSeries.at(0).value.year - 1) || formGroup3.value.baseYear}}</th>
-                    <ng-container *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
-                      <th class="mat-cell" *ngIf="(element.value.year > formGroup3.value.baseYear) === formGroup2.value.deterministic || element.value.year === formGroup3.value.baseYear">
-                        <button type="button" id="remove-year" (click)="removeYear()" mat-icon-button *ngIf="timeSeries.controls.indexOf(element) === (formGroup2.value.deterministic ? timeSeries.length - 1 : 0)">
-                          <mat-icon>delete</mat-icon>
-                        </button>
-                        {{element.value.year}}
-                      </th>
-                    </ng-container>
-                    <th class="mat-cell" *ngIf="formGroup2.value.deterministic">{{(timeSeries.at(timeSeries.length - 1) && timeSeries.at(timeSeries.length - 1).value.year + 1) || formGroup3.value.baseYear}}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="mat-row">
-                    <th class="mat-header-cell">Fremdkapital</th>
-                    <td *ngIf="!formGroup2.value.deterministic" rowspan="2" class="mat-cell">
-                      <button type="button" (click)="addYear()" color="accent" mat-icon-button>
-                        <mat-icon>add</mat-icon>
-                      </button>
-                    </td>
-                    <ng-container *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
-                      <td class="mat-cell" *ngIf="(element.value.year > formGroup3.value.baseYear) === formGroup2.value.deterministic || element.value.year === formGroup3.value.baseYear">
-                        <mat-form-field class="table-input-right" [formGroup]="element">
-                          <input type="text" matInput formControlName="externalCapital" appToDouble required>
-                        </mat-form-field>
-                      </td>
-                    </ng-container>
-                    <td *ngIf="formGroup2.value.deterministic" rowspan="2" class="mat-cell">
-                      <button type="button" (click)="addYear()" color="accent" mat-icon-button>
-                        <mat-icon>add</mat-icon>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr class="mat-row" #fcfrow>
-                    <th class="mat-header-cell">FCF</th>
-                    <ng-container *ngFor="let element of timeSeries.controls; trackBy: trackByYear">
-                      <td class="mat-cell" *ngIf="(element.value.year > formGroup3.value.baseYear) === formGroup2.value.deterministic || element.value.year === formGroup3.value.baseYear">
-                        <mat-form-field class="table-input-right" [formGroup]="element">
-                          <input type="text" matInput formControlName="fcf" appToDouble required>
-                        </mat-form-field>
-                      </td>
-                    </ng-container>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <app-accounting-data [editable]="true" [initialData]="importedScenario" (formGroupOutput)="formGroup3 = $event"></app-accounting-data>
           </mat-card-content>
           <mat-card-actions class="stepper-actions">
             <button mat-button matStepperPrevious [disabled]="busy">Zurück</button>
-            <button mat-raised-button matStepperNext color="accent" [disabled]="busy">Projekt anlegen</button>
+            <button mat-raised-button matStepperNext color="accent" [disabled]="busy">Szenario anlegen</button>
           </mat-card-actions>
         </mat-card>
       </form>
