@@ -91,6 +91,6 @@ export class AppComponent {
   }
 
   delete() {
-    this._router.navigateByUrl('/users/delete');
+    this._router.navigateByUrl('/users/:id/delete');
   }
 }

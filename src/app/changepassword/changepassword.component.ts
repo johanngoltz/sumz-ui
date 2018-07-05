@@ -53,7 +53,7 @@ import { AlertService } from '../service/alert.service';
       }
 
       // call the method to change the password
-      this.authenticationService.changepassword(this.pwdOld.value.toString(), this.pwdNew.value.toString(), this.pwdNew2.value.toString())
+      this.authenticationService.changepassword(this.pwdOld.value.toString(), this.pwdNew.value.toString())
       .then( () => {
           // if the change was successful
           this.alertService.success('Ihr Passwort wurde erfolgreich geändert!');

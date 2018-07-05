@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { TypedAxiosInstance } from 'restyped-axios';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import { from, Observable, of, ReplaySubject, throwError } from 'rxjs';
 import { SumzAPI } from '../api/api';
 import { HttpClient } from './http-client';
 
@@ -11,6 +11,8 @@ import { HttpClient } from './http-client';
 })
 export class AuthenticationService {
   private returnUrl: string;
+  public users$: Observable<SumzAPI[]>;
+  protected _users$: ReplaySubject<SumzAPI[]>;
 
   constructor(
     private router: Router,
@@ -19,6 +21,8 @@ export class AuthenticationService {
   ) {
     // handle expired access_token
     this.addInterceptor();
+    this._users$ = new ReplaySubject();
+    this.users$ = this._users$.asObservable();
   }
 
   /**
@@ -96,12 +100,15 @@ export class AuthenticationService {
   /**
    * changes the password
    * (is called in changepassword.component)
-   * @param {string} passwordold Actual password
-   * @param {string} passwordnew new password
-   * @param {string} passwordnew2 new password
+   * @param {string} oldPassword Actual password
+   * @param {string} newPassword new password
    * @returns {Promise} Promise
    */
-  async changepassword(passwordold: string, passwordnew: string, passwordnew2: string) {
+  async changepassword(oldPassword: string, newPassword: string) {
+
+    return from(this._apiClient.put(`/users/${JSON.parse(localStorage.getItem('currentUser')).id}`,
+    {'oldPassword' : oldPassword, 'newPassword' : newPassword}));
+/*
     await this._apiClient.request({
       url: '/users/id',
       data: {passwordold, passwordnew, passwordnew2},
@@ -114,6 +121,7 @@ export class AuthenticationService {
         this.router.navigate(['/users']);
       }
     });
+    */
   }
 
   /**
@@ -137,11 +145,14 @@ export class AuthenticationService {
    */
   async deleteuser(password: string) {
     // TODO: Übergabe der ID einrichten.
+
+    return from(this._apiClient.post(`/users/${JSON.parse(localStorage.getItem('currentUser')).id}/delete`, {'password' : password}));
+
     /*
     const ab = JSON.stringify(JSON.parse(localStorage.getItem('currentUser')).id);
     debugger;
-    await this._apiClient.post({
-      url: `/users/${JSON.parse(localStorage.getItem('currentUser')).id}/delete`,
+    await this._apiClient.request({
+      url: '/users/{' + JSON.parse(localStorage.getItem('currentUser')).id + '}/delete',
       //params: {'id' : JSON.parse(localStorage.getItem('currentUser')).id},
       data: {password},
       method: 'POST',
