@@ -1,7 +1,6 @@
 import { animate, group, query, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
 
 import { AuthenticationService } from './service/authentication.service';
 
@@ -65,17 +64,9 @@ export class AppComponent {
   title = 'SUMZ';
 
   constructor(
-    router: Router,
-    private _router: Router,
+    private router: Router,
     private authenticationService: AuthenticationService,
-  ) {
-    this.log = [];
-    router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((route: NavigationEnd) => {
-      this.log.push(route);
-    });
-  }
+  ) { }
 
   getState(outlet) {
     return outlet.activatedRouteData.state;
@@ -83,10 +74,10 @@ export class AppComponent {
 
   logout() {
     this.authenticationService.logout();
-    this._router.navigateByUrl('/login');
+    this.router.navigateByUrl('/login');
   }
 
   change() {
-    this._router.navigateByUrl('changepassword');
+    this.router.navigateByUrl('changepassword');
   }
 }
