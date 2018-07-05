@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { TypedAxiosInstance } from 'restyped-axios';
 import { Router, ActivatedRoute } from '@angular/router';
-import { from, Observable, of, ReplaySubject } from 'rxjs';
+import { from, Observable, ReplaySubject } from 'rxjs';
 import { SumzAPI } from '../api/api';
 import { HttpClient } from './http-client';
 
@@ -138,7 +138,6 @@ export class AuthenticationService {
    * @returns {Promise} Promise
    */
   async deleteuser(password: string) {
-    // ${JSON.parse(localStorage.getItem('currentUser')).id} -> getting the id of the current user that should be deleted
     return from(this._apiClient.post(`/users/${JSON.parse(localStorage.getItem('currentUser')).id}/delete`, {'password' : password}));
   }
 
