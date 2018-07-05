@@ -7,7 +7,7 @@ export const accountingDataParams = {
     investments: { displayName: 'Investitionen', showOnCalculation: true },
     divestments: { displayName: 'Desinvestitionen', showOnCalculation: true },
     freeCashFlows: { displayName: 'Free Cash Flow', showOnCalculation: false },
-    liabilities: { displayName: 'Fremdkapital', shiftDeterministic: true },
+    liabilities: { displayName: 'Fremdkapital', showOnCalculation: undefined, shiftDeterministic: true },
 };
 
 export let environmentParams = {
