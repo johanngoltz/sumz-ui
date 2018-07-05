@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { PasswordValidation } from '../registration/registration.passwordvalidation';
 import { AuthenticationService } from '../service/authentication.service';
 import { AlertService } from '../service/alert.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-newpassword',
@@ -26,7 +27,7 @@ export class NewPasswordComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
-    private alertService: AlertService) { }
+    private alertService: AlertService, private router: Router) { }
 
   ngOnInit() {
     this.newFormGroup = this._formBuilder.group({
@@ -51,6 +52,12 @@ export class NewPasswordComponent implements OnInit {
 
     // call the method to request a new password
     this.authenticationService.postNewPassword(this.pwdNew1.value.toString())
+      .then(() => {
+        // if the change was successful
+        this.alertService.success('Ihr neues Passwort wurde erfolgreich gesetzt. Bitte loggen Sie sich mit dem neuen Passwort ein');
+        this.authenticationService.logout();
+        this.router.navigate(['/login']); // relog with the new password
+      })
       .catch( // catch the error-warnings if the method fails
         error => {
           this.alertService.error(error);
