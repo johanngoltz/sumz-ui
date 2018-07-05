@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PasswordValidation } from '../registration/registration.passwordvalidation';
 import { AlertService } from '../service/alert.service';
 import { AuthenticationService } from '../service/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-changepassword',
@@ -27,7 +28,7 @@ export class ChangePasswordComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
-    private alertService: AlertService) { }
+    private alertService: AlertService, private router: Router) { }
 
   ngOnInit() {
     this.changeFormGroup = this._formBuilder.group({
@@ -59,6 +60,8 @@ export class ChangePasswordComponent implements OnInit {
       .then( () => {
           // if the change was successful
           this.alertService.success('Ihr Passwort wurde erfolgreich geändert!');
+          this.authenticationService.logout();
+          this.router.navigate(['/login']);
       })
       .catch( // catch the error-warnings if the method fails
         error => {
