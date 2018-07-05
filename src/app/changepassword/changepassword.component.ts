@@ -57,6 +57,7 @@ import { AlertService } from '../service/alert.service';
       .then( () => {
           // if the change was successful
           this.alertService.success('Ihr Passwort wurde erfolgreich geändert!');
+          this.authenticationService.logout();
       })
       .catch( // catch the error-warnings if the method fails
         error => {
