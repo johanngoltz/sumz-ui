@@ -8,8 +8,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   styleUrls: ['./export-scenario.component.css'],
 })
 export class ExportScenarioComponent implements OnInit {
-  // private csvBlobUrl: string;
-  private jsonBlobUrl: SafeUrl;
+  // csvBlobUrl: SafeUrl;
+  jsonBlobUrl: SafeUrl;
 
   constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
     private _bottomSheetRef: MatBottomSheetRef<ExportScenarioComponent>,
