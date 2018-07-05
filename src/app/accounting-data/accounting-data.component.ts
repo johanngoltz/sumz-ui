@@ -164,6 +164,10 @@ export class AccountingDataComponent implements OnInit {
     });
   }
 
+  get timeSeriesControls() {
+    return ((this.formGroup.controls.liabilities as FormGroup).controls.timeSeries as FormArray).controls;
+  }
+
   quarterlyChanged() {
     const quarterly = this.formGroup.controls.quarterly.value;
     Object.keys(this.paramData).forEach(param => {

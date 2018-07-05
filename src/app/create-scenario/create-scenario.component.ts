@@ -1,12 +1,12 @@
-import { Component, ElementRef, OnInit, ViewChild, EventEmitter } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatBottomSheet, MatSnackBar } from '@angular/material';
+import { Component, EventEmitter, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatBottomSheet } from '@angular/material';
 import { Router } from '@angular/router';
-import { AccountingFigure, Scenario } from '../api/scenario';
-import { SelectScenarioComponent } from '../select-scenario/select-scenario.component';
-import { ScenariosService } from '../service/scenarios.service';
 import { paramData } from '../api/paramData';
+import { Scenario } from '../api/scenario';
+import { SelectScenarioComponent } from '../select-scenario/select-scenario.component';
 import { AlertService } from '../service/alert.service';
+import { ScenariosService } from '../service/scenarios.service';
 import { TimeSeriesMethodsService } from '../service/time-series-methods.service';
 
 @Component({
