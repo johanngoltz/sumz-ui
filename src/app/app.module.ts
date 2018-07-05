@@ -60,7 +60,7 @@ import { ToDoubleDirective } from './to-double.directive';
   ],
   providers: [
     environment.emergencyDemo
-      ? { provide: ScenariosService, useFactory: () => new ScenariosServiceMock() }
+      ? { provide: ScenariosService, useClass: ScenariosServiceMock }
       : ScenariosService,
     AuthGuard,
   ],
