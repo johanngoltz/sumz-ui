@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { licenses } from './licenses';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-credits',
@@ -31,7 +32,9 @@ export class CreditsComponent implements OnInit {
               dependency.repository.replace('://github.com', '://raw.githubusercontent.com')
               + '/master/LICENSE.txt',
               { responseType: 'text' }
-            ))),
+            ))).pipe(
+              catchError(() => of('Kein Lizenztext gefunden')),
+          ),
         };
       });
 

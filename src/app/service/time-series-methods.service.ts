@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DataPoint } from '../api/scenario';
+import { AccountingDataParams } from '../api/paramData';
 
 @Injectable({
   providedIn: 'root',
@@ -7,6 +8,11 @@ import { DataPoint } from '../api/scenario';
 export class TimeSeriesMethodsService {
 
   constructor() { }
+
+  shouldDisplayAccountingDataParam(
+    accountingDataParams: AccountingDataParams, calculateFcf: boolean, param: keyof AccountingDataParams) {
+    return [undefined, calculateFcf].indexOf(accountingDataParams[param].showOnCalculation) > -1;
+  }
 
   checkVisibility(value: TimePoint, requireHistoric: Boolean, quarterly: Boolean, base: TimePoint, end: TimePoint, shifted = false) {
     if (!quarterly) {

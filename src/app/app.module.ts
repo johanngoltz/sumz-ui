@@ -28,6 +28,9 @@ import { SelectScenarioComponent } from './select-scenario/select-scenario.compo
 import { ScenariosService } from './service/scenarios.service';
 import { ScenariosServiceMock } from './service/scenarios.service.mock';
 import { ToDoubleDirective } from './to-double.directive';
+import { HttpClientModule } from '@angular/common/http';
+import { ExportScenarioComponent } from './export-scenario/export-scenario.component';
+import { ImportScenarioComponent } from './import-scenario/import-scenario.component';
 
 
 @NgModule({
@@ -49,6 +52,8 @@ import { ToDoubleDirective } from './to-double.directive';
     DeleteUserComponent,
     AlertComponent,
     CreditsComponent,
+    ExportScenarioComponent,
+    ImportScenarioComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,6 +64,7 @@ import { ToDoubleDirective } from './to-double.directive';
     ReactiveFormsModule,
     FlexLayoutModule,
     ChartModule,
+    HttpClientModule,
   ],
   providers: [
     environment.emergencyDemo
@@ -67,6 +73,6 @@ import { ToDoubleDirective } from './to-double.directive';
     AuthGuard,
   ],
   bootstrap: [AppComponent],
-  entryComponents: [SelectScenarioComponent, DeleteDialogComponent, AlertComponent],
+  entryComponents: [SelectScenarioComponent, DeleteDialogComponent, AlertComponent, ExportScenarioComponent, ImportScenarioComponent],
 })
 export class AppModule { }
