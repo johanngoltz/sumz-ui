@@ -31,6 +31,10 @@ export class AuthenticationService {
     await this._apiClient.request({
       url: '/oauth/token',
       params: {email, password, 'grant_type' : 'password'},
+      auth: { // -> Basic Authentication
+        username: 'testjwtclientid',
+        password: 'XY7kmzoNzl100',
+      },
       method: 'POST',
     }).then(response => {
       if (response.status === 200) {
@@ -54,6 +58,10 @@ export class AuthenticationService {
         'refresh_token' : JSON.parse(localStorage.getItem('currentUser')).refresh_token,
         'grant_type' : 'refresh_token'},
       headers: { '_isRetry': true },
+      auth: { // -> Basic Authentication
+        username: 'testjwtclientid',
+        password: 'XY7kmzoNzl100',
+      },
       method: 'POST',
     });
 
