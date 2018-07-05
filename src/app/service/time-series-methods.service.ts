@@ -8,23 +8,31 @@ export class TimeSeriesMethodsService {
 
   constructor() { }
 
-  checkVisibility(value: DataPoint, requireHistoric: Boolean, quarterly: Boolean, base: TimePoint, end: TimePoint, shifted = false) {
-    return this.checkValue(value, requireHistoric, quarterly, base, shifted) &&
-      (!shifted || value.year !== end.year || (quarterly && value.quarter !== end.quarter));
-  }
+  checkVisibility(value: TimePoint, requireHistoric: Boolean, quarterly: Boolean, base: TimePoint, end: TimePoint, shifted = false) {
+    if (!quarterly) {
+      [base, end, value] = [base, end, value].map(this.removeQuarter);
+    }
 
-  checkValue(value: DataPoint, requireHistoric: Boolean, quarterly: Boolean, base: TimePoint, shifted = false) {
-    return ((value.year < base.year) || (value.year === base.year &&
-      (!quarterly || value.quarter <= base.quarter))) === requireHistoric
-      || (shifted && value.year === base.year && (!quarterly || value.quarter === base.quarter));
+    return (requireHistoric === !this.isBefore(base, value)
+      || shifted && this.isSameTime(base, value)) &&
+      (!shifted || !this.isSameTime(end, value));
   }
 
   isInsideBounds(quarterly: Boolean, start: TimePoint, end: TimePoint, value: TimePoint) {
     if (!quarterly) {
-      // Kopien anlegen und quarter-Property löschen. "delete" geht nicht wg. call-by-reference.
-      [start, end, value] = [start, end, value].map(point => ({ year: point.year }));
+      [start, end, value] = [start, end, value].map(this.removeQuarter);
     }
     return !this.isBefore(value, start) && !this.isBefore(end, value);
+  }
+
+  private removeQuarter(point: TimePoint) {
+    point = ({ ...point });
+    delete point.quarter;
+    return point;
+  }
+
+  private isSameTime(first: TimePoint, second: TimePoint) {
+    return first.year === second.year && first.quarter === second.quarter;
   }
 
   private isBefore(first: TimePoint, second: TimePoint) {
