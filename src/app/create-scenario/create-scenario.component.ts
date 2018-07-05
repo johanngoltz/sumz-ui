@@ -91,24 +91,24 @@ export class CreateScenarioComponent implements OnInit {
   }
 
   openSelectionSheet() {
-    this._bottomSheet.open(SelectScenarioComponent).afterDismissed().subscribe((scenario) => this.insertScenarioData(scenario, this));
+    this._bottomSheet.open(SelectScenarioComponent).afterDismissed().subscribe(this.insertScenarioData.bind(this));
   }
 
-  insertScenarioData(scenario: Scenario, that: CreateScenarioComponent) {
+  insertScenarioData(scenario: Scenario) {
     if (scenario) {
-      if (that.formGroup1.value.name.length === 0) {
-        that.formGroup1.controls.name.setValue(scenario.name);
+      if (this.formGroup1.value.name.length === 0) {
+        this.formGroup1.controls.name.setValue(scenario.name);
       }
-      if (that.formGroup1.value.description.length === 0) {
-        that.formGroup1.controls.description.setValue(scenario.description);
+      if (this.formGroup1.value.description.length === 0) {
+        this.formGroup1.controls.description.setValue(scenario.description);
       }
-      that.formGroup2.controls.equityInterestRate.setValue(scenario.equityInterestRate);
-      that.formGroup2.controls.interestOnLiabilitiesRate.setValue(scenario.interestOnLiabilitiesRate);
-      that.formGroup2.controls.businessTaxRate.setValue(scenario.businessTaxRate);
-      that.formGroup2.controls.corporateTaxRate.setValue(scenario.corporateTaxRate);
-      that.formGroup2.controls.solidaryTaxRate.setValue(scenario.solidaryTaxRate);
-      that.importedScenario.emit(scenario);
-      that._alertService.success(`Die Daten des Szenarios "${scenario.name}" wurden erfolgreich übernommen`);
+      this.formGroup2.controls.equityInterestRate.setValue(scenario.equityInterestRate);
+      this.formGroup2.controls.interestOnLiabilitiesRate.setValue(scenario.interestOnLiabilitiesRate);
+      this.formGroup2.controls.businessTaxRate.setValue(scenario.businessTaxRate);
+      this.formGroup2.controls.corporateTaxRate.setValue(scenario.corporateTaxRate);
+      this.formGroup2.controls.solidaryTaxRate.setValue(scenario.solidaryTaxRate);
+      this.importedScenario.emit(scenario);
+      this._alertService.success(`Die Daten des Szenarios "${scenario.name}" wurden erfolgreich übernommen`);
     }
   }
 
