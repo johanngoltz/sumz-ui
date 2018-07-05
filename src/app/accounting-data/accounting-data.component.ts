@@ -3,7 +3,7 @@ import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl, FormCon
 import { debounceTime, map, first } from 'rxjs/operators';
 import { Scenario } from '../api/scenario';
 import { Observable } from 'rxjs';
-import { paramData } from '../api/paramData';
+import { AccountingDataParams } from '../api/paramData';
 import { TimeSeriesMethodsService } from '../service/time-series-methods.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class AccountingDataComponent implements OnInit {
   base: { year: number, quarter: number };
   start: { year: number, quarter: number }; // debounced values
   end: { year: number, quarter: number };
-  paramData = paramData;
+  accountingDataParams = AccountingDataParams.prototype;
 
   constructor(private _formBuilder: FormBuilder, private _timeSeriesMethodsService: TimeSeriesMethodsService) {
   }
@@ -83,7 +83,7 @@ export class AccountingDataComponent implements OnInit {
   }
 
   calculateInterval(scenario: Scenario) {
-    const params = Object.keys(this.paramData);
+    const params = Object.keys(this.accountingDataParams);
     this.start = undefined;
     this.end = undefined;
     this.base = undefined;
@@ -101,7 +101,7 @@ export class AccountingDataComponent implements OnInit {
               accountingFigure.timeSeries[accountingFigure.timeSeries.length - 1].quarter : 1,
           };
         } else if (!this.end && !accountingFigure.isHistoric) {
-          const shiftDeterministic = this.paramData[params[i]].shiftDeterministic;
+          const shiftDeterministic = this.accountingDataParams[params[i]].shiftDeterministic;
           let dataPoint = accountingFigure.timeSeries[accountingFigure.timeSeries.length - 1];
           let year = dataPoint.year +
             ((shiftDeterministic && (!dataPoint.quarter || dataPoint.quarter === 4)) ? 1 : 0);
@@ -138,11 +138,11 @@ export class AccountingDataComponent implements OnInit {
   }
 
   buildParamFormGroups(formGroup: FormGroup, scenario?: Scenario) {
-    Object.keys(this.paramData).forEach(param => {
+    Object.keys(this.accountingDataParams).forEach(param => {
       const timeSeries = [];
       if (scenario && scenario[param] && scenario[param].timeSeries) {
         const items = scenario[param].timeSeries.filter(dataPoint => this._timeSeriesMethodsService.isInsideBounds(
-          this.formGroup.controls.quarterly.value,
+          formGroup.controls.quarterly.value,
           this.start,
           this.end,
           dataPoint
@@ -165,12 +165,16 @@ export class AccountingDataComponent implements OnInit {
   }
 
   get timeSeriesControls() {
-    return ((this.formGroup.controls.liabilities as FormGroup).controls.timeSeries as FormArray).controls;
+    try {
+      return ((this.formGroup.controls.liabilities as FormGroup).controls.timeSeries as FormArray).controls;
+    } catch (err) {
+      return undefined;
+    }
   }
 
   quarterlyChanged() {
     const quarterly = this.formGroup.controls.quarterly.value;
-    Object.keys(this.paramData).forEach(param => {
+    Object.keys(this.accountingDataParams).forEach(param => {
       const newTimeSeries = [];
       const timeSeries = <FormArray>(<FormGroup>this.formGroup.controls[param]).controls.timeSeries;
       if (quarterly) {
@@ -190,14 +194,14 @@ export class AccountingDataComponent implements OnInit {
         });
       } else {
         while (timeSeries.length > 0) {
-          const values = [];
+          const valuesOfYear = [];
           do {
-            values.push(timeSeries.value[0]);
+            valuesOfYear.push(timeSeries.value[0]);
             timeSeries.removeAt(0);
-          } while (timeSeries.length > 0 && timeSeries.value[0].year === values[0].year);
+          } while (timeSeries.length > 0 && timeSeries.value[0].year === valuesOfYear[0].year);
           newTimeSeries.push(this._formBuilder.group({
-            year: values[0].year,
-            amount: values.reduce((a, b) => a ? a : 0 + b ? b : 0, 0),
+            year: valuesOfYear[0].year,
+            amount: valuesOfYear.reduce((a, b) => a + b.amount, 0),
           }));
         }
       }
@@ -249,7 +253,7 @@ export class AccountingDataComponent implements OnInit {
   updateTable() {
     const start = this.formGroup.controls.start.value;
     const end = this.formGroup.controls.end.value;
-    Object.keys(this.paramData).forEach((param) => {
+    Object.keys(this.accountingDataParams).forEach((param) => {
       const timeSeries = <FormArray>(<FormGroup>this.formGroup.controls[param]).controls.timeSeries;
       // Remove values outside bounds
       for (let i = 0; i < timeSeries.length; i++) {
@@ -275,7 +279,7 @@ export class AccountingDataComponent implements OnInit {
   }
 
   validateForm(formGroup: FormGroup) {
-    const params = Object.keys(this.paramData).map(param => {
+    const params = Object.keys(this.accountingDataParams).map(param => {
       const paramFormGroup = (<FormGroup>formGroup.controls[param]);
       if (paramFormGroup) {
         const timeSeries = (<FormArray>paramFormGroup.controls.timeSeries).controls;
@@ -292,7 +296,7 @@ export class AccountingDataComponent implements OnInit {
             this.formGroup.controls.quarterly.value,
             this.formGroup.controls.base.value,
             this.end,
-            this.paramData[param].shiftDeterministic))
+            this.accountingDataParams[param].shiftDeterministic))
           .map(dataPoint => dataPoint.valid)
           .filter(valid => valid === false)
           .length === 0;

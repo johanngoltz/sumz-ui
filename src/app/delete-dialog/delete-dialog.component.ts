@@ -8,8 +8,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 })
 export class DeleteDialogComponent {
   constructor(
-    public dialogRef: MatDialogRef<DeleteDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    public dialogRef: MatDialogRef<DeleteDialogComponent>) { }
 
   onNoClick(): void {
     this.dialogRef.close(false);

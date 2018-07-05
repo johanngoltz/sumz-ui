@@ -1,16 +1,16 @@
+import { animate, keyframes, query, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { switchMap, first } from 'rxjs/operators';
-import { Scenario } from '../api/scenario';
-import { RemoteConfig } from '../api/config';
-import { ScenariosService } from '../service/scenarios.service';
-import { AlertService } from '../service/alert.service';
-import { Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { OptionsService } from '../service/options.service';
-import { trigger, transition, query, animate, style, keyframes } from '@angular/animations';
-import { paramData } from '../api/paramData';
 import { Chart } from 'angular-highcharts';
+import { Observable, of } from 'rxjs';
+import { first, switchMap } from 'rxjs/operators';
+import { RemoteConfig } from '../api/config';
+import { AccountingDataParams, environmentParams } from '../api/paramData';
+import { Scenario } from '../api/scenario';
+import { AlertService } from '../service/alert.service';
+import { OptionsService } from '../service/options.service';
+import { ScenariosService } from '../service/scenarios.service';
 import { TimeSeriesMethodsService } from '../service/time-series-methods.service';
 
 @Component({
@@ -27,8 +27,8 @@ import { TimeSeriesMethodsService } from '../service/time-series-methods.service
             right: 0,
           }),
         ], {
-          optional: true,
-        }),
+            optional: true,
+          }),
         query(':leave', [
           animate('.2s cubic-bezier(0.4, 0.0, 1, 1)', keyframes([
             style({
@@ -46,8 +46,8 @@ import { TimeSeriesMethodsService } from '../service/time-series-methods.service
             right: 0,
           }),
         ], {
-          optional: true,
-        }),
+            optional: true,
+          }),
         query(':enter', [
           style({
             position: 'static',
@@ -63,20 +63,20 @@ import { TimeSeriesMethodsService } from '../service/time-series-methods.service
             }),
           ])),
         ], {
-          optional: true,
-        }),
+            optional: true,
+          }),
       ]),
     ]),
   ],
 })
 
 export class ScenarioDetailComponent implements OnInit {
-  forScenario$: Observable < Scenario > ;
-  forConfig$: Observable < RemoteConfig > ;
+  forScenario$: Observable<Scenario>;
+  forConfig$: Observable<RemoteConfig>;
   formGroup: FormGroup;
   accountingDataFormGroup: FormGroup;
   configFormGroup: FormGroup;
-  paramData = paramData;
+  accountingDataParams = AccountingDataParams.prototype;
 
   /* edit mode */
   editable;
@@ -92,12 +92,12 @@ export class ScenarioDetailComponent implements OnInit {
     private _optionsService: OptionsService,
     private _alertService: AlertService,
     private route: ActivatedRoute,
-    private _timeSeriesMethodsService: TimeSeriesMethodsService) {}
+    private _timeSeriesMethodsService: TimeSeriesMethodsService) { }
 
   ngOnInit() {
     this.editable = false;
-    this.forScenario$ = this.route.paramMap.pipe(first(),
-      switchMap(params => of (Number.parseInt(params.get('id')))),
+    this.forScenario$ = this.route.paramMap.pipe(
+      switchMap(params => of(Number.parseInt(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
     this.forConfig$ = this._optionsService.getConfig();
     this.formGroup = this._formBuilder.group({
@@ -160,17 +160,13 @@ export class ScenarioDetailComponent implements OnInit {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
       this.formGroup.controls.name.setValue(currentScenario.name);
       this.formGroup.controls.description.setValue(currentScenario.description);
-      this.formGroup.controls.equityInterestRate.setValue(currentScenario.equityInterestRate * 100);
-      this.formGroup.controls.interestOnLiabilitiesRate.setValue(currentScenario.interestOnLiabilitiesRate * 100);
-      this.formGroup.controls.businessTaxRate.setValue(currentScenario.businessTaxRate * 100);
-      this.formGroup.controls.corporateTaxRate.setValue(currentScenario.corporateTaxRate * 100);
-      this.formGroup.controls.solidaryTaxRate.setValue(currentScenario.solidaryTaxRate * 100);
+      Object.keys(environmentParams).forEach(key => this.formGroup.controls[key].setValue(currentScenario[key] * 100));
     });
   }
 
   initConfig() {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
-      this.forConfig$.pipe(first()).subscribe( remote => {
+      this.forConfig$.pipe(first()).subscribe(remote => {
         this.configFormGroup.setValue(remote.scenarioConfig.get(currentScenario.id).showResult);
       });
     });
@@ -193,11 +189,7 @@ export class ScenarioDetailComponent implements OnInit {
 
       currentScenario.name = this.formGroup.controls.name.value;
       currentScenario.description = this.formGroup.controls.description.value;
-      currentScenario.equityInterestRate = this.formGroup.controls.equityInterestRate.value / 100;
-      currentScenario.interestOnLiabilitiesRate = this.formGroup.controls.interestOnLiabilitiesRate.value / 100;
-      currentScenario.businessTaxRate = this.formGroup.controls.businessTaxRate.value / 100;
-      currentScenario.corporateTaxRate = this.formGroup.controls.corporateTaxRate.value / 100;
-      currentScenario.solidaryTaxRate = this.formGroup.controls.solidaryTaxRate.value / 100;
+      Object.keys(environmentParams).forEach(key => currentScenario[key] = this.formGroup.controls[key].value / 100);
 
       currentScenario.stochastic = false;
       currentScenario.periods = (this.accountingDataFormGroup.value.endYear - this.accountingDataFormGroup.value.startYear) * 4;
@@ -206,8 +198,10 @@ export class ScenarioDetailComponent implements OnInit {
       const start = this.accountingDataFormGroup.controls.start.value;
       const base = this.accountingDataFormGroup.controls.base.value;
       const end = this.accountingDataFormGroup.controls.end.value;
-      Object.keys(paramData)
-        .filter(param => [undefined, this.accountingDataFormGroup.value.calculateFcf].indexOf(this.paramData[param].showOnCalculation) > -1)
+      Object.keys(AccountingDataParams)
+        .filter((param: keyof AccountingDataParams) =>
+          this._timeSeriesMethodsService.shouldDisplayAccountingDataParam(
+            this.accountingDataParams, this.accountingDataFormGroup.value.calculateFcf, param))
         .forEach((param) => {
           const paramFormGroup = this.accountingDataFormGroup.controls[param];
           if (paramFormGroup.value.isHistoric && !currentScenario.stochastic) {
@@ -223,7 +217,7 @@ export class ScenarioDetailComponent implements OnInit {
                 quarterly,
                 base,
                 end,
-                paramData[param].shiftDeterministic)),
+                AccountingDataParams[param].shiftDeterministic)),
           };
         });
 
@@ -240,14 +234,16 @@ export class ScenarioDetailComponent implements OnInit {
 
   saveConfig() {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
-      this.forConfig$.pipe(first()).subscribe( remote => {
-        const currentConfig = {...remote.scenarioConfig.get(currentScenario.id),
+      this.forConfig$.pipe(first()).subscribe(remote => {
+        const currentConfig = {
+          ...remote.scenarioConfig.get(currentScenario.id),
           showResult: {
             apv: this.configFormGroup.controls.apv.value,
             cvd: this.configFormGroup.controls.cvd.value,
             fcf: this.configFormGroup.controls.fcf.value,
             fte: this.configFormGroup.controls.fte.value,
-          }};
+          },
+        };
 
         remote.scenarioConfig.set(currentScenario.id, currentConfig);
         this._optionsService.setConfig(remote);
@@ -256,7 +252,7 @@ export class ScenarioDetailComponent implements OnInit {
     });
   }
 
-  setEditable(editable: Boolean, save ?: Boolean) {
+  setEditable(editable: Boolean, save?: Boolean) {
     if (editable) {
       this.formGroup.enable();
       this.configFormGroup.enable();

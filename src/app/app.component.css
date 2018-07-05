@@ -33,3 +33,7 @@ mat-toolbar {
 ::ng-deep .content-conatiner {
   display: block;
 }
+
+::ng-deep mat-dialog-container {
+  position: relative;
+}

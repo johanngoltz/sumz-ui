@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 import { AuthenticationService } from './service/authentication.service';
+import { MatDialog } from '@angular/material';
+import { ImportScenarioComponent } from './import-scenario/import-scenario.component';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +12,7 @@ import { AuthenticationService } from './service/authentication.service';
   styleUrls: ['./app.component.css'],
   animations: [
     trigger('routerTransition', [
-      transition('projects => create', [
+      transition('scenarios => create', [
         query(':enter', style({ position: 'fixed', opacity: 0, transform: 'translateY(25px)', zIndex: 7 })
           , { optional: true }),
         group([
@@ -64,20 +66,25 @@ export class AppComponent {
   title = 'SUMZ';
 
   constructor(
-    private router: Router,
-    private authenticationService: AuthenticationService,
+    private _router: Router,
+    private _authenticationService: AuthenticationService,
+    private _dialog: MatDialog,
   ) { }
 
   getState(outlet) {
     return outlet.activatedRouteData.state;
   }
 
+  openImportDialog() {
+    this._dialog.open(ImportScenarioComponent).afterClosed().subscribe();
+  }
+
   logout() {
-    this.authenticationService.logout();
-    this.router.navigateByUrl('/login');
+    this._authenticationService.logout();
+    this._router.navigateByUrl('/login');
   }
 
   change() {
-    this.router.navigateByUrl('changepassword');
+    this._router.navigateByUrl('changepassword');
   }
 }
