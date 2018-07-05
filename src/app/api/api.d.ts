@@ -28,7 +28,6 @@ export interface SumzAPI {
             body: {
                 passwordold: string,
                 passwordnew: string,
-                passwordnew2: string
             },
         }
     },
