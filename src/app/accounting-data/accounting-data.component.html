@@ -10,7 +10,7 @@
       <tr class="mat-header-row">
         <th class="mat-header-cell">
           <div class="bold">Jahr</div>{{formGroup.controls.quarterly.value ? 'Quartal' : ''}}</th>
-        <ng-container *ngFor="let element of formGroup.controls.liabilities?.controls.timeSeries.controls; let i = index; trackBy: trackByYearQuarter">
+        <ng-container *ngFor="let element of formGroup.controls.liabilities?.controls.timeSeries?.controls; let i = index; trackBy: trackByYearQuarter">
           <th class="mat-cell" *ngIf="_timeSeriesMethodsService.isInsideBounds(formGroup.controls.quarterly.value, start, end, element.value)">
             <div id="startyear-container" class="leveraged-field editable" *ngIf="_editable && element.value.year === start.year && (!formGroup.controls.quarterly.value || element.value.quarter === start.quarter)">
               <div [formGroup]="formGroup.controls.start" class="flex">
