@@ -1,12 +1,13 @@
-import { Component, ElementRef, OnInit, ViewChild, EventEmitter } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatBottomSheet, MatSnackBar } from '@angular/material';
+import { Component, EventEmitter, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatBottomSheet } from '@angular/material';
 import { Router } from '@angular/router';
-import { AccountingFigure, Scenario } from '../api/scenario';
-import { SelectScenarioComponent } from '../select-scenario/select-scenario.component';
-import { ScenariosService } from '../service/scenarios.service';
 import { paramData } from '../api/paramData';
+import { Scenario } from '../api/scenario';
+import { SelectScenarioComponent } from '../select-scenario/select-scenario.component';
 import { AlertService } from '../service/alert.service';
+import { ScenariosService } from '../service/scenarios.service';
+import { TimeSeriesMethodsService } from '../service/time-series-methods.service';
 
 @Component({
   selector: 'app-create-scenario',
@@ -21,8 +22,12 @@ export class CreateScenarioComponent implements OnInit {
   importedScenario: EventEmitter<Scenario>;
   paramData = paramData;
 
-  constructor(private _formBuilder: FormBuilder, private _scenariosService: ScenariosService, private _router: Router,
-    private _alertService: AlertService, private _bottomSheet: MatBottomSheet) {
+  constructor(private _formBuilder: FormBuilder,
+    private _scenariosService: ScenariosService,
+    private _router: Router,
+    private _alertService: AlertService,
+    private _bottomSheet: MatBottomSheet,
+    private _timeSeriesMethodsService: TimeSeriesMethodsService) {
   }
 
   ngOnInit() {
@@ -32,31 +37,14 @@ export class CreateScenarioComponent implements OnInit {
       description: '',
     });
     this.formGroup2 = this._formBuilder.group({
-      equityInterest: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
-      outsideCapitalInterest: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
-      corporateTax: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      equityInterestRate: ['', [Validators.required, Validators.pattern('^[0-9\.]*$')]],
+      interestOnLiabilitiesRate: ['', [Validators.required, Validators.pattern('^[0-9\.]*$')]],
+      businessTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9\.]*$')]],
+      corporateTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9\.]*$')]],
+      solidaryTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9\.]*$')]],
     });
     this.formGroup3 = this._formBuilder.group({});
     this.importedScenario = new EventEmitter<Scenario>();
-  }
-
-  checkVisibility(value, requireHistoric: Boolean, quarterly: Boolean, base, end, shifted = false) {
-    return this.checkValue(value, requireHistoric, quarterly, base, shifted) &&
-      (!shifted || value.year !== end.year || (quarterly && value.quarter !== end.quarter));
-  }
-
-  checkValue(value, requireHistoric: Boolean, quarterly: Boolean, base, shifted = false) {
-    return ((value.year < base.year) || (value.year === base.year &&
-      (!quarterly || value.quarter <= base.quarter))) === requireHistoric
-      || (shifted && value.year === base.year && (!quarterly || value.quarter === base.quarter));
-  }
-
-  isInsideBounds(quarterly, start, end, value) {
-    return (value.year > start.year - (quarterly ? 0 : 1) ||
-      (quarterly && value.year === start.year
-        && value.quarter >= start.quarter)) &&
-      (value.year < end.year + (quarterly ? 0 : 1) ||
-        (quarterly && value.year === end.year && value.quarter <= end.quarter));
   }
 
   createScenario() {
@@ -83,8 +71,8 @@ export class CreateScenarioComponent implements OnInit {
           scenario[param] = {
             isHistoric: paramFormGroup.value.isHistoric,
             timeSeries: paramFormGroup.value.timeSeries.filter(dataPoint =>
-              this.isInsideBounds(quarterly, start, end, dataPoint)
-              && this.checkVisibility(dataPoint, paramFormGroup.value.isHistoric, quarterly, base, end,
+              this._timeSeriesMethodsService.isInsideBounds(quarterly, start, end, dataPoint)
+              && this._timeSeriesMethodsService.checkVisibility(dataPoint, paramFormGroup.value.isHistoric, quarterly, base, end,
                 this.paramData[param].shiftDeterministic)),
           };
         });
@@ -103,22 +91,24 @@ export class CreateScenarioComponent implements OnInit {
   }
 
   openSelectionSheet() {
-    this._bottomSheet.open(SelectScenarioComponent).afterDismissed().subscribe((scenario) => this.insertScenarioData(scenario, this));
+    this._bottomSheet.open(SelectScenarioComponent).afterDismissed().subscribe(this.insertScenarioData.bind(this));
   }
 
-  insertScenarioData(scenario: Scenario, that: CreateScenarioComponent) {
+  insertScenarioData(scenario: Scenario) {
     if (scenario) {
-      if (that.formGroup1.value.name.length === 0) {
-        that.formGroup1.controls.name.setValue(scenario.name);
+      if (this.formGroup1.value.name.length === 0) {
+        this.formGroup1.controls.name.setValue(scenario.name);
       }
-      if (that.formGroup1.value.description.length === 0) {
-        that.formGroup1.controls.description.setValue(scenario.description);
+      if (this.formGroup1.value.description.length === 0) {
+        this.formGroup1.controls.description.setValue(scenario.description);
       }
-      that.formGroup2.controls.equityInterest.setValue(scenario.equityInterest);
-      that.formGroup2.controls.outsideCapitalInterest.setValue(scenario.outsideCapitalInterest);
-      that.formGroup2.controls.corporateTax.setValue(scenario.corporateTax);
-      that.importedScenario.emit(scenario);
-      that._alertService.success(`Die Daten des Szenarios "${scenario.name}" wurden erfolgreich übernommen`);
+      this.formGroup2.controls.equityInterestRate.setValue(scenario.equityInterestRate);
+      this.formGroup2.controls.interestOnLiabilitiesRate.setValue(scenario.interestOnLiabilitiesRate);
+      this.formGroup2.controls.businessTaxRate.setValue(scenario.businessTaxRate);
+      this.formGroup2.controls.corporateTaxRate.setValue(scenario.corporateTaxRate);
+      this.formGroup2.controls.solidaryTaxRate.setValue(scenario.solidaryTaxRate);
+      this.importedScenario.emit(scenario);
+      this._alertService.success(`Die Daten des Szenarios "${scenario.name}" wurden erfolgreich übernommen`);
     }
   }
 

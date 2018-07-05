@@ -10,14 +10,14 @@
       <tr class="mat-header-row">
         <th class="mat-header-cell">
           <div class="bold">Jahr</div>{{formGroup.controls.quarterly.value ? 'Quartal' : ''}}</th>
-        <ng-container *ngFor="let element of formGroup.controls.liabilities?.controls.timeSeries.controls; let i = index; trackBy: trackByYearQuarter">
-          <th class="mat-cell" *ngIf="isInsideBounds(element.value)">
+        <ng-container *ngFor="let element of timeSeriesControls; let i = index; trackBy: trackByYearQuarter">
+          <th class="mat-cell" *ngIf="_timeSeriesMethodsService.isInsideBounds(formGroup.controls.quarterly.value, start, end, element.value)">
             <div id="startyear-container" class="leveraged-field editable" *ngIf="_editable && element.value.year === start.year && (!formGroup.controls.quarterly.value || element.value.quarter === start.quarter)">
               <div [formGroup]="formGroup.controls.start" class="flex">
                 <mat-form-field class="table-input-right">
-                  <input type="number" matInput formControlName="year" required placeholder="Startjahr" (input)="checkStartIntegrity($event)">
+                  <input type="number" matInput formControlName="year" required placeholder="Startjahr" (input)="checkMaxIntegrity(formGroup.controls.base, formGroup.controls.start)">
                 </mat-form-field>
-                <mat-form-field class="small-field" *ngIf="formGroup.controls.quarterly.value" (input)="checkStartIntegrity($event)">
+                <mat-form-field class="small-field" *ngIf="formGroup.controls.quarterly.value" (input)="checkMaxIntegrity(formGroup.controls.base, formGroup.controls.start)">
                   <mat-select placeholder="Quartal" formControlName="quarter">
                     <mat-option [value]="1">1</mat-option>
                     <mat-option [value]="2">2</mat-option>
@@ -35,10 +35,10 @@
               </span>
               <div [formGroup]="formGroup.controls.base" class="flex">
                 <mat-form-field class="table-input-right" *ngIf="_editable">
-                  <input type="number" matInput formControlName="year" required placeholder="Basisjahr" (input)="checkBaseIntegrity($event)">
+                  <input type="number" matInput formControlName="year" required placeholder="Basisjahr" (input)="checkMaxIntegrity(formGroup.controls.end, formGroup.controls.base);checkMinIntegrity(formGroup.controls.start, formGroup.controls.base)">
                 </mat-form-field>
                 <mat-form-field class="small-field" *ngIf="formGroup.controls.quarterly.value">
-                  <mat-select placeholder="Quartal" formControlName="quarter" (input)="checkBaseIntegrity($event)">
+                  <mat-select placeholder="Quartal" formControlName="quarter" (input)="checkMaxIntegrity(formGroup.controls.end, formGroup.controls.base);checkMinIntegrity(formGroup.controls.start, formGroup.controls.base)">
                     <mat-option [value]="1">1</mat-option>
                     <mat-option [value]="2">2</mat-option>
                     <mat-option [value]="3">3</mat-option>
@@ -51,10 +51,10 @@
             <div id="endyear-container" class="leveraged-field" [class.editable]="_editable" *ngIf="_editable && element.value.year === end.year && (!formGroup.controls.quarterly.value || element.value.quarter === end.quarter)">
               <div [formGroup]="formGroup.controls.end" class="flex">
                 <mat-form-field class="table-input-right" (focusout)="updateTable()">
-                  <input type="number" matInput formControlName="year" required placeholder="Endjahr" (input)="checkEndIntegrity($event)">
+                  <input type="number" matInput formControlName="year" required placeholder="Endjahr" (input)="checkMinIntegrity(formGroup.controls.base, formGroup.controls.end)">
                 </mat-form-field>
                 <mat-form-field class="small-field" *ngIf="formGroup.controls.quarterly.value">
-                  <mat-select placeholder="Quartal" formControlName="quarter" (input)="checkEndIntegrity($event)">
+                  <mat-select placeholder="Quartal" formControlName="quarter" (input)="checkMinIntegrity(formGroup.controls.base, formGroup.controls.end)">
                     <mat-option [value]="1">1</mat-option>
                     <mat-option [value]="2">2</mat-option>
                     <mat-option [value]="3">3</mat-option>
@@ -80,7 +80,7 @@
             <div *ngIf="!_editable" class="no-bold">&nbsp;{{formGroup.controls[ctrl].value.isHistoric ? 'Wird prognostiziert' : ''}}</div>
           </th>
           <td class="mat-cell" *ngFor="let element of formGroup.controls[ctrl].controls.timeSeries.controls; trackBy: trackByYearQuarter">
-            <ng-container *ngIf="checkVisibility(element.value, formGroup.controls[ctrl].controls.isHistoric.value, paramData[ctrl].shiftDeterministic)">
+            <ng-container *ngIf="_timeSeriesMethodsService.checkVisibility(element.value, formGroup.controls[ctrl].controls.isHistoric.value, formGroup.controls.quarterly.value, base, formGroup.controls.end.value, paramData[ctrl].shiftDeterministic)">
               <span class="table-data" *ngIf="!_editable">{{element.value.amount}}</span>
               <mat-form-field class="table-input-right" [formGroup]="element" *ngIf="_editable">
                 <input type="text" matInput formControlName="amount" appToDouble required>

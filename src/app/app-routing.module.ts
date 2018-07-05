@@ -10,6 +10,7 @@ import { NewPasswordEmailComponent} from './newpasswordemail/newpasswordemail.co
 import { DeleteUserComponent} from './deleteuser/deleteuser.component';
 import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.component';
 import { ScenariosComponent } from './scenarios/scenarios.component';
+import { CreditsComponent } from './credits/credits.component';
 
 
 const routes: Routes = [
@@ -19,13 +20,14 @@ const routes: Routes = [
   { path: 'changepassword', component: ChangePasswordComponent, data: {state: 'changepassword'}, canActivate: [AuthGuard] },
   { path: 'users/forgot', component: NewPasswordEmailComponent, data: {state: 'forgot'} },
   { path: 'users/reset/token', component: NewPasswordComponent, data: {state: 'reset'} },
-  { path: 'users/:id/delete', component: DeleteUserComponent, data: {state: 'delete'} },
+  { path: 'users/delete', component: DeleteUserComponent, data: {state: 'delete'}, canActivate: [AuthGuard] },
   { path: 'create', component: CreateScenarioComponent, data: {state: 'create'}, canActivate: [AuthGuard] },
   { path: 'scenario/:id', component: ScenarioDetailComponent, data: {state: 'details'}, canActivate: [AuthGuard] },
+  { path: 'credits', component: CreditsComponent, data: {state: 'credits'} },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

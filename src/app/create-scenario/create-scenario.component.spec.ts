@@ -33,5 +33,4 @@ describe('CreateScenarioComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
 });

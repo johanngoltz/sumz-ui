@@ -65,17 +65,9 @@ export class AppComponent {
   title = 'SUMZ';
 
   constructor(
-    router: Router,
-    private _router: Router,
+    private router: Router,
     private authenticationService: AuthenticationService,
-  ) {
-    this.log = [];
-    router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((route: NavigationEnd) => {
-      this.log.push(route);
-    });
-  }
+  ) { }
 
   getState(outlet) {
     return outlet.activatedRouteData.state;
@@ -83,14 +75,14 @@ export class AppComponent {
 
   logout() {
     this.authenticationService.logout();
-    this._router.navigateByUrl('/login');
+    this.router.navigateByUrl('/login');
   }
 
   change() {
-    this._router.navigateByUrl('/changepassword');
+    this.router.navigateByUrl('/changepassword');
   }
 
   delete() {
-    this._router.navigateByUrl('/users/:id/delete');
+    this.router.navigateByUrl('/users/delete');
   }
 }
