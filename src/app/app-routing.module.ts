@@ -21,6 +21,7 @@ const routes: Routes = [
   { path: 'users/reset/token', component: NewPasswordComponent, data: { state: 'reset' } },
   { path: 'create', component: CreateScenarioComponent, data: { state: 'create' }, canActivate: [AuthGuard] },
   { path: 'scenario/:id', component: ScenarioDetailComponent, data: { state: 'details' }, canActivate: [AuthGuard] },
+  { path: 'credits', component: CreditsComponent, data: { state: 'credits' } },
 ];
 
 @NgModule({
