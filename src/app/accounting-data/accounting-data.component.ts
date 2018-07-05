@@ -3,7 +3,7 @@ import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl, FormCon
 import { debounceTime, map, first } from 'rxjs/operators';
 import { Scenario } from '../api/scenario';
 import { Observable } from 'rxjs';
-import { accountingDataParams } from '../api/paramData';
+import { AccountingDataParams } from '../api/paramData';
 import { TimeSeriesMethodsService } from '../service/time-series-methods.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class AccountingDataComponent implements OnInit {
   base: { year: number, quarter: number };
   start: { year: number, quarter: number }; // debounced values
   end: { year: number, quarter: number };
-  accountingDataParams = accountingDataParams;
+  accountingDataParams = AccountingDataParams.prototype;
 
   constructor(private _formBuilder: FormBuilder, private _timeSeriesMethodsService: TimeSeriesMethodsService) {
   }
@@ -165,7 +165,11 @@ export class AccountingDataComponent implements OnInit {
   }
 
   get timeSeriesControls() {
-    return ((this.formGroup.controls.liabilities as FormGroup).controls.timeSeries as FormArray).controls;
+    try {
+      return ((this.formGroup.controls.liabilities as FormGroup).controls.timeSeries as FormArray).controls;
+    } catch (err) {
+      return undefined;
+    }
   }
 
   quarterlyChanged() {

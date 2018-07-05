@@ -1,16 +1,16 @@
+import { animate, keyframes, query, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { switchMap, first } from 'rxjs/operators';
-import { Scenario } from '../api/scenario';
-import { RemoteConfig } from '../api/config';
-import { ScenariosService } from '../service/scenarios.service';
-import { AlertService } from '../service/alert.service';
-import { Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { OptionsService } from '../service/options.service';
-import { trigger, transition, query, animate, style, keyframes } from '@angular/animations';
-import { AccountingDataParams } from '../api/paramData';
 import { Chart } from 'angular-highcharts';
+import { Observable, of } from 'rxjs';
+import { first, switchMap } from 'rxjs/operators';
+import { RemoteConfig } from '../api/config';
+import { AccountingDataParams, environmentParams } from '../api/paramData';
+import { Scenario } from '../api/scenario';
+import { AlertService } from '../service/alert.service';
+import { OptionsService } from '../service/options.service';
+import { ScenariosService } from '../service/scenarios.service';
 import { TimeSeriesMethodsService } from '../service/time-series-methods.service';
 
 @Component({
@@ -160,11 +160,7 @@ export class ScenarioDetailComponent implements OnInit {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
       this.formGroup.controls.name.setValue(currentScenario.name);
       this.formGroup.controls.description.setValue(currentScenario.description);
-      this.formGroup.controls.equityInterestRate.setValue(currentScenario.equityInterestRate * 100);
-      this.formGroup.controls.interestOnLiabilitiesRate.setValue(currentScenario.interestOnLiabilitiesRate * 100);
-      this.formGroup.controls.businessTaxRate.setValue(currentScenario.businessTaxRate * 100);
-      this.formGroup.controls.corporateTaxRate.setValue(currentScenario.corporateTaxRate * 100);
-      this.formGroup.controls.solidaryTaxRate.setValue(currentScenario.solidaryTaxRate * 100);
+      Object.keys(environmentParams).forEach(key => this.formGroup.controls[key].setValue(currentScenario[key] * 100));
     });
   }
 
@@ -193,11 +189,7 @@ export class ScenarioDetailComponent implements OnInit {
 
       currentScenario.name = this.formGroup.controls.name.value;
       currentScenario.description = this.formGroup.controls.description.value;
-      currentScenario.equityInterestRate = this.formGroup.controls.equityInterestRate.value / 100;
-      currentScenario.interestOnLiabilitiesRate = this.formGroup.controls.interestOnLiabilitiesRate.value / 100;
-      currentScenario.businessTaxRate = this.formGroup.controls.businessTaxRate.value / 100;
-      currentScenario.corporateTaxRate = this.formGroup.controls.corporateTaxRate.value / 100;
-      currentScenario.solidaryTaxRate = this.formGroup.controls.solidaryTaxRate.value / 100;
+      Object.keys(environmentParams).forEach(key => currentScenario[key] = this.formGroup.controls[key].value / 100);
 
       currentScenario.stochastic = false;
       currentScenario.periods = (this.accountingDataFormGroup.value.endYear - this.accountingDataFormGroup.value.startYear) * 4;
