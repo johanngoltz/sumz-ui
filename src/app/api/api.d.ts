@@ -23,7 +23,7 @@ export interface SumzAPI {
             },
         }
     },
-    '/users/id': {
+    '/users/:id': {
         PUT: {
             body: {
                 passwordold: string,
