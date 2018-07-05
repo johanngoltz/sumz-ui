@@ -29,7 +29,7 @@ export class DeleteUserComponent implements OnInit {
   ngOnInit() {
     this.deleteFormGroup = this._formBuilder.group({
       // Validators to check the length of the password
-      pwd: ['', Validators.minLength(8)],
+      pwdCtrl: ['', Validators.minLength(8)],
     });
   }
 
@@ -43,7 +43,7 @@ export class DeleteUserComponent implements OnInit {
     }
 
     // call the method to request the delete
-    this.authenticationService.deleteuser(this.pwd.value.toString())
+    this.authenticationService.deleteuser(this.pwdCtrl.value.toString())
       .then(() => {
         // if the delete was successful
         this.alertService.success('Ihr Account wurde erfolgreich gelöscht!');
@@ -53,13 +53,10 @@ export class DeleteUserComponent implements OnInit {
       .catch( // catch the error-warnings if the method fails
         error => {
           this.alertService.error(error);
-          this.loading = false;
+          this.submitted = false;
         });
-
-    // if deleting was successful
-    this.alertService.success('Ihr Account wurde erfolgreich gelöscht!');
   }
 
   // getter for the password
-  get pwd() { return this.deleteFormGroup.get('pwd'); }
+  get pwdCtrl() { return this.deleteFormGroup.get('pwdCtrl'); }
 }
