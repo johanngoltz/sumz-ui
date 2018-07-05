@@ -15,14 +15,14 @@ export class ImportScenarioComponent implements OnInit {
   scenario: Scenario;
   creatingScenario = false;
   readingScenario = false;
-  scenarioIsValid;
+  scenarioIsValid: boolean;
 
   constructor(private _alertService: AlertService,
     private _scenariosService: ScenariosService,
     private _dialogRef: MatDialogRef<ImportScenarioComponent>) { }
 
   ngOnInit() {
-    this._fileReader.onloadend = (() => this.generateJSON());
+    this._fileReader.onloadend = this.generateJSON;
   }
 
   selectFile(event) {
