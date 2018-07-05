@@ -69,7 +69,7 @@ export class AppComponent {
   constructor(
     router: Router,
     private _router: Router,
-    private authenticationService: AuthenticationService,
+    private _authenticationService: AuthenticationService,
     private _dialog: MatDialog,
   ) {
     this.log = [];
@@ -89,7 +89,7 @@ export class AppComponent {
   }
 
   logout() {
-    this.authenticationService.logout();
+    this._authenticationService.logout();
     this._router.navigateByUrl('/login');
   }
 
