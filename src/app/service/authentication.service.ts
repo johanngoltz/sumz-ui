@@ -96,7 +96,7 @@ export class AuthenticationService {
       method: 'POST',
     }).then(response => {
       // if credentials correct, redirect to main page
-      if (response.status === 200) {  // should be 302
+      if (response.status === 302) {
         console.log('Registrierung klappt');
         // navigate to return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -113,23 +113,9 @@ export class AuthenticationService {
    * @returns {Promise} Promise
    */
   async changepassword(oldPassword: string, newPassword: string) {
-
+    // ${JSON.parse(localStorage.getItem('currentUser')).id} -> getting the id of the current user to update the password
     return from(this._apiClient.put(`/users/${JSON.parse(localStorage.getItem('currentUser')).id}`,
     {'oldPassword' : oldPassword, 'newPassword' : newPassword}));
-/*
-    await this._apiClient.request({
-      url: '/users/id',
-      data: {passwordold, passwordnew, passwordnew2},
-      method: 'PUT',
-    }).then( response => {
-      // if credentials correct, redirect to main page
-      if (response.status === 200) {  // should be 302
-        console.log('Reset klappt');
-        // redirect to "successful registration"
-        this.router.navigate(['/users']);
-      }
-    });
-    */
   }
 
   /**
@@ -152,25 +138,13 @@ export class AuthenticationService {
    * @returns {Promise} Promise
    */
   async deleteuser(password: string) {
-    // TODO: Übergabe der ID einrichten.
-
+    // ${JSON.parse(localStorage.getItem('currentUser')).id} -> getting the id of the current user that should be deleted
     return from(this._apiClient.post(`/users/${JSON.parse(localStorage.getItem('currentUser')).id}/delete`, {'password' : password}));
-
-    /*
-    const ab = JSON.stringify(JSON.parse(localStorage.getItem('currentUser')).id);
-    debugger;
-    await this._apiClient.request({
-      url: '/users/{' + JSON.parse(localStorage.getItem('currentUser')).id + '}/delete',
-      //params: {'id' : JSON.parse(localStorage.getItem('currentUser')).id},
-      data: {password},
-      method: 'POST',
-    });
-    */
   }
 
     /**
    * sends the new password after the reset
-   * @param {string} password new passwoed
+   * @param {string} password new password
    * @returns {Promise} Promise
    */
   async postnewpassword(password: string) {
