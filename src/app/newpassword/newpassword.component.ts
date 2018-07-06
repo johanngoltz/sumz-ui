@@ -30,8 +30,12 @@ export class NewPasswordComponent implements OnInit {
 
   ngOnInit() {
     this.newFormGroup = this._formBuilder.group({
-      // Validators to check the length of the passwords
-      pwdNew1: ['', Validators.minLength(8)],
+      // Validators to check the inputs
+      // Note: Backend uses same validators
+      pwdNew1: ['', [
+        Validators.minLength(6),
+        Validators.maxLength(20),
+        Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).*')]],
       pwdNew2: [''],
     },
       {

@@ -28,7 +28,13 @@
               <strong>Pflichtfeld</strong>
             </mat-error>
             <mat-error *ngIf="pwdCtrl.errors?.minlength">
-              Das neue Passwort muss mindestens <strong>8 Zeichen</strong> lang sein
+              Das neue Passwort muss mindestens <strong>6 Zeichen</strong> lang sein
+            </mat-error>
+            <mat-error *ngIf="pwdCtrl.errors?.maxlength">
+              Das neue Passwort darf maximal <strong>20 Zeichen</strong> lang sein
+            </mat-error>
+            <mat-error *ngIf="pwdCtrl.errors?.pattern">
+              Im Passwort müssen mindestens ein Großbuchstabe, Kleinbuchstabe, Sonderzeichen (@#$%) und eine Zahl vorkommen
             </mat-error>
           </mat-form-field>
         </p>

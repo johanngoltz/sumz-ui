@@ -33,12 +33,14 @@ export class ChangePasswordComponent implements OnInit {
 
   ngOnInit() {
     this.changeFormGroup = this._formBuilder.group({
-
-      // Validators to check the length of the password
+      // Validators to check the inputs
+      // Note: Backend uses same validators
       pwdOld: [''],
-      pwdNew: ['', Validators.minLength(8)],
+      pwdNew: ['', [
+        Validators.minLength(6),
+        Validators.maxLength(20),
+        Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).*')]],
       pwdNew2: [''],
-
     }, {
       // validates the two passwords
       validator: PasswordValidation.Match('pwdNew', 'pwdNew2'),

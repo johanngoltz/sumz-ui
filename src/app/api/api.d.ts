@@ -11,7 +11,7 @@ export interface SumzAPI {
                 expires_in: number;
                 scope: string;
                 jti: string;
-                id: number;
+                user_id: number;
             },
         }
     },
@@ -46,7 +46,7 @@ export interface SumzAPI {
             },
         }
     },
-    '/users/reset/token': {
+    '/users/reset/:token': {
         POST: {
             body: {
                 password: string

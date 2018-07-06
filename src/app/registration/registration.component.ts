@@ -29,11 +29,14 @@ export class RegistrationComponent implements OnInit {
 
   ngOnInit() {
     this.registerFormGroup = this._formBuilder.group({
-      // Validators to check the syntax of the email-adress and the length of the password
+      // Validators to check the inputs
+      // Note: Backend uses same validators
       mailCtrl: ['', Validators.email],
-      pwdCtrl: ['', Validators.minLength(8)],
+      pwdCtrl: ['', [
+        Validators.minLength(6),
+        Validators.maxLength(20),
+        Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).*')]],
       pwdrptCtrl: ['', Validators.minLength(8)],
-
     }, {
         // validates the two passwords
         validator: PasswordValidation.Match('pwdCtrl', 'pwdrptCtrl'),

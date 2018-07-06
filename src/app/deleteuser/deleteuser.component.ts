@@ -15,8 +15,6 @@ import { Router } from '@angular/router';
  * @author Burkart
  */
 export class DeleteUserComponent implements OnInit {
-
-  [x: string]: any;
   deleteFormGroup: FormGroup;
   loading = false;
   hide = true;

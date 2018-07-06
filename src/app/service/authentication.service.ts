@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterStateSnapshot, RouterState } from '@angular/router';
 import { TypedAxiosInstance } from 'restyped-axios';
 import { from, Observable, ReplaySubject } from 'rxjs';
 import { SumzAPI } from '../api/api';
@@ -33,9 +33,16 @@ export class AuthenticationService {
    * @returns {Promise} Promise
    */
   async login(email: string, password: string) {
+    // convert data in x-www-form-urlencoded
+    const data = new URLSearchParams();
+    data.append('username', email);
+    data.append('password', password);
+    data.append('grant_type', 'password');
+
     await this._apiClient.request({
       url: '/oauth/token',
-      params: { email, password, 'grant_type': 'password' },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      data: data,
       auth: { // -> Basic Authentication
         username: 'sumz1718AngularFrontend',
         password: 'XY7kmzoNzl100',
@@ -57,13 +64,15 @@ export class AuthenticationService {
    * @returns {Promise} Promise
    */
   async refresh() {
+    // convert data in x-www-form-urlencoded
+    const data = new URLSearchParams();
+    data.append('refresh_token', JSON.parse(localStorage.getItem('currentUser')).refresh_token);
+    data.append('grant_type', 'refresh_token');
+
     const response = await this._apiClient.request({
       url: '/oauth/token',
-      params: {
-        'refresh_token': JSON.parse(localStorage.getItem('currentUser')).refresh_token,
-        'grant_type': 'refresh_token',
-      },
       headers: { '_isRetry': true },
+      data: data,
       auth: { // -> Basic Authentication
         username: 'sumz1718AngularFrontend',
         password: 'XY7kmzoNzl100',
@@ -116,7 +125,7 @@ export class AuthenticationService {
    */
   async changepassword(oldPassword: string, newPassword: string) {
     // ${JSON.parse(localStorage.getItem('currentUser')).id} -> getting the id of the current user to update the password
-    return from(this._apiClient.put(`/users/${JSON.parse(localStorage.getItem('currentUser')).id}`,
+    return from(this._apiClient.put(`/users/${JSON.parse(localStorage.getItem('currentUser')).user_id}`,
       { 'oldPassword': oldPassword, 'newPassword': newPassword }));
   }
 
@@ -140,20 +149,26 @@ export class AuthenticationService {
    * @returns {Promise} Promise
    */
   async deleteuser(password: string) {
-    return from(this._apiClient.post(`/users/${JSON.parse(localStorage.getItem('currentUser')).id}/delete`, { 'password': password }));
+    // FIXME: es wird auch eine Erfolgsmeldung ausgegeben, wenn das Passwort falsch ist
+    // Bitte entsprechende Meldung einbauen
+    // Fehler-Response ist im OneNote
+    return from(this._apiClient.post(`/users/${JSON.parse(localStorage.getItem('currentUser')).user_id}/delete`, { 'password': password }));
   }
 
   /**
- * sends the new password after the reset
- * @param {string} password new password
- * @returns {Promise} Promise
- */
+   * sends the new password after the reset
+   * @param {string} password new password
+   * @returns {Promise} Promise
+   */
   async postNewPassword(password: string) {
-    await this._apiClient.request({
-      url: '/users/reset/token',
-      data: { password },
-      method: 'POST',
-    });
+    const url: string[] = this._router.routerState.snapshot.url.split('/');
+
+    // check URL
+    if (!(url.length === 4 && url[1] === 'users' && url[2] === 'reset' && url[3] !== '')) {
+      return;
+    }
+
+    return from(this._apiClient.post(`/users/reset/${url[3]}`, {'password': password}));
   }
 
   /**
@@ -171,6 +186,7 @@ export class AuthenticationService {
    * @returns {void}
    */
   private addInterceptor() {
+    // TODO: Muss getestet werden
     this._apiClient.interceptors.response.use(response => {
       return response;
     },
