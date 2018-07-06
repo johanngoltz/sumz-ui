@@ -289,23 +289,22 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
       const paramFormGroup = (<FormGroup>formGroup.controls[param]);
       if (paramFormGroup) {
         const timeSeries = (<FormArray>paramFormGroup.controls.timeSeries).controls;
-        return timeSeries.filter(dataPoint =>
-          this._timeSeriesMethodsService.isInsideBounds(
-            formGroup.controls.quarterly.value,
-            this.start,
-            this.end,
-            dataPoint.value
-          ) &&
-          this._timeSeriesMethodsService.checkVisibility(
-            dataPoint.value,
-            paramFormGroup.value.isHistoric,
-            formGroup.controls.quarterly.value,
-            formGroup.controls.base.value,
-            this.end,
-            this.accountingDataParams.get(param).shiftDeterministic))
-          .map(dataPoint => dataPoint.valid)
-          .filter(valid => valid === false)
-          .length === 0;
+        return timeSeries
+          .filter(dataPoint =>
+            this._timeSeriesMethodsService.isInsideBounds(
+              formGroup.controls.quarterly.value,
+              this.start,
+              this.end,
+              dataPoint.value
+            ) &&
+            this._timeSeriesMethodsService.checkVisibility(
+              dataPoint.value,
+              paramFormGroup.value.isHistoric,
+              formGroup.controls.quarterly.value,
+              formGroup.controls.base.value,
+              this.end,
+              this.accountingDataParams.get(param).shiftDeterministic))
+          .every(dataPoint => dataPoint.valid);
       } else {
         return false;
       }
