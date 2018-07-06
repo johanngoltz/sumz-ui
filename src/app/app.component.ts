@@ -62,13 +62,12 @@ import { ImportScenarioComponent } from './import-scenario/import-scenario.compo
   ],
 })
 export class AppComponent {
-  log: NavigationEnd[];
   title = 'SUMZ';
 
   constructor(
-    private router: Router,
-    private authenticationService: AuthenticationService,
-    private dialog: MatDialog,
+    private _router: Router,
+    private _authenticationService: AuthenticationService,
+    private _dialog: MatDialog,
   ) { }
 
   getState(outlet) {
@@ -76,19 +75,19 @@ export class AppComponent {
   }
 
   openImportDialog() {
-    this.dialog.open(ImportScenarioComponent).afterClosed().subscribe();
+    this._dialog.open(ImportScenarioComponent).afterClosed().subscribe();
   }
 
   logout() {
-    this.authenticationService.logout();
-    this.router.navigateByUrl('/login');
+    this._authenticationService.logout();
+    this._router.navigateByUrl('/login');
   }
 
   change() {
-    this.router.navigateByUrl('/changepassword');
+    this._router.navigateByUrl('/changepassword');
   }
 
   delete() {
-    this.router.navigateByUrl('/users/delete');
+    this._router.navigateByUrl('/users/delete');
   }
 }
