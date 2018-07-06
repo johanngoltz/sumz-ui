@@ -11,7 +11,7 @@ export class PasswordValidation {
    * (Used for form field validation)
    * @param {string} input1 the first password
    * @param {string} input2 the second password
-   * @returns {AbstractControl} AbstractControl
+   * @returns {any} (AC: AbstractControl) => any
    */
   static Match(input1: string, input2: string) {
     return (AC: AbstractControl) => {
