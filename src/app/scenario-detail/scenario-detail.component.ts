@@ -87,6 +87,10 @@ export class ScenarioDetailComponent implements OnInit {
   /*chart */
   chart;
 
+  private readonly numberValidator = Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$');
+  private readonly taxRateValidators =
+    [this.numberValidator, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')];
+
   constructor(private _scenariosService: ScenariosService,
     private _formBuilder: FormBuilder,
     private _optionsService: OptionsService,
@@ -103,11 +107,11 @@ export class ScenarioDetailComponent implements OnInit {
     this.formGroup = this._formBuilder.group({
       name: ['', Validators.required],
       description: '',
-      equityInterestRate: ['', [Validators.required, Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')]],
-      interestOnLiabilitiesRate: ['', [Validators.required, Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')]],
-      businessTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')]],
-      corporateTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')]],
-      solidaryTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')]],
+      equityInterestRate: ['', [Validators.required, this.numberValidator]],
+      interestOnLiabilitiesRate: ['', [Validators.required, this.numberValidator]],
+      businessTaxRate: ['', [Validators.required, ...this.taxRateValidators]],
+      corporateTaxRate: ['', [Validators.required, ...this.taxRateValidators]],
+      solidaryTaxRate: ['', [Validators.required, ...this.taxRateValidators]],
     });
     this.formGroup.disable();
     this.initData();
