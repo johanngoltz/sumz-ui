@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthenticationService } from '../service/authentication.service';
-import { AlertService } from '../service/alert.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AlertService } from '../service/alert.service';
+import { AuthenticationService } from '../service/authentication.service';
 
 @Component({
   selector: 'app-deleteuser',

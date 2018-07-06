@@ -6,10 +6,10 @@ exports.routes = [{
   handler: function (req, res) {
     res.json(state.scenarios);
 
-    // Interceptor test
-    if(req.headers.Authorization === undefined || req.headers.Authorization !== 'bearer 214vg3hg2v123f123f4ghv_') {
-      return res.send(401, 'Invalid token at /scenario');
-    }
+    // // Interceptor test
+    // if(req.headers.Authorization === undefined || req.headers.Authorization !== 'bearer 214vg3hg2v123f123f4ghv_') {
+    //   return res.send(401, 'Invalid token at /scenario');
+    // }
   },
 },
 {

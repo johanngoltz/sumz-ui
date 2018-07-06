@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { PasswordValidation } from '../registration/registration.passwordvalidation';
-import { AuthenticationService } from '../service/authentication.service';
-import { AlertService } from '../service/alert.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { PasswordValidation } from '../registration/registration.passwordvalidation';
+import { AlertService } from '../service/alert.service';
+import { AuthenticationService } from '../service/authentication.service';
 
 @Component({
   selector: 'app-newpassword',

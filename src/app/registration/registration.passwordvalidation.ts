@@ -1,4 +1,4 @@
-import {AbstractControl} from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 
 /**
  * The validation of two strings (if they match each other) is implemented in this class.

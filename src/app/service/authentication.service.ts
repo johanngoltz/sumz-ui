@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { ActivatedRoute, Router, RouterStateSnapshot, RouterState } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TypedAxiosInstance } from 'restyped-axios';
 import { from, Observable, ReplaySubject } from 'rxjs';
 import { SumzAPI } from '../api/api';
