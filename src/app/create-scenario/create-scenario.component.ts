@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material';
 import { Router } from '@angular/router';
-import { accountingDataParams } from '../api/paramData';
+import { accountingDataParams, environmentParams } from '../api/paramData';
 import { Scenario } from '../api/scenario';
 import { SelectScenarioComponent } from '../select-scenario/select-scenario.component';
 import { AlertService } from '../service/alert.service';
@@ -20,7 +20,9 @@ export class CreateScenarioComponent implements OnInit {
   formGroup3: FormGroup;
   busy: Boolean;
   importedScenario: EventEmitter<Scenario>;
-  accountingDataParams = accountingDataParams;
+  accountingDataParams = accountingDataParams; // fix scope issues in view
+  environmentParams = environmentParams;
+  Object = Object;
 
   constructor(private _formBuilder: FormBuilder,
     private _scenariosService: ScenariosService,
@@ -36,13 +38,11 @@ export class CreateScenarioComponent implements OnInit {
       name: ['', Validators.required],
       description: '',
     });
-    this.formGroup2 = this._formBuilder.group({
-      equityInterestRate: ['', [Validators.required, Validators.pattern('^[0-9\.]*$')]],
-      interestOnLiabilitiesRate: ['', [Validators.required, Validators.pattern('^[0-9\.]*$')]],
-      businessTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9\.]*$')]],
-      corporateTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9\.]*$')]],
-      solidaryTaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9\.]*$')]],
+    const environmentParamControls = {};
+    Object.entries(environmentParams).forEach(([name, config]) => {
+      environmentParamControls[name] = ['', config.validators];
     });
+    this.formGroup2 = this._formBuilder.group(environmentParamControls);
     this.formGroup3 = this._formBuilder.group({});
     this.importedScenario = new EventEmitter<Scenario>();
   }
@@ -110,6 +110,10 @@ export class CreateScenarioComponent implements OnInit {
       this.importedScenario.emit(scenario);
       this._alertService.success(`Die Daten des Szenarios "${scenario.name}" wurden erfolgreich übernommen`);
     }
+  }
+
+  trackByName([name, config]) {
+    return name;
   }
 
 }

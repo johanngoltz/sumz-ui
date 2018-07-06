@@ -31,13 +31,13 @@
             <div id="baseyear-container" class="leveraged-field" [class.editable]="_editable" *ngIf="element.value.year === formGroup.controls.base.value.year && (!formGroup.controls.quarterly.value || element.value.quarter === formGroup.controls.base.value.quarter)">
               <span *ngIf="!_editable">
                 <small>Basisjahr</small>
-                {{formGroup.value.baseYear}}
+                {{formGroup.controls.base.value.year}}{{formGroup.value.quarterly ? ' Q' + formGroup.controls.base.value.quarter : ''}
               </span>
               <div [formGroup]="formGroup.controls.base" class="flex">
                 <mat-form-field class="table-input-right" *ngIf="_editable">
                   <input type="number" matInput formControlName="year" required placeholder="Basisjahr" (input)="checkMaxIntegrity(formGroup.controls.end, formGroup.controls.base);checkMinIntegrity(formGroup.controls.start, formGroup.controls.base)">
                 </mat-form-field>
-                <mat-form-field class="small-field" *ngIf="formGroup.controls.quarterly.value">
+                <mat-form-field class="small-field" *ngIf="formGroup.controls.quarterly.value && _editable">
                   <mat-select placeholder="Quartal" formControlName="quarter" (input)="checkMaxIntegrity(formGroup.controls.end, formGroup.controls.base);checkMinIntegrity(formGroup.controls.start, formGroup.controls.base)">
                     <mat-option [value]="1">1</mat-option>
                     <mat-option [value]="2">2</mat-option>
