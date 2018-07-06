@@ -3,7 +3,7 @@
   <!--<a [href]="csvBlobUrl" download="scenario.csv" mat-list-item>
     <div class="title" matLine>.csv (Comma seperated value)</div>
   </a>-->
-  <a [href]="jsonBlobUrl" download="scenario.json" mat-list-item>
+  <a [href]="jsonBlobUrl" download="scenario.json" mat-list-item (click)="closeSheet()">
     <div class="title" matLine>.json (JavaScript Object notation)</div>
     <div class="description" matLine>kann später wieder importiert werden.</div>
   </a>
