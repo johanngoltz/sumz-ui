@@ -37,7 +37,7 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // unsubscribe from the @Input scenario to not execute another validation round when this component is destroyed.
-    this.scenarioSubscription.unsubscribe();
+    if (this.scenarioSubscription) { this.scenarioSubscription.unsubscribe(); }
   }
 
   @Input() set editable(value: Boolean) {
