@@ -95,12 +95,12 @@ export class ScenarioDetailComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _optionsService: OptionsService,
     private _alertService: AlertService,
-    private route: ActivatedRoute,
+    private _route: ActivatedRoute,
     private _timeSeriesMethodsService: TimeSeriesMethodsService) { }
 
   ngOnInit() {
     this.editable = false;
-    this.forScenario$ = this.route.paramMap.pipe(
+    this.forScenario$ = this._route.paramMap.pipe(
       switchMap(params => of(Number.parseInt(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
     this.forConfig$ = this._optionsService.getConfig();
