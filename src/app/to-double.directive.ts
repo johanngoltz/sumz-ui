@@ -20,7 +20,7 @@ export class ToDoubleDirective implements ControlValueAccessor {
     const keepEnd = decimalNumberRegEx && caretPosition > decimalNumberRegEx[1].length;
     value = parseFloat(value.replace(/\./g, '').replace(/,/g, '.'));
     if (isNaN(value)) {
-      this.onChangeCallback(0);
+      this.onChangeCallback(value);
     } else {
       this.onChangeCallback(value);
       value = value.toLocaleString('de-de') + (keepEnd ? decimalNumberRegEx[2] : '');
