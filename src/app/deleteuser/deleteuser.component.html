@@ -1,17 +1,16 @@
 <div class="content-container">
-    <mat-card class="delete-card">
+    <mat-card class="delete-card" [class.busy]="submitted">
+        <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+        <mat-card-title>Account wirklich löschen?</mat-card-title>
         <mat-card-content>
-
-            <mat-card-title>Account wirklich löschen?</mat-card-title>
-            <mat-divider></mat-divider>
-
             <form [formGroup]="deleteFormGroup" id="delete-form" (ngSubmit)="onSubmit()">
                 <p>
                     <mat-icon class="delete-icon">lock</mat-icon>
                     <mat-form-field>
-                        <input [type]="hide_pw1 ? 'password' : 'text'" id="password" name="password" required matInput placeholder="Passwort"
-                            formControlName="pwdCtrl">
-                        <mat-icon matSuffix (click)="hide_pw1 = !hide_pw1">{{hide_pw1 ? 'visibility' : 'visibility_off'}}</mat-icon>
+                        <input [type]="hide_pw1 ? 'password' : 'text'" id="password" name="password" required matInput placeholder="Passwort" formControlName="pwdCtrl">
+                        <button type="button" mat-icon-button matSuffix (click)="hide_pw1 = !hide_pw1">
+                            <mat-icon>{{hide_pw1 ? 'visibility' : 'visibility_off'}}</mat-icon>
+                        </button>
                         <mat-error>
                             Bitte ein Passwort mit mind. 6 Zeichen eingeben
                         </mat-error>

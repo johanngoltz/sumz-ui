@@ -32,10 +32,11 @@ mat-toolbar {
   display: block;
 }
 
-::ng-deep .content-conatiner {
-  display: block;
+#user-menu-btn {
+  transition: opacity .2s, transform .2s;
 }
 
-::ng-deep mat-dialog-container {
-  position: relative;
+.hide-menu {
+  opacity: 0;
+  transform: scale(0);
 }
