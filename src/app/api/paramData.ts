@@ -1,3 +1,5 @@
+import { AbstractControl, ValidationErrors, Validators } from '@angular/forms';
+
 export type AccountingDataParams = ReadonlyMap<string, AccountingDataParam>;
 
 export const accountingDataParams: AccountingDataParams =
@@ -15,10 +17,16 @@ export const accountingDataParams: AccountingDataParams =
 
 export interface AccountingDataParam { displayName: string; showOnCalculation?: boolean; shiftDeterministic?: boolean; }
 
+const numberValidator = Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$');
+const taxRateValidators =
+    [numberValidator, Validators.min(0), Validators.max(100)];
+
 export const environmentParams = {
-    equityInterestRate: {},
-    interestOnLiabilitiesRate: {},
-    businessTaxRate: {},
-    corporateTaxRate: {},
-    solidaryTaxRate: {},
+    equityInterestRate: { validators: [Validators.required, numberValidator] },
+    interestOnLiabilitiesRate: { validators: [Validators.required, numberValidator] },
+    businessTaxRate: { validators: [Validators.required, ...taxRateValidators] },
+    corporateTaxRate: { validators: [Validators.required, ...taxRateValidators] },
+    solidaryTaxRate: { validators: [Validators.required, ...taxRateValidators] },
 };
+
+interface EnvironmentParam { validators: ((control: AbstractControl) => ValidationErrors)[]; }

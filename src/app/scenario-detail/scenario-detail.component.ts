@@ -87,10 +87,6 @@ export class ScenarioDetailComponent implements OnInit {
   /*chart */
   chart;
 
-  private readonly numberValidator = Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$');
-  private readonly taxRateValidators =
-    [this.numberValidator, Validators.min(0), Validators.max(100)];
-
   constructor(private _scenariosService: ScenariosService,
     private _formBuilder: FormBuilder,
     private _optionsService: OptionsService,
@@ -104,15 +100,21 @@ export class ScenarioDetailComponent implements OnInit {
       switchMap(params => of(Number.parseInt(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
     this.forConfig$ = this._optionsService.getConfig();
-    this.formGroup = this._formBuilder.group({
+    const controls = {
       name: ['', Validators.required],
       description: '',
-      equityInterestRate: ['', [Validators.required, this.numberValidator]],
-      interestOnLiabilitiesRate: ['', [Validators.required, this.numberValidator]],
-      businessTaxRate: ['', [Validators.required, ...this.taxRateValidators]],
-      corporateTaxRate: ['', [Validators.required, ...this.taxRateValidators]],
-      solidaryTaxRate: ['', [Validators.required, ...this.taxRateValidators]],
+      equityInterestRate: [''],
+      interestOnLiabilitiesRate: [''],
+      businessTaxRate: [''],
+      corporateTaxRate: [''],
+      solidaryTaxRate: [''],
+    };
+    Object.keys(controls).forEach(controlKey => {
+      if (environmentParams[controlKey]) {
+        controls[controlKey].push(environmentParams[controlKey].validators);
+      }
     });
+    this.formGroup = this._formBuilder.group(controls);
     this.formGroup.disable();
     this.initData();
 
