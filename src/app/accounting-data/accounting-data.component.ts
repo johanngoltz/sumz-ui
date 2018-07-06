@@ -261,18 +261,12 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
     const end = this.formGroup.controls.end.value;
     for (const param of this.accountingDataParams.keys()) {
       const timeSeries = <FormArray>(<FormGroup>this.formGroup.controls[param]).controls.timeSeries;
-      // Remove values outside bounds
-      for (let i = 0; i < timeSeries.length; i++) {
-        if (!this._timeSeriesMethodsService.isInsideBounds(
+      timeSeries.controls = timeSeries.controls.filter(control =>
+        this._timeSeriesMethodsService.isInsideBounds(
           this.formGroup.controls.quarterly.value,
           this.start,
           this.end,
-          timeSeries.at(i).value)
-        ) {
-          timeSeries.removeAt(i);
-          i--;
-        }
-      }
+          control.value));
       // Fill up missing values between the start and first value
       if (timeSeries.length > 0) {
         this.fillTimeSeriesGaps(timeSeries, start, timeSeries.value[0], true);
