@@ -18,7 +18,7 @@ export class AccountingDataComponent implements OnInit {
   formGroup: FormGroup;
   @ViewChild('scrollable') dataScrollContainer: ElementRef;
   @ViewChild('fkrow') fkRow: ElementRef;
-  keys = Object.keys; // needed due to context issues in ngFor
+  Array = Array; // needed due to context issues in ngFor
   base: { year: number, quarter: number };
   start: { year: number, quarter: number }; // debounced values
   end: { year: number, quarter: number };
