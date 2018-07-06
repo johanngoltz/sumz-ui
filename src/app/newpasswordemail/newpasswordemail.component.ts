@@ -14,15 +14,13 @@ import { AuthenticationService } from '../service/authentication.service';
  * @author Burkart
  */
 export class NewPasswordEmailComponent implements OnInit {
-  // TODO: Input-Feld für Email hinzufügen
   newFormGroup: FormGroup;
-  submitted = false;
-  private loading: boolean;
+  loading = false;
 
   constructor(
     private _formBuilder: FormBuilder,
-    private authenticationService: AuthenticationService,
-    private alertService: AlertService) { }
+    private _authenticationService: AuthenticationService,
+    private _alertService: AlertService) { }
 
   ngOnInit() {
     this.newFormGroup = this._formBuilder.group({
@@ -32,24 +30,24 @@ export class NewPasswordEmailComponent implements OnInit {
   }
 
   onSubmit() {
-    // deactivate the registration button
-    this.submitted = true;
-
     // stop here if form is invalid
     if (this.newFormGroup.invalid) {
       return;
     }
 
+    // deactivate the registration button
+    this.loading = true;
+
     // call the method to request a new password
-    this.authenticationService.resetPassword(this.mailCtrl.value.toString())
+    this._authenticationService.resetPassword(this.mailCtrl.value.toString())
       .catch( // catch the error-warnings if the method fails
         error => {
-          this.alertService.error(error);
+          this._alertService.error(error);
           this.loading = false;
         });
 
     // if the new was successful
-    this.alertService.success('Ihr Passwort wurde erfolgreich geändert!');
+    this._alertService.success('Ein Link zum Zurücksetzen des Passworts wurde an die angegebene Mailadresse versendet');
   }
 
   // getter for the email, old and new passwords

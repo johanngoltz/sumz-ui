@@ -18,13 +18,14 @@ export class DeleteUserComponent implements OnInit {
 
   [x: string]: any;
   deleteFormGroup: FormGroup;
-  submitted = false;
+  loading = false;
   hide = true;
 
   constructor(
     private _formBuilder: FormBuilder,
-    private authenticationService: AuthenticationService,
-    private alertService: AlertService, private router: Router) { }
+    private _authenticationService: AuthenticationService,
+    private _alertService: AlertService,
+    private _router: Router) { }
 
   ngOnInit() {
     this.deleteFormGroup = this._formBuilder.group({
@@ -40,20 +41,20 @@ export class DeleteUserComponent implements OnInit {
     }
 
     // deactivate the registration button
-    this.submitted = true;
+    this.loading = true;
 
     // call the method to request the delete
-    this.authenticationService.deleteuser(this.pwdCtrl.value.toString())
+    this._authenticationService.deleteuser(this.pwdCtrl.value.toString())
       .then(() => {
         // if the delete was successful
-        this.alertService.success('Ihr Account wurde erfolgreich gelöscht!');
-        this.authenticationService.logout();
-        this.router.navigate(['/login']); // route to login page
+        this._alertService.success('Ihr Account wurde erfolgreich gelöscht!');
+        this._authenticationService.logout();
+        this._router.navigate(['/login']); // route to login page
       })
       .catch( // catch the error-warnings if the method fails
         error => {
-          this.alertService.error(error);
-          this.submitted = false;
+          this._alertService.error(error);
+          this.loading = false;
         });
   }
 

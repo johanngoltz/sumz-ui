@@ -18,15 +18,14 @@ import { AlertService } from '../service/alert.service';
 export class RegistrationComponent implements OnInit {
 
   registerFormGroup: FormGroup;
-  submitted = false;
-  hide_pw1 = true;
-  hide_pw2 = true;
-  loading: boolean;
+  hidePw1 = true;
+  hidePw2 = true;
+  loading = false;
 
   constructor(
     private _formBuilder: FormBuilder,
-    private authenticationService: AuthenticationService,
-    private alertService: AlertService) { }
+    private _authenticationService: AuthenticationService,
+    private _alertService: AlertService) { }
 
   ngOnInit() {
     this.registerFormGroup = this._formBuilder.group({
@@ -35,32 +34,30 @@ export class RegistrationComponent implements OnInit {
       pwdCtrl: ['', Validators.minLength(8)],
       pwdrptCtrl: ['', Validators.minLength(8)],
 
-    },
-      {
+    }, {
         // validates the two passwords
         validator: PasswordValidation.Match('pwdCtrl', 'pwdrptCtrl'),
       });
   }
 
   onSubmit() {
-
-    // deactivate the registration button
-    this.submitted = true;
-
     // stop here if form is invalid
     if (this.registerFormGroup.invalid) {
       return;
     }
 
-    this.authenticationService.register(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString())
+    // deactivate the registration button
+    this.loading = true;
+
+    this._authenticationService.register(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString())
       .catch( // catch the error warnings if the registration fails
         error => {
-          this.alertService.error(error);
+          this._alertService.error(error);
           this.loading = false;
         });
 
     // if the registration was successful inform them to check their mails and activate their account
-    this.alertService.success('Die Registrierung war erfolgreich! ' +
+    this._alertService.success('Die Registrierung war erfolgreich! ' +
       'Ein Link zur Aktivierung Ihres Profils wurde an die von Ihnen angegebene Email-Adresse versandt.');
   }
 

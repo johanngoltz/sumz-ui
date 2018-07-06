@@ -19,21 +19,20 @@ import { Router } from '@angular/router';
 export class NewPasswordComponent implements OnInit {
 
   newFormGroup: FormGroup;
-  submitted = false;
-  hide_pw1 = true;
-  hide_pw2 = true;
-  private loading: boolean;
+  hidePw1 = true;
+  hidePw2 = true;
+  loading = false;
 
   constructor(
     private _formBuilder: FormBuilder,
-    private authenticationService: AuthenticationService,
-    private alertService: AlertService, private router: Router) { }
+    private _authenticationService: AuthenticationService,
+    private _alertService: AlertService, private router: Router) { }
 
   ngOnInit() {
     this.newFormGroup = this._formBuilder.group({
       // Validators to check the length of the passwords
       pwdNew1: ['', Validators.minLength(8)],
-      pwdNew2: ['', Validators.minLength(8)],
+      pwdNew2: [''],
     },
       {
         // validates the two passwords
@@ -42,30 +41,30 @@ export class NewPasswordComponent implements OnInit {
   }
 
   onSubmit() {
-    // deactivate the registration button
-    this.submitted = true;
-
     // stop here if form is invalid
     if (this.newFormGroup.invalid) {
       return;
     }
 
+    // deactivate the registration button
+    this.loading = true;
+
     // call the method to request a new password
-    this.authenticationService.postNewPassword(this.pwdNew1.value.toString())
+    this._authenticationService.postNewPassword(this.pwdNew1.value.toString())
       .then(() => {
         // if the change was successful
-        this.alertService.success('Ihr neues Passwort wurde erfolgreich gesetzt. Bitte loggen Sie sich mit dem neuen Passwort ein');
-        this.authenticationService.logout();
+        this._alertService.success('Ihr neues Passwort wurde erfolgreich gesetzt. Bitte loggen Sie sich mit dem neuen Passwort ein');
+        this._authenticationService.logout();
         this.router.navigate(['/login']); // relog with the new password
       })
       .catch( // catch the error-warnings if the method fails
         error => {
-          this.alertService.error(error);
+          this._alertService.error(error);
           this.loading = false;
         });
 
     // if the new was successful
-    this.alertService.success('Ihr Passwort wurde erfolgreich geändert!');
+    this._alertService.success('Ihr Passwort wurde erfolgreich geändert!');
   }
 
   // getter for the email, old and new passwords

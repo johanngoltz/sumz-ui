@@ -15,13 +15,13 @@ export class LoginComponent implements OnInit {
   hide = true;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private authenticationService: AuthenticationService,
-    private alertService: AlertService,
+    private _formBuilder: FormBuilder,
+    private _authenticationService: AuthenticationService,
+    private _alertService: AlertService,
   ) { }
 
   ngOnInit() {
-    this.loginFormGroup = this.formBuilder.group({
+    this.loginFormGroup = this._formBuilder.group({
       mailCtrl: ['', Validators.email],
       pwdCtrl: '',
     });
@@ -37,12 +37,12 @@ export class LoginComponent implements OnInit {
     this.loading = true;
 
     // reset login status
-    this.authenticationService.logout();
+    this._authenticationService.logout();
 
-    this.authenticationService.login(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString())
+    this._authenticationService.login(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString())
       .catch(
         error => {
-          this.alertService.error(error);
+          this._alertService.error(error);
           this.loading = false;
         });
   }
