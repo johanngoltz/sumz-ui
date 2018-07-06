@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { debounceTime, map, first } from 'rxjs/operators';
 import { Scenario } from '../api/scenario';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { accountingDataParams } from '../api/paramData';
 import { TimeSeriesMethodsService } from '../service/time-series-methods.service';
 
@@ -11,7 +11,7 @@ import { TimeSeriesMethodsService } from '../service/time-series-methods.service
   templateUrl: './accounting-data.component.html',
   styleUrls: ['./accounting-data.component.css'],
 })
-export class AccountingDataComponent implements OnInit {
+export class AccountingDataComponent implements OnInit, OnDestroy {
   @Input() _editable: Boolean;
   @Input() initialData: Observable<Scenario>;
   @Output() formGroupOutput = new EventEmitter<FormGroup>();
@@ -23,6 +23,7 @@ export class AccountingDataComponent implements OnInit {
   start: { year: number, quarter: number }; // debounced values
   end: { year: number, quarter: number };
   accountingDataParams = accountingDataParams;
+  private scenarioSubscription: Subscription;
 
   constructor(private _formBuilder: FormBuilder, private _timeSeriesMethodsService: TimeSeriesMethodsService) {
   }
@@ -30,8 +31,13 @@ export class AccountingDataComponent implements OnInit {
   ngOnInit() {
     this.buildForm();
     if (this.initialData) {
-      this.initialData.subscribe((scenario) => this.buildForm(scenario));
+      this.scenarioSubscription = this.initialData.subscribe((scenario) => this.buildForm(scenario));
     }
+  }
+
+  ngOnDestroy() {
+    // unsubscribe from the @Input scenario to not execute another validation round when this component is destroyed.
+    this.scenarioSubscription.unsubscribe();
   }
 
   @Input() set editable(value: Boolean) {
