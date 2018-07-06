@@ -17,5 +17,10 @@
       "dom"
     ],
     "downlevelIteration": true,
+    "plugins": [
+      {
+        "name": "@angular/language-service"
+      }
+    ]
   }
 }
