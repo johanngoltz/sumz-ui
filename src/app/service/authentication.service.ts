@@ -195,15 +195,7 @@ export class AuthenticationService {
     });
   }
 
-  /**
-   * Shows whether a user is logged in
-   * @return {Boolean} true, if user is logged in
-   */
-  isUserLoggedIn(): Boolean {
-    if (localStorage.getItem('currentUser')) {
-      return true;
-    } else {
-      return false;
-    }
+  isUserLoggedIn(): boolean {
+    return !!localStorage.getItem('currentUser');
   }
 }
