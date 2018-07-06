@@ -6,7 +6,7 @@ import { Chart } from 'angular-highcharts';
 import { Observable, of } from 'rxjs';
 import { first, switchMap } from 'rxjs/operators';
 import { RemoteConfig } from '../api/config';
-import { AccountingDataParams, environmentParams } from '../api/paramData';
+import { accountingDataParams, environmentParams } from '../api/paramData';
 import { Scenario } from '../api/scenario';
 import { AlertService } from '../service/alert.service';
 import { OptionsService } from '../service/options.service';
@@ -76,7 +76,7 @@ export class ScenarioDetailComponent implements OnInit {
   formGroup: FormGroup;
   accountingDataFormGroup: FormGroup;
   configFormGroup: FormGroup;
-  accountingDataParams = AccountingDataParams.prototype;
+  accountingDataParams = accountingDataParams;
 
   /* edit mode */
   editable;
@@ -202,11 +202,10 @@ export class ScenarioDetailComponent implements OnInit {
       const start = this.accountingDataFormGroup.controls.start.value;
       const base = this.accountingDataFormGroup.controls.base.value;
       const end = this.accountingDataFormGroup.controls.end.value;
-      Object.keys(AccountingDataParams)
-        .filter((param: keyof AccountingDataParams) =>
-          this._timeSeriesMethodsService.shouldDisplayAccountingDataParam(
-            this.accountingDataParams, this.accountingDataFormGroup.value.calculateFcf, param))
-        .forEach((param) => {
+
+      for (const [param, paramDefinition] of this.accountingDataParams) {
+        if (this._timeSeriesMethodsService.shouldDisplayAccountingDataParam(
+          this.accountingDataParams, this.accountingDataFormGroup.value.calculateFcf, param)) {
           const paramFormGroup = this.accountingDataFormGroup.controls[param];
           if (paramFormGroup.value.isHistoric && !currentScenario.stochastic) {
             currentScenario.stochastic = true;
@@ -221,17 +220,18 @@ export class ScenarioDetailComponent implements OnInit {
                 quarterly,
                 base,
                 end,
-                AccountingDataParams[param].shiftDeterministic)),
+                paramDefinition.shiftDeterministic)),
           };
-        });
+        }
+      }
 
       this._scenariosService.updateScenario(currentScenario).subscribe(
         () => {
           this.editable = false;
           this.formGroup.disable();
-          this._alertService.success('Scenario wurde gespeichert');
+          this._alertService.success('Szenario wurde gespeichert');
         },
-        () => this._alertService.warning('Scenario konnte nicht gespeichert werden'),
+        () => this._alertService.warning('Szenario konnte nicht gespeichert werden'),
       );
     });
   }
