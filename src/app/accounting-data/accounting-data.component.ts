@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, 
 import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { debounceTime, map, first } from 'rxjs/operators';
 import { Scenario } from '../api/scenario';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, identity } from 'rxjs';
 import { accountingDataParams } from '../api/paramData';
 import { TimeSeriesMethodsService } from '../service/time-series-methods.service';
 
@@ -302,7 +302,7 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
       } else {
         return false;
       }
-    }).every(v => v);
+    }).every(Boolean);
 
     const intervalIsValid = formGroup.controls.base.valid &&
       formGroup.controls.start.valid &&
