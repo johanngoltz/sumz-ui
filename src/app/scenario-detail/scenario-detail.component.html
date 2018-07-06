@@ -42,72 +42,18 @@
         <mat-divider vertical="true"></mat-divider>
         <div>
           <h3>Umweltfaktoren</h3>
-          <mat-form-field floatLabel="always">
-            <input matInput type="text" appToDouble placeholder="Eigenkapitalzinsen" formControlName="equityInterestRate" />
+          <mat-form-field floatLabel="always" *ngFor="let paramEntry of Object.entries(environmentParams); trackBy: trackByName">
+            <input matInput type="text" appToDouble [placeholder]="paramEntry[1].displayName" [formControlName]="paramEntry[0]" />
             <span matPrefix>% &nbsp;</span>
-            <mat-error *ngIf="formGroup.controls.equityInterestRate.hasError('required')">
-              Eigenkapitalzinsen werden
+            <mat-error *ngIf="formGroup.controls[paramEntry[0]].hasError('required')">
+              Dieses Feld wird
               <strong>benötigt</strong>
             </mat-error>
-            <mat-error *ngIf="formGroup.controls.equityInterestRate.hasError('pattern')">
-              Nur Zahlen erlaubt
+            <mat-error *ngIf="formGroup.controls[paramEntry[0]].hasError('pattern')">
+              Dieses Feld erlaubt nur Zahlen
             </mat-error>
-          </mat-form-field>
-
-          <mat-form-field floatLabel="always">
-            <input matInput type="text" appToDouble placeholder="Zinssatz für Verbindlichkeiten" formControlName="interestOnLiabilitiesRate" />
-            <span matPrefix>% &nbsp;</span>
-            <mat-error *ngIf="formGroup.controls.interestOnLiabilitiesRate.hasError('required')">
-              Zinssatz für Verbindlichkeiten wird
-              <strong>benötigt</strong>
-            </mat-error>
-            <mat-error *ngIf="formGroup.controls.interestOnLiabilitiesRate.hasError('pattern')">
-              Nur Zahlen erlaubt
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field floatLabel="always">
-            <input matInput type="text" appToDouble placeholder="Gewerbesteuersatz" formControlName="businessTaxRate" />
-            <span matPrefix>% &nbsp;</span>
-            <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('min') || formGroup.controls.businessTaxRate.hasError('max')">
+            <mat-error *ngIf="formGroup.controls[paramEntry[0]].hasError('min') || formGroup.controls[paramEntry[0]].hasError('max')">
               Der Wert muss zwischen 0% und 100% liegen
-            </mat-error>
-            <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('required')">
-             Gewerbesteuersatz wird
-              <strong>benötigt</strong>
-            </mat-error>
-            <mat-error *ngIf="formGroup.controls.businessTaxRate.hasError('pattern')">
-              Nur Zahlen erlaubt
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field floatLabel="always">
-            <input matInput type="text" appToDouble placeholder="Körperschaftssteuersatz" formControlName="corporateTaxRate" />
-            <span matPrefix>% &nbsp;</span>
-            <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('min') || formGroup.controls.corporateTaxRate.hasError('max')">
-              Der Wert muss zwischen 0% und 100% liegen
-            </mat-error>
-            <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('required')">
-              Köroerschaftssteuersatz wird
-              <strong>benötigt</strong>
-            </mat-error>
-            <mat-error *ngIf="formGroup.controls.corporateTaxRate.hasError('pattern')">
-              Nur Zahlen erlaubt
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field floatLabel="always">
-            <input matInput type="text" appToDouble placeholder="Solidaritätszuschlag" formControlName="solidaryTaxRate" />
-            <span matPrefix>% &nbsp;</span>
-            <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('min') || formGroup.controls.solidaryTaxRate.hasError('max')">
-              Der Wert muss zwischen 0% und 100% liegen
-            </mat-error>
-            <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('required')">
-              Solidaritätszuschlag wird
-              <strong>benötigt</strong>
-            </mat-error>
-            <mat-error *ngIf="formGroup.controls.solidaryTaxRate.hasError('pattern')">
-              Nur Zahlen erlaubt
             </mat-error>
           </mat-form-field>
         </div>

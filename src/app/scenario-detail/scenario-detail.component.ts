@@ -77,6 +77,8 @@ export class ScenarioDetailComponent implements OnInit {
   accountingDataFormGroup: FormGroup;
   configFormGroup: FormGroup;
   accountingDataParams = accountingDataParams;
+  environmentParams = environmentParams; // fix scope issues in view
+  Object = Object;
 
   /* edit mode */
   editable;
@@ -103,16 +105,9 @@ export class ScenarioDetailComponent implements OnInit {
     const controls = {
       name: ['', Validators.required],
       description: '',
-      equityInterestRate: [''],
-      interestOnLiabilitiesRate: [''],
-      businessTaxRate: [''],
-      corporateTaxRate: [''],
-      solidaryTaxRate: [''],
     };
-    Object.keys(controls).forEach(controlKey => {
-      if (environmentParams[controlKey]) {
-        controls[controlKey].push(environmentParams[controlKey].validators);
-      }
+    Object.entries(environmentParams).forEach(([name, config]) => {
+        controls[name] = ['', config.validators];
     });
     this.formGroup = this._formBuilder.group(controls);
     this.formGroup.disable();
@@ -126,8 +121,6 @@ export class ScenarioDetailComponent implements OnInit {
     });
     this.configFormGroup.disable();
     this.initConfig();
-
-    this.configFormGroup.valueChanges.subscribe(value => console.log(value));
 
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
       this.chart = new Chart({
@@ -279,5 +272,9 @@ export class ScenarioDetailComponent implements OnInit {
         this.initConfig();
       }
     }
+  }
+
+  trackByName([name, config]) {
+    return name;
   }
 }

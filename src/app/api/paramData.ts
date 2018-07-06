@@ -22,11 +22,11 @@ const taxRateValidators =
     [numberValidator, Validators.min(0), Validators.max(100)];
 
 export const environmentParams = {
-    equityInterestRate: { validators: [Validators.required, numberValidator] },
-    interestOnLiabilitiesRate: { validators: [Validators.required, numberValidator] },
-    businessTaxRate: { validators: [Validators.required, ...taxRateValidators] },
-    corporateTaxRate: { validators: [Validators.required, ...taxRateValidators] },
-    solidaryTaxRate: { validators: [Validators.required, ...taxRateValidators] },
+    equityInterestRate: { displayName: 'Eigenkapitalzinsen', validators: [Validators.required, numberValidator] },
+    interestOnLiabilitiesRate: { displayName: 'Zinssatz für Verbindlichkeiten', validators: [Validators.required, numberValidator] },
+    businessTaxRate: { displayName: 'Gewerbesteuersatz', validators: [Validators.required, ...taxRateValidators] },
+    corporateTaxRate: { displayName: 'Körperschaftssteuersatz', validators: [Validators.required, ...taxRateValidators] },
+    solidaryTaxRate: { displayName: 'Solidaritätszuschlag', validators: [Validators.required, ...taxRateValidators] },
 };
 
 interface EnvironmentParam { validators: ((control: AbstractControl) => ValidationErrors)[]; }
