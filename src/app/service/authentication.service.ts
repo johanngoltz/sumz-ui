@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TypedAxiosInstance } from 'restyped-axios';
-import { Router, ActivatedRoute } from '@angular/router';
 import { from, Observable, ReplaySubject } from 'rxjs';
 import { SumzAPI } from '../api/api';
 import { HttpClient } from './http-client';
@@ -10,18 +10,19 @@ import { HttpClient } from './http-client';
   providedIn: 'root',
 })
 export class AuthenticationService {
-  private returnUrl: string;
+  private _returnUrl: string;
   public users$: Observable<SumzAPI[]>;
   protected _users$: ReplaySubject<SumzAPI[]>;
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
+    private _router: Router,
+    private _route: ActivatedRoute,
     @Inject(HttpClient) private _apiClient: TypedAxiosInstance<SumzAPI>,
   ) {
     // handle expired access_token
     this.addInterceptor();
-    this._users$ = new ReplaySubject();
+
+    this._users$ = new ReplaySubject(1);
     this.users$ = this._users$.asObservable();
   }
 
@@ -31,12 +32,12 @@ export class AuthenticationService {
    * @param {string} password Password of the user
    * @returns {Promise} Promise
    */
-  async login(email: string, password: string ) {
+  async login(email: string, password: string) {
     await this._apiClient.request({
       url: '/oauth/token',
-      params: {email, password, 'grant_type' : 'password'},
+      params: { email, password, 'grant_type': 'password' },
       auth: { // -> Basic Authentication
-        username: 'testjwtclientid',
+        username: 'sumz1718AngularFrontend',
         password: 'XY7kmzoNzl100',
       },
       method: 'POST',
@@ -45,8 +46,8 @@ export class AuthenticationService {
         // store user details in local storage to keep user logged in
         localStorage.setItem('currentUser', JSON.stringify(response.data));
         // navigate to return url from route parameters or default to '/'
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        this.router.navigate([this.returnUrl]);
+        this._returnUrl = this._route.snapshot.queryParams['returnUrl'] || '/';
+        this._router.navigate([this._returnUrl]);
       }
     });
   }
@@ -59,11 +60,12 @@ export class AuthenticationService {
     const response = await this._apiClient.request({
       url: '/oauth/token',
       params: {
-        'refresh_token' : JSON.parse(localStorage.getItem('currentUser')).refresh_token,
-        'grant_type' : 'refresh_token'},
+        'refresh_token': JSON.parse(localStorage.getItem('currentUser')).refresh_token,
+        'grant_type': 'refresh_token',
+      },
       headers: { '_isRetry': true },
       auth: { // -> Basic Authentication
-        username: 'testjwtclientid',
+        username: 'sumz1718AngularFrontend',
         password: 'XY7kmzoNzl100',
       },
       method: 'POST',
@@ -92,15 +94,15 @@ export class AuthenticationService {
   async register(email: string, password: string) {
     await this._apiClient.request({
       url: '/users',
-      data: {email, password},
+      data: { email, password },
       method: 'POST',
     }).then(response => {
       // if credentials correct, redirect to main page
       if (response.status === 302) {
         console.log('Registrierung klappt');
         // navigate to return url from route parameters or default to '/'
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        this.router.navigate([this.returnUrl]);
+        this._returnUrl = this._route.snapshot.queryParams['returnUrl'] || '/';
+        this._router.navigate([this._returnUrl]);
       }
     });
   }
@@ -115,7 +117,7 @@ export class AuthenticationService {
   async changepassword(oldPassword: string, newPassword: string) {
     // ${JSON.parse(localStorage.getItem('currentUser')).id} -> getting the id of the current user to update the password
     return from(this._apiClient.put(`/users/${JSON.parse(localStorage.getItem('currentUser')).id}`,
-    {'oldPassword' : oldPassword, 'newPassword' : newPassword}));
+      { 'oldPassword': oldPassword, 'newPassword': newPassword }));
   }
 
   /**
@@ -127,7 +129,7 @@ export class AuthenticationService {
   async resetPassword(email: string) {
     await this._apiClient.request({
       url: '/users/forgot',
-      data: {email},
+      data: { email },
       method: 'POST',
     });
   }
@@ -138,22 +140,21 @@ export class AuthenticationService {
    * @returns {Promise} Promise
    */
   async deleteuser(password: string) {
-    return from(this._apiClient.post(`/users/${JSON.parse(localStorage.getItem('currentUser')).id}/delete`, {'password' : password}));
+    return from(this._apiClient.post(`/users/${JSON.parse(localStorage.getItem('currentUser')).id}/delete`, { 'password': password }));
   }
 
-    /**
-   * sends the new password after the reset
-   * @param {string} password new password
-   * @returns {Promise} Promise
-   */
+  /**
+ * sends the new password after the reset
+ * @param {string} password new password
+ * @returns {Promise} Promise
+ */
   async postNewPassword(password: string) {
     await this._apiClient.request({
       url: '/users/reset/token',
-      data: {password},
+      data: { password },
       method: 'POST',
     });
   }
-
 
   /**
    * removes user from local storage to log user out
@@ -170,31 +171,35 @@ export class AuthenticationService {
    * @returns {void}
    */
   private addInterceptor() {
-    this._apiClient.interceptors.response.use( response => {
+    this._apiClient.interceptors.response.use(response => {
       return response;
     },
-    error => {
-      if (error.response.status === 401 && localStorage.getItem('currentUser') && !error.response.config.headers._isRetry) {
-        // get new access_token
-        return this.refresh()
-        .then( () => {
-          error.config.headers.Authorization = JSON.parse(localStorage.getItem('currentUser')).token_type
-            + ' '
-            + JSON.parse(localStorage.getItem('currentUser')).access_token;
+      error => {
+        if (error.response.status === 401 && localStorage.getItem('currentUser') && !error.response.config.headers._isRetry) {
+          // get new access_token
+          return this.refresh()
+            .then(() => {
+              error.config.headers.Authorization = JSON.parse(localStorage.getItem('currentUser')).token_type
+                + ' '
+                + JSON.parse(localStorage.getItem('currentUser')).access_token;
 
-          error.config.headers._isRetry = true;
+              error.config.headers._isRetry = true;
 
-          // return the response with a new access_token
-          return this._apiClient.request(error.config);
-        })
-        .catch( () => {
-          console.log('Refresh login error: ', error);
-          return Promise.reject(error);
-        });
-      }
-    });
+              // return the response with a new access_token
+              return this._apiClient.request(error.config);
+            })
+            .catch(() => {
+              console.log('Refresh login error: ', error);
+              return Promise.reject(error);
+            });
+        }
+      });
   }
 
+  /**
+   * Shows wether a user is logged in
+   * @returns {Boolean} true, if user is logged in
+   */
   isUserLoggedIn(): boolean {
     return !!localStorage.getItem('currentUser');
   }
