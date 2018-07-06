@@ -18,31 +18,33 @@ import { Router } from '@angular/router';
 export class ChangePasswordComponent implements OnInit {
 
   resetFormGroup: FormGroup;
-  hide_pw1 = true;
-  hide_pw2 = true;
-  hide_pw3 = true;
+  hidePw1 = true;
+  hidePw2 = true;
+  hidePw3 = true;
   submitted: boolean;
   loading: boolean;
   changeFormGroup: FormGroup;
 
   constructor(
     private _formBuilder: FormBuilder,
-    private authenticationService: AuthenticationService,
-    private alertService: AlertService, private router: Router) { }
+    private _authenticationService: AuthenticationService,
+    private _alertService: AlertService,
+    private router: Router,
+  ) { }
 
   ngOnInit() {
     this.changeFormGroup = this._formBuilder.group({
 
       // Validators to check the length of the password
-      pwdOld: ['', Validators.minLength(8)],
+      pwdOld: [''],
       pwdNew: ['', Validators.minLength(8)],
       pwdNew2: ['', Validators.minLength(8)],
 
-    },
-      {
-        // validates the two passwords
-        validator: PasswordValidation.Match('pwdNew', 'pwdNew2'),
-      });
+    }, {
+      // validates the two passwords
+      validator: PasswordValidation.Match('pwdNew', 'pwdNew2'),
+    });
+    debugger;
   }
 
   onSubmit() {
@@ -56,16 +58,16 @@ export class ChangePasswordComponent implements OnInit {
     }
 
       // call the method to change the password
-      this.authenticationService.changepassword(this.pwdOld.value.toString(), this.pwdNew.value.toString())
+      this._authenticationService.changepassword(this.pwdOld.value.toString(), this.pwdNew.value.toString())
       .then( () => {
           // if the change was successful
-          this.alertService.success('Ihr Passwort wurde erfolgreich geändert! Bitte melden Sie sich mit dem neuen Passwort an.');
-          this.authenticationService.logout();
+          this._alertService.success('Ihr Passwort wurde erfolgreich geändert! Bitte melden Sie sich mit dem neuen Passwort an.');
+          this._authenticationService.logout();
           this.router.navigate(['/login']); // relog with the new password
       })
       .catch( // catch the error-warnings if the method fails
         error => {
-          this.alertService.error(error);
+          this._alertService.error(error);
           this.loading = false;
         });
 

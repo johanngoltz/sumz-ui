@@ -19,7 +19,7 @@ export class DeleteUserComponent implements OnInit {
   [x: string]: any;
   deleteFormGroup: FormGroup;
   submitted = false;
-  hide_pw1 = true;
+  hide = true;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -29,18 +29,18 @@ export class DeleteUserComponent implements OnInit {
   ngOnInit() {
     this.deleteFormGroup = this._formBuilder.group({
       // Validators to check the length of the password
-      pwdCtrl: ['', Validators.minLength(8)],
+      pwdCtrl: [''],
     });
   }
 
   onSubmit() {
-    // deactivate the registration button
-    this.submitted = true;
-
     // stop here if form is invalid
     if (this.deleteFormGroup.invalid) {
       return;
     }
+
+    // deactivate the registration button
+    this.submitted = true;
 
     // call the method to request the delete
     this.authenticationService.deleteuser(this.pwdCtrl.value.toString())
