@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material';
 import { Router } from '@angular/router';
-import { AccountingDataParams } from '../api/paramData';
+import { accountingDataParams } from '../api/paramData';
 import { Scenario } from '../api/scenario';
 import { SelectScenarioComponent } from '../select-scenario/select-scenario.component';
 import { AlertService } from '../service/alert.service';
@@ -20,7 +20,7 @@ export class CreateScenarioComponent implements OnInit {
   formGroup3: FormGroup;
   busy: Boolean;
   importedScenario: EventEmitter<Scenario>;
-  accountingDataParams = AccountingDataParams.prototype;
+  accountingDataParams = accountingDataParams;
 
   constructor(private _formBuilder: FormBuilder,
     private _scenariosService: ScenariosService,
@@ -62,22 +62,24 @@ export class CreateScenarioComponent implements OnInit {
       const base = this.formGroup3.controls.base.value;
       const end = this.formGroup3.controls.end.value;
       const quarterly = this.formGroup3.controls.quarterly.value;
-      Object.keys(this.accountingDataParams)
-        .filter((param: keyof AccountingDataParams) => this._timeSeriesMethodsService.shouldDisplayAccountingDataParam(
-          this.accountingDataParams, this.formGroup3.controls.calculateFcf.value, param))
-        .forEach((param) => {
-          const paramFormGroup = this.formGroup3.controls[param];
+
+      for (const [paramName, paramDefinition] of this.accountingDataParams) {
+        if (this._timeSeriesMethodsService.shouldDisplayAccountingDataParam(
+          this.accountingDataParams, this.formGroup3.controls.calculateFcf.value, paramName)) {
+          const paramFormGroup = this.formGroup3.controls[paramName];
           if (paramFormGroup.value.isHistoric && !scenario.stochastic) {
             scenario.stochastic = true;
           }
-          scenario[param] = {
+          scenario[paramName] = {
             isHistoric: paramFormGroup.value.isHistoric,
             timeSeries: paramFormGroup.value.timeSeries.filter(dataPoint =>
               this._timeSeriesMethodsService.isInsideBounds(quarterly, start, end, dataPoint)
               && this._timeSeriesMethodsService.checkVisibility(dataPoint, paramFormGroup.value.isHistoric, quarterly, base, end,
-                this.accountingDataParams[param].shiftDeterministic)),
+                paramDefinition.shiftDeterministic)),
           };
-        });
+        }
+      }
+
       this._scenariosService.addScenario(scenario)
         .subscribe(
           (createdScenario) => {
