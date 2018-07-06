@@ -291,7 +291,7 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
         const timeSeries = (<FormArray>paramFormGroup.controls.timeSeries).controls;
         return timeSeries.filter(dataPoint =>
           this._timeSeriesMethodsService.isInsideBounds(
-            this.formGroup.controls.quarterly.value,
+            formGroup.controls.quarterly.value,
             this.start,
             this.end,
             dataPoint.value
@@ -299,8 +299,8 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
           this._timeSeriesMethodsService.checkVisibility(
             dataPoint.value,
             paramFormGroup.value.isHistoric,
-            this.formGroup.controls.quarterly.value,
-            this.formGroup.controls.base.value,
+            formGroup.controls.quarterly.value,
+            formGroup.controls.base.value,
             this.end,
             this.accountingDataParams.get(param).shiftDeterministic))
           .map(dataPoint => dataPoint.valid)
