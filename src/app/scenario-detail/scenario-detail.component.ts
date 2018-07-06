@@ -89,7 +89,7 @@ export class ScenarioDetailComponent implements OnInit {
 
   private readonly numberValidator = Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$');
   private readonly taxRateValidators =
-    [this.numberValidator, Validators.min(0), Validators.max(100), Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$')];
+    [this.numberValidator, Validators.min(0), Validators.max(100)];
 
   constructor(private _scenariosService: ScenariosService,
     private _formBuilder: FormBuilder,
