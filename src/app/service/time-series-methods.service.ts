@@ -11,7 +11,7 @@ export class TimeSeriesMethodsService {
 
   shouldDisplayAccountingDataParam(
     accountingDataParams: AccountingDataParams, calculateFcf: boolean, param: keyof AccountingDataParams) {
-    return [undefined, calculateFcf].indexOf(accountingDataParams[param].showOnCalculation) > -1;
+    return [undefined, calculateFcf].includes(accountingDataParams[param].showOnCalculation);
   }
 
   checkVisibility(value: TimePoint, requireHistoric: Boolean, quarterly: Boolean, base: TimePoint, end: TimePoint, shifted = false) {
