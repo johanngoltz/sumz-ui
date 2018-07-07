@@ -1,7 +1,7 @@
 export class Scenario {
     id: number;
-    name: string;
-    description: string;
+    scenarioName: string;
+    scenarioDescription: string;
     periods: number;
 
     equityInterestRate: number;

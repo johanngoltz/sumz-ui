@@ -30,7 +30,7 @@ describe('ScenariosComponent', () => {
         { provide: APP_BASE_HREF, useValue: '/' },
         {
           provide: ScenariosService, useValue: {
-            scenarios$: of([{ id: 1, name: 'Eins', description: 'Das erste Szenario' } as Scenario]),
+            scenarios$: of([{ id: 1, scenarioName: 'Eins', scenarioDescription: 'Das erste Szenario' } as Scenario]),
             getScenarios: () => this.scenarios$,
           } as ScenariosService,
         },

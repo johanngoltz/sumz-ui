@@ -73,7 +73,7 @@ describe('ScenariosService', () => {
   }));
 
   it('should be able to modify a scenario', inject([ScenariosService], (service: ScenariosService) => {
-    const modifyThis = { id: 2500, description: 'A new description' } as Scenario;
+    const modifyThis = { id: 2500, scenarioDescription: 'A new description' } as Scenario;
     service
       .updateScenario(modifyThis)
       .subscribe(

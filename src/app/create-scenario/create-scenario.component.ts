@@ -35,8 +35,8 @@ export class CreateScenarioComponent implements OnInit {
   ngOnInit() {
     this.busy = false;
     this.formGroup1 = this._formBuilder.group({
-      name: ['', Validators.required],
-      description: '',
+      scenarioName: ['', Validators.required],
+      scenarioDescription: '',
     });
     const environmentParamControls = {};
     Object.entries(environmentParams).forEach(([name, config]) => {
@@ -106,14 +106,14 @@ export class CreateScenarioComponent implements OnInit {
   insertScenarioData(scenario: Scenario) {
     if (scenario) {
       if (this.formGroup1.value.name.length === 0) {
-        this.formGroup1.controls.name.setValue(scenario.name);
+        this.formGroup1.controls.name.setValue(scenario.scenarioName);
       }
       if (this.formGroup1.value.description.length === 0) {
-        this.formGroup1.controls.description.setValue(scenario.description);
+        this.formGroup1.controls.description.setValue(scenario.scenarioDescription);
       }
       Object.entries(this.formGroup2.controls).forEach(([key, control]) => control.setValue(scenario[key] * 100));
       this.importedScenario.emit(scenario);
-      this._alertService.success(`Die Daten des Szenarios "${scenario.name}" wurden erfolgreich übernommen`);
+      this._alertService.success(`Die Daten des Szenarios "${scenario.scenarioName}" wurden erfolgreich übernommen`);
     }
   }
 

@@ -46,8 +46,8 @@ const accountingFigures = Object.entries(rawAccountingFigures).reduce(
 export const DEFAULT_MOCK_DATA: Scenario[] = [{
     ...{
         id: 69190,
-        name: 'Testszenario',
-        description: 'KPMG-geprüfte, garantiert fehlerfreie Unternehmensbewertung',
+        scenarioName: 'Testszenario',
+        scenarioDescription: 'KPMG-geprüfte, garantiert fehlerfreie Unternehmensbewertung',
         businessTaxRate: .25,
         corporateTaxRate: .2,
         solidaryTaxRate: .055,

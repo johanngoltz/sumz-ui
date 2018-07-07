@@ -23,27 +23,8 @@ describe('ScenarioCardComponent', () => {
     component = fixture.componentInstance;
     component.scenario = new Wrapper<Scenario>({
       id: 3,
-      name: 'Testscenario',
-      description: 'Testdesc',
-      // FIXME
-      /*
-      algorithm: 'fcf',
-      deterministic: true,
-      baseYear: 2014,
-      iterations: 5000,
-      prognosisLength: 3,
-      timeSeries: [
-        {
-          year: 2014,
-          fcf: 300,
-          externalCapital: 500,
-        },
-        {
-          year: 2015,
-          fcf: 350,
-          externalCapital: 400,
-        },
-      ],*/
+      scenarioName: 'Testscenario',
+      scenarioDescription: 'Testdesc',
     } as Scenario);
     fixture.detectChanges();
   });
