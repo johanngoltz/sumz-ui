@@ -80,7 +80,7 @@
             <div *ngIf="!_editable" class="no-bold">&nbsp;{{formGroup.controls[ctrl].value.isHistoric ? 'Wird prognostiziert' : ''}}</div>
           </th>
           <td class="mat-cell" *ngFor="let element of formGroup.controls[ctrl].controls.timeSeries.controls; trackBy: trackByYearQuarter">
-            <ng-container *ngIf="_timeSeriesMethodsService.checkVisibility(element.value, formGroup.controls[ctrl].controls.isHistoric.value, formGroup.controls.quarterly.value, base, end.value, accountingDataParams.get(ctrl).shiftDeterministic)">
+            <ng-container *ngIf="_timeSeriesMethodsService.checkVisibility(element.value, formGroup.controls[ctrl].controls.isHistoric.value, formGroup.controls.quarterly.value, base, end, accountingDataParams.get(ctrl).shiftDeterministic)">
               <span class="table-data" *ngIf="!_editable">{{element.value.amount}}</span>
               <mat-form-field class="table-input-right" [formGroup]="element" *ngIf="_editable">
                 <input type="text" matInput formControlName="amount" appToDouble required>
