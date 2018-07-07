@@ -1,23 +1,19 @@
 import { Inject, Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { TypedAxiosInstance } from 'restyped-axios';
 import { from, Observable, ReplaySubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { SumzAPI } from '../api/api';
 import { HttpClient } from './http-client';
-import { switchMap, tap } from 'rxjs/operators';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
-  private _returnUrl: string;
   public user$: Observable<Number>;
   protected _user$: ReplaySubject<Number>;
 
   constructor(
-    private _router: Router,
-    private _route: ActivatedRoute,
     @Inject(HttpClient) private _apiClient: TypedAxiosInstance<SumzAPI>,
   ) {
     // handle expired access_token
@@ -31,16 +27,16 @@ export class AuthenticationService {
    * signin a registered user
    * @param {string} email Email of the user
    * @param {string} password Password of the user
-   * @returns {Promise} Promise
+   * @returns {Observable<any>} Observable
    */
-  async login(email: string, password: string) {
-    // convert data in x-www-form-urlencoded
+  login(email: string, password: string) {
+    // convert data to x-www-form-urlencoded
     const data = new URLSearchParams();
     data.append('username', email);
     data.append('password', password);
     data.append('grant_type', 'password');
 
-    await this._apiClient.request({
+    return from(this._apiClient.request({
       url: '/oauth/token',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       data: data,
@@ -49,28 +45,28 @@ export class AuthenticationService {
         password: 'XY7kmzoNzl100',
       },
       method: 'POST',
-    }).then(response => {
-      if (response.status === 200) {
-        // store user details in local storage to keep user logged in
-        localStorage.setItem('currentUser', JSON.stringify(response.data));
-        // navigate to return url from route parameters or default to '/'
-        this._returnUrl = this._route.snapshot.queryParams['returnUrl'] || '/';
-        this._router.navigate([this._returnUrl]);
-      }
-    });
+    }))
+      .pipe(
+        tap(response => {
+          this.logout();
+          // store user details in local storage to keep user logged in
+          localStorage.setItem('currentUser', JSON.stringify(response.data));
+          this._user$.next();
+        }),
+    );
   }
 
   /**
    * refresh the tokens for authenticated server communicaiton
-   * @returns {Promise} Promise
+   * @returns {Observable<any>} Observable
    */
-  async refresh() {
+  refresh() {
     // convert data in x-www-form-urlencoded
     const data = new URLSearchParams();
     data.append('refresh_token', JSON.parse(localStorage.getItem('currentUser')).refresh_token);
     data.append('grant_type', 'refresh_token');
 
-    const response = await this._apiClient.request({
+    return from(this._apiClient.request({
       url: '/oauth/token',
       headers: { '_isRetry': true },
       data: data,
@@ -79,19 +75,16 @@ export class AuthenticationService {
         password: 'XY7kmzoNzl100',
       },
       method: 'POST',
-    });
-
-    // delete old tokens
-    this.logout();
-
-    // if refresh token correct, redirect page
-    if (response.status === 200) {
-      // store new user details in local storage to keep user logged in
-      localStorage.setItem('currentUser', JSON.stringify(response.data));
-      return;
-    } else {
-      return;
-    }
+    }))
+      .pipe(
+        tap(response => {
+          // delete old tokens
+          this.logout();
+          // store new user details in local storage to keep user logged in
+          localStorage.setItem('currentUser', JSON.stringify(response.data));
+          this._user$.next();
+        })
+      );
   }
 
   /**
@@ -99,83 +92,87 @@ export class AuthenticationService {
    * (is called in registration.component)
    * @param {string} email Email
    * @param {string} password Password
-   * @returns {Promise} Promise
+   * @returns {Observable<any>} Observable
    */
-  async register(email: string, password: string) {
-    await this._apiClient.request({
+  register(email: string, password: string) {
+    return from(this._apiClient.request({
       url: '/users',
       data: { email, password },
       method: 'POST',
-    }).then(response => {
-      // if credentials correct, redirect to main page
-      if (response.status === 302) {
-        console.log('Registrierung klappt');
-        // navigate to return url from route parameters or default to '/'
-        this._returnUrl = this._route.snapshot.queryParams['returnUrl'] || '/';
-        this._router.navigate([this._returnUrl]);
-      }
-    });
+    }))
+      .pipe(
+        tap(() => {
+          this._user$.next();
+        })
+      );
   }
 
   /**
    * changes the password
    * (is called in changepassword.component)
-   * @param {string} oldPassword Actual password
+   * @param {string} oldPassword actual password
    * @param {string} newPassword new password
-   * @returns {Observable} Observable
+   * @returns {Observable<any>} Observable
    */
   changePassword(oldPassword: string, newPassword: string) {
-    // ${JSON.parse(localStorage.getItem('currentUser')).id} -> getting the id of the current user to update the password
     return from(this._apiClient.put(`/users/${JSON.parse(localStorage.getItem('currentUser')).user_id}`,
-      { 'oldPassword': oldPassword, 'newPassword': newPassword }));
+      { 'oldPassword': oldPassword, 'newPassword': newPassword }))
+      .pipe(
+        tap(() => {
+          this.logout();
+          this._user$.next();
+        })
+      );
   }
 
   /**
    * send a request to reset the current password
-   * (is called in newpassword.component)
-   * @param {string} email email
-   * @returns {Promise} Promise
+   * (is called in newpasswordemail.component.ts)
+   * @param {string} email Email
+   * @returns {Observable<any>} Observable
    */
-  async resetPassword(email: string) {
-    await this._apiClient.request({
+  resetPassword(email: string) {
+    return from(this._apiClient.request({
       url: '/users/forgot',
       data: { email },
       method: 'POST',
-    });
+    }))
+      .pipe(
+        tap(() => {
+          this._user$.next();
+        })
+      );
   }
 
   /**
    * deletes an existing user
    * @param {string} password password of the user account
-   * @returns {Ovservable} Observable
+   * @returns {Ovservable<any>} Observable
    */
   deleteUser(password: string) {
-    // FIXME: es wird auch eine Erfolgsmeldung ausgegeben, wenn das Passwort falsch ist
-    // Bitte entsprechende Meldung einbauen
-    // Fehler-Response ist im OneNote
     return from(this._apiClient.post(`/users/${JSON.parse(localStorage.getItem('currentUser')).user_id}/delete`, { 'password': password }))
-    .pipe(
-      tap( () => {
-        this.logout();
-        this._user$.next();
-      })
-    );
+      .pipe(
+        tap(() => {
+          this.logout();
+          this._user$.next();
+        })
+      );
   }
 
   /**
    * sends the new password after the reset
+   * @param {string} token user token from mail
    * @param {string} password new password
-   * @returns {Observable} Observable
+   * @returns {Observable<any>} Observable
    */
-  postNewPassword(password: string) {
-    const url = this._router.routerState.snapshot.url.split('/');
-
-    // check URL
-    if (!(url.length === 4 && url[1] === 'users' && url[2] === 'reset' && url[3] !== '')) {
-      return;
-    }
-
-    return from(this._apiClient.post(`/users/reset/${url[3]}`, {'password': password}));
+  postNewPassword(token: string, password: string) {
+    return from(this._apiClient.post(`/users/reset/${token}`, { 'password': password }))
+      .pipe(
+        tap(() => {
+          this.logout();
+          this._user$.next();
+        })
+      );
   }
 
   /**
@@ -193,29 +190,34 @@ export class AuthenticationService {
    * @returns {void}
    */
   private addInterceptor() {
-    // TODO: Muss getestet werden
     this._apiClient.interceptors.response.use(response => {
       return response;
     },
       error => {
-        if (error.response.status === 401 && localStorage.getItem('currentUser') && !error.response.config.headers._isRetry) {
+        if (!!error.response
+          && error.response.status === 401
+          && localStorage.getItem('currentUser')
+          && !error.response.config.headers._isRetry) {
+
           // get new access_token
-          return this.refresh()
-            .then(() => {
-              error.config.headers.Authorization = JSON.parse(localStorage.getItem('currentUser')).token_type
-                + ' '
-                + JSON.parse(localStorage.getItem('currentUser')).access_token;
-
-              error.config.headers._isRetry = true;
-
-              // return the response with a new access_token
-              return this._apiClient.request(error.config);
-            })
-            .catch(() => {
-              console.log('Refresh login error: ', error);
-              return Promise.reject(error);
-            });
+          this.refresh()
+            .subscribe(
+              () => {
+                // update Authorization header in primary request
+                error.config.headers.Authorization = JSON.parse(localStorage.getItem('currentUser')).token_type
+                  + ' '
+                  + JSON.parse(localStorage.getItem('currentUser')).access_token;
+                error.config.headers._isRetry = true;
+                // return the response with a new access_token
+                return this._apiClient.request(error.config);
+              },
+              () => {
+                console.log('Refresh login error: ', error);
+                return Promise.reject(error);
+              }
+            );
         }
+        return Promise.reject(error);
       });
   }
 

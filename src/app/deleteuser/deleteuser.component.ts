@@ -12,7 +12,6 @@ import { AuthenticationService } from '../service/authentication.service';
 
 /**
  * Deleting an existing user account is implemented in this class.
- * @author Burkart
  */
 export class DeleteUserComponent implements OnInit {
   deleteFormGroup: FormGroup;
@@ -42,19 +41,19 @@ export class DeleteUserComponent implements OnInit {
     this.loading = true;
 
     this._authenticationService.deleteUser(this.pwdCtrl.value.toString())
-    .subscribe(
-      () => {
-        // if the delete was successful
-        this._alertService.success('Ihr Account wurde erfolgreich gelöscht!');
-        this._router.navigate(['/login']); // route to login page
-      },
-      (error) => {
-        this._alertService.error(error);
-      },
-      () => {
-        this.loading = false;
-      }
-    );
+      .subscribe(
+        () => {
+          // if the delete was successful
+          this._alertService.success('Ihr Account wurde erfolgreich gelöscht!');
+          this._router.navigate(['/login']); // return to login page
+        },
+        (error) => {
+          this._alertService.error(error.response.data.message || error);
+        },
+        () => {
+          this.loading = false;
+        }
+      );
   }
 
   // getter for the password

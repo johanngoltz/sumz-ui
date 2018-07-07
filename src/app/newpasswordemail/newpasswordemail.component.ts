@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AlertService } from '../service/alert.service';
 import { AuthenticationService } from '../service/authentication.service';
 
@@ -11,7 +12,6 @@ import { AuthenticationService } from '../service/authentication.service';
 
 /**
  * Changing the password of an existing user account is implemented in this class.
- * @author Burkart
  */
 export class NewPasswordEmailComponent implements OnInit {
   newFormGroup: FormGroup;
@@ -20,7 +20,8 @@ export class NewPasswordEmailComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private _authenticationService: AuthenticationService,
-    private _alertService: AlertService) { }
+    private _alertService: AlertService,
+    private _router: Router) { }
 
   ngOnInit() {
     this.newFormGroup = this._formBuilder.group({
@@ -40,14 +41,18 @@ export class NewPasswordEmailComponent implements OnInit {
 
     // call the method to request a new password
     this._authenticationService.resetPassword(this.mailCtrl.value.toString())
-      .catch( // catch the error-warnings if the method fails
-        error => {
-          this._alertService.error(error);
+      .subscribe(
+        () => {
+          this._alertService.success('Ein Link zum Zurücksetzen des Passworts wurde an die angegebene Mailadresse versendet');
+          this._router.navigate(['/login']);
+        },
+        (error) => {
+          this._alertService.error(error.response.data.message || error);
+        },
+        () => {
           this.loading = false;
-        });
-
-    // if the new was successful
-    this._alertService.success('Ein Link zum Zurücksetzen des Passworts wurde an die angegebene Mailadresse versendet');
+        },
+    );
   }
 
   // getter for the email, old and new passwords

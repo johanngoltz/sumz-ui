@@ -14,7 +14,6 @@ import { AuthenticationService } from '../service/authentication.service';
 /**
  * Changing the password of an existing user account is implemented in this class after the reset
  * in component newpasswordemail.
- * @author Burkart
  */
 export class NewPasswordComponent implements OnInit {
 
@@ -26,7 +25,8 @@ export class NewPasswordComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private _authenticationService: AuthenticationService,
-    private _alertService: AlertService, private router: Router) { }
+    private _alertService: AlertService,
+    private _router: Router) { }
 
   ngOnInit() {
     this.newFormGroup = this._formBuilder.group({
@@ -53,23 +53,29 @@ export class NewPasswordComponent implements OnInit {
     // deactivate the registration button
     this.loading = true;
 
-    // FIXME: in Observables ändern
-    // // call the method to request a new password
-    // this._authenticationService.postNewPassword(this.pwdNew1.value.toString())
-    //   .then(() => {
-    //     // if the change was successful
-    //     this._alertService.success('Ihr neues Passwort wurde erfolgreich gesetzt. Bitte loggen Sie sich mit dem neuen Passwort ein');
-    //     this._authenticationService.logout();
-    //     this.router.navigate(['/login']); // relog with the new password
-    //   })
-    //   .catch( // catch the error-warnings if the method fails
-    //     error => {
-    //       this._alertService.error(error);
-    //       this.loading = false;
-    //     });
+    const url = this._router.routerState.snapshot.url.split('/');
 
-    // if the new was successful
-    this._alertService.success('Ihr Passwort wurde erfolgreich geändert!');
+    // check URL
+    if (!(url.length === 4 && url[1] === 'users' && url[2] === 'reset' && url[3] !== '')) {
+      this.loading = false;
+      return;
+    }
+
+    // request a new password
+    this._authenticationService.postNewPassword(url[3], this.pwdNew1.value.toString())
+      .subscribe(
+        () => {
+          this._alertService.success('Ihr neues Passwort wurde erfolgreich gesetzt. Bitte loggen Sie sich mit dem neuen Passwort ein.');
+          this._authenticationService.logout();
+          this._router.navigate(['/login']); // return to login page
+        },
+        (error) => {
+          this._alertService.error(error.response.data.message || error);
+        },
+        () => {
+          this.loading = false;
+        }
+      );
   }
 
   // getter for the email, old and new passwords

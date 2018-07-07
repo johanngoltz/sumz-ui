@@ -13,7 +13,6 @@ import { AuthenticationService } from '../service/authentication.service';
 
 /**
  * Changing the password of an existing user account is implemented in this class.
- * @author Burkart
  */
 export class ChangePasswordComponent implements OnInit {
 
@@ -42,9 +41,9 @@ export class ChangePasswordComponent implements OnInit {
         Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).*')]],
       pwdNew2: [''],
     }, {
-      // validates the two passwords
-      validator: PasswordValidation.Match('pwdNew', 'pwdNew2'),
-    });
+        // validates the two passwords
+        validator: PasswordValidation.Match('pwdNew', 'pwdNew2'),
+      });
   }
 
   onSubmit() {
@@ -56,20 +55,20 @@ export class ChangePasswordComponent implements OnInit {
     // deactivate the change password button
     this.loading = true;
 
-    // FIXME: in Observables ändern
-    // // call the method to change the password
-    // this._authenticationService.changePassword(this.pwdOld.value.toString(), this.pwdNew.value.toString())
-    // .then( () => {
-    //     // if the change was successful
-    //     this._alertService.success('Ihr Passwort wurde erfolgreich geändert! Bitte melden Sie sich mit dem neuen Passwort an.');
-    //     this._authenticationService.logout();
-    //     this._router.navigate(['/login']); // relog with the new password
-    // })
-    // .catch( // catch the error-warnings if the method fails
-    //   error => {
-    //     this._alertService.error(error);
-    //     this.loading = false;
-    //   });
+    this._authenticationService.changePassword(this.pwdOld.value.toString(), this.pwdNew.value.toString())
+      .subscribe(
+        () => {
+          // if the change was successful
+          this._alertService.success('Ihr Passwort wurde erfolgreich geändert! Bitte melden Sie sich mit dem neuen Passwort an.');
+          this._router.navigate(['/login']); // return to login page
+        },
+        (error) => {
+          this._alertService.error(error.response.data.message || error);
+        },
+        () => {
+          this.loading = false;
+        }
+      );
   }
 
   // getter for the old and new passwords
