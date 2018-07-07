@@ -18,18 +18,18 @@ describe('ScenariosService', () => {
           const axiosInstance = axios.create<SumzAPI>();
           const data = [{ id: 2500 }, { id: 2501 }, { id: 2502 }, { id: 2510 }] as Scenario[];
           new MockAdapter(axiosInstance)
-            .onGet('/scenario').reply(config => {
+            .onGet('/scenarios').reply(config => {
               return [200, [...data]];
             })
-            .onDelete('/scenario/2510').reply(config => {
+            .onDelete('/scenarios/2510').reply(config => {
               return [200];
             })
-            .onPut('/scenario/2500').reply(config => {
+            .onPut('/scenarios/2500').reply(config => {
               const updateScenario = JSON.parse(config.data);
               updateScenario.id = 2500;
               return [200, updateScenario];
             })
-            .onPost('/scenario').reply(200, { id: 2520 });
+            .onPost('/scenarios').reply(200, { id: 2520 });
           return axiosInstance;
         },
       }],
