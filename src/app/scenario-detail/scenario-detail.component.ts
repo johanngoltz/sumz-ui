@@ -190,16 +190,13 @@ export class ScenarioDetailComponent implements OnInit {
       currentScenario.scenarioDescription = this.formGroup.controls.scenarioDescription.value;
       Object.keys(environmentParams).forEach(key => currentScenario[key] = this.formGroup.controls[key].value / 100);
 
-      currentScenario.stochastic = false;
-      currentScenario.periods = this._timeSeriesMethodsService.calculateIntervalLength(
-        this.accountingDataFormGroup.controls.start.value,
-        this.accountingDataFormGroup.controls.end.value,
-        this.accountingDataFormGroup.controls.quarterly.value);
-
       const quarterly = this.accountingDataFormGroup.controls.quarterly.value;
       const start = this.accountingDataFormGroup.controls.start.value;
       const base = this.accountingDataFormGroup.controls.base.value;
       const end = this.accountingDataFormGroup.controls.end.value;
+
+      currentScenario.stochastic = false;
+      currentScenario.periods = this._timeSeriesMethodsService.calculatePeriods(base, end, quarterly);
 
       for (const [param, paramDefinition] of this.accountingDataParams) {
         if (this._timeSeriesMethodsService.shouldDisplayAccountingDataParam(

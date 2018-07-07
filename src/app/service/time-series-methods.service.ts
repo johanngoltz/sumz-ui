@@ -40,8 +40,8 @@ export class TimeSeriesMethodsService {
     });
   }
 
-  calculateIntervalLength(start: TimePoint, end: TimePoint, quarterly: Boolean) {
-    return (end.year - start.year) * (quarterly ? 4 : 1) + (quarterly ? end.quarter - start.quarter : 0);
+  calculatePeriods(base: TimePoint, end: TimePoint, quarterly: Boolean) {
+    return (end.year - base.year) * (quarterly ? 4 : 1) + (quarterly ? end.quarter - base.quarter : 0);
   }
 
   private removeQuarter(point: TimePoint) {

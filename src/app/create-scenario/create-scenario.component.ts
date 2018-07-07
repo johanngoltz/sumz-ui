@@ -49,23 +49,21 @@ export class CreateScenarioComponent implements OnInit {
 
   createScenario() {
     if (this.formGroup3.valid) {
-      Object.values(this.formGroup2.controls).forEach(control => control.setValue(control.value / 100));
+      const start = this.formGroup3.controls.start.value;
+      const base = this.formGroup3.controls.base.value;
+      const end = this.formGroup3.controls.end.value;
+      const quarterly = this.formGroup3.controls.quarterly.value;
+
       this.busy = true;
       const scenario = {
         id: null,
         ...this.formGroup1.value,
         ...this.formGroup2.value,
         stochastic: false,
-        periods: this._timeSeriesMethodsService.calculateIntervalLength(
-          this.formGroup3.controls.start.value,
-          this.formGroup3.controls.end.value,
-          this.formGroup3.controls.quarterly.value),
+        periods: this._timeSeriesMethodsService.calculatePeriods(base, end, quarterly),
       };
-      const start = this.formGroup3.controls.start.value;
-      const base = this.formGroup3.controls.base.value;
-      const end = this.formGroup3.controls.end.value;
-      const quarterly = this.formGroup3.controls.quarterly.value;
 
+      Object.keys(this.formGroup2.controls).forEach(param => scenario[param] = scenario[param] / 100);
       for (const [paramName, paramDefinition] of this.accountingDataParams) {
         if (this._timeSeriesMethodsService.shouldDisplayAccountingDataParam(
           this.accountingDataParams, this.formGroup3.controls.calculateFcf.value, paramName)) {

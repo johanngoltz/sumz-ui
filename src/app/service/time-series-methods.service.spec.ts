@@ -122,7 +122,7 @@ describe('TimeSeriesMethodsService', () => {
         },
       ];
       testData.forEach(data =>
-        expect(service.calculateIntervalLength.apply(service, data.parameters))
+        expect(service.calculatePeriods.apply(service, data.parameters))
           .toBe(data.result)
       );
     }));
