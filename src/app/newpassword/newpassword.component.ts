@@ -53,19 +53,20 @@ export class NewPasswordComponent implements OnInit {
     // deactivate the registration button
     this.loading = true;
 
-    // call the method to request a new password
-    this._authenticationService.postNewPassword(this.pwdNew1.value.toString())
-      .then(() => {
-        // if the change was successful
-        this._alertService.success('Ihr neues Passwort wurde erfolgreich gesetzt. Bitte loggen Sie sich mit dem neuen Passwort ein');
-        this._authenticationService.logout();
-        this.router.navigate(['/login']); // relog with the new password
-      })
-      .catch( // catch the error-warnings if the method fails
-        error => {
-          this._alertService.error(error);
-          this.loading = false;
-        });
+    // FIXME: in Observables ändern
+    // // call the method to request a new password
+    // this._authenticationService.postNewPassword(this.pwdNew1.value.toString())
+    //   .then(() => {
+    //     // if the change was successful
+    //     this._alertService.success('Ihr neues Passwort wurde erfolgreich gesetzt. Bitte loggen Sie sich mit dem neuen Passwort ein');
+    //     this._authenticationService.logout();
+    //     this.router.navigate(['/login']); // relog with the new password
+    //   })
+    //   .catch( // catch the error-warnings if the method fails
+    //     error => {
+    //       this._alertService.error(error);
+    //       this.loading = false;
+    //     });
 
     // if the new was successful
     this._alertService.success('Ihr Passwort wurde erfolgreich geändert!');

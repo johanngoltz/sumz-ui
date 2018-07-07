@@ -41,19 +41,20 @@ export class DeleteUserComponent implements OnInit {
     // deactivate the registration button
     this.loading = true;
 
-    // call the method to request the delete
-    this._authenticationService.deleteuser(this.pwdCtrl.value.toString())
-      .then(() => {
+    this._authenticationService.deleteUser(this.pwdCtrl.value.toString())
+    .subscribe(
+      () => {
         // if the delete was successful
         this._alertService.success('Ihr Account wurde erfolgreich gelöscht!');
-        this._authenticationService.logout();
         this._router.navigate(['/login']); // route to login page
-      })
-      .catch( // catch the error-warnings if the method fails
-        error => {
-          this._alertService.error(error);
-          this.loading = false;
-        });
+      },
+      (error) => {
+        this._alertService.error(error);
+      },
+      () => {
+        this.loading = false;
+      }
+    );
   }
 
   // getter for the password

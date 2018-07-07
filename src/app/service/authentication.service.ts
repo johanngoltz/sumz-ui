@@ -4,6 +4,7 @@ import { TypedAxiosInstance } from 'restyped-axios';
 import { from, Observable, ReplaySubject } from 'rxjs';
 import { SumzAPI } from '../api/api';
 import { HttpClient } from './http-client';
+import { switchMap, tap } from 'rxjs/operators';
 
 
 @Injectable({
@@ -11,8 +12,8 @@ import { HttpClient } from './http-client';
 })
 export class AuthenticationService {
   private _returnUrl: string;
-  public users$: Observable<SumzAPI[]>;
-  protected _users$: ReplaySubject<SumzAPI[]>;
+  public user$: Observable<Number>;
+  protected _user$: ReplaySubject<Number>;
 
   constructor(
     private _router: Router,
@@ -22,8 +23,8 @@ export class AuthenticationService {
     // handle expired access_token
     this.addInterceptor();
 
-    this._users$ = new ReplaySubject(1);
-    this.users$ = this._users$.asObservable();
+    this._user$ = new ReplaySubject(1);
+    this.user$ = this._user$.asObservable();
   }
 
   /**
@@ -121,9 +122,9 @@ export class AuthenticationService {
    * (is called in changepassword.component)
    * @param {string} oldPassword Actual password
    * @param {string} newPassword new password
-   * @returns {Promise} Promise
+   * @returns {Observable} Observable
    */
-  async changepassword(oldPassword: string, newPassword: string) {
+  changePassword(oldPassword: string, newPassword: string) {
     // ${JSON.parse(localStorage.getItem('currentUser')).id} -> getting the id of the current user to update the password
     return from(this._apiClient.put(`/users/${JSON.parse(localStorage.getItem('currentUser')).user_id}`,
       { 'oldPassword': oldPassword, 'newPassword': newPassword }));
@@ -146,22 +147,28 @@ export class AuthenticationService {
   /**
    * deletes an existing user
    * @param {string} password password of the user account
-   * @returns {Promise} Promise
+   * @returns {Ovservable} Observable
    */
-  async deleteuser(password: string) {
+  deleteUser(password: string) {
     // FIXME: es wird auch eine Erfolgsmeldung ausgegeben, wenn das Passwort falsch ist
     // Bitte entsprechende Meldung einbauen
     // Fehler-Response ist im OneNote
-    return from(this._apiClient.post(`/users/${JSON.parse(localStorage.getItem('currentUser')).user_id}/delete`, { 'password': password }));
+    return from(this._apiClient.post(`/users/${JSON.parse(localStorage.getItem('currentUser')).user_id}/delete`, { 'password': password }))
+    .pipe(
+      tap( () => {
+        this.logout();
+        this._user$.next();
+      })
+    );
   }
 
   /**
    * sends the new password after the reset
    * @param {string} password new password
-   * @returns {Promise} Promise
+   * @returns {Observable} Observable
    */
-  async postNewPassword(password: string) {
-    const url: string[] = this._router.routerState.snapshot.url.split('/');
+  postNewPassword(password: string) {
+    const url = this._router.routerState.snapshot.url.split('/');
 
     // check URL
     if (!(url.length === 4 && url[1] === 'users' && url[2] === 'reset' && url[3] !== '')) {

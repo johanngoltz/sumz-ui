@@ -56,19 +56,20 @@ export class ChangePasswordComponent implements OnInit {
     // deactivate the change password button
     this.loading = true;
 
-    // call the method to change the password
-    this._authenticationService.changepassword(this.pwdOld.value.toString(), this.pwdNew.value.toString())
-    .then( () => {
-        // if the change was successful
-        this._alertService.success('Ihr Passwort wurde erfolgreich geändert! Bitte melden Sie sich mit dem neuen Passwort an.');
-        this._authenticationService.logout();
-        this._router.navigate(['/login']); // relog with the new password
-    })
-    .catch( // catch the error-warnings if the method fails
-      error => {
-        this._alertService.error(error);
-        this.loading = false;
-      });
+    // FIXME: in Observables ändern
+    // // call the method to change the password
+    // this._authenticationService.changePassword(this.pwdOld.value.toString(), this.pwdNew.value.toString())
+    // .then( () => {
+    //     // if the change was successful
+    //     this._alertService.success('Ihr Passwort wurde erfolgreich geändert! Bitte melden Sie sich mit dem neuen Passwort an.');
+    //     this._authenticationService.logout();
+    //     this._router.navigate(['/login']); // relog with the new password
+    // })
+    // .catch( // catch the error-warnings if the method fails
+    //   error => {
+    //     this._alertService.error(error);
+    //     this.loading = false;
+    //   });
   }
 
   // getter for the old and new passwords
