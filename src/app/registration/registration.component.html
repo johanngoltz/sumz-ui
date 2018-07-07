@@ -1,5 +1,5 @@
 <div class="content-container">
-  <mat-card class="register-card" [class.busy]="submitted">
+  <mat-card class="register-card" [class.busy]="loading">
     <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
     <mat-card-title>Registrierung</mat-card-title>
     <mat-card-content>
@@ -56,7 +56,7 @@
         </p>
 
         <br>
-        <button mat-raised-button [disabled]="submitted" color="accent" class="register-btn">Neuen Account anlegen</button>
+        <button mat-raised-button [disabled]="loading" color="accent" class="register-btn">Neuen Account anlegen</button>
       </form>
 
       <div class="register-footer">

@@ -53,11 +53,11 @@ export interface SumzAPI {
             },
         }
     },
-    '/scenario': {
+    '/scenarios': {
         GET: { response: Scenario[] },
         POST: { body: Scenario, response: Scenario }
     },
-    '/scenario/:sId': {
+    '/scenarios/:sId': {
         params: { sId: number },
         GET: { response: Scenario },
         PUT: { body: Scenario, response: Scenario },

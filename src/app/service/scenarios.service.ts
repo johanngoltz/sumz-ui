@@ -22,11 +22,7 @@ export class ScenariosService {
   }
 
   getScenarios() {
-    return from(this._apiClient.request({ url: '/scenario' })).pipe(
-      switchMap(response => response.status === 200 ?
-        of(response) :
-        throwError(response)
-      ),
+    return from(this._apiClient.request({ url: '/scenarios' })).pipe(
       retry(2),
       flatMap(response => {
         this._scenariosStorage = response.data;
@@ -45,11 +41,10 @@ export class ScenariosService {
 
   addScenario(scenario: Scenario) {
     return from(this._apiClient.request({
-      url: '/scenario',
+      url: '/scenarios',
       data: scenario,
       method: 'POST',
     })).pipe(
-      switchMap(response => response.status === 201 ? of(response) : throwError(response)),
       retry(2),
       switchMap(response => {
         this._scenariosStorage.push(response.data);
@@ -60,11 +55,14 @@ export class ScenariosService {
   }
 
   updateScenario(scenario: Scenario) {
-    return from(this._apiClient.put(`/scenario/${scenario.id}`, scenario)).pipe(
-      switchMap(response => response.status === 200 ? of(response) : throwError(response)),
+    return from(this._apiClient.request({
+      url: `/scenarios/${scenario.id}` as '/scenarios/:sId',
+      method: 'PUT',
+      data: scenario,
+    })).pipe(
       retry(2),
       switchMap(response => {
-        const updatedScenario = response.data as Scenario;
+        const updatedScenario = response.data;
         this._scenariosStorage[this._scenariosStorage.indexOf(scenario)] = updatedScenario;
         return of(updatedScenario);
       })
@@ -72,10 +70,9 @@ export class ScenariosService {
   }
 
   removeScenario(scenario: Scenario) {
-    return from(this._apiClient.delete(`/scenario/${scenario.id}`)).pipe(
-      switchMap(response => response.status === 200 ? of(response) : throwError(response)),
+    return from(this._apiClient.delete(`/scenarios/${scenario.id}`)).pipe(
       retry(2),
-      switchMap(response => {
+      switchMap(() => {
         this._scenariosStorage.splice(this._scenariosStorage.indexOf(scenario), 1);
         this._scenarios$.next([...this._scenariosStorage]);
         return of(scenario);
