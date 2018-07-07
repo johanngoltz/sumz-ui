@@ -57,6 +57,7 @@ export class ScenariosService {
   updateScenario(scenario: Scenario) {
     return from(this._apiClient.request({
       url: `/scenario/${scenario.id}` as '/scenario/:sId',
+      method: 'PUT',
       data: scenario,
     })).pipe(
       retry(2),
