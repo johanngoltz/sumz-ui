@@ -21,57 +21,26 @@ Sandbox.define('/oauth/token', 'POST', function (req, res) {
   if (!req.is('application/x-www-form-urlencoded')) {
     return res.send(400, 'Invalid content type, expected application/json');
   }
-  
-  // // Login
-  // if (req.query.grant_type === 'password') {
-  //   // Check login credentials
-  //   if (!(req.query.email === 'tomastepa@web.de' && req.query.password === '123')) {
-  //     return res.send(401, 'Invalid username or password');
-  //   }
 
-    // Set the type of response, sets the content type.
-    res.type('application/json');
+  // Set the type of response, sets the content type.
+  res.type('application/json');
 
-    // Set the status code of the response.
-    res.status(200);
+  // Set the status code of the response.
+  res.status(200);
 
-    // Send the response body.
-    res.json(
-      {
-        access_token: "214vg3hg2v123f123f4ghv",
-        refresh_token: "dfshbfhb367gfvagfasf",
-        token_type: "bearer",
-        expires_in: 1234,
-        scope: "read write",
-        jti: "",
-        id: 1,
-      }
-    );
-    return;
-  // }
-
-  // // get new access_token
-  // if (req.query.grant_type === 'refresh_token') {
-  //   // check if refresh_token is valid
-  //   if(req.query.refresh_token !== 'dfshbfhb367gfvagfasf') {
-  //     return res.send(401, 'Invalid refresh token');
-  //   }
-
-  //   res.type('application/json');
-  //   res.status(200);
-  //   res.json(
-  //     {
-  //       access_token: "214vg3hg2v123f123f4ghv_",
-  //       refresh_token: "dfshbfhb367gfvagfasf",
-  //       token_type: "bearer",
-  //       expires_in: 1234,
-  //       scope: "read write",
-  //       jti: "",
-  //       id: 1,
-  //     }
-  //   );
-  //   return;
-  // }
+  // Send the response body.
+  res.json(
+    {
+      access_token: "214vg3hg2v123f123f4ghv",
+      refresh_token: "dfshbfhb367gfvagfasf",
+      token_type: "bearer",
+      expires_in: 1234,
+      scope: "read write",
+      jti: "",
+      id: 1,
+    }
+  );
+  return;
 })
 
 // Registration
@@ -168,11 +137,11 @@ Sandbox.define('/users/{id}/delete', 'POST', function (req, res) {
   res.type('application/json');
 
   // Set the status code of the response.
-  res.status(200); 
+  res.status(200);
 
   res.json(
     {
-      
+
     }
   );
 
