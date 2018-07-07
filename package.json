@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "gather-licenses": "cp ./src/app/credits/licenses-skeleton ./src/app/credits/licenses.ts; nlf -c -r 1 | csv2json >> ./src/app/credits/licenses.ts",
-    "mockserver": "cd mock && run-mockserver",
+    "mockserver": "cd mock && ./run-mockserver",
     "serve": "ng serve"
   },
   "private": true,
