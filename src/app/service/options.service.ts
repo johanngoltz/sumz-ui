@@ -9,19 +9,17 @@ import { RemoteConfig, ScenarioConfig } from '../api/config';
 export class OptionsService {
   public config$: Observable<RemoteConfig>;
   private _config$: ReplaySubject<RemoteConfig>;
-  private _remoteConfig: RemoteConfig = {
-    scenarioConfig: new Map<number, ScenarioConfig>([
-      [1, { showResult: { apv: true, cvd: true, fcf: false, fte: false } }],
-      [2, { showResult: { apv: false, cvd: false, fcf: false, fte: false } }],
-      [3, { showResult: { apv: true, cvd: true, fcf: true, fte: true } }]]),
-  };
+  private _remoteConfig: RemoteConfig;
 
   constructor() {
-    this._config$ = new ReplaySubject();
+    this._config$ = new ReplaySubject(1);
     this.config$ = this._config$.asObservable();
   }
 
   getConfig() {
+    this._remoteConfig = this._remoteConfig
+      || JSON.parse(localStorage.getItem('remoteConfig'))
+      || { scenarioConfig: new Map<number, ScenarioConfig>() };
     // TODO: Make Backend request here
     return of(this._remoteConfig).pipe(
       tap(remoteConfig => this._config$.next(remoteConfig)),
@@ -35,6 +33,7 @@ export class OptionsService {
       map(response => response.data),
       tap(remoteConfig => {
         this._remoteConfig = remoteConfig;
+        localStorage.setItem('remoteConfig', JSON.stringify(remoteConfig));
         this._config$.next({ ...remoteConfig });
       }),
       switchMapTo(this.config$),
