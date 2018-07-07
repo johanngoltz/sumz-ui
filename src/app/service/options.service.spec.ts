@@ -19,17 +19,16 @@ describe('OptionsService', () => {
     service.getConfig().subscribe(config => {
       expect(config).toBeTruthy();
       expect(config.scenarioConfig).toBeDefined();
-      expect(config.scenarioConfig.get(1).showResult.fte).toBeDefined();
     }, fail);
   }));
 
-  it('should return the remote configuration', inject([OptionsService], (service: OptionsService) => {
+  it('should modify the remote configuration', inject([OptionsService], (service: OptionsService) => {
     const newConfig: RemoteConfig = {
       scenarioConfig: new Map<number, ScenarioConfig>([
         [1, { showResult: { apv: true, cvd: true, fcf: false, fte: false } }]]),
     };
     service.getConfig().subscribe();
-    service.setConfig(newConfig).pipe(skip(1)).subscribe(updatedConfig => {
+    service.setConfig(newConfig).subscribe(updatedConfig => {
       expect(updatedConfig).toEqual(newConfig);
     }, fail);
   }));
