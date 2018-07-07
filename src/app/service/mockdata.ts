@@ -30,8 +30,10 @@ const accountingFigures = Object.entries(rawAccountingFigures).reduce(
             (accumulated, figure, index) => {
                 const forYear = new Date().getFullYear() - 4 + index;
                 accumulated.timeSeries.push(...[1, 2, 3, 4].map(quarter => ({
-                    year: forYear,
-                    quarter: quarter,
+                    date: {
+                        year: forYear,
+                        quarter: quarter,
+                    },
                     amount: figure / 4,
                 })));
                 return accumulated;

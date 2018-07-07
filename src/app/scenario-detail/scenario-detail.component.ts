@@ -107,7 +107,7 @@ export class ScenarioDetailComponent implements OnInit {
       description: '',
     };
     Object.entries(environmentParams).forEach(([name, config]) => {
-        controls[name] = ['', config.validators];
+      controls[name] = ['', config.validators];
     });
     this.formGroup = this._formBuilder.group(controls);
     this.formGroup.disable();
@@ -191,7 +191,10 @@ export class ScenarioDetailComponent implements OnInit {
       Object.keys(environmentParams).forEach(key => currentScenario[key] = this.formGroup.controls[key].value / 100);
 
       currentScenario.stochastic = false;
-      currentScenario.periods = (this.accountingDataFormGroup.value.endYear - this.accountingDataFormGroup.value.startYear) * 4;
+      currentScenario.periods = this._timeSeriesMethodsService.calculateIntervalLength(
+        this.accountingDataFormGroup.controls.start.value,
+        this.accountingDataFormGroup.controls.end.value,
+        this.accountingDataFormGroup.controls.quarterly.value);
 
       const quarterly = this.accountingDataFormGroup.controls.quarterly.value;
       const start = this.accountingDataFormGroup.controls.start.value;
@@ -207,15 +210,17 @@ export class ScenarioDetailComponent implements OnInit {
           }
           currentScenario[param] = {
             isHistoric: paramFormGroup.value.isHistoric,
-            timeSeries: paramFormGroup.value.timeSeries.filter(dataPoint =>
-              this._timeSeriesMethodsService.isInsideBounds(quarterly, start, end, dataPoint) &&
-              this._timeSeriesMethodsService.checkVisibility(
-                dataPoint,
-                paramFormGroup.value.isHistoric,
-                quarterly,
-                base,
-                end,
-                paramDefinition.shiftDeterministic)),
+            timeSeries: this._timeSeriesMethodsService.convertToBackendFormat(
+              paramFormGroup.value.timeSeries.filter(dataPoint =>
+                this._timeSeriesMethodsService.isInsideBounds(quarterly, start, end, dataPoint) &&
+                this._timeSeriesMethodsService.checkVisibility(
+                  dataPoint,
+                  paramFormGroup.value.isHistoric,
+                  quarterly,
+                  base,
+                  end,
+                  paramDefinition.shiftDeterministic))
+            ),
           };
         }
       }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AccountingDataParams } from '../api/paramData';
+import { TimePoint } from '../api/scenario';
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +31,19 @@ export class TimeSeriesMethodsService {
     return !this.isBefore(value, start) && !this.isBefore(end, value);
   }
 
+  convertToBackendFormat(flatTimeSeries) {
+    return flatTimeSeries.map(flatDataPoint => {
+      return {
+        date: { year: flatDataPoint.year, quarter: flatDataPoint.quarter },
+        amount: flatDataPoint.amount,
+      };
+    });
+  }
+
+  calculateIntervalLength(start: TimePoint, end: TimePoint, quarterly: Boolean) {
+    return (end.year - start.year) * (quarterly ? 4 : 1) + (quarterly ? end.quarter - start.quarter : 0);
+  }
+
   private removeQuarter(point: TimePoint) {
     point = ({ ...point });
     delete point.quarter;
@@ -46,7 +60,3 @@ export class TimeSeriesMethodsService {
   }
 }
 
-interface TimePoint {
-  year: number;
-  quarter?: number;
-}

@@ -56,7 +56,10 @@ export class CreateScenarioComponent implements OnInit {
         ...this.formGroup1.value,
         ...this.formGroup2.value,
         stochastic: false,
-        periods: (this.formGroup3.value.endYear - this.formGroup3.value.startYear) * 4,
+        periods: this._timeSeriesMethodsService.calculateIntervalLength(
+          this.formGroup3.controls.start.value,
+          this.formGroup3.controls.end.value,
+          this.formGroup3.controls.quarterly.value),
       };
       const start = this.formGroup3.controls.start.value;
       const base = this.formGroup3.controls.base.value;
@@ -72,10 +75,12 @@ export class CreateScenarioComponent implements OnInit {
           }
           scenario[paramName] = {
             isHistoric: paramFormGroup.value.isHistoric,
-            timeSeries: paramFormGroup.value.timeSeries.filter(dataPoint =>
-              this._timeSeriesMethodsService.isInsideBounds(quarterly, start, end, dataPoint)
-              && this._timeSeriesMethodsService.checkVisibility(dataPoint, paramFormGroup.value.isHistoric, quarterly, base, end,
-                paramDefinition.shiftDeterministic)),
+            timeSeries: this._timeSeriesMethodsService.convertToBackendFormat(
+              paramFormGroup.value.timeSeries.filter(dataPoint =>
+                this._timeSeriesMethodsService.isInsideBounds(quarterly, start, end, dataPoint)
+                && this._timeSeriesMethodsService.checkVisibility(dataPoint, paramFormGroup.value.isHistoric, quarterly, base, end,
+                  paramDefinition.shiftDeterministic))
+            ),
           };
         }
       }

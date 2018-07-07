@@ -63,7 +63,7 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
       base: this._formBuilder.group({ year: [this.base.year, Validators.required], quarter: [this.base.quarter, Validators.required] }),
       calculateFcf: [(scenario && scenario.additionalIncome && scenario.additionalIncome.timeSeries.length > 0) || false,
       Validators.required],
-      quarterly: [(scenario && scenario.liabilities.timeSeries[0] && scenario.liabilities.timeSeries[0].quarter) || false,
+      quarterly: [(scenario && scenario.liabilities.timeSeries[0] && scenario.liabilities.timeSeries[0].date.quarter) || false,
       Validators.required],
     }, {
         validator: (formGroup: FormGroup) => {
@@ -98,30 +98,30 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
       if (accountingFigure && accountingFigure.timeSeries && accountingFigure.timeSeries.length > 0) {
         if (!this.start && accountingFigure.isHistoric) {
           this.start = {
-            year: accountingFigure.timeSeries[0].year,
-            quarter: accountingFigure.timeSeries[0].quarter ? accountingFigure.timeSeries[0].quarter : 1,
+            year: accountingFigure.timeSeries[0].date.year,
+            quarter: accountingFigure.timeSeries[0].date.quarter ? accountingFigure.timeSeries[0].date.quarter : 1,
           };
           this.base = this.base || {
-            year: accountingFigure.timeSeries[accountingFigure.timeSeries.length - 1].year,
-            quarter: accountingFigure.timeSeries[accountingFigure.timeSeries.length - 1].quarter ?
-              accountingFigure.timeSeries[accountingFigure.timeSeries.length - 1].quarter : 1,
+            year: accountingFigure.timeSeries[accountingFigure.timeSeries.length - 1].date.year,
+            quarter: accountingFigure.timeSeries[accountingFigure.timeSeries.length - 1].date.quarter ?
+              accountingFigure.timeSeries[accountingFigure.timeSeries.length - 1].date.quarter : 1,
           };
         } else if (!this.end && !accountingFigure.isHistoric) {
           const shiftDeterministic = this.accountingDataParams.get(params[i]).shiftDeterministic;
           let dataPoint = accountingFigure.timeSeries[accountingFigure.timeSeries.length - 1];
-          let year = dataPoint.year +
-            ((shiftDeterministic && (!dataPoint.quarter || dataPoint.quarter === 4)) ? 1 : 0);
-          let quarter = !dataPoint.quarter ? 4 : (shiftDeterministic && dataPoint.quarter === 4) ? 1 :
-            dataPoint.quarter + (shiftDeterministic) ? 1 : 0;
+          let year = dataPoint.date.year +
+            ((shiftDeterministic && (!dataPoint.date.quarter || dataPoint.date.quarter === 4)) ? 1 : 0);
+          let quarter = !dataPoint.date.quarter ? 4 : (shiftDeterministic && dataPoint.date.quarter === 4) ? 1 :
+            dataPoint.date.quarter + (shiftDeterministic) ? 1 : 0;
           this.end = {
             year: year,
             quarter: quarter,
           };
           dataPoint = accountingFigure.timeSeries[0];
-          year = dataPoint.year +
-            ((!shiftDeterministic && (!dataPoint.quarter || dataPoint.quarter === 1)) ? -1 : 0);
-          quarter = !dataPoint.quarter ? 1 : (!shiftDeterministic && dataPoint.quarter === 1) ? 4 :
-            dataPoint.quarter + (shiftDeterministic) ? -1 : 0;
+          year = dataPoint.date.year +
+            ((!shiftDeterministic && (!dataPoint.date.quarter || dataPoint.date.quarter === 1)) ? -1 : 0);
+          quarter = !dataPoint.date.quarter ? 1 : (!shiftDeterministic && dataPoint.date.quarter === 1) ? 4 :
+            dataPoint.date.quarter + (shiftDeterministic) ? -1 : 0;
           this.base = this.base || {
             year: year,
             quarter: quarter,
@@ -151,13 +151,13 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
           formGroup.controls.quarterly.value,
           this.start,
           this.end,
-          dataPoint
+          dataPoint.date
         ));
         if (items.length > 0) {
           items.forEach((dataPoint) => {
             timeSeries.push(this._formBuilder.group({
-              year: dataPoint.year,
-              quarter: dataPoint.quarter,
+              year: dataPoint.date.year,
+              quarter: dataPoint.date.quarter,
               amount: [dataPoint.amount, Validators.required],
             }));
           });
