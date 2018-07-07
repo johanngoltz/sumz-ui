@@ -61,7 +61,7 @@ export class ScenariosService {
     })).pipe(
       retry(2),
       switchMap(response => {
-        const updatedScenario = response.data as Scenario;
+        const updatedScenario = response.data;
         this._scenariosStorage[this._scenariosStorage.indexOf(scenario)] = updatedScenario;
         return of(updatedScenario);
       })
