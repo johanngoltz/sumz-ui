@@ -11,7 +11,9 @@ export class OptionsService {
   private _config$: ReplaySubject<RemoteConfig>;
   private _remoteConfig: RemoteConfig = {
     scenarioConfig: new Map<number, ScenarioConfig>([
-      [1, { showResult: { apv: true, cvd: true, fcf: false, fte: false } }]]),
+      [1, { showResult: { apv: true, cvd: true, fcf: false, fte: false } }],
+      [2, { showResult: { apv: false, cvd: false, fcf: false, fte: false } }],
+      [3, { showResult: { apv: true, cvd: true, fcf: true, fte: true } }]]),
   };
 
   constructor() {

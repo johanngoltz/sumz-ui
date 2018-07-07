@@ -1,21 +1,21 @@
 import { Inject, Injectable } from '@angular/core';
-import { TypedAxiosInstance, TypedAxiosResponse } from 'restyped-axios';
-import { Observable, ReplaySubject, from, of, throwError, concat } from 'rxjs';
-import { filter, flatMap, retry, switchMap, tap, debounceTime, concatMap, map } from 'rxjs/operators';
-import { ScenarioAPI } from '../api/api';
+import { TypedAxiosInstance } from 'restyped-axios';
+import { Observable, ReplaySubject, from, of, throwError } from 'rxjs';
+import { filter, flatMap, retry, switchMap } from 'rxjs/operators';
+import { SumzAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
-import { ScenarioClient } from './http-client';
+import { HttpClient } from './http-client';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ScenariosService {
   public scenarios$: Observable<Scenario[]>;
-  private _scenarios$: ReplaySubject<Scenario[]>;
-  private _scenariosStorage: Scenario[];
+  protected _scenarios$: ReplaySubject<Scenario[]>;
+  protected _scenariosStorage: Scenario[];
 
-  constructor(@Inject(ScenarioClient) private _apiClient: TypedAxiosInstance<ScenarioAPI>) {
-    this._scenarios$ = new ReplaySubject();
+  constructor(@Inject(HttpClient) private _apiClient: TypedAxiosInstance<SumzAPI>) {
+    this._scenarios$ = new ReplaySubject(1);
     this.scenarios$ = this._scenarios$.asObservable();
 
     this.getScenarios().subscribe();
@@ -23,18 +23,16 @@ export class ScenariosService {
 
   getScenarios() {
     return from(this._apiClient.request({ url: '/scenario' })).pipe(
-      // TODO: wird vllt nicht wie gedacht funktionieren
       switchMap(response => response.status === 200 ?
         of(response) :
         throwError(response)
       ),
       retry(2),
-      switchMap(response => {
+      flatMap(response => {
         this._scenariosStorage = response.data;
         this._scenarios$.next([...response.data]);
         return this.scenarios$;
-      })
-    );
+      }));
   }
 
   getScenario(id: number) {
