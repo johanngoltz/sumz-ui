@@ -89,9 +89,6 @@ export class ScenarioDetailComponent implements OnInit {
   /*chart */
   chart;
 
-  /*stochastic*/
-  stochastic;
-
   constructor(private _scenariosService: ScenariosService,
     private _formBuilder: FormBuilder,
     private _optionsService: OptionsService,

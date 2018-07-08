@@ -120,7 +120,6 @@ describe('ScenariosService', () => {
     service.addScenario(addThis).subscribe(
       addedScenario => {
         expect(addedScenario).toEqual(addThis);
-        console.log(addedScenario);
         service.scenarios$.subscribe(
           scenarios => expect(scenarios).toContain(addThis),
           fail);
