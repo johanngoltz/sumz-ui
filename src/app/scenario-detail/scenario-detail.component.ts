@@ -145,14 +145,14 @@ export class ScenarioDetailComponent implements OnInit {
           },
         },
         xAxis: {
-          categories: currentScenario.companyValueDistribution.xValues,
+          categories: (currentScenario.stochastic ? currentScenario.companyValueDistribution.xValues : []),
           title: {
             text: 'Unternehmenswert in €',
           },
         },
         series: [{
           name: ' ',
-          data: currentScenario.companyValueDistribution.yValues,
+          data: (currentScenario.stochastic ? currentScenario.companyValueDistribution.yValues : []),
         }],
       });
     });
