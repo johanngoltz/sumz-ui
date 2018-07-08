@@ -20,6 +20,7 @@ import { ScenarioCardComponent } from './scenario-card/scenario-card.component';
 import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.component';
 import { ScenariosComponent } from './scenarios/scenarios.component';
 import { SelectScenarioComponent } from './select-scenario/select-scenario.component';
+import { DeleteUserComponent } from './deleteuser/deleteuser.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -41,6 +42,7 @@ describe('AppComponent', () => {
         NewPasswordComponent,
         CreditsComponent,
         NewPasswordEmailComponent,
+        DeleteUserComponent,
       ],
       imports: [
         MaterialModule,

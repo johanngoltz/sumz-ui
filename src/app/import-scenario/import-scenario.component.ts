@@ -28,7 +28,11 @@ export class ImportScenarioComponent implements OnInit {
   selectFile(event) {
     this.scenarioIsValid = false;
     this.readingScenario = true;
-    this._fileReader.readAsText(event.target.files[0]);
+    try {
+      this._fileReader.readAsText(event.target.files[0]);
+    } catch (error) {
+      this.readingScenario = false;
+    }
   }
 
   generateJSON() {

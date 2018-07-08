@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-
 import { AlertComponent } from '../alert/alert.component';
 
 
@@ -11,6 +10,7 @@ enum Icon {
   WARN = 'warning',
   ERROR = 'error',
 }
+
 
 @Injectable({
   providedIn: 'root',

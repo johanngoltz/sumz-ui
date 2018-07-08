@@ -22,7 +22,7 @@ export class ScenariosService {
   }
 
   getScenarios() {
-    return from(this._apiClient.request({ url: '/scenario' })).pipe(
+    return from(this._apiClient.request({ url: '/scenarios' })).pipe(
       retry(2),
       flatMap(response => {
         this._scenariosStorage = response.data;
@@ -41,7 +41,7 @@ export class ScenariosService {
 
   addScenario(scenario: Scenario) {
     return from(this._apiClient.request({
-      url: '/scenario',
+      url: '/scenarios',
       data: scenario,
       method: 'POST',
     })).pipe(
@@ -56,7 +56,7 @@ export class ScenariosService {
 
   updateScenario(scenario: Scenario) {
     return from(this._apiClient.request({
-      url: `/scenario/${scenario.id}` as '/scenario/:sId',
+      url: `/scenarios/${scenario.id}` as '/scenarios/:sId',
       method: 'PUT',
       data: scenario,
     })).pipe(
@@ -70,7 +70,7 @@ export class ScenariosService {
   }
 
   removeScenario(scenario: Scenario) {
-    return from(this._apiClient.delete(`/scenario/${scenario.id}`)).pipe(
+    return from(this._apiClient.delete(`/scenarios/${scenario.id}`)).pipe(
       retry(2),
       switchMap(() => {
         this._scenariosStorage.splice(this._scenariosStorage.indexOf(scenario), 1);
