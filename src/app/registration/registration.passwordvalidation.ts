@@ -2,25 +2,18 @@ import { AbstractControl } from '@angular/forms';
 
 /**
  * The validation of two strings (if they match each other) is implemented in this class.
- * @author Burkart
  */
 export class PasswordValidation {
 
-  /**
-   * Compares two Strings if they are the same.
-   * (Used for form field validation)
-   * @param {string} input1 the first password
-   * @param {string} input2 the second password
-   * @returns {any} (AC: AbstractControl) => any
-   */
-  static Match(input1: string, input2: string) {
+  static Match(mainInputName: string, repeatInputName: string) {
     return (AC: AbstractControl) => {
-      const firstControlValue = AC.get(input1).value; // get the valies of the password1 field
-      const secondControlValue = AC.get(input2).value; // get the value of the password2 field
+      const firstControlValue = AC.get(mainInputName).value;
+      const secondControlValue = AC.get(repeatInputName).value;
+
       if (firstControlValue !== secondControlValue) {
-        AC.get(input2).setErrors({MatchFields: true});
+        AC.get(repeatInputName).setErrors({ MatchFields: true });
       } else {
-        return null;   // if the passwords match
+        return null;
       }
     };
   }

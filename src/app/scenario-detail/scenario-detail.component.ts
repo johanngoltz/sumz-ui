@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Chart } from 'angular-highcharts';
-import { Observable, of } from 'rxjs';
+import { Observable, of, noop } from 'rxjs';
 import { first, switchMap } from 'rxjs/operators';
 import { RemoteConfig } from '../api/config';
 import { accountingDataParams, environmentParams } from '../api/paramData';
@@ -101,7 +101,10 @@ export class ScenarioDetailComponent implements OnInit {
     this.forScenario$ = this._route.paramMap.pipe(
       switchMap(params => of(Number.parseInt(params.get('id')))),
       switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
+    this.forScenario$.subscribe(noop, error => this._alertService.error(`Fehler beim Laden des Szenarios: ${error}`));
+
     this.forConfig$ = this._optionsService.getConfig();
+
     const controls = {
       scenarioName: ['', Validators.required],
       scenarioDescription: '',
@@ -122,7 +125,7 @@ export class ScenarioDetailComponent implements OnInit {
     this.configFormGroup.disable();
     this.initConfig();
 
-    this.forScenario$.pipe(first()).subscribe(currentScenario => {
+    this.forScenario$.pipe().subscribe(currentScenario => {
       this.chart = new Chart({
         chart: {
           type: 'line',
@@ -166,6 +169,9 @@ export class ScenarioDetailComponent implements OnInit {
   initConfig() {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
       this.forConfig$.pipe(first()).subscribe(remote => {
+        if (!remote.scenarioConfig.get(currentScenario.id)) {
+          remote.scenarioConfig.set(currentScenario.id, { showResult: { apv: true, cvd: true, fcf: true, fte: true } });
+        }
         this.configFormGroup.setValue(remote.scenarioConfig.get(currentScenario.id).showResult);
       });
     });

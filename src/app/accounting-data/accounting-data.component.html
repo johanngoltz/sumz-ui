@@ -31,7 +31,7 @@
             <div id="baseyear-container" class="leveraged-field" [class.editable]="_editable" *ngIf="element.value.year === formGroup.controls.base.value.year && (!formGroup.controls.quarterly.value || element.value.quarter === formGroup.controls.base.value.quarter)">
               <span *ngIf="!_editable">
                 <small>Basisjahr</small>
-                {{formGroup.controls.base.value.year}}{{formGroup.value.quarterly ? ' Q' + formGroup.controls.base.value.quarter : ''}
+                {{formGroup.controls.base.value.year}}{{formGroup.value.quarterly ? ' Q' + formGroup.controls.base.value.quarter : ''}}
               </span>
               <div [formGroup]="formGroup.controls.base" class="flex">
                 <mat-form-field class="table-input-right" *ngIf="_editable">

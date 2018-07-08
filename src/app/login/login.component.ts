@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '../service/alert.service';
 import { AuthenticationService } from '../service/authentication.service';
 
@@ -9,6 +10,10 @@ import { AuthenticationService } from '../service/authentication.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
+
+/**
+ * Functionality to login a known user
+ */
 export class LoginComponent implements OnInit {
   loginFormGroup: FormGroup;
   loading = false;
@@ -18,6 +23,8 @@ export class LoginComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _authenticationService: AuthenticationService,
     private _alertService: AlertService,
+    private _router: Router,
+    private _route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
@@ -36,15 +43,19 @@ export class LoginComponent implements OnInit {
     // disable login button
     this.loading = true;
 
-    // reset login status
-    this._authenticationService.logout();
-
     this._authenticationService.login(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString())
-      .catch(
-        error => {
-          this._alertService.error(error);
+      .subscribe(
+        () => {
+          // navigate to return url from route parameters or default to '/'
+          this._router.navigate([this._route.snapshot.queryParams['returnUrl'] || '/']);
+        },
+        (error) => {
+          this._alertService.error(error.response.data.message || error);
+        },
+        () => {
           this.loading = false;
-        });
+        }
+      );
   }
 
   get mailCtrl() { return this.loginFormGroup.get('mailCtrl'); }
