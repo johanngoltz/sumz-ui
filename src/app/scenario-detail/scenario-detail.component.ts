@@ -137,7 +137,7 @@ export class ScenarioDetailComponent implements OnInit {
           enabled: false,
         },
         title: {
-          text: '',
+          text: (currentScenario.stochastic ? '' : ' Deterministische Rechnung, keine Verteilung'),
         },
         yAxis: {
           title: {
