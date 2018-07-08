@@ -13,7 +13,7 @@ exports.routes = [{
   handler: function (req, res) {
     req.body.id = Math.round(Math.random()*99999);
     state.scenarios.push(req.body)
-    res.json(req.body);
+    res.send(req.body.id);
     res.status(201);
   },
 },
@@ -30,7 +30,7 @@ exports.routes = [{
   verb: 'PUT',
   handler: function (req, res) {
     utils.setById(req.params.sId, state.scenarios, req.body);
-    res.json(req.body);
+    res.send(req.body.id);
   }
 },
 {
