@@ -1,2 +1,2 @@
 #!/bin/bash
-java -jar sandbox run
+java -jar sandbox run --state=./state.json
