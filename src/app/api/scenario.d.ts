@@ -29,7 +29,7 @@ export class Scenario {
 }
 
 export class AccountingFigure {
-    isHistoric: Boolean;
+    isHistoric: boolean;
     timeSeries: DataPoint[];
 }
 
