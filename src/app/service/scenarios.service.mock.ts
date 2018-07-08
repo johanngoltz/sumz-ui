@@ -25,6 +25,8 @@ export class ScenariosServiceMock extends ScenariosService {
     }
 
     addScenario(scenario: Scenario) {
+        this._scenariosStorage.push(scenario);
+        this._scenarios$.next(this._scenariosStorage);
         return of(scenario);
     }
 
