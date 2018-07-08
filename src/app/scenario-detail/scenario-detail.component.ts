@@ -169,6 +169,9 @@ export class ScenarioDetailComponent implements OnInit {
   initConfig() {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
       this.forConfig$.pipe(first()).subscribe(remote => {
+        if (!remote.scenarioConfig.get(currentScenario.id)) {
+          remote.scenarioConfig.set(currentScenario.id, { showResult: { apv: true, cvd: true, fcf: true, fte: true } });
+        }
         this.configFormGroup.setValue(remote.scenarioConfig.get(currentScenario.id).showResult);
       });
     });
