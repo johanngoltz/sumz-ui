@@ -103,7 +103,8 @@
         <div [hidden]="!configFormGroup.controls.cvd.value" class="flex-item">
           <mat-divider></mat-divider>
           <h1>Unternehmenswertverteilung</h1>
-          <div [chart]="chart"></div>
+          <div [chart]="chart" [hidden]=!stochastic></div>
+          <p [hidden]=stochastic>Bei einer deterministischen Berechnung gibt es keine Verteilung</p>
         </div>
 
         <div [hidden]="!configFormGroup.controls.apv.value" class="flex-item">

@@ -89,6 +89,9 @@ export class ScenarioDetailComponent implements OnInit {
   /*chart */
   chart;
 
+  /*stochastic*/
+  stochastic;
+
   constructor(private _scenariosService: ScenariosService,
     private _formBuilder: FormBuilder,
     private _optionsService: OptionsService,
@@ -137,7 +140,7 @@ export class ScenarioDetailComponent implements OnInit {
           enabled: false,
         },
         title: {
-          text: (currentScenario.stochastic ? '' : ' Deterministische Rechnung, keine Verteilung'),
+          text: '',
         },
         yAxis: {
           title: {
