@@ -30,8 +30,10 @@ const accountingFigures = Object.entries(rawAccountingFigures).reduce(
             (accumulated, figure, index) => {
                 const forYear = new Date().getFullYear() - 4 + index;
                 accumulated.timeSeries.push(...[1, 2, 3, 4].map(quarter => ({
-                    year: forYear,
-                    quarter: quarter,
+                    date: {
+                        year: forYear,
+                        quarter: quarter,
+                    },
                     amount: figure / 4,
                 })));
                 return accumulated;
@@ -47,8 +49,8 @@ const distribution = new Gaussian(companyValue, 500000000);
 export const DEFAULT_MOCK_DATA: Scenario[] = [{
     ...{
         id: 69190,
-        name: 'Testszenario',
-        description: 'KPMG-geprüfte, garantiert fehlerfreie Unternehmensbewertung',
+        scenarioName: 'Testszenario',
+        scenarioDescription: 'KPMG-geprüfte, garantiert fehlerfreie Unternehmensbewertung',
         businessTaxRate: .25,
         corporateTaxRate: .2,
         solidaryTaxRate: .055,

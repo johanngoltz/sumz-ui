@@ -47,8 +47,8 @@ export class ImportScenarioComponent implements OnInit {
 
   checkValidity() {
     this.scenario.id = null;
-    this.scenario.name = this.scenario.name || '-';
-    this.scenario.description = this.scenario.description || '';
+    this.scenario.scenarioName = this.scenario.scenarioName || '-';
+    this.scenario.scenarioDescription = this.scenario.scenarioDescription || '';
 
     Object.keys(environmentParams).forEach(param => {
       if (!this.scenario[param]) {

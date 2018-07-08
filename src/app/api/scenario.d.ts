@@ -1,7 +1,7 @@
 export class Scenario {
     id: number;
-    name: string;
-    description: string;
+    scenarioName: string;
+    scenarioDescription: string;
     periods: number;
 
     equityInterestRate: number;
@@ -34,10 +34,14 @@ export class AccountingFigure {
 }
 
 export class DataPoint {
-    year: number;
-    quarter: 1 | 2 | 3 | 4;
+    date: TimePoint;
     amount: number;
 }
+
+interface TimePoint {
+    year: number;
+    quarter: number;
+  }
 
 export class DistributedCompanyValue {
     xValues: number[];

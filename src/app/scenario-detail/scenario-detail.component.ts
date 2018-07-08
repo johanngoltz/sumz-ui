@@ -106,8 +106,8 @@ export class ScenarioDetailComponent implements OnInit {
     this.forConfig$ = this._optionsService.getConfig();
 
     const controls = {
-      name: ['', Validators.required],
-      description: '',
+      scenarioName: ['', Validators.required],
+      scenarioDescription: '',
     };
     Object.entries(environmentParams).forEach(([name, config]) => {
       controls[name] = ['', config.validators];
@@ -160,8 +160,8 @@ export class ScenarioDetailComponent implements OnInit {
 
   initData() {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
-      this.formGroup.controls.name.setValue(currentScenario.name);
-      this.formGroup.controls.description.setValue(currentScenario.description);
+      this.formGroup.controls.name.setValue(currentScenario.scenarioName);
+      this.formGroup.controls.description.setValue(currentScenario.scenarioDescription);
       Object.keys(environmentParams).forEach(key => this.formGroup.controls[key].setValue(currentScenario[key] * 100));
     });
   }
@@ -192,17 +192,17 @@ export class ScenarioDetailComponent implements OnInit {
   saveScenario() {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
 
-      currentScenario.name = this.formGroup.controls.name.value;
-      currentScenario.description = this.formGroup.controls.description.value;
+      currentScenario.scenarioName = this.formGroup.controls.scenarioName.value;
+      currentScenario.scenarioDescription = this.formGroup.controls.scenarioDescription.value;
       Object.keys(environmentParams).forEach(key => currentScenario[key] = this.formGroup.controls[key].value / 100);
-
-      currentScenario.stochastic = false;
-      currentScenario.periods = (this.accountingDataFormGroup.value.endYear - this.accountingDataFormGroup.value.startYear) * 4;
 
       const quarterly = this.accountingDataFormGroup.controls.quarterly.value;
       const start = this.accountingDataFormGroup.controls.start.value;
       const base = this.accountingDataFormGroup.controls.base.value;
       const end = this.accountingDataFormGroup.controls.end.value;
+
+      currentScenario.stochastic = false;
+      currentScenario.periods = this._timeSeriesMethodsService.calculatePeriods(base, end, quarterly);
 
       for (const [param, paramDefinition] of this.accountingDataParams) {
         if (this._timeSeriesMethodsService.shouldDisplayAccountingDataParam(
@@ -213,15 +213,17 @@ export class ScenarioDetailComponent implements OnInit {
           }
           currentScenario[param] = {
             isHistoric: paramFormGroup.value.isHistoric,
-            timeSeries: paramFormGroup.value.timeSeries.filter(dataPoint =>
-              this._timeSeriesMethodsService.isInsideBounds(quarterly, start, end, dataPoint) &&
-              this._timeSeriesMethodsService.checkVisibility(
-                dataPoint,
-                paramFormGroup.value.isHistoric,
-                quarterly,
-                base,
-                end,
-                paramDefinition.shiftDeterministic)),
+            timeSeries: this._timeSeriesMethodsService.convertToBackendFormat(
+              paramFormGroup.value.timeSeries.filter(dataPoint =>
+                this._timeSeriesMethodsService.isInsideBounds(quarterly, start, end, dataPoint) &&
+                this._timeSeriesMethodsService.checkVisibility(
+                  dataPoint,
+                  paramFormGroup.value.isHistoric,
+                  quarterly,
+                  base,
+                  end,
+                  paramDefinition.shiftDeterministic))
+            ),
           };
         }
       }

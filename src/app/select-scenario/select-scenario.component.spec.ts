@@ -22,11 +22,11 @@ describe('SelectScenarioComponent', () => {
           useValue: {
             scenarios$: of<Scenario[]>([
               {
-                name: 'Eins',
-                description: 'Eine Beschreibung',
+                scenarioName: 'Eins',
+                scenarioDescription: 'Eine Beschreibung',
               }, {
-                name: 'Zwei',
-                description: 'Zweite Beschreibung',
+                scenarioName: 'Zwei',
+                scenarioDescription: 'Zweite Beschreibung',
               }] as Scenario[]),
           },
         },
