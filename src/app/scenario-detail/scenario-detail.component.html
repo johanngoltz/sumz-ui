@@ -1,6 +1,6 @@
 <div class="content-container">
   <h1>
-    {{(forScenario$ | async)?.name}}
+    {{(forScenario$ | async)?.scenarioName}}
     <div [@toggleEditAnimation]="editable">
       <button type="button" mat-button color="primary" *ngIf="!editable" (click)="setEditable(true)">
         Szenario bearbeiten
