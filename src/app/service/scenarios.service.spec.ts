@@ -1,12 +1,14 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { inject, TestBed } from '@angular/core/testing';
 import MockAdapter from 'axios-mock-adapter';
-import axios, { TypedAxiosInstance } from 'restyped-axios';
+import axios from 'restyped-axios';
+import { flatMap, skip } from 'rxjs/operators';
 import { SumzAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
 import { HttpClient } from './http-client';
 import { ScenariosService } from './scenarios.service';
-import { Subject, EMPTY } from 'rxjs';
-import { withLatestFrom, mapTo, flatMap, combineLatest, combineAll, map, skip } from 'rxjs/operators';
+
+let mockAdapter: MockAdapter;
+const mockData = [{ id: 2500 }, { id: 2501 }, { id: 2502 }, { id: 2510 }] as Scenario[];
 
 describe('ScenariosService', () => {
   beforeEach(() => {
@@ -16,20 +18,22 @@ describe('ScenariosService', () => {
         provide: HttpClient,
         useFactory: () => {
           const axiosInstance = axios.create<SumzAPI>();
-          const data = [{ id: 2500 }, { id: 2501 }, { id: 2502 }, { id: 2510 }] as Scenario[];
-          new MockAdapter(axiosInstance)
+          mockAdapter = new MockAdapter(axiosInstance)
             .onGet('/scenarios').reply(config => {
-              return [200, [...data]];
+              return [200, [...mockData]];
             })
             .onDelete('/scenarios/2510').reply(config => {
               return [200];
             })
-            .onPut('/scenarios/2500').reply(config => {
-              const updateScenario = JSON.parse(config.data);
-              updateScenario.id = 2500;
-              return [200, updateScenario];
+            .onPost('/scenarios').reply(config => {
+              const receivedScenario: Scenario = JSON.parse(config.data);
+              mockData.push(receivedScenario);
+              return [200, receivedScenario.id];
             })
-            .onPost('/scenarios').reply(200, { id: 2520 });
+            .onGet(/\/scenarios\/[0-9]+/).reply(config => {
+              const requestedId = +config.url.split('/').reverse()[0];
+              return [200, mockData.find(s => s.id === requestedId)];
+            });
           return axiosInstance;
         },
       }],
@@ -39,6 +43,13 @@ describe('ScenariosService', () => {
   it('should be created', inject([ScenariosService], (service: ScenariosService) => {
     expect(service).toBeTruthy();
   }));
+
+  /* Wichtig zu wissen: alle nachfolgenden Tests gehen davon aus, dass die Methoden des Services entweder
+  ** einen Wert zurückgeben (Observer.next) oder einen Fehler werfen (Observer.error).
+  ** Wenn sie ohne einen Wert zurückzugeben beendet werden oder nie enden, wird überhaupt keine Assertion
+  ** ausgeführt. Das ist zwar äußerst unwahrscheinlich, aber es wäre ggf. sinnvoll, einen Spy einzusetzen,
+  ** um sicherzugehen, dass tatsächlich next/error aufgerufen werden.
+  */
 
   it('should return a list of scenarios', inject([ScenariosService], (service: ScenariosService) => {
     service.getScenarios().subscribe(
@@ -74,23 +85,46 @@ describe('ScenariosService', () => {
 
   it('should be able to modify a scenario', inject([ScenariosService], (service: ScenariosService) => {
     const modifyThis = { id: 2500, scenarioDescription: 'A new description' } as Scenario;
+
+    let received: Scenario;
+    mockAdapter
+      .onPut('/scenarios/2500').reply(config => {
+        const updateScenario = JSON.parse(config.data);
+        updateScenario.id = 2500;
+        mockData[mockData.findIndex(s => s.id === updateScenario.id)] = updateScenario;
+        received = updateScenario;
+        return [200, 2500];
+      })
+      .onGet('/scenarios/2500').reply(config => {
+        return [200, received];
+      });
+
     service
       .updateScenario(modifyThis)
       .subscribe(
-        modifiedScenario => expect(modifiedScenario).toEqual(modifyThis),
-        fail);
+        modifiedScenario => {
+          expect(modifiedScenario).toEqual(modifyThis, 'Should have returned the modified scenario');
+          service.scenarios$.subscribe(
+            allScenarios => expect(allScenarios).toContain(modifyThis, 'The list of scenarios should have contained the modified scenario'),
+            fail
+          );
+        },
+        fail
+      );
 
   }));
 
   it('should be able to add a scenario', inject([ScenariosService], (service: ScenariosService) => {
     const addThis = { id: 9999 } as Scenario;
-    const adder = EMPTY || service.addScenario(addThis);
-    adder.subscribe(
-      addedScenario => expect(addedScenario).toEqual({ id: 2520 } as Scenario),
+
+    service.addScenario(addThis).subscribe(
+      addedScenario => {
+        expect(addedScenario).toEqual(addThis);
+        console.log(addedScenario);
+        service.scenarios$.subscribe(
+          scenarios => expect(scenarios).toContain(addThis),
+          fail);
+      },
       fail);
-    adder.pipe(flatMap(() => service.scenarios$), skip(1))
-      .subscribe(
-        scenarios => expect(scenarios).toContain({ id: 2520 } as Scenario),
-        fail);
   }));
 });
