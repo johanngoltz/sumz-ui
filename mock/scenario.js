@@ -1,14 +1,14 @@
 var utils = require('./utils');
 
 exports.routes = [{
-  route: '/scenario',
+  route: '/scenarios',
   verb: 'GET',
   handler: function (req, res) {
     res.json(state.scenarios);
   },
 },
 {
-  route: '/scenario',
+  route: '/scenarios',
   verb: 'POST',
   handler: function (req, res) {
     req.body.id = Math.round(Math.random()*99999);
@@ -18,7 +18,7 @@ exports.routes = [{
   },
 },
 {
-  route: '/scenario/:sId',
+  route: '/scenarios/:sId',
   verb: 'GET',
   handler: function (req, res) {
     var scenario = utils.getById(req.params.sId, state.scenarios);
@@ -26,7 +26,7 @@ exports.routes = [{
   },
 },
 {
-  route: '/scenario/:sId',
+  route: '/scenarios/:sId',
   verb: 'PUT',
   handler: function (req, res) {
     utils.setById(req.params.sId, state.scenarios, req.body);
@@ -34,7 +34,7 @@ exports.routes = [{
   }
 },
 {
-  route: '/scenario/:sId',
+  route: '/scenarios/:sId',
   verb: 'DELETE',
   handler: function (req, res) {
     var sId = parseInt(req.params.sId);
