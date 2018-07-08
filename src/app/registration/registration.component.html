@@ -1,33 +1,67 @@
-<h2>Neuen Benutzer registrieren</h2>
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-        <label for="firstName">Vorname</label>
-        <input type="text" formControlName="firstName" class="form-control"  />
-        
-    </div>
-    <div class="form-group">
-        <label for="lastName">Nachname</label>
-        <input type="text" formControlName="lastName" class="form-control" />
-        
-    </div>
-    <div class="form-group">
-        <label for="username">Benutzername</label>
-        <input type="text" formControlName="username" class="form-control"  />
-        
-    </div>
-    <div class="form-group">
-        <label for="username">Email-Adresse</label>
-        <input type="text" formControlName="email" class="form-control"  />
-        
-    </div>
-    <div class="form-group">
-        <label for="password">Passwort</label>
-        <input type="password" formControlName="password" class="form-control"  />
-        
-    </div>
-    <div class="form-group">
-        <button [disabled]="loading" class="btn btn-primary">Registrieren</button>
-        
-        <a [routerLink]="['/login']" class="btn btn-link">Cancel</a>
-    </div>
-</form>
+<div class="content-container">
+  <mat-card class="register-card" [class.busy]="loading">
+    <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+    <mat-card-title>Registrierung</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="registerFormGroup" id="register-form" (ngSubmit)="onSubmit()">
+        <p>
+          <mat-icon class="register-icon">mail</mat-icon>
+          <mat-form-field>
+            <input type="text" id="email" name="email" matInput placeholder="E-Mail" required formControlName="mailCtrl">
+            <mat-error *ngIf="mailCtrl.errors?.required">
+              Dieses Feld ist ein
+              <strong>Pflichtfeld</strong>
+            </mat-error>
+            <mat-error *ngIf="mailCtrl.errors?.email">
+              Bitte geben Sie eine gültige E-Mail-Adresse ein
+            </mat-error>
+          </mat-form-field>
+        </p>
+
+        <p>
+          <mat-icon class="register-icon">lock</mat-icon>
+          <mat-form-field>
+            <input [type]="hidePw1 ? 'password' : 'text'" id="password" name="password" matInput placeholder="Passwort" required formControlName="pwdCtrl">
+            <mat-icon matSuffix (click)="hidePw1 = !hidePw1">{{hidePw1 ? 'visibility' : 'visibility_off'}}</mat-icon>
+            <mat-error *ngIf="pwdCtrl.errors?.required">
+              Dieses Feld ist ein
+              <strong>Pflichtfeld</strong>
+            </mat-error>
+            <mat-error *ngIf="pwdCtrl.errors?.minlength">
+              Das neue Passwort muss mindestens <strong>6 Zeichen</strong> lang sein
+            </mat-error>
+            <mat-error *ngIf="pwdCtrl.errors?.maxlength">
+              Das neue Passwort darf maximal <strong>20 Zeichen</strong> lang sein
+            </mat-error>
+            <mat-error *ngIf="pwdCtrl.errors?.pattern">
+              Im Passwort müssen mindestens ein Großbuchstabe, Kleinbuchstabe, Sonderzeichen (@#$%) und eine Zahl vorkommen
+            </mat-error>
+          </mat-form-field>
+        </p>
+
+        <p>
+          <mat-icon class="register-icon">lock</mat-icon>
+          <mat-form-field>
+            <input [type]="hidePw2 ? 'password' : 'text'" id="passwordrepeat" name="passwordrepeat" matInput placeholder="Passwort wiederholen"
+              required formControlName="pwdrptCtrl">
+            <mat-icon matSuffix (click)="hidePw2 = !hidePw2">{{hidePw2 ? 'visibility' : 'visibility_off'}}</mat-icon>
+            <mat-error *ngIf="pwdrptCtrl.errors?.required">
+              Dieses Feld ist ein
+              <strong>Pflichtfeld</strong>
+            </mat-error>
+            <mat-error *ngIf="pwdrptCtrl.errors?.MatchFields">
+              Die Passwörter stimmen nicht überein
+            </mat-error>
+          </mat-form-field>
+        </p>
+
+        <br>
+        <button mat-raised-button [disabled]="loading" color="accent" class="register-btn">Neuen Account anlegen</button>
+      </form>
+
+      <div class="register-footer">
+        <button mat-button class="login-btn" routerLink="../login">Jetzt einloggen!</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { MaterialModule } from '../material.module';
 import { CreateScenarioComponent } from './create-scenario.component';
+import { AccountingDataComponent } from '../accounting-data/accounting-data.component';
 import { ScenariosService } from '../service/scenarios.service';
 
 
@@ -13,7 +14,7 @@ describe('CreateScenarioComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CreateScenarioComponent],
+      declarations: [CreateScenarioComponent, AccountingDataComponent],
       imports: [MaterialModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule],
       providers: [
         { provide: Router, useValue: { navigate() { return true; } } },

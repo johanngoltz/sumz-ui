@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ScenariosService } from './scenarios.service';
-import { Scenario, AccountingFigure } from '../api/scenario';
-import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { Scenario } from '../api/scenario';
+import { DEFAULT_MOCK_DATA } from './mockdata';
+import { ScenariosService } from './scenarios.service';
 
-@Injectable({
-    providedIn: 'root',
-})
+@Injectable()
 export class ScenariosServiceMock extends ScenariosService {
-    constructor(protected _scenariosStorage: Scenario[]) {
+    protected _scenariosStorage: Scenario[] = DEFAULT_MOCK_DATA;
+
+    constructor() {
         super(null);
         this._scenarios$.next(this._scenariosStorage);
     }

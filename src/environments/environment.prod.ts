@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://sumz1718.dh-karlsruhe.de',
+  emergencyDemo: false,
+  apiUrl: 'http://sumz1718.dh-karlsruhe.de:8080',
 };

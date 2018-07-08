@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
-import { TypedAxiosInstance, TypedAxiosResponse } from 'restyped-axios';
-import { Observable, ReplaySubject, from, of, throwError, concat } from 'rxjs';
-import { filter, flatMap, retry, switchMap, tap, debounceTime, concatMap, map } from 'rxjs/operators';
-import { ScenarioAPI } from '../api/api';
+import { TypedAxiosInstance } from 'restyped-axios';
+import { Observable, ReplaySubject, from, of, throwError } from 'rxjs';
+import { filter, flatMap, retry, switchMap } from 'rxjs/operators';
+import { SumzAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
-import { ScenarioClient } from './http-client';
+import { HttpClient } from './http-client';
 
 @Injectable({
   providedIn: 'root',
@@ -14,27 +14,21 @@ export class ScenariosService {
   protected _scenarios$: ReplaySubject<Scenario[]>;
   protected _scenariosStorage: Scenario[];
 
-  constructor(@Inject(ScenarioClient) private _apiClient: TypedAxiosInstance<ScenarioAPI>) {
-    this._scenarios$ = new ReplaySubject();
+  constructor(@Inject(HttpClient) private _apiClient: TypedAxiosInstance<SumzAPI>) {
+    this._scenarios$ = new ReplaySubject(1);
     this.scenarios$ = this._scenarios$.asObservable();
 
     this.getScenarios().subscribe();
   }
 
   getScenarios() {
-    return from(this._apiClient.request({ url: '/scenario' })).pipe(
-      // TODO: wird vllt nicht wie gedacht funktionieren
-      switchMap(response => response.status === 200 ?
-        of(response) :
-        throwError(response)
-      ),
+    return from(this._apiClient.request({ url: '/scenarios' })).pipe(
       retry(2),
-      switchMap(response => {
+      flatMap(response => {
         this._scenariosStorage = response.data;
         this._scenarios$.next([...response.data]);
         return this.scenarios$;
-      })
-    );
+      }));
   }
 
   getScenario(id: number) {
@@ -47,11 +41,10 @@ export class ScenariosService {
 
   addScenario(scenario: Scenario) {
     return from(this._apiClient.request({
-      url: '/scenario',
+      url: '/scenarios',
       data: scenario,
       method: 'POST',
     })).pipe(
-      switchMap(response => response.status === 201 ? of(response) : throwError(response)),
       retry(2),
       switchMap(response => {
         this._scenariosStorage.push(response.data);
@@ -62,11 +55,14 @@ export class ScenariosService {
   }
 
   updateScenario(scenario: Scenario) {
-    return from(this._apiClient.put(`/scenario/${scenario.id}`, scenario)).pipe(
-      switchMap(response => response.status === 200 ? of(response) : throwError(response)),
+    return from(this._apiClient.request({
+      url: `/scenarios/${scenario.id}` as '/scenarios/:sId',
+      method: 'PUT',
+      data: scenario,
+    })).pipe(
       retry(2),
       switchMap(response => {
-        const updatedScenario = response.data as Scenario;
+        const updatedScenario = response.data;
         this._scenariosStorage[this._scenariosStorage.indexOf(scenario)] = updatedScenario;
         return of(updatedScenario);
       })
@@ -74,10 +70,9 @@ export class ScenariosService {
   }
 
   removeScenario(scenario: Scenario) {
-    return from(this._apiClient.delete(`/scenario/${scenario.id}`)).pipe(
-      switchMap(response => response.status === 200 ? of(response) : throwError(response)),
+    return from(this._apiClient.delete(`/scenarios/${scenario.id}`)).pipe(
       retry(2),
-      switchMap(response => {
+      switchMap(() => {
         this._scenariosStorage.splice(this._scenariosStorage.indexOf(scenario), 1);
         this._scenarios$.next([...this._scenariosStorage]);
         return of(scenario);

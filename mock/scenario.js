@@ -1,23 +1,24 @@
 var utils = require('./utils');
 
 exports.routes = [{
-  route: '/scenario',
+  route: '/scenarios',
   verb: 'GET',
   handler: function (req, res) {
     res.json(state.scenarios);
   },
 },
 {
-  route: '/scenario',
+  route: '/scenarios',
   verb: 'POST',
   handler: function (req, res) {
+    req.body.id = Math.round(Math.random()*99999);
     state.scenarios.push(req.body)
     res.json(req.body);
     res.status(201);
   },
 },
 {
-  route: '/scenario/:sId',
+  route: '/scenarios/:sId',
   verb: 'GET',
   handler: function (req, res) {
     var scenario = utils.getById(req.params.sId, state.scenarios);
@@ -25,7 +26,7 @@ exports.routes = [{
   },
 },
 {
-  route: '/scenario/:sId',
+  route: '/scenarios/:sId',
   verb: 'PUT',
   handler: function (req, res) {
     utils.setById(req.params.sId, state.scenarios, req.body);
@@ -33,14 +34,15 @@ exports.routes = [{
   }
 },
 {
-  route: '/scenario/:sId',
+  route: '/scenarios/:sId',
   verb: 'DELETE',
   handler: function (req, res) {
+    var sId = parseInt(req.params.sId);
     state.scenarios.splice(
       utils.findIndex(state.scenarios, function (scenario) {
-        return scenario.id === req.params.sId;
+        return scenario.id === sId;
       }),
-      0);
+      1);
     res.send(true);
   }
 }

@@ -20,3 +20,32 @@ body {
     bottom: 32px;
     right: 32px;
 }
+
+.content-conatiner {
+    display: block;
+}
+  
+mat-dialog-container {
+    position: relative;
+}
+
+.mat-card > mat-progress-bar {
+    transition: opacity .25s;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+mat-card-title, mat-card-content,  mat-card-actions {
+    transition: opacity .25s;
+}
+
+.busy mat-card-title, .busy mat-card-content, .busy mat-card-actions {
+    opacity: 0.5;
+}
+
+.busy mat-progress-bar {
+    opacity: 1;
+}
