@@ -11,7 +11,7 @@ export interface SumzAPI {
                 expires_in: number;
                 scope: string;
                 jti: string;
-                id: number;
+                user_id: number;
             },
         }
     },
@@ -23,12 +23,19 @@ export interface SumzAPI {
             },
         }
     },
-    '/users/id': {
+    '/users/:id': {
         PUT: {
             body: {
                 passwordold: string,
                 passwordnew: string,
-                passwordnew2: string
+            },
+        }
+    },
+    '/users/:id/delete': {
+        params: {id: number},
+        POST: {
+            body: {
+                password: string,
             },
         }
     },
@@ -39,18 +46,18 @@ export interface SumzAPI {
             },
         }
     },
-    '/users/reset/token': {
+    '/users/reset/:token': {
         POST: {
             body: {
                 password: string
             },
         }
     },
-    '/scenario': {
+    '/scenarios': {
         GET: { response: Scenario[] },
         POST: { body: Scenario, response: Scenario }
     },
-    '/scenario/:sId': {
+    '/scenarios/:sId': {
         params: { sId: number },
         GET: { response: Scenario },
         PUT: { body: Scenario, response: Scenario },

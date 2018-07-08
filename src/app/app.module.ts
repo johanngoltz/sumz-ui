@@ -19,6 +19,7 @@ import { LoginComponent } from './login/login.component';
 import { MaterialModule } from './material.module';
 import { NewPasswordComponent } from './newpassword/newpassword.component';
 import { NewPasswordEmailComponent } from './newpasswordemail/newpasswordemail.component';
+import { DeleteUserComponent } from './deleteuser/deleteuser.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { ScenarioCardComponent } from './scenario-card/scenario-card.component';
 import { ScenarioDetailComponent } from './scenario-detail/scenario-detail.component';
@@ -27,6 +28,7 @@ import { SelectScenarioComponent } from './select-scenario/select-scenario.compo
 import { ScenariosService } from './service/scenarios.service';
 import { ScenariosServiceMock } from './service/scenarios.service.mock';
 import { ToDoubleDirective } from './to-double.directive';
+import { HttpClientModule } from '@angular/common/http';
 import { ExportScenarioComponent } from './export-scenario/export-scenario.component';
 import { ImportScenarioComponent } from './import-scenario/import-scenario.component';
 
@@ -47,6 +49,7 @@ import { ImportScenarioComponent } from './import-scenario/import-scenario.compo
     ChangePasswordComponent,
     NewPasswordComponent,
     NewPasswordEmailComponent,
+    DeleteUserComponent,
     AlertComponent,
     CreditsComponent,
     ExportScenarioComponent,
@@ -61,6 +64,7 @@ import { ImportScenarioComponent } from './import-scenario/import-scenario.compo
     ReactiveFormsModule,
     FlexLayoutModule,
     ChartModule,
+    HttpClientModule,
   ],
   providers: [
     environment.emergencyDemo

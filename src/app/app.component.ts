@@ -62,8 +62,9 @@ import { ImportScenarioComponent } from './import-scenario/import-scenario.compo
   ],
 })
 export class AppComponent {
-  log: NavigationEnd[];
   title = 'SUMZ';
+  isUserLoggedIn = this._authenticationService.isUserLoggedIn;
+  logout = this._authenticationService.logout;
 
   constructor(
     private _router: Router,
@@ -77,14 +78,5 @@ export class AppComponent {
 
   openImportDialog() {
     this._dialog.open(ImportScenarioComponent).afterClosed().subscribe();
-  }
-
-  logout() {
-    this._authenticationService.logout();
-    this._router.navigateByUrl('/login');
-  }
-
-  change() {
-    this._router.navigateByUrl('changepassword');
   }
 }

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { PasswordValidation } from '../registration/registration.passwordvalidation';
-import { AuthenticationService } from '../service/authentication.service';
 import { AlertService } from '../service/alert.service';
+import { AuthenticationService } from '../service/authentication.service';
 
 
 @Component({
@@ -13,55 +14,60 @@ import { AlertService } from '../service/alert.service';
 
 /**
  * The registration of new users is implemented in this component
- * @author Burkart
  */
 export class RegistrationComponent implements OnInit {
 
   registerFormGroup: FormGroup;
-  submitted = false;
-  hide_pw1 = true;
-  hide_pw2 = true;
-  loading: boolean;
+  hidePw1 = true;
+  hidePw2 = true;
+  loading = false;
 
   constructor(
     private _formBuilder: FormBuilder,
-    private authenticationService: AuthenticationService,
-    private alertService: AlertService) { }
+    private _authenticationService: AuthenticationService,
+    private _alertService: AlertService,
+    private _router: Router) { }
 
   ngOnInit() {
     this.registerFormGroup = this._formBuilder.group({
-      // Validators to check the syntax of the email-adress and the length of the password
+      // Validators to check the inputs
+      // Note: Backend uses same validators
       mailCtrl: ['', Validators.email],
-      pwdCtrl: ['', Validators.minLength(8)],
-      pwdrptCtrl: ['', Validators.minLength(8)],
-
-    },
-      {
+      pwdCtrl: ['', [
+        Validators.minLength(6),
+        Validators.maxLength(20),
+        Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).*')]],
+      pwdrptCtrl: [''],
+    }, {
         // validates the two passwords
         validator: PasswordValidation.Match('pwdCtrl', 'pwdrptCtrl'),
       });
   }
 
   onSubmit() {
-
-    // deactivate the registration button
-    this.submitted = true;
-
     // stop here if form is invalid
     if (this.registerFormGroup.invalid) {
       return;
     }
 
-    this.authenticationService.register(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString())
-      .catch( // catch the error warnings if the registration fails
-        error => {
-          this.alertService.error(error);
-          this.loading = false;
-        });
+    // deactivate the registration button
+    this.loading = true;
 
-    // if the registration was successful inform them to check their mails and activate their account
-    this.alertService.success('Die Registrierung war erfolgreich! ' +
-      'Ein Link zur Aktivierung Ihres Profils wurde an die von Ihnen angegebene Email-Adresse versandt.');
+    this._authenticationService.register(this.mailCtrl.value.toString(), this.pwdCtrl.value.toString())
+      .subscribe(
+        () => {
+          // if the registration was successful inform them to check their mails and activate their account
+          this._alertService.success('Die Registrierung war erfolgreich! ' +
+            'Ein Link zur Aktivierung Ihres Profils wurde an die von Ihnen angegebene Email-Adresse versandt.');
+          this._router.navigate(['/login']);
+        },
+        (error) => {
+          this._alertService.error(error.response.data.message || error);
+        },
+        () => {
+          this.loading = false;
+        }
+      );
   }
 
   // getter for the email-adress and the two passwords to check if they match
