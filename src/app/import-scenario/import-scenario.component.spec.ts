@@ -1,8 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ImportScenarioComponent } from './import-scenario.component';
-import { MaterialModule } from '../material.module';
 import { MatDialogRef } from '@angular/material';
+import { MaterialModule } from '../material.module';
+import { ScenariosService } from '../service/scenarios.service';
+import { ScenariosServiceMock } from '../service/scenarios.service.mock';
+import { ImportScenarioComponent } from './import-scenario.component';
+
 
 describe('ImportScenarioComponent', () => {
   let component: ImportScenarioComponent;
@@ -12,7 +14,7 @@ describe('ImportScenarioComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ImportScenarioComponent],
       imports: [MaterialModule],
-      providers: [{ provide: MatDialogRef, useValue: { close() { } } }],
+      providers: [{ provide: MatDialogRef, useValue: { close() { } } }, { provide: ScenariosService, useClass: ScenariosServiceMock }],
     })
       .compileComponents();
   }));
