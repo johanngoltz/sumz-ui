@@ -1,4 +1,5 @@
 import { AccountingFigure, Scenario } from '../api/scenario';
+import { Gaussian } from 'ts-gaussian';
 
 export interface AccountingFigures {
     revenue: AccountingFigure;
@@ -25,7 +26,6 @@ const rawAccountingFigures = {
 };
 const accountingFigures = Object.entries(rawAccountingFigures).reduce(
     (allFigures, [key, figureSeries]) => {
-        // Hab ich schon mal gesagt, dass JS-Datumsobjekte schlimm sind?
         allFigures[key] = figureSeries.reduce(
             (accumulated, figure, index) => {
                 const forYear = new Date().getFullYear() - 4 + index;
@@ -41,6 +41,9 @@ const accountingFigures = Object.entries(rawAccountingFigures).reduce(
         return allFigures;
     }, {} as AccountingFigures);
 
+const companyValue = 122000;
+const distribution = new Gaussian(companyValue, 500000000);
+
 export const DEFAULT_MOCK_DATA: Scenario[] = [{
     ...{
         id: 69190,
@@ -54,21 +57,21 @@ export const DEFAULT_MOCK_DATA: Scenario[] = [{
         periods: 4,
         stochastic: true,
         fcfValuationResult: {
-            companyValue: 122000,
+            companyValue: companyValue,
             marketValueTotalAssets: 55000,
             totalLiabilities: 20000,
         },
-        fteValuationResult: { companyValue: 122000 },
+        fteValuationResult: { companyValue: companyValue },
         apvValuationResult: {
-            companyValue: 122000,
+            companyValue: companyValue,
             marketValueTotalAssets: 50000,
             taxShield: 5000,
             totalLiabilities: 20000,
             presentValueOfCashflows: 10000,
         },
         companyValueDistribution: {
-            xValues: [...Array(31).keys()].map(i => i * 10000),
-            yValues: [...Array(31).keys()].map(i => i / 30),
+            xValues: [...Array(31).keys()].map(i => i * companyValue / 15).map(Math.round),
+            yValues: [...Array(31).keys()].map(i => i * companyValue / 15).map(i => distribution.cdf(i + 1) - distribution.cdf(i)),
         },
         freeCashflows: {} as AccountingFigure,
     },
