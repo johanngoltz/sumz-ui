@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { PasswordValidation } from '../registration/registration.passwordvalidation';
 import { AlertService } from '../service/alert.service';
@@ -54,7 +55,7 @@ export class NewPasswordComponent implements OnInit {
     // deactivate the registration button
     this.loading = true;
 
-    const token = this._activatedRoute.paramMap.pipe(switchMap(paramMap => paramMap.get('token')));
+    const token = this._activatedRoute.paramMap.pipe(switchMap(paramMap => of(paramMap.get('token'))));
 
     // request a new password
     token.pipe(

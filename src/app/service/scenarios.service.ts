@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { TypedAxiosInstance } from 'restyped-axios';
-import { Observable, ReplaySubject, from, of, throwError } from 'rxjs';
+import { from, Observable, of, ReplaySubject, throwError } from 'rxjs';
 import { filter, flatMap, retry, switchMap } from 'rxjs/operators';
 import { SumzAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
@@ -46,10 +46,11 @@ export class ScenariosService {
       method: 'POST',
     })).pipe(
       retry(2),
-      switchMap(response => {
-        this._scenariosStorage.push(response.data);
+      switchMap(response => this._forceGetScenario(response.data)),
+      switchMap(addedScenario => {
+        this._scenariosStorage.push(addedScenario);
         this._scenarios$.next([...this._scenariosStorage]);
-        return of(response.data);
+        return of(addedScenario);
       })
     );
   }
@@ -61,9 +62,10 @@ export class ScenariosService {
       data: scenario,
     })).pipe(
       retry(2),
-      switchMap(response => {
-        const updatedScenario = response.data;
-        this._scenariosStorage[this._scenariosStorage.indexOf(scenario)] = updatedScenario;
+      switchMap(response => this._forceGetScenario(response.data)),
+      flatMap(updatedScenario => {
+        this._scenariosStorage[this._scenariosStorage.findIndex(s => s.id === updatedScenario.id)] = updatedScenario;
+        this._scenarios$.next([...this._scenariosStorage]);
         return of(updatedScenario);
       })
     );
@@ -72,11 +74,20 @@ export class ScenariosService {
   removeScenario(scenario: Scenario) {
     return from(this._apiClient.delete(`/scenarios/${scenario.id}`)).pipe(
       retry(2),
-      switchMap(() => {
+      flatMap(() => {
         this._scenariosStorage.splice(this._scenariosStorage.indexOf(scenario), 1);
         this._scenarios$.next([...this._scenariosStorage]);
         return of(scenario);
       }),
+    );
+  }
+
+  private _forceGetScenario(id: number) {
+    return from(this._apiClient.request({
+      url: `/scenarios/${id}` as '/scenarios/:sId',
+    })).pipe(
+      retry(2),
+      switchMap(response => of(response.data))
     );
   }
 }
