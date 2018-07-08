@@ -91,6 +91,7 @@ export class CreateScenarioComponent implements OnInit {
           },
           (error) => {
             this._alertService.error(`Das Szenario konnte nicht erstellt werden. (${error.statusText})`);
+            this.busy = false;
           },
           () => this.busy = false
         );

@@ -55,12 +55,12 @@ export interface SumzAPI {
     },
     '/scenarios': {
         GET: { response: Scenario[] },
-        POST: { body: Scenario, response: Scenario }
+        POST: { body: Scenario, response: number }
     },
     '/scenarios/:sId': {
         params: { sId: number },
         GET: { response: Scenario },
-        PUT: { body: Scenario, response: Scenario },
+        PUT: { body: Scenario, response: number },
         DELETE: {}
     },
 }
