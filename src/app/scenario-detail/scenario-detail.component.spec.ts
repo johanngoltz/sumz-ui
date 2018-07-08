@@ -54,17 +54,4 @@ describe('ScenarioDetailComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a valid formGroup', async(() => {
-    fixture.whenStable().then( () => { expect(component.formGroup.valid).toBeTruthy(); });
-  }));
-
-  it('should have a valid accountingDataFormGroup', async(() => {
-    fixture.whenStable().then( () => { expect(component.accountingDataFormGroup.valid).toBeTruthy(); });
-  }));
-
-  it('should have a valid configFormGroup', async(() => {
-    fixture.whenStable().then( () => { expect(component.configFormGroup.valid).toBeTruthy(); });
-  }));
-
-
 });
