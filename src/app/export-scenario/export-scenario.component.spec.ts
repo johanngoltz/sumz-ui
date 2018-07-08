@@ -20,8 +20,8 @@ describe('ExportScenarioComponent', () => {
           useValue: {
             scenario:
               {
-                name: 'Eins',
-                description: 'Eine Beschreibung',
+                scenarioName: 'Eins',
+                scenarioDescription: 'Eine Beschreibung',
               } as Scenario,
           },
         },

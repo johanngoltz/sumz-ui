@@ -39,8 +39,8 @@ export class ScenarioCardComponent implements OnInit {
         if (result === true) {
           this._scenariosService.removeScenario(this.scenario.valueOf())
             .subscribe(
-              removed => this._alertService.success(`Das Szenario "${this.scenario.valueOf().name}" wurde erfolgreich gelöscht`),
-              error => this._alertService.error(`Das Szenario "${this.scenario.valueOf().name}" konnte nicht gelöscht werden
+              removed => this._alertService.success(`Das Szenario "${this.scenario.valueOf().scenarioName}" wurde erfolgreich gelöscht`),
+              error => this._alertService.error(`Das Szenario "${this.scenario.valueOf().scenarioName}" konnte nicht gelöscht werden
                  (${error.message})`)
             );
         }

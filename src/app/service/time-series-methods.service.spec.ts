@@ -86,4 +86,44 @@ describe('TimeSeriesMethodsService', () => {
           .toBe(data.result)
       );
     }));
+    it('should calculate the total interval', inject([TimeSeriesMethodsService], (service: TimeSeriesMethodsService) => {
+      const testData = [
+        {
+          parameters: [
+            { year: 1001, quarter: 1 },
+            { year: 1001, quarter: 1 },
+            false,
+          ],
+          result: 0,
+        },
+        {
+          parameters: [
+            { year: 1000, quarter: 1 },
+            { year: 1005, quarter: 1 },
+            false,
+          ],
+          result: 5,
+        },
+        {
+          parameters: [
+            { year: 1000, quarter: 1 },
+            { year: 1002, quarter: 2 },
+            true,
+          ],
+          result: 9,
+        },
+        {
+          parameters: [
+            { year: 1000, quarter: 2 },
+            { year: 1002, quarter: 1 },
+            true,
+          ],
+          result: 7,
+        },
+      ];
+      testData.forEach(data =>
+        expect(service.calculatePeriods.apply(service, data.parameters))
+          .toBe(data.result)
+      );
+    }));
 });
