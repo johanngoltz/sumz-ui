@@ -239,7 +239,9 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
   fillTimeSeriesGaps(timeSeries, start, end, insertAtStart = false, shiftByOne = false) {
     const quarterly = this.formGroup.value.quarterly;
     let insertCount = 0;
-    for (let currentYear = start.year + (shiftByOne ? 1 : 0); currentYear < end.year + (quarterly || shiftByOne ? 1 : 0); currentYear++) {
+    for (let currentYear = start.year + (shiftByOne ? 1 : 0);
+      currentYear < end.year + (quarterly || shiftByOne ? 1 : 0) + (quarterly && end.quarter === 4 && shiftByOne ? 1 : 0);
+      currentYear++) {
       if (quarterly) {
         for (let currentQuarter = (currentYear === start.year ?
           (start.quarter + (shiftByOne ? 1 : 0) === 4 ? 1 : start.quarter + (shiftByOne ? 1 : 0)) : 1);
@@ -260,13 +262,14 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
     const start = this.formGroup.controls.start.value;
     const end = this.formGroup.controls.end.value;
     for (const param of this.accountingDataParams.keys()) {
-      const timeSeries = <FormArray>(<FormGroup>this.formGroup.controls[param]).controls.timeSeries;
-      timeSeries.controls = timeSeries.controls.filter(control =>
+      const formGroup = <FormGroup>this.formGroup.controls[param];
+      formGroup.setControl('timeSeries', this._formBuilder.array((<FormArray>formGroup.controls.timeSeries).controls.filter(control =>
         this._timeSeriesMethodsService.isInsideBounds(
           this.formGroup.controls.quarterly.value,
           this.start,
           this.end,
-          control.value));
+          control.value))));
+      const timeSeries = <FormArray>formGroup.controls.timeSeries;
       // Fill up missing values between the start and first value
       if (timeSeries.length > 0) {
         this.fillTimeSeriesGaps(timeSeries, start, timeSeries.value[0], true);
@@ -276,6 +279,7 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
         this.createFinancialData(timeSeries, end.year, this.formGroup.value.quarterly ? end.quarter : undefined);
       }
     }
+    console.log(this.formGroup);
   }
 
   validateForm(formGroup: FormGroup) {
@@ -322,8 +326,9 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
   }
 
   checkMinIntegrity(limit, subject) {
-    if (limit.value.year > subject.value.year
-      || (limit.value.year === subject.value.year &&
+    if (limit.value.year >= subject.value.year
+      || (this.formGroup.value.quarterly &&
+        limit.value.year === subject.value.year &&
         limit.value.quarter >= subject.value.quarter)) {
       subject.controls.year.setValue(limit.value.quarter === 4 || !this.formGroup.value.quarterly ?
         limit.value.year + 1 : limit.value.year);
@@ -332,55 +337,14 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
   }
 
   checkMaxIntegrity(limit, subject) {
-    if (limit.value.year < subject.value.year
-      || (limit.value.year === subject.value.year &&
+    if (limit.value.year <= subject.value.year
+      || (this.formGroup.value.quarterly &&
+        limit.value.year === subject.value.year &&
         limit.value.quarter <= subject.value.quarter)) {
       subject.controls.year.setValue(limit.value.quarter === 1 ||
         !this.formGroup.value.quarterly ? limit.value.year - 1 : limit.value.year);
       subject.controls.quarter.setValue(limit.value.quarter === 1 && this.formGroup.value.quarterly ? 4 :
         this.formGroup.value.quarterly ? 1 : limit.value.quarter - 1);
-    }
-  }
-
-  checkStartIntegrity() {
-    const start = <FormGroup>this.formGroup.controls.start;
-    const base = <FormGroup>this.formGroup.controls.base;
-    if (start.value.year > base.value.year
-      || (start.value.year === base.value.year &&
-        start.value.quarter >= base.value.quarter)) {
-      start.controls.year.setValue(base.value.quarter === 1 || !this.formGroup.value.quarterly ? base.value.year - 1 : base.value.year);
-      start.controls.quarter.setValue(base.value.quarter === 1 && this.formGroup.value.quarterly ? 4 :
-        this.formGroup.value.quarterly ? 1 : base.value.quarter - 1);
-    }
-  }
-
-  checkBaseIntegrity() {
-    const start = <FormGroup>this.formGroup.controls.start;
-    const base = <FormGroup>this.formGroup.controls.base;
-    const end = <FormGroup>this.formGroup.controls.end;
-    if (start.value.year > base.value.year
-      || (start.value.year === base.value.year &&
-        start.value.quarter >= base.value.quarter)) {
-      base.controls.year.setValue(start.value.quarter === 4 || !this.formGroup.value.quarterly ? start.value.year + 1 : start.value.year);
-      base.controls.quarter.setValue(start.value.quarter === 4 || !this.formGroup.value.quarterly ? 1 : start.value.quarter + 1);
-    }
-    if (end.value.year < base.value.year
-      || (end.value.year === base.value.year &&
-        end.value.quarter <= base.value.quarter)) {
-      base.controls.year.setValue(end.value.quarter === 1 || !this.formGroup.value.quarterly ? end.value.year - 1 : end.value.year);
-      base.controls.quarter.setValue(end.value.quarter === 1 && this.formGroup.value.quarterly ? 4 :
-        this.formGroup.value.quarterly ? 1 : end.value.quarter - 1);
-    }
-  }
-
-  checkEndIntegrity() {
-    const end = <FormGroup>this.formGroup.controls.end;
-    const base = <FormGroup>this.formGroup.controls.base;
-    if (end.value.year < base.value.year
-      || (end.value.year === base.value.year &&
-        end.value.quarter <= base.value.quarter)) {
-      end.controls.year.setValue(base.value.quarter === 4 || !this.formGroup.value.quarterly ? base.value.year + 1 : base.value.year);
-      end.controls.quarter.setValue(base.value.quarter === 4 || !this.formGroup.value.quarterly ? 1 : base.value.quarter + 1);
     }
   }
 }
