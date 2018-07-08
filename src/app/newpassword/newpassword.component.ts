@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
 import { PasswordValidation } from '../registration/registration.passwordvalidation';
 import { AlertService } from '../service/alert.service';
 import { AuthenticationService } from '../service/authentication.service';
@@ -26,7 +27,9 @@ export class NewPasswordComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _authenticationService: AuthenticationService,
     private _alertService: AlertService,
-    private _router: Router) { }
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute,
+  ) { }
 
   ngOnInit() {
     this.newFormGroup = this._formBuilder.group({
@@ -45,37 +48,30 @@ export class NewPasswordComponent implements OnInit {
   }
 
   onSubmit() {
-    // stop here if form is invalid
     if (this.newFormGroup.invalid) {
       return;
     }
-
     // deactivate the registration button
     this.loading = true;
 
-    const url = this._router.routerState.snapshot.url.split('/');
-
-    // check URL
-    if (!(url.length === 4 && url[1] === 'users' && url[2] === 'reset' && url[3] !== '')) {
-      this.loading = false;
-      return;
-    }
+    const token = this._activatedRoute.paramMap.pipe(switchMap(paramMap => paramMap.get('token')));
 
     // request a new password
-    this._authenticationService.postNewPassword(url[3], this.pwdNew1.value.toString())
-      .subscribe(
-        () => {
-          this._alertService.success('Ihr neues Passwort wurde erfolgreich gesetzt. Bitte loggen Sie sich mit dem neuen Passwort ein.');
-          this._authenticationService.logout();
-          this._router.navigate(['/login']); // return to login page
-        },
-        (error) => {
-          this._alertService.error(error.response.data.message || error);
-        },
-        () => {
-          this.loading = false;
-        }
-      );
+    token.pipe(
+      switchMap(t => this._authenticationService.postNewPassword(t, this.pwdNew1.value.toString()))
+    ).subscribe(
+      () => {
+        this._alertService.success('Ihr neues Passwort wurde erfolgreich gesetzt. Bitte loggen Sie sich mit dem neuen Passwort ein.');
+        this._authenticationService.logout();
+        this._router.navigate(['/login']); // return to login page
+      },
+      error => {
+        this._alertService.error(error.response.data.message || error);
+      },
+      () => {
+        this.loading = false;
+      }
+    );
   }
 
   // getter for the email, old and new passwords

@@ -19,7 +19,7 @@ const routes: Routes = [
   { path: 'registration', component: RegistrationComponent, data: { state: 'registration' } },
   { path: 'changepassword', component: ChangePasswordComponent, data: { state: 'changepassword' }, canActivate: [AuthGuard] },
   { path: 'newpasswordemail', component: NewPasswordEmailComponent, data: { state: 'forgot' } },
-  { path: 'users/reset/:id', component: NewPasswordComponent, data: { state: 'reset' } },
+  { path: 'users/reset/:token', component: NewPasswordComponent, data: { state: 'reset' } },
   { path: 'users/delete', component: DeleteUserComponent, data: { state: 'delete' }, canActivate: [AuthGuard] },
   { path: 'create', component: CreateScenarioComponent, data: { state: 'create' }, canActivate: [AuthGuard] },
   { path: 'scenario/:id', component: ScenarioDetailComponent, data: { state: 'details' }, canActivate: [AuthGuard] },
