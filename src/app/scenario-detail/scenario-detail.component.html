@@ -5,17 +5,18 @@
       <button type="button" mat-button color="primary" *ngIf="!editable" (click)="setEditable(true)">
         Szenario bearbeiten
       </button>
-      <button type="button" mat-button color="primary" *ngIf="editable" (click)="setEditable(false)" class="space-right">
+      <button type="button" mat-button color="primary" *ngIf="editable" (click)="setEditable(false)" class="space-right" [disabled]="busy">
         Änderungen Verwerfen
       </button>
-      <button type="button" mat-raised-button color="accent" *ngIf="editable" (click)="setEditable(false, true)">
+      <button type="button" mat-raised-button color="accent" *ngIf="editable" (click)="setEditable(false, true)" [disabled]="busy">
         Speichern
       </button>
     </div>
   </h1>
   <!-- panels for different parts of Scenario-->
-  <mat-accordion multi="true" class="headers-align">
+  <mat-accordion multi="true" class="headers-align" [class.busy]="busy">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true" [formGroup]="formGroup">
+      <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
       <mat-expansion-panel-header>
         <mat-panel-title>
           Daten
@@ -81,7 +82,7 @@
     </mat-expansion-panel>
 
     <!-- Panel for Comparison-->
-    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="true"  [formGroup]="configFormGroup">
+    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="true" [formGroup]="configFormGroup">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Auswertung
@@ -122,11 +123,11 @@
             </thead>
             <tbody>
               <tr class="mat-row">
-                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.companyValue | number:'1.0-2'}}€</td>
-                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.marketValueTotalAssets | number:'1.0-2'}}€</td>
-                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.totalLiabilities | number:'1.0-2'}}€</td>
-                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.taxShield | number:'1.0-2'}}€</td>
-                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.presentValueOfCashflows | number:'1.0-2'}}€</td>
+                <td class="mat-cell" class="bold">{{(forScenario$ | async)?.apvValuationResult?.companyValue | number:'1.2-2'}}€</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.marketValueTotalAssets | number:'1.2-2'}}€</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.totalLiabilities | number:'1.2-2'}}€</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.taxShield | number:'1.2-2'}}€</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.apvValuationResult?.presentValueOfCashflows | number:'1.2-2'}}€</td>
               </tr>
             </tbody>
           </table>
@@ -145,9 +146,9 @@
             </thead>
             <tbody>
               <tr class="mat-row">
-                <td class="mat-cell">{{(forScenario$ | async)?.fcfValuationResult?.companyValue | number:'1.0-2'}}€</td>
-                <td class="mat-cell">{{(forScenario$ | async)?.fcfValuationResult?.marketValueTotalAssets | number:'1.0-2'}}€</td>
-                <td class="mat-cell">{{(forScenario$ | async)?.fcfValuationResult?.totalLiabilities | number:'1.0-2'}}€</td>
+                <td class="mat-cell" class="bold">{{(forScenario$ | async)?.fcfValuationResult?.companyValue | number:'1.2-2'}}€</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.fcfValuationResult?.marketValueTotalAssets | number:'1.2-2'}}€</td>
+                <td class="mat-cell">{{(forScenario$ | async)?.fcfValuationResult?.totalLiabilities | number:'1.2-2'}}€</td>
               </tr>
             </tbody>
           </table>
@@ -164,7 +165,7 @@
             </thead>
             <tbody>
               <tr class="mat-row">
-                <td class="mat-cell">{{(forScenario$ | async)?.fteValuationResult?.companyValue | number:'1.0-2'}}€</td>
+                <td class="mat-cell" class="bold">{{(forScenario$ | async)?.fteValuationResult?.companyValue | number:'1.2-2'}}€</td>
               </tr>
             </tbody>
           </table>
