@@ -135,7 +135,8 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
     if (this.end) {
       this.start = { year: this.base.year - 1, quarter: this.base.quarter };
     } else if (this.start) {
-      this.end = this._timeSeriesMethodsService.addPeriods({...this.base}, 2, this.formGroup.value.quarterly);
+      const quarterly = Boolean(scenario && scenario.liabilities.timeSeries[0] && scenario.liabilities.timeSeries[0].date.quarter) || false;
+      this.end = this._timeSeriesMethodsService.addPeriods({...this.base}, scenario.periods, quarterly);
     } else {
       this.base = { year: new Date().getFullYear() - 1, quarter: 1 };
       this.start = { year: this.base.year - 1, quarter: 1 };
