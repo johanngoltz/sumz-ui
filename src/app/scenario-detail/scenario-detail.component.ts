@@ -1,9 +1,9 @@
 import { animate, keyframes, query, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Chart } from 'angular-highcharts';
-import { Observable, of, noop } from 'rxjs';
+import { Observable, noop, of } from 'rxjs';
 import { first, switchMap } from 'rxjs/operators';
 import { RemoteConfig } from '../api/config';
 import { accountingDataParams, environmentParams } from '../api/paramData';
@@ -79,6 +79,7 @@ export class ScenarioDetailComponent implements OnInit {
   accountingDataParams = accountingDataParams;
   environmentParams = environmentParams; // fix scope issues in view
   Object = Object;
+  busy = false;
 
   /* edit mode */
   editable;
@@ -89,25 +90,31 @@ export class ScenarioDetailComponent implements OnInit {
   /*chart */
   chart;
 
+  private forScenarioId$: Observable<number>;
+
   constructor(private _scenariosService: ScenariosService,
     private _formBuilder: FormBuilder,
     private _optionsService: OptionsService,
     private _alertService: AlertService,
     private _route: ActivatedRoute,
+    private _router: Router,
     private _timeSeriesMethodsService: TimeSeriesMethodsService) { }
 
   ngOnInit() {
     this.editable = false;
-    this.forScenario$ = this._route.paramMap.pipe(
-      switchMap(params => of(Number.parseInt(params.get('id')))),
-      switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
+    this.forScenarioId$ = this._route.paramMap.pipe(
+      switchMap(params => {
+        return of(Number.parseInt(params.get('id')));
+      })
+    );
+    this.forScenario$ = this._scenariosService.getScenario(this.forScenarioId$);
     this.forScenario$.subscribe(noop, error => this._alertService.error(`Fehler beim Laden des Szenarios: ${error}`));
 
     this.forConfig$ = this._optionsService.getConfig();
 
     const controls = {
       scenarioName: ['', Validators.required],
-      scenarioDescription: '',
+      scenarioDescription: ['', Validators.required],
     };
     Object.entries(environmentParams).forEach(([name, config]) => {
       controls[name] = ['', config.validators];
@@ -125,7 +132,7 @@ export class ScenarioDetailComponent implements OnInit {
     this.configFormGroup.disable();
     this.initConfig();
 
-    this.forScenario$.pipe().subscribe(currentScenario => {
+    const subscription = this.forScenario$.subscribe(currentScenario => {
       this.chart = new Chart({
         chart: {
           type: 'line',
@@ -141,7 +148,7 @@ export class ScenarioDetailComponent implements OnInit {
         },
         yAxis: {
           title: {
-            text: 'Verteilung',
+            text: 'Wahrscheinlichkeitsdichte',
           },
         },
         xAxis: {
@@ -149,6 +156,10 @@ export class ScenarioDetailComponent implements OnInit {
           title: {
             text: 'Unternehmenswert in €',
           },
+          labels: {
+            format: '{value:.0f}',
+          },
+          allowDecimals: false,
         },
         series: [{
           name: ' ',
@@ -227,14 +238,20 @@ export class ScenarioDetailComponent implements OnInit {
           };
         }
       }
-
+      this.step = 0;
+      this.busy = true;
       this._scenariosService.updateScenario(currentScenario).subscribe(
-        () => {
+        (scenario) => {
+          this._router.navigate(['/scenario', scenario.id]);
           this.editable = false;
           this.formGroup.disable();
           this._alertService.success('Szenario wurde gespeichert');
+          this.busy = false;
         },
-        () => this._alertService.warning('Szenario konnte nicht gespeichert werden'),
+        () => {
+          this._alertService.warning('Szenario konnte nicht gespeichert werden');
+          this.busy = false;
+        },
       );
     });
   }
@@ -270,7 +287,7 @@ export class ScenarioDetailComponent implements OnInit {
           this.saveConfig();
           this.saveScenario();
         } else {
-          this._alertService.error('Speichern des Scenarios nicht möglich. Es sind noch Fehler vorhanden');
+          this._alertService.error('Speichern des Szenarios nicht möglich. Es sind noch Fehler vorhanden');
         }
       } else {
         this.editable = editable;

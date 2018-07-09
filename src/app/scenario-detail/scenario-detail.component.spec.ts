@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { of, EMPTY, NEVER } from 'rxjs';
 import { MaterialModule } from '../material.module';
 import { ScenarioDetailComponent } from './scenario-detail.component';
@@ -39,7 +39,8 @@ describe('ScenarioDetailComponent', () => {
             scenarioConfig: { get: () => ({ showResult: { apv: true, cvd: true, fcf: false, fte: false } }), set: () => { } },
           }),
         },
-      }],
+      }, { provide: Router, useValue: { navigate() { return true; } } },
+      ],
     })
       .compileComponents();
   }));

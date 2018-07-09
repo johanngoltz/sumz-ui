@@ -69,10 +69,13 @@
 
 #startyear-container {
     left: -3px;
+    transform: translateX(-50%);
 }
 
 #baseyear-container {
     left: 0;
+    bottom: 30px;
+    right: 0;
 }
 
 #baseyear-container > span {
@@ -80,13 +83,16 @@
 }
 
 #startyear-container, #baseyear-container {
-    transform: translateX(-50%);
     align-items: center;
 }
 
 #endyear-container {
     right: 0;
     align-items: flex-end;
+}
+
+#endyear-container:not(.editable) {
+    opacity: 0;
 }
 
 mat-checkbox {

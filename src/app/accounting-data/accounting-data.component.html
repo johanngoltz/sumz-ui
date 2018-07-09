@@ -35,10 +35,10 @@
               </span>
               <div [formGroup]="formGroup.controls.base" class="flex">
                 <mat-form-field class="table-input-right" *ngIf="_editable">
-                  <input type="number" matInput formControlName="year" required placeholder="Basisjahr" (input)="checkMaxIntegrity(formGroup.controls.end, formGroup.controls.base);checkMinIntegrity(formGroup.controls.start, formGroup.controls.base)">
+                  <input type="number" matInput formControlName="year" required placeholder="Basisjahr" (input)="checkMaxIntegrity(formGroup.controls.end, formGroup.controls.base, 2);checkMinIntegrity(formGroup.controls.start, formGroup.controls.base)">
                 </mat-form-field>
                 <mat-form-field class="small-field" *ngIf="formGroup.controls.quarterly.value && _editable">
-                  <mat-select placeholder="Quartal" formControlName="quarter" (input)="checkMaxIntegrity(formGroup.controls.end, formGroup.controls.base);checkMinIntegrity(formGroup.controls.start, formGroup.controls.base)">
+                  <mat-select placeholder="Quartal" formControlName="quarter" (input)="checkMaxIntegrity(formGroup.controls.end, formGroup.controls.base, 2);checkMinIntegrity(formGroup.controls.start, formGroup.controls.base)">
                     <mat-option [value]="1">1</mat-option>
                     <mat-option [value]="2">2</mat-option>
                     <mat-option [value]="3">3</mat-option>
@@ -48,13 +48,13 @@
               </div>
               <div class="indicator"></div>
             </div>
-            <div id="endyear-container" class="leveraged-field" [class.editable]="_editable" *ngIf="_editable && element.value.year === end.year && (!formGroup.controls.quarterly.value || element.value.quarter === end.quarter)">
-              <div [formGroup]="formGroup.controls.end" class="flex">
+            <div id="endyear-container" class="leveraged-field" [class.editable]="_editable" *ngIf="element.value.year === end.year && (!formGroup.controls.quarterly.value || element.value.quarter === end.quarter)">
+              <div [formGroup]="formGroup.controls.end" class="flex" *ngIf="_editable">
                 <mat-form-field class="table-input-right" (focusout)="updateTable()">
-                  <input type="number" matInput formControlName="year" required placeholder="Endjahr" (input)="checkMinIntegrity(formGroup.controls.base, formGroup.controls.end)">
+                  <input type="number" matInput formControlName="year" required placeholder="Endjahr" (input)="checkMinIntegrity(formGroup.controls.base, formGroup.controls.end, 2)">
                 </mat-form-field>
                 <mat-form-field class="small-field" *ngIf="formGroup.controls.quarterly.value">
-                  <mat-select placeholder="Quartal" formControlName="quarter" (input)="checkMinIntegrity(formGroup.controls.base, formGroup.controls.end)">
+                  <mat-select placeholder="Quartal" formControlName="quarter" (input)="checkMinIntegrity(formGroup.controls.base, formGroup.controls.end, 2)">
                     <mat-option [value]="1">1</mat-option>
                     <mat-option [value]="2">2</mat-option>
                     <mat-option [value]="3">3</mat-option>

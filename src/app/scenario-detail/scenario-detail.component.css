@@ -2,7 +2,7 @@ table {
   width: 100%;
 }
 
-.headers-align .mat-expansion-panel-header-title, 
+.headers-align .mat-expansion-panel-header-title,
 .headers-align .mat-expansion-panel-header-description {
   flex-basis: 0;
 }
@@ -23,20 +23,20 @@ table {
   margin: 0 10px;
 }
 
-.flex-container{
-  display:flex;
+.flex-container {
+  display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
 }
 
-.flex-item{
+.flex-item {
   align-content: left;
   align-items: center;
   padding: 5px;
   margin: 1px;
 }
 
-.mat-table{
+.mat-table {
   justify-content: baseline;
   align-content: left;
   margin: 0 1px;
@@ -63,11 +63,11 @@ h1 {
   justify-content: stretch;
 }
 
-.divided-form > div {
+.divided-form>div {
   width: 50%;
 }
 
-.divided-form > mat-divider {
+.divided-form>mat-divider {
   margin: 0 20px;
 }
 
@@ -86,4 +86,32 @@ h1 {
 .divided-form .mat-form-field-appearance-legacy.mat-form-field-disabled ::ng-deep .mat-form-field-underline {
   background: rgba(0, 0, 0, 0.42);
   opacity: 0;
+}
+
+.busy .mat-expansion-panel {
+  pointer-events: none;
+}
+
+.mat-expansion-panel-header-title,
+.mat-expansion-panel-header-description,
+.divided-form {
+  transition: opacity .2s;
+}
+
+.busy .mat-expansion-panel-header-title,
+.busy .mat-expansion-panel-header-description,
+.busy .divided-form {
+  opacity: 0.5;
+}
+
+mat-expansion-panel {
+  position: relative;
+}
+
+mat-progress-bar {
+  position: absolute;
+}
+
+.bold {
+  font-weight: bold;
 }

@@ -17,7 +17,7 @@ export const accountingDataParams: AccountingDataParams =
 
 export interface AccountingDataParam { displayName: string; showOnCalculation?: boolean; shiftDeterministic?: boolean; }
 
-const numberValidator = Validators.pattern('^[0-9]+(\.[0-9]{1,3})?$');
+const numberValidator = Validators.pattern('^[0-9]+(\.[0-9]+)?$');
 const taxRateValidators =
     [numberValidator, Validators.min(0), Validators.max(100)];
 
