@@ -79,6 +79,7 @@ export class ScenarioDetailComponent implements OnInit {
   accountingDataParams = accountingDataParams;
   environmentParams = environmentParams; // fix scope issues in view
   Object = Object;
+  busy = false;
 
   /* edit mode */
   editable;
@@ -228,14 +229,19 @@ export class ScenarioDetailComponent implements OnInit {
           };
         }
       }
-
+      this.step = 0;
+      this.busy = true;
       this._scenariosService.updateScenario(currentScenario).subscribe(
         () => {
           this.editable = false;
           this.formGroup.disable();
           this._alertService.success('Szenario wurde gespeichert');
+          this.busy = false;
         },
-        () => this._alertService.warning('Szenario konnte nicht gespeichert werden'),
+        () => {
+          this._alertService.warning('Szenario konnte nicht gespeichert werden');
+          this.busy = false;
+        },
       );
     });
   }
@@ -271,7 +277,7 @@ export class ScenarioDetailComponent implements OnInit {
           this.saveConfig();
           this.saveScenario();
         } else {
-          this._alertService.error('Speichern des Scenarios nicht möglich. Es sind noch Fehler vorhanden');
+          this._alertService.error('Speichern des Szenarios nicht möglich. Es sind noch Fehler vorhanden');
         }
       } else {
         this.editable = editable;

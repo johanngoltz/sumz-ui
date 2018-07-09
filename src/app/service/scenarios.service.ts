@@ -64,7 +64,8 @@ export class ScenariosService {
       retry(2),
       switchMap(response => this._forceGetScenario(response.data)),
       flatMap(updatedScenario => {
-        this._scenariosStorage[this._scenariosStorage.findIndex(s => s.id === updatedScenario.id)] = updatedScenario;
+        this._scenariosStorage.splice(this._scenariosStorage.indexOf(scenario), 1);
+        this._scenariosStorage.push(updatedScenario);
         this._scenarios$.next([...this._scenariosStorage]);
         return of(updatedScenario);
       })
