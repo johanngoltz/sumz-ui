@@ -10,7 +10,7 @@
               <input type="text" id="name" name="name" matInput placeholder="Name" required formControlName="scenarioName">
             </mat-form-field>
             <mat-form-field>
-              <textarea  matInput cdkTextareaAutosize placeholder="Beschreibung" formControlName="scenarioDescription"></textarea>
+              <textarea  matInput cdkTextareaAutosize placeholder="Beschreibung" formControlName="scenarioDescription" required></textarea>
             </mat-form-field>
             <div class="info">
               <h4>Aus bestehendem Szenario erstellen</h4>
@@ -36,7 +36,7 @@
           <mat-card-title>Umweltfaktoren</mat-card-title>
           <mat-card-content>
             <mat-form-field floatLabel="always" *ngFor="let paramEntry of Object.entries(environmentParams); trackBy: trackByName">
-              <input matInput type="text" appToDouble [placeholder]="paramEntry[1].displayName" [formControlName]="paramEntry[0]" />
+              <input matInput type="text" appToDouble [placeholder]="paramEntry[1].displayName" [formControlName]="paramEntry[0]" required/>
               <span matPrefix>% &nbsp;</span>
               <mat-error *ngIf="formGroup2.controls[paramEntry[0]].hasError('required')">
                 Dieses Feld wird
