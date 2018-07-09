@@ -25,7 +25,17 @@ export class LoginComponent implements OnInit {
     private _alertService: AlertService,
     private _router: Router,
     private _route: ActivatedRoute,
-  ) { }
+  ) {
+    // checks if url call was from mail confirmation link
+    this._route.queryParams.subscribe(
+      param => {
+        // debugger;
+        if (Object.keys(param).includes('useractivated')) {
+          this._alertService.success('Benutzeraccount erfolgreich aktiviert!');
+        }
+      }
+    );
+  }
 
   ngOnInit() {
     this.loginFormGroup = this._formBuilder.group({
@@ -50,11 +60,14 @@ export class LoginComponent implements OnInit {
           this._router.navigate([this._route.snapshot.queryParams['returnUrl'] || '/']);
         },
         (error) => {
-          this._alertService.error(error.response.data.message || error);
-        },
-        () => {
+          if (error.response.data.error_description === 'Bad credentials') {
+            this._alertService.error('Authentifizierungsfehler: Benutzername oder Password falsch');
+          } else {
+            this._alertService.error(error.response.data.error_description || error);
+          }
           this.loading = false;
-        }
+        },
+        () => this.loading = false
       );
   }
 

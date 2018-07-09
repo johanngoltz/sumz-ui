@@ -47,12 +47,11 @@ export class NewPasswordEmailComponent implements OnInit {
           this._router.navigate(['/login']);
         },
         (error) => {
-          this._alertService.error(error.response.data.message || error);
-        },
-        () => {
+          this._alertService.error(error.response.data.error_description || error);
           this.loading = false;
         },
-    );
+        () => this.loading = false
+      );
   }
 
   // getter for the email, old and new passwords
