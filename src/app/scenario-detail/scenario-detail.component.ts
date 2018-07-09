@@ -150,6 +150,9 @@ export class ScenarioDetailComponent implements OnInit {
           title: {
             text: 'Unternehmenswert in €',
           },
+          labels: {
+            format: '{value:.0f}',
+          },
           allowDecimals: false,
         },
         series: [{
