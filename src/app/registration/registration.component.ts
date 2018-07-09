@@ -63,10 +63,9 @@ export class RegistrationComponent implements OnInit {
         },
         (error) => {
           this._alertService.error(error.response.data.message || error);
-        },
-        () => {
           this.loading = false;
-        }
+        },
+        () => this.loading = false
       );
   }
 
