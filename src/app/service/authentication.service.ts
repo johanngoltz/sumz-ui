@@ -194,10 +194,12 @@ export class AuthenticationService {
       return response;
     },
       error => {
-        if (!!error.response
+        debugger;
+        if ( error.message === 'Network Error' ||
+          (!!error.response
           && error.response.status === 401
-          && localStorage.getItem('currentUser')
-          && !error.response.config.headers._isRetry) {
+          && !error.response.config.headers._isRetry)
+          && localStorage.getItem('currentUser')) {
 
           // get new access_token
           this.refresh()
