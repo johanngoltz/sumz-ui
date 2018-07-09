@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { TypedAxiosInstance } from 'restyped-axios';
-import { from, Observable, of, ReplaySubject, throwError } from 'rxjs';
-import { filter, flatMap, retry, switchMap } from 'rxjs/operators';
+import { Observable, ReplaySubject, from, of, throwError } from 'rxjs';
+import { filter, flatMap, retry, switchMap, withLatestFrom } from 'rxjs/operators';
 import { SumzAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
 import { HttpClient } from './http-client';
@@ -31,11 +31,24 @@ export class ScenariosService {
       }));
   }
 
-  getScenario(id: number) {
-    return this.scenarios$.pipe(
-      filter(scenarios => !!scenarios),
-      switchMap(scenarios => of(scenarios.find(s => s.id === id))),
-      switchMap(scenario => undefined === scenario ? throwError('Szenario existiert nicht') : of(scenario))
+  getScenario(id$: Observable<number> | number) {
+    // TODO: alle Verwendungen dieser Methode auf Observable<number> ändern
+    if (typeof (id$) === 'number') {
+      id$ = of(id$);
+    }
+
+    return id$.pipe(
+      // TODO: funktioniert nicht, wenn der Aufruf von einer Komponente erfolgt, ohne, dass sich die Route geändert hätte
+      withLatestFrom(this.scenarios$),
+      filter(([scenarioId, scenarios]) => !!scenarios),
+      switchMap(([scenarioId, scenarios]) => {
+        const scenario = scenarios.find(s => s.id === scenarioId);
+        if (scenario) {
+          return of(scenario);
+        } else {
+          return throwError(`Szenario ${scenarioId} existiert nicht`);
+        }
+      })
     );
   }
 

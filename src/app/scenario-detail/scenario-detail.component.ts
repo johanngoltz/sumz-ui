@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chart } from 'angular-highcharts';
 import { Observable, of, noop } from 'rxjs';
-import { first, switchMap } from 'rxjs/operators';
+import { first, switchMap, withLatestFrom } from 'rxjs/operators';
 import { RemoteConfig } from '../api/config';
 import { accountingDataParams, environmentParams } from '../api/paramData';
 import { Scenario } from '../api/scenario';
@@ -90,6 +90,8 @@ export class ScenarioDetailComponent implements OnInit {
   /*chart */
   chart;
 
+  private forScenarioId$: Observable<number>;
+
   constructor(private _scenariosService: ScenariosService,
     private _formBuilder: FormBuilder,
     private _optionsService: OptionsService,
@@ -100,9 +102,12 @@ export class ScenarioDetailComponent implements OnInit {
 
   ngOnInit() {
     this.editable = false;
-    this.forScenario$ = this._route.paramMap.pipe(
-      switchMap(params => of(Number.parseInt(params.get('id')))),
-      switchMap(scenarioId => this._scenariosService.getScenario(scenarioId)));
+    this.forScenarioId$ = this._route.paramMap.pipe(
+      switchMap(params => {
+        return of(Number.parseInt(params.get('id')));
+      })
+    );
+    this.forScenario$ = this._scenariosService.getScenario(this.forScenarioId$);
     this.forScenario$.subscribe(noop, error => this._alertService.error(`Fehler beim Laden des Szenarios: ${error}`));
 
     this.forConfig$ = this._optionsService.getConfig();
@@ -127,7 +132,8 @@ export class ScenarioDetailComponent implements OnInit {
     this.configFormGroup.disable();
     this.initConfig();
 
-    this.forScenario$.pipe().subscribe(currentScenario => {
+    const subscription = this.forScenario$.subscribe(currentScenario => {
+      console.log(currentScenario);
       this.chart = new Chart({
         chart: {
           type: 'line',
