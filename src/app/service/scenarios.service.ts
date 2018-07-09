@@ -33,7 +33,7 @@ export class ScenariosService {
 
   getScenario(id$: Observable<number> | number) {
     // TODO: alle Verwendungen dieser Methode auf Observable<number> ändern
-    if (typeof (id$) === 'number') {
+    if (typeof id$ === 'number') {
       id$ = of(id$);
     }
 
@@ -41,7 +41,6 @@ export class ScenariosService {
       id$,
       this.scenarios$,
     ).pipe(
-      debounceTime(50),
       filter(([scenarioId, scenarios]) => !!scenarios),
       switchMap(([scenarioId, scenarios]) => {
         const scenario = scenarios.find(s => s.id === scenarioId);
