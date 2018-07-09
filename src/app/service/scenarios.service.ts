@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { TypedAxiosInstance } from 'restyped-axios';
-import { Observable, ReplaySubject, from, of, throwError } from 'rxjs';
-import { filter, flatMap, retry, switchMap, withLatestFrom } from 'rxjs/operators';
+import { combineLatest, from, Observable, of, ReplaySubject, throwError, zip } from 'rxjs';
+import { debounceTime, filter, flatMap, retry, switchMap } from 'rxjs/operators';
 import { SumzAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
 import { HttpClient } from './http-client';
@@ -37,9 +37,11 @@ export class ScenariosService {
       id$ = of(id$);
     }
 
-    return id$.pipe(
-      // TODO: funktioniert nicht, wenn der Aufruf von einer Komponente erfolgt, ohne, dass sich die Route geändert hätte
-      withLatestFrom(this.scenarios$),
+    return zip(
+      id$,
+      this.scenarios$,
+    ).pipe(
+      debounceTime(50),
       filter(([scenarioId, scenarios]) => !!scenarios),
       switchMap(([scenarioId, scenarios]) => {
         const scenario = scenarios.find(s => s.id === scenarioId);
