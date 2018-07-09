@@ -40,7 +40,7 @@ export class TimeSeriesMethodsService {
     });
   }
 
-  calculatePeriods(base: TimePoint, end: TimePoint, quarterly: Boolean) {
+  calculatePeriod(base: TimePoint, end: TimePoint, quarterly: Boolean) {
     return (end.year - base.year) * (quarterly ? 4 : 1) + (quarterly ? end.quarter - base.quarter : 0);
   }
 

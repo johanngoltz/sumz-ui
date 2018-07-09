@@ -202,7 +202,7 @@ export class ScenarioDetailComponent implements OnInit {
       const end = this.accountingDataFormGroup.controls.end.value;
 
       currentScenario.stochastic = false;
-      currentScenario.periods = this._timeSeriesMethodsService.calculatePeriods(base, end, quarterly);
+      currentScenario.periods = this._timeSeriesMethodsService.calculatePeriod(base, end, quarterly);
 
       for (const [param, paramDefinition] of this.accountingDataParams) {
         if (this._timeSeriesMethodsService.shouldDisplayAccountingDataParam(
