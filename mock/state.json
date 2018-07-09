@@ -1,27 +1,994 @@
 {
   "scenarios": [
     {
-      "id": 1,
-      "name": "Eins",
-      "description": "Das erste Szenario",
-      "periods": 2
+      "id": 93,
+      "stochastic": false,
+      "scenarioName": "Fall A",
+      "scenarioDescription": "Deterministisch, Free Cashflows werden berechnet",
+      "periods": 4,
+      "businessTaxRate": 0.14,
+      "corporateTaxRate": 0.15,
+      "solidaryTaxRate": 0.055,
+      "equityInterestRate": 0.1,
+      "interestOnLiabilitiesRate": 0.08,
+      "depreciation": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "date": {
+              "year": 2000,
+              "quarter": null
+            },
+            "amount": 280
+          },
+          {
+            "date": {
+              "year": 2001,
+              "quarter": null
+            },
+            "amount": 280
+          },
+          {
+            "date": {
+              "year": 2002,
+              "quarter": null
+            },
+            "amount": 280
+          },
+          {
+            "date": {
+              "year": 2003,
+              "quarter": null
+            },
+            "amount": 400
+          }
+        ]
+      },
+      "additionalIncome": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "date": {
+              "year": 2000,
+              "quarter": null
+            },
+            "amount": 0
+          },
+          {
+            "date": {
+              "year": 2001,
+              "quarter": null
+            },
+            "amount": 1000
+          },
+          {
+            "date": {
+              "year": 2002,
+              "quarter": null
+            },
+            "amount": 500
+          },
+          {
+            "date": {
+              "year": 2003,
+              "quarter": null
+            },
+            "amount": 600
+          }
+        ]
+      },
+      "additionalCosts": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "date": {
+              "year": 2000,
+              "quarter": null
+            },
+            "amount": 31.41
+          },
+          {
+            "date": {
+              "year": 2001,
+              "quarter": null
+            },
+            "amount": 1.41
+          },
+          {
+            "date": {
+              "year": 2002,
+              "quarter": null
+            },
+            "amount": 931.41
+          },
+          {
+            "date": {
+              "year": 2003,
+              "quarter": null
+            },
+            "amount": 59.89
+          }
+        ]
+      },
+      "investments": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "date": {
+              "year": 2000,
+              "quarter": null
+            },
+            "amount": 500
+          },
+          {
+            "date": {
+              "year": 2001,
+              "quarter": null
+            },
+            "amount": 400
+          },
+          {
+            "date": {
+              "year": 2002,
+              "quarter": null
+            },
+            "amount": 300
+          },
+          {
+            "date": {
+              "year": 2003,
+              "quarter": null
+            },
+            "amount": 500
+          }
+        ]
+      },
+      "divestments": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "date": {
+              "year": 2000,
+              "quarter": null
+            },
+            "amount": 220
+          },
+          {
+            "date": {
+              "year": 2001,
+              "quarter": null
+            },
+            "amount": 120
+          },
+          {
+            "date": {
+              "year": 2002,
+              "quarter": null
+            },
+            "amount": 20
+          },
+          {
+            "date": {
+              "year": 2003,
+              "quarter": null
+            },
+            "amount": 0
+          }
+        ]
+      },
+      "revenue": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "date": {
+              "year": 2000,
+              "quarter": null
+            },
+            "amount": 2000
+          },
+          {
+            "date": {
+              "year": 2001,
+              "quarter": null
+            },
+            "amount": 1000
+          },
+          {
+            "date": {
+              "year": 2002,
+              "quarter": null
+            },
+            "amount": 1500
+          },
+          {
+            "date": {
+              "year": 2003,
+              "quarter": null
+            },
+            "amount": 1600
+          }
+        ]
+      },
+      "costOfMaterial": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "date": {
+              "year": 2000,
+              "quarter": null
+            },
+            "amount": 1000
+          },
+          {
+            "date": {
+              "year": 2001,
+              "quarter": null
+            },
+            "amount": 430
+          },
+          {
+            "date": {
+              "year": 2002,
+              "quarter": null
+            },
+            "amount": 250
+          },
+          {
+            "date": {
+              "year": 2003,
+              "quarter": null
+            },
+            "amount": 1000
+          }
+        ]
+      },
+      "costOfStaff": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "date": {
+              "year": 2000,
+              "quarter": null
+            },
+            "amount": 400
+          },
+          {
+            "date": {
+              "year": 2001,
+              "quarter": null
+            },
+            "amount": 1000
+          },
+          {
+            "date": {
+              "year": 2002,
+              "quarter": null
+            },
+            "amount": 250
+          },
+          {
+            "date": {
+              "year": 2003,
+              "quarter": null
+            },
+            "amount": 400
+          }
+        ]
+      },
+      "liabilities": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "date": {
+              "year": 1999,
+              "quarter": null
+            },
+            "amount": 1000
+          },
+          {
+            "date": {
+              "year": 2000,
+              "quarter": null
+            },
+            "amount": 1200
+          },
+          {
+            "date": {
+              "year": 2001,
+              "quarter": null
+            },
+            "amount": 1400
+          },
+          {
+            "date": {
+              "year": 2002,
+              "quarter": null
+            },
+            "amount": 1800
+          }
+        ]
+      },
+      "freeCashFlows": null,
+      "companyValueDistribution": null,
+      "apvValuationResult": {
+        "companyValue": 986.2265031883719,
+        "marketValueTotalAssets": 1986.226503188372,
+        "totalLiabilities": 1000,
+        "presentValueOfCashflows": 1545.4970793200591,
+        "taxShield": 440.7294238683127
+      },
+      "fteValuationResult": {
+        "companyValue": 986.2265031883722
+      },
+      "fcfValuationResult": {
+        "companyValue": 986.2265031883725,
+        "marketValueTotalAssets": 1986.2265031883726,
+        "totalLiabilities": 1000
+      }
     },
     {
-      "name": "Zwei",
-      "description": "Das zweite Szenario",
-      "periods": 5,
-      "id": 2
+      "id": 94,
+      "stochastic": false,
+      "scenarioName": "Fall B",
+      "scenarioDescription": "Deterministisch, Free Cashflows sind angegeben",
+      "periods": 4,
+      "businessTaxRate": 0.2,
+      "corporateTaxRate": 0.14810427,
+      "solidaryTaxRate": 0.055,
+      "equityInterestRate": 0.100582,
+      "interestOnLiabilitiesRate": 0.08,
+      "depreciation": null,
+      "additionalIncome": null,
+      "additionalCosts": null,
+      "investments": null,
+      "divestments": null,
+      "revenue": null,
+      "costOfMaterial": null,
+      "costOfStaff": null,
+      "liabilities": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "date": {
+              "year": 2000,
+              "quarter": null
+            },
+            "amount": 1260
+          },
+          {
+            "date": {
+              "year": 2001,
+              "quarter": null
+            },
+            "amount": 1300
+          },
+          {
+            "date": {
+              "year": 2002,
+              "quarter": null
+            },
+            "amount": 1000
+          },
+          {
+            "date": {
+              "year": 2003,
+              "quarter": null
+            },
+            "amount": 1400
+          }
+        ]
+      },
+      "freeCashFlows": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "date": {
+              "year": 2001,
+              "quarter": null
+            },
+            "amount": 176.76
+          },
+          {
+            "date": {
+              "year": 2002,
+              "quarter": null
+            },
+            "amount": 520.13
+          },
+          {
+            "date": {
+              "year": 2003,
+              "quarter": null
+            },
+            "amount": 404.87
+          },
+          {
+            "date": {
+              "year": 2004,
+              "quarter": null
+            },
+            "amount": 203.78
+          }
+        ]
+      },
+      "companyValueDistribution": null,
+      "apvValuationResult": {
+        "companyValue": 1569.164208903791,
+        "marketValueTotalAssets": 2829.164208903791,
+        "totalLiabilities": 1260,
+        "presentValueOfCashflows": 2413.4701643182175,
+        "taxShield": 415.6940445855733
+      },
+      "fteValuationResult": {
+        "companyValue": 1569.1642089037907
+      },
+      "fcfValuationResult": {
+        "companyValue": 1569.1642089037907,
+        "marketValueTotalAssets": 2829.1642089037905,
+        "totalLiabilities": 1260
+      }
     },
     {
-      "timeSeries": [],
-      "name": "Drei",
-      "deterministic": true,
-      "baseYear": 2017,
-      "description": "Das dreite Szenario",
-      "prognosisLength": 5,
-      "id": null,
-      "iterations": 10000,
-      "algorithm": "fcf"
-    }
+      "id": 102,
+      "stochastic": true,
+      "scenarioName": "Fall 1",
+      "scenarioDescription": "Enge Verteilung",
+      "periods": 4,
+      "businessTaxRate": 0.2,
+      "corporateTaxRate": 0.14810427,
+      "solidaryTaxRate": 0.055,
+      "equityInterestRate": 0.100582,
+      "interestOnLiabilitiesRate": 0.08,
+      "depreciation": null,
+      "additionalIncome": null,
+      "additionalCosts": null,
+      "investments": null,
+      "divestments": null,
+      "revenue": null,
+      "costOfMaterial": null,
+      "costOfStaff": null,
+      "liabilities": {
+        "isHistoric": false,
+        "timeSeries": [
+          {
+            "date": {
+              "year": 2000,
+              "quarter": null
+            },
+            "amount": 1260
+          },
+          {
+            "date": {
+              "year": 2001,
+              "quarter": null
+            },
+            "amount": 1300
+          },
+          {
+            "date": {
+              "year": 2002,
+              "quarter": null
+            },
+            "amount": 1000
+          },
+          {
+            "date": {
+              "year": 2003,
+              "quarter": null
+            },
+            "amount": 1400
+          }
+        ]
+      },
+      "freeCashFlows": {
+        "isHistoric": true,
+        "timeSeries": [
+          {
+            "date": {
+              "year": 1997,
+              "quarter": null
+            },
+            "amount": 101.76
+          },
+          {
+            "date": {
+              "year": 1998,
+              "quarter": null
+            },
+            "amount": 102.13
+          },
+          {
+            "date": {
+              "year": 1999,
+              "quarter": null
+            },
+            "amount": 103.87
+          },
+          {
+            "date": {
+              "year": 2000,
+              "quarter": null
+            },
+            "amount": 104.78
+          }
+        ]
+      },
+      "companyValueDistribution": {
+        "xValues": [
+          -431.38569968125915,
+          -431.38569768125916,
+          -431.38569568125916,
+          -431.38569368125917,
+          -431.3856916812592,
+          -431.3856896812592,
+          -431.3856876812592,
+          -431.3856856812592,
+          -431.3856836812592,
+          -431.3856816812592,
+          -431.3856796812592,
+          -431.3856776812592,
+          -431.3856756812592,
+          -431.3856736812592,
+          -431.3856716812592,
+          -431.38566968125923,
+          -431.38566768125924,
+          -431.38566568125924,
+          -431.38566368125925,
+          -431.38566168125925,
+          -431.38565968125926,
+          -431.38565768125926,
+          -431.38565568125927,
+          -431.38565368125927,
+          -431.3856516812593,
+          -431.3856496812593,
+          -431.3856476812593,
+          -431.3856456812593,
+          -431.3856436812593,
+          -431.3856416812593,
+          -431.3856396812593
+        ],
+        "yValues": [
+          443.1848437065661,
+          791.5451613675611,
+          1358.296926476441,
+          2239.4530315002044,
+          3547.45928360954,
+          5399.096644463819,
+          7895.015813891987,
+          11092.08343875598,
+          14972.746518513193,
+          19418.605436462167,
+          24197.07237546164,
+          28969.15519122146,
+          33322.46020581741,
+          36827.01396147408,
+          39104.269357038334,
+          39894.228040143265,
+          39104.26944595114,
+          36827.01412894395,
+          33322.460433116925,
+          28969.1554546944,
+          24197.0726505505,
+          19418.60570137895,
+          14972.746756821782,
+          11092.083640519806,
+          7895.015975452678,
+          5399.096767225064,
+          3547.4593723354155,
+          2239.4530926033253,
+          1358.2969666257677,
+          791.545186564276,
+          443.1848588218513
+        ]
+      },
+      "apvValuationResult": {
+        "companyValue": -431.3856696812592,
+        "marketValueTotalAssets": 828.6143303187408,
+        "totalLiabilities": 1260,
+        "presentValueOfCashflows": 412.92028573316753,
+        "taxShield": 415.6940445855733
+      },
+      "fteValuationResult": {
+        "companyValue": -431.3856696812593
+      },
+      "fcfValuationResult": {
+        "companyValue": -431.3856696812593,
+        "marketValueTotalAssets": 828.6143303187407,
+        "totalLiabilities": 1260
+      }
+    },
+    {
+      "id": 124,
+      "stochastic": true,
+      "scenarioName": "Fall D",
+      "scenarioDescription": "Stochastisch ohne FCFs",
+      "periods": 4,
+      "businessTaxRate": 0.14,
+      "corporateTaxRate": 0.15,
+      "solidaryTaxRate": 0.055,
+      "equityInterestRate": 0.1,
+      "interestOnLiabilitiesRate": 0.08,
+      "depreciation": {
+          "isHistoric": false,
+          "timeSeries": [
+              {
+                  "date": {
+                      "year": 2000,
+                      "quarter": null
+                  },
+                  "amount": 280
+              },
+              {
+                  "date": {
+                      "year": 2001,
+                      "quarter": null
+                  },
+                  "amount": 280
+              },
+              {
+                  "date": {
+                      "year": 2002,
+                      "quarter": null
+                  },
+                  "amount": 280
+              },
+              {
+                  "date": {
+                      "year": 2003,
+                      "quarter": null
+                  },
+                  "amount": 400
+              }
+          ]
+      },
+      "additionalIncome": {
+          "isHistoric": false,
+          "timeSeries": [
+              {
+                  "date": {
+                      "year": 2000,
+                      "quarter": null
+                  },
+                  "amount": 0
+              },
+              {
+                  "date": {
+                      "year": 2001,
+                      "quarter": null
+                  },
+                  "amount": 1000
+              },
+              {
+                  "date": {
+                      "year": 2002,
+                      "quarter": null
+                  },
+                  "amount": 500
+              },
+              {
+                  "date": {
+                      "year": 2003,
+                      "quarter": null
+                  },
+                  "amount": 600
+              }
+          ]
+      },
+      "additionalCosts": {
+          "isHistoric": false,
+          "timeSeries": [
+              {
+                  "date": {
+                      "year": 2000,
+                      "quarter": null
+                  },
+                  "amount": 31.41
+              },
+              {
+                  "date": {
+                      "year": 2001,
+                      "quarter": null
+                  },
+                  "amount": 1.41
+              },
+              {
+                  "date": {
+                      "year": 2002,
+                      "quarter": null
+                  },
+                  "amount": 931.41
+              },
+              {
+                  "date": {
+                      "year": 2003,
+                      "quarter": null
+                  },
+                  "amount": 59.89
+              }
+          ]
+      },
+      "investments": {
+          "isHistoric": false,
+          "timeSeries": [
+              {
+                  "date": {
+                      "year": 2000,
+                      "quarter": null
+                  },
+                  "amount": 500
+              },
+              {
+                  "date": {
+                      "year": 2001,
+                      "quarter": null
+                  },
+                  "amount": 400
+              },
+              {
+                  "date": {
+                      "year": 2002,
+                      "quarter": null
+                  },
+                  "amount": 300
+              },
+              {
+                  "date": {
+                      "year": 2003,
+                      "quarter": null
+                  },
+                  "amount": 500
+              }
+          ]
+      },
+      "divestments": {
+          "isHistoric": false,
+          "timeSeries": [
+              {
+                  "date": {
+                      "year": 2000,
+                      "quarter": null
+                  },
+                  "amount": 220
+              },
+              {
+                  "date": {
+                      "year": 2001,
+                      "quarter": null
+                  },
+                  "amount": 120
+              },
+              {
+                  "date": {
+                      "year": 2002,
+                      "quarter": null
+                  },
+                  "amount": 20
+              },
+              {
+                  "date": {
+                      "year": 2003,
+                      "quarter": null
+                  },
+                  "amount": 0
+              }
+          ]
+      },
+      "revenue": {
+          "isHistoric": false,
+          "timeSeries": [
+              {
+                  "date": {
+                      "year": 2000,
+                      "quarter": null
+                  },
+                  "amount": 2000
+              },
+              {
+                  "date": {
+                      "year": 2001,
+                      "quarter": null
+                  },
+                  "amount": 1000
+              },
+              {
+                  "date": {
+                      "year": 2002,
+                      "quarter": null
+                  },
+                  "amount": 1500
+              },
+              {
+                  "date": {
+                      "year": 2003,
+                      "quarter": null
+                  },
+                  "amount": 1600
+              }
+          ]
+      },
+      "costOfMaterial": {
+          "isHistoric": false,
+          "timeSeries": [
+              {
+                  "date": {
+                      "year": 2000,
+                      "quarter": null
+                  },
+                  "amount": 1000
+              },
+              {
+                  "date": {
+                      "year": 2001,
+                      "quarter": null
+                  },
+                  "amount": 430
+              },
+              {
+                  "date": {
+                      "year": 2002,
+                      "quarter": null
+                  },
+                  "amount": 250
+              },
+              {
+                  "date": {
+                      "year": 2003,
+                      "quarter": null
+                  },
+                  "amount": 1000
+              }
+          ]
+      },
+      "costOfStaff": {
+          "isHistoric": false,
+          "timeSeries": [
+              {
+                  "date": {
+                      "year": 2000,
+                      "quarter": null
+                  },
+                  "amount": 400
+              },
+              {
+                  "date": {
+                      "year": 2001,
+                      "quarter": null
+                  },
+                  "amount": 1000
+              },
+              {
+                  "date": {
+                      "year": 2002,
+                      "quarter": null
+                  },
+                  "amount": 250
+              },
+              {
+                  "date": {
+                      "year": 2003,
+                      "quarter": null
+                  },
+                  "amount": 400
+              }
+          ]
+      },
+      "liabilities": {
+          "isHistoric": true,
+          "timeSeries": [
+              {
+                  "date": {
+                      "year": 1996,
+                      "quarter": null
+                  },
+                  "amount": 1000
+              },
+              {
+                  "date": {
+                      "year": 1997,
+                      "quarter": null
+                  },
+                  "amount": 1200
+              },
+              {
+                  "date": {
+                      "year": 1998,
+                      "quarter": null
+                  },
+                  "amount": 1400
+              },
+              {
+                  "date": {
+                      "year": 1999,
+                      "quarter": null
+                  },
+                  "amount": 2100
+              }
+          ]
+      },
+      "freeCashFlows": null,
+      "companyValueDistribution": {
+          "xValues": [
+              3820.8469665669354,
+              3899.396963721286,
+              3977.9469608756363,
+              4056.4969580299867,
+              4135.046955184337,
+              4213.5969523386875,
+              4292.146949493038,
+              4370.696946647388,
+              4449.246943801739,
+              4527.796940956089,
+              4606.34693811044,
+              4684.89693526479,
+              4763.4469324191405,
+              4841.996929573491,
+              4920.546926727841,
+              4999.096923882192,
+              5077.646921036542,
+              5156.196918190893,
+              5234.746915345243,
+              5313.296912499593,
+              5391.846909653944,
+              5470.396906808294,
+              5548.946903962645,
+              5627.496901116995,
+              5706.0468982713455,
+              5784.596895425696,
+              5863.146892580046,
+              5941.696889734397,
+              6020.246886888747,
+              6098.796884043098,
+              6177.346881197448
+          ],
+          "yValues": [
+              0.000011284146588139111,
+              0.000020153919464633762,
+              0.000034584264101232535,
+              0.000057019811855212896,
+              0.00009032360058912267,
+              0.0001374690476616973,
+              0.00020101886991989883,
+              0.00028242097695177834,
+              0.0003812284431825775,
+              0.0004944266378562374,
+              0.0006160935284152115,
+              0.0007375978695256716,
+              0.0008484395034082918,
+              0.0009376706649133889,
+              0.0009956529806285244,
+              0.0010157665050388545,
+              0.0009956529806285253,
+              0.0009376706649133906,
+              0.0008484395034082943,
+              0.0007375978695256743,
+              0.0006160935284152142,
+              0.0004944266378562402,
+              0.0003812284431825799,
+              0.0002824209769517805,
+              0.0002010188699199005,
+              0.00013746904766169857,
+              0.00009032360058912361,
+              0.00005701981185521353,
+              0.00003458426410123294,
+              0.000020153919464634023,
+              0.000011284146588139272
+          ]
+      },
+      "apvValuationResult": {
+          "companyValue": 4999.0969238821945,
+          "marketValueTotalAssets": 8598.742992206153,
+          "totalLiabilities": 3599.646068323959,
+          "presentValueOfCashflows": 1545.4970793200591,
+          "taxShield": 7053.245912886093
+      },
+      "fteValuationResult": {
+          "companyValue": 4999.096923882193
+      },
+      "fcfValuationResult": {
+          "companyValue": 4999.096923882195,
+          "marketValueTotalAssets": 8598.742992206155,
+          "totalLiabilities": 3599.646068323959
+      }
+  }
   ]
 }

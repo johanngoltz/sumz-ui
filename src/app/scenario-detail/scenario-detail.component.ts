@@ -145,14 +145,14 @@ export class ScenarioDetailComponent implements OnInit {
           },
         },
         xAxis: {
-          categories: currentScenario.companyValueDistribution.xValues,
+          categories: (currentScenario.stochastic ? currentScenario.companyValueDistribution.xValues : []),
           title: {
             text: 'Unternehmenswert in €',
           },
         },
         series: [{
           name: ' ',
-          data: currentScenario.companyValueDistribution.yValues,
+          data: (currentScenario.stochastic ? currentScenario.companyValueDistribution.yValues : []),
         }],
       });
     });
@@ -160,8 +160,8 @@ export class ScenarioDetailComponent implements OnInit {
 
   initData() {
     this.forScenario$.pipe(first()).subscribe(currentScenario => {
-      this.formGroup.controls.name.setValue(currentScenario.scenarioName);
-      this.formGroup.controls.description.setValue(currentScenario.scenarioDescription);
+      this.formGroup.controls.scenarioName.setValue(currentScenario.scenarioName);
+      this.formGroup.controls.scenarioDescription.setValue(currentScenario.scenarioDescription);
       Object.keys(environmentParams).forEach(key => this.formGroup.controls[key].setValue(currentScenario[key] * 100));
     });
   }

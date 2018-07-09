@@ -6,7 +6,7 @@ import { MaterialModule } from '../material.module';
 import { ScenarioDetailComponent } from './scenario-detail.component';
 import { ScenariosService } from '../service/scenarios.service';
 import { Scenario } from '../api/scenario';
-import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormsModule, FormGroup } from '@angular/forms';
 import { AccountingDataComponent } from '../accounting-data/accounting-data.component';
 import { DEFAULT_MOCK_DATA } from '../service/mockdata';
 import { ChartModule } from 'angular-highcharts';
@@ -53,4 +53,5 @@ describe('ScenarioDetailComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });

@@ -37,6 +37,7 @@ testem.log
 /typings
 debug.log
 *.stackdump
+mock/state.json
 
 # System Files
 .DS_Store
