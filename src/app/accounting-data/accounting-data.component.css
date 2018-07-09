@@ -74,7 +74,7 @@
 
 #baseyear-container {
     left: 0;
-    bottom: 25px;
+    bottom: 30px;
     right: 0;
 }
 
@@ -89,6 +89,10 @@
 #endyear-container {
     right: 0;
     align-items: flex-end;
+}
+
+#endyear-container:not(.editable) {
+    opacity: 0;
 }
 
 mat-checkbox {
