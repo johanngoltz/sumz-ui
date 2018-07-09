@@ -1,7 +1,7 @@
 import { animate, keyframes, query, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Chart } from 'angular-highcharts';
 import { Observable, of, noop } from 'rxjs';
 import { first, switchMap } from 'rxjs/operators';
@@ -95,6 +95,7 @@ export class ScenarioDetailComponent implements OnInit {
     private _optionsService: OptionsService,
     private _alertService: AlertService,
     private _route: ActivatedRoute,
+    private _router: Router,
     private _timeSeriesMethodsService: TimeSeriesMethodsService) { }
 
   ngOnInit() {
@@ -108,7 +109,7 @@ export class ScenarioDetailComponent implements OnInit {
 
     const controls = {
       scenarioName: ['', Validators.required],
-      scenarioDescription: '',
+      scenarioDescription: ['', Validators.required],
     };
     Object.entries(environmentParams).forEach(([name, config]) => {
       controls[name] = ['', config.validators];
@@ -235,7 +236,8 @@ export class ScenarioDetailComponent implements OnInit {
       this.step = 0;
       this.busy = true;
       this._scenariosService.updateScenario(currentScenario).subscribe(
-        () => {
+        (scenario) => {
+          this._router.navigate(['/scenario', scenario.id]);
           this.editable = false;
           this.formGroup.disable();
           this._alertService.success('Szenario wurde gespeichert');

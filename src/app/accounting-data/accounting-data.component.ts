@@ -55,7 +55,7 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
     } else {
       this.base = { year: new Date().getFullYear() - 1, quarter: 1 };
       this.start = { year: this.base.year - 1, quarter: 1 };
-      this.end = { year: this.base.year + 1, quarter: 4 };
+      this.end = { year: this.base.year + 2, quarter: 1 };
     }
     const newFormGroup = this._formBuilder.group({
       start: this._formBuilder.group({ year: [this.start.year, Validators.required], quarter: [this.start.quarter, Validators.required] }),
@@ -135,7 +135,7 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
     if (this.end) {
       this.start = { year: this.base.year - 1, quarter: this.base.quarter };
     } else if (this.start) {
-      this.end = { year: this.base.year + 1, quarter: this.base.quarter };
+      this.end = this._timeSeriesMethodsService.addPeriods({...this.base}, 2, this.formGroup.value.quarterly);
     } else {
       this.base = { year: new Date().getFullYear() - 1, quarter: 1 };
       this.start = { year: this.base.year - 1, quarter: 1 };
@@ -328,18 +328,13 @@ export class AccountingDataComponent implements OnInit, OnDestroy {
 
   checkMinIntegrity(limit, subject, periodsBetween = 1) {
     if (this._timeSeriesMethodsService.calculatePeriod(limit.value, subject.value, this.formGroup.value.quarterly) < periodsBetween) {
-      subject.controls.year.setValue(limit.value.quarter === 4 || !this.formGroup.value.quarterly ?
-        limit.value.year + 1 : limit.value.year);
-      subject.controls.quarter.setValue(limit.value.quarter === 4 || !this.formGroup.value.quarterly ? 1 : limit.value.quarter + 1);
+      subject.setValue(this._timeSeriesMethodsService.addPeriods({...limit.value}, periodsBetween, this.formGroup.value.quarterly));
     }
   }
 
   checkMaxIntegrity(limit, subject, periodsBetween = 1) {
     if (this._timeSeriesMethodsService.calculatePeriod(subject.value, limit.value, this.formGroup.value.quarterly) < periodsBetween) {
-      subject.controls.year.setValue(limit.value.quarter === 1 ||
-        !this.formGroup.value.quarterly ? limit.value.year - 1 : limit.value.year);
-      subject.controls.quarter.setValue(limit.value.quarter === 1 && this.formGroup.value.quarterly ? 4 :
-        this.formGroup.value.quarterly ? 1 : limit.value.quarter - 1);
+      subject.setValue(this._timeSeriesMethodsService.addPeriods({...limit.value}, -periodsBetween, this.formGroup.value.quarterly));
     }
   }
 }

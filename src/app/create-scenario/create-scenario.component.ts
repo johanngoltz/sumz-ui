@@ -36,7 +36,7 @@ export class CreateScenarioComponent implements OnInit {
     this.busy = false;
     this.formGroup1 = this._formBuilder.group({
       scenarioName: ['', Validators.required],
-      scenarioDescription: '',
+      scenarioDescription: ['', Validators.required],
     });
     const environmentParamControls = {};
     Object.entries(environmentParams).forEach(([name, config]) => {
