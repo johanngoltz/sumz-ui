@@ -111,3 +111,7 @@ mat-expansion-panel {
 mat-progress-bar {
   position: absolute;
 }
+
+.bold {
+  font-weight: bold;
+}

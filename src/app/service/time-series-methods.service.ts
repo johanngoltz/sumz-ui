@@ -44,6 +44,32 @@ export class TimeSeriesMethodsService {
     return (end.year - base.year) * (quarterly ? 4 : 1) + (quarterly ? end.quarter - base.quarter : 0);
   }
 
+  addPeriods(base: TimePoint, periods: number, quarterly: Boolean) {
+    if (!quarterly) {
+      base.year += periods;
+    } else {
+      base.year += Math.floor(periods / 4);
+      for (let i = 0; i < Math.abs(periods % 4); i++) {
+        if (periods > 0) {
+          if (base.quarter === 4) {
+            base.quarter = 1;
+            base.year++;
+          } else {
+            base.quarter++;
+          }
+        } else {
+          if (base.quarter === 1) {
+            base.quarter = 4;
+            base.year--;
+          } else {
+            base.quarter--;
+          }
+        }
+      }
+    }
+    return base;
+  }
+
   private removeQuarter(point: TimePoint) {
     point = ({ ...point });
     delete point.quarter;

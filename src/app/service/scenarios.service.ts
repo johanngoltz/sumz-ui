@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { TypedAxiosInstance } from 'restyped-axios';
-import { from, Observable, of, ReplaySubject, throwError } from 'rxjs';
-import { filter, flatMap, retry, switchMap } from 'rxjs/operators';
+import { combineLatest, from, Observable, of, ReplaySubject, throwError, zip } from 'rxjs';
+import { debounceTime, filter, flatMap, retry, switchMap } from 'rxjs/operators';
 import { SumzAPI } from '../api/api';
 import { Scenario } from '../api/scenario';
 import { HttpClient } from './http-client';
@@ -31,11 +31,25 @@ export class ScenariosService {
       }));
   }
 
-  getScenario(id: number) {
-    return this.scenarios$.pipe(
-      filter(scenarios => !!scenarios),
-      switchMap(scenarios => of(scenarios.find(s => s.id === id))),
-      switchMap(scenario => undefined === scenario ? throwError('Szenario existiert nicht') : of(scenario))
+  getScenario(id$: Observable<number> | number) {
+    // TODO: alle Verwendungen dieser Methode auf Observable<number> ändern
+    if (typeof id$ === 'number') {
+      id$ = of(id$);
+    }
+
+    return zip(
+      id$,
+      this.scenarios$,
+    ).pipe(
+      filter(([scenarioId, scenarios]) => !!scenarios),
+      switchMap(([scenarioId, scenarios]) => {
+        const scenario = scenarios.find(s => s.id === scenarioId);
+        if (scenario) {
+          return of(scenario);
+        } else {
+          return throwError(`Szenario ${scenarioId} existiert nicht`);
+        }
+      })
     );
   }
 
