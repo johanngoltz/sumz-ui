@@ -33,7 +33,7 @@ export class ScenariosService {
 
   getScenario(id$: Observable<number> | number) {
     // TODO: alle Verwendungen dieser Methode auf Observable<number> ändern
-    if (typeof (id$) === 'number') {
+    if (typeof id$ === 'number') {
       id$ = of(id$);
     }
 
