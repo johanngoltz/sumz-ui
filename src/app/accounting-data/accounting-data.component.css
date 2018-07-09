@@ -69,10 +69,13 @@
 
 #startyear-container {
     left: -3px;
+    transform: translateX(-50%);
 }
 
 #baseyear-container {
     left: 0;
+    bottom: 25px;
+    right: 0;
 }
 
 #baseyear-container > span {
@@ -80,7 +83,6 @@
 }
 
 #startyear-container, #baseyear-container {
-    transform: translateX(-50%);
     align-items: center;
 }
 

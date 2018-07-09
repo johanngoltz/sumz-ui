@@ -141,7 +141,7 @@ export class ScenarioDetailComponent implements OnInit {
         },
         yAxis: {
           title: {
-            text: 'Verteilung',
+            text: 'Wahrscheinlichkeitsdichte',
           },
         },
         xAxis: {
@@ -149,6 +149,7 @@ export class ScenarioDetailComponent implements OnInit {
           title: {
             text: 'Unternehmenswert in €',
           },
+          allowDecimals: false,
         },
         series: [{
           name: ' ',

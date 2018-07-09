@@ -29,7 +29,7 @@ mat-dialog-container {
     position: relative;
 }
 
-.mat-card > mat-progress-bar {
+.mat-card > mat-progress-bar, mat-expansion-panel  mat-progress-bar {
     transition: opacity .25s;
     opacity: 0;
     position: absolute;
