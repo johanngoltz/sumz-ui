@@ -60,7 +60,7 @@ export class CreateScenarioComponent implements OnInit {
         ...this.formGroup1.value,
         ...this.formGroup2.value,
         stochastic: false,
-        periods: this._timeSeriesMethodsService.calculatePeriods(base, end, quarterly),
+        periods: this._timeSeriesMethodsService.calculatePeriod(base, end, quarterly),
       };
 
       Object.keys(this.formGroup2.controls).forEach(param => scenario[param] = scenario[param] / 100);
