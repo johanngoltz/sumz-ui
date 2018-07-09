@@ -133,7 +133,6 @@ export class ScenarioDetailComponent implements OnInit {
     this.initConfig();
 
     const subscription = this.forScenario$.subscribe(currentScenario => {
-      console.log(currentScenario);
       this.chart = new Chart({
         chart: {
           type: 'line',
