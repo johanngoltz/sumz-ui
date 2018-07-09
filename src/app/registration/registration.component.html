@@ -2,6 +2,7 @@
   <mat-card class="register-card" [class.busy]="loading">
     <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
     <mat-card-title>Registrierung</mat-card-title>
+    <mat-divider></mat-divider>
     <mat-card-content>
       <form [formGroup]="registerFormGroup" id="register-form" (ngSubmit)="onSubmit()">
         <p>

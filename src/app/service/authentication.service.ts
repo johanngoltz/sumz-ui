@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { TypedAxiosInstance } from 'restyped-axios';
 import { from, Observable, ReplaySubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, switchMap, catchError } from 'rxjs/operators';
 import { SumzAPI } from '../api/api';
 import { HttpClient } from './http-client';
 
@@ -194,28 +194,27 @@ export class AuthenticationService {
       return response;
     },
       error => {
-        if (!!error.response
-          && error.response.status === 401
-          && localStorage.getItem('currentUser')
-          && !error.response.config.headers._isRetry) {
+        if (error.message === 'Network Error' ||
+          (!!error.response
+            && error.response.status === 401
+            && !error.response.config.headers._isRetry)
+          && localStorage.getItem('currentUser')) {
 
           // get new access_token
-          this.refresh()
-            .subscribe(
-              () => {
+          const newResponse = this.refresh()
+            .pipe(
+              switchMap(({ data }) => {
                 // update Authorization header in primary request
-                error.config.headers.Authorization = JSON.parse(localStorage.getItem('currentUser')).token_type
+                error.config.headers.Authorization = data.token_type
                   + ' '
-                  + JSON.parse(localStorage.getItem('currentUser')).access_token;
+                  + data.access_token;
                 error.config.headers._isRetry = true;
-                // return the response with a new access_token
+
+                // return the response using a new access_token
                 return this._apiClient.request(error.config);
-              },
-              () => {
-                console.log('Refresh login error: ', error);
-                return Promise.reject(error);
-              }
-            );
+              })
+            ).toPromise();
+          return newResponse;
         }
         return Promise.reject(error);
       });
