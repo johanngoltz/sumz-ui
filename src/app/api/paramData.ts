@@ -11,6 +11,7 @@ export const accountingDataParams: AccountingDataParams =
         ['additionalCosts', { displayName: 'Sonstige Kosten', showOnCalculation: true }],
         ['investments', { displayName: 'Investitionen', showOnCalculation: true }],
         ['divestments', { displayName: 'Desinvestitionen', showOnCalculation: true }],
+        ['depreciation', { displayName: 'Abschreibungen', showOnCalculation: true }],
         ['freeCashFlows', { displayName: 'Free Cash Flow', showOnCalculation: false }],
         ['liabilities', { displayName: 'Fremdkapital', showOnCalculation: undefined, shiftDeterministic: true }],
     ]);
