@@ -22,7 +22,7 @@ export class ImportScenarioComponent implements OnInit {
     private _dialogRef: MatDialogRef<ImportScenarioComponent>) { }
 
   ngOnInit() {
-    this._fileReader.onloadend = this.generateJSON;
+    this._fileReader.onloadend = this.generateJSON.bind(this);
   }
 
   selectFile(event) {
@@ -66,12 +66,17 @@ export class ImportScenarioComponent implements OnInit {
   }
 
   createScenario() {
+    this.creatingScenario = true;
     this._scenariosService.addScenario(this.scenario).subscribe(
       () => {
         this._alertService.success('Das Szenario wurde erfolgreich importiert.');
         this._dialogRef.close();
+        this.creatingScenario = false;
       },
-      () => this._alertService.warning('Das Szenario konnte nicht importiert werden.')
+      () => {
+        this._alertService.warning('Das Szenario konnte nicht importiert werden.');
+        this.creatingScenario = false;
+      }
     );
   }
 
